@@ -1,0 +1,69 @@
+package org.lrima.laop.settings.option;
+
+import javax.swing.*;
+
+public class OptionDouble implements Option<Double> {
+    private Double value, max, min, step;
+
+    /**
+     * Creates a new OptionDouble
+     *
+     * @param defaultValue The default value of the OptionDouble
+     */
+    public OptionDouble(Double defaultValue){
+        this.value = defaultValue;
+    }
+
+    /**
+     * Creates a new OptionDouble
+     *
+     * @param defaultValue The default value of the OptionDouble
+     * @param max ConstraDouble the value to this max
+     * @param min ConstraDouble the value to this min
+     */
+    public OptionDouble(Double defaultValue, Double max, Double min){
+        this(defaultValue);
+        this.max = max;
+        this.min = min;
+    }
+
+    /**
+     *
+     * @param defaultValue The default value of the OptionDouble
+     * @param max ConstraDouble the value to this max
+     * @param min ConstraDouble the value to this max
+     * @param step The step that the JSpinner created with generateComponent must have
+     */
+    public OptionDouble(Double defaultValue, Double max, Double min, Double step){
+        this(defaultValue, max, min);
+        this.step = step;
+    }
+
+    @Override
+    public Double getValue() {
+        return value;
+    }
+
+    @Override
+    public boolean setValue(Double value) {
+        // Check if the value is inside the bounds. If it is, it returns false without changing the value
+        if(max != null && value > max) return false;
+        if(min != null && value < min) return false;
+
+        this.value = value;
+
+        return true;
+    }
+
+    @Override
+    public JComponent generateComponent() {
+        JSpinner spinner = new JSpinner(new SpinnerNumberModel(value, min, max, step));
+        spinner.addChangeListener(e -> {
+            setValue((Double) spinner.getValue());
+        });
+
+
+        return spinner;
+    }
+
+}

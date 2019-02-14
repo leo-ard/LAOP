@@ -8,5 +8,10 @@
     <artifactId>LAOP</artifactId>
     <version>0.0.1</version>
 
+    <properties>
+        <java.version>10.2</java.version>
+        <maven.compiler.source>10.2</maven.compiler.source>
+        <maven.compiler.target>10.2</maven.compiler.target>
+    </properties>
 
 </project>
