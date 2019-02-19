@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="698.0" prefWidth="464.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.lrima.laop.controller.ConfigurationController">
+   <children>
+      <Label layoutX="196.0" layoutY="26.0" text="Configuration" />
+      <JFXButton buttonType="RAISED" layoutX="137.0" layoutY="174.0" prefHeight="61.0" prefWidth="190.0" ripplerFill="RED" text="Configurer" />
+      <JFXTreeTableView layoutX="21.0" layoutY="382.0" prefHeight="191.0" prefWidth="422.0" />
+   </children>
+</AnchorPane>
