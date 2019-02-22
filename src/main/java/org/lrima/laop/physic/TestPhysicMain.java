@@ -5,6 +5,7 @@ import org.lrima.laop.math.Vector2d;
 import org.lrima.laop.math.Vector3d;
 import org.lrima.laop.physic.objects.Bloc;
 import org.lrima.laop.physic.objects.Sphere;
+import org.lrima.laop.simulation.objects.Car;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,6 +23,8 @@ public class TestPhysicMain extends JPanel implements ActionListener {
     private static Bloc bloc = new Bloc(0.1, 150, 100);
     private static Bloc bloc2 = new Bloc(0.5, 150, 100);
     private static Sphere sphere1 = new Sphere(0.01, 70);
+
+    private static Car car1 = new Car();
 
     public static void main(String[] args) {
         JFrame window = new JFrame();
@@ -46,6 +49,10 @@ public class TestPhysicMain extends JPanel implements ActionListener {
         sphere1.addForce(new Vector3d(-30, -50, 0));
         engine.addObject(sphere1);
 
+        car1.setPosition(new Vector3d(400, 500, 0));
+        car1.addForce(new Vector3d(-50, -50, 0));
+        engine.addObject(car1);
+
         engine.run();
     }
 
@@ -57,6 +64,9 @@ public class TestPhysicMain extends JPanel implements ActionListener {
         g2d.fill(bloc.getArea());
         g2d.fill(bloc2.getArea());
         g2d.fill(sphere1.getArea());
+
+        g2d.setColor(Color.RED);
+        g2d.fill(car1.getArea());
     }
 
     @Override
