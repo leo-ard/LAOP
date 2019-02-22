@@ -88,9 +88,10 @@ class Scope extends LinkedHashMap<String, Option> {
                 component.setOnMouseClicked((e) ->{
                     System.out.println("jdjdj");
                     int row = GridPane.getRowIndex(component);
+                    Option currentValue = globalScope.getOption(key);
                     centerPanel.getChildren().remove(component);
-                    this.put(key, value.getValue());
-                    Node newComponent = value.generateComponent();
+                    this.put(key, currentValue.getValue());
+                    Node newComponent = currentValue.generateComponent();
                     GridPane.setHgrow(newComponent, Priority.ALWAYS);
                     centerPanel.add(newComponent, 1, row);
                 });
