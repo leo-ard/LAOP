@@ -26,7 +26,7 @@ class Scope extends LinkedHashMap<String, Option> {
      * @param key - The key to retrieve the option from
      * @return the Object stored in the option or null if an error occurred.
      */
-    Option getOption(String key) {
+    private Option getOption(String key) {
         return get(key);
     }
 
@@ -43,8 +43,7 @@ class Scope extends LinkedHashMap<String, Option> {
         return null;
     }
 
-    public Object put(String key, Object value) {
-        System.out.println("test 1212");
+    Object put(String key, Object value) {
         return super.put(key, transformToOption(value));
     }
 
@@ -63,7 +62,7 @@ class Scope extends LinkedHashMap<String, Option> {
      * @param globalScope The global scope to show the options that can be overrithen. If this is the globalScope, this variable must be null.
      * @return The javafx layout.
      */
-    public Node generatePanel(Scope globalScope) {
+     Node generatePanel(Scope globalScope) {
 
         GridPane centerPanel = new GridPane();
         int i = 0;

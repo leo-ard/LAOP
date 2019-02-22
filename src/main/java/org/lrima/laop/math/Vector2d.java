@@ -1,4 +1,4 @@
-package math;
+package org.lrima.laop.math;
 
 /**
  * Stores a two dimensions vector
@@ -8,6 +8,7 @@ public class Vector2d {
     private double x;
     private double y;
 
+    private static Vector2d origin = new Vector2d(0, 0);
 
     /**
      * Creates a new two dimensions vector from two values
@@ -24,7 +25,13 @@ public class Vector2d {
      * @return the new vector
      */
     public Vector2d clone(){
-        return new Vector2d(this.x, this.y);
+        try {
+            super.clone();
+            return new Vector2d(this.x, this.y);
+        }catch (CloneNotSupportedException e){
+            System.err.println("Clone not supported !");
+            return Vector2d.origin;
+        }
     }
 
     /**
@@ -34,6 +41,15 @@ public class Vector2d {
      */
     public Vector2d multiply(double k){
         return new Vector2d(this.x * k, this.y * k);
+    }
+
+    /**
+     * Adds two vectors together
+     * @param v2 the second vector to add
+     * @return the resulting vector from the addition
+     */
+    public Vector2d add(Vector2d v2){
+        return new Vector2d(this.x + v2.x, this.y + v2.y);
     }
 
     /**

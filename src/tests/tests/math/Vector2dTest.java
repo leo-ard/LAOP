@@ -1,6 +1,6 @@
 package tests.math;
 
-import math.Vector2d;
+import org.lrima.laop.math.Vector2d;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -11,7 +11,7 @@ import org.junit.Test;
  */
 public class Vector2dTest {
 
-    double floatError = 0.00001;
+    private double floatError = 0.00001;
 
     @Test
     public void instantiationTest(){
@@ -57,5 +57,16 @@ public class Vector2dTest {
         Vector2d normalizedV = v.normalize();
 
         Assert.assertEquals(2/Math.sqrt(13), normalizedV.getX(), this.floatError);
+    }
+
+    @Test
+    public void addTest(){
+        Vector2d v = new Vector2d(1, 1);
+        Vector2d v2 = new Vector2d(-3, 7);
+        Vector2d addV = v.add(v2);
+
+        Assert.assertEquals(-2, addV.getX(), this.floatError);
+        Assert.assertEquals(8, addV.getY(), this.floatError);
+
     }
 }
