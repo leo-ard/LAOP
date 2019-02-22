@@ -4,7 +4,7 @@ package org.lrima.laop.math;
  * Stores a two dimensions vector
  * @author Clement Bisaillon
  */
-public class Vector2d {
+public class Vector2d implements Cloneable {
     private double x;
     private double y;
 

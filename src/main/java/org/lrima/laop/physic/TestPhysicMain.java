@@ -47,8 +47,6 @@ public class TestPhysicMain extends JPanel implements ActionListener {
         engine.addObject(sphere1);
 
         engine.run();
-
-
     }
 
     @Override
