@@ -18,7 +18,7 @@ public abstract class Physicable {
 
     //Used to disable collision detection right after the collision happened
     protected long stopCheckingCollisionAt;
-    private final int MINIMUM_TIME_BEFORE_COLLISION_AGAIN = 50;
+    private final int MINIMUM_TIME_BEFORE_COLLISION_AGAIN = 100;
 
     private Physicable(){
         this.position = Vector3d.origin;

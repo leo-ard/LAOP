@@ -4,7 +4,7 @@ package org.lrima.laop.math;
  * Stores a three dimensions vector
  * @author Clement Bisaillon
  */
-public class Vector3d {
+public class Vector3d implements Cloneable {
     private double x;
     private double y;
     private double z;
