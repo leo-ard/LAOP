@@ -1,7 +1,10 @@
 package org.lrima.laop.settings.option;
 
+import javafx.scene.Node;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.TextField;
+
 import javax.swing.*;
-import java.awt.*;
 
 public class OptionString implements Option<String>{
     private String value, regex;
@@ -41,10 +44,11 @@ public class OptionString implements Option<String>{
     }
 
     @Override
-    public JComponent generateComponent() {
-        JTextField textField = new JTextField();
-
-        //TODO add code to limit with regex
+    public Node generateComponent() {
+        TextField textField = new TextField();
+        textField.textProperty().addListener((obs, oldVal, newVal)->{
+            value = newVal;
+        });
 
         return textField;
     }

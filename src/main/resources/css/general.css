@@ -1,0 +1,21 @@
+.scene{
+    -fx-background-color: #FFFFFF;
+}
+
+.high{
+    -fx-background-color : #3944ff;
+    -fx-text-fill : #FFFFFF;
+    -jfx-button-type: RAISED;
+}
+
+.medium{
+    -fx-background-color : #3944ff;
+    -fx-text-fill : #FFFFFF;
+    -jfx-button-type: RAISED;
+}
+
+.low{
+    -fx-background-color : #3944ff;
+    -fx-text-fill : #FFFFFF;
+
+}

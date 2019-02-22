@@ -1,6 +1,24 @@
 package org.lrima.laop.settings;
 
-import java.util.HashMap;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXListView;
+import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.stage.Stage;
+import org.lrima.laop.core.LAOP;
+import org.lrima.laop.settings.option.Option;
+
+import javax.swing.*;
+import java.lang.reflect.Array;
+import java.util.*;
 
 /**
  * Stores the settings in different scopes and allows the user to get and set the values of the
@@ -9,16 +27,17 @@ import java.util.HashMap;
  * @author Clement Bisaillon
  */
 public class Settings {
+    public final static String GLOBAL_SCOPE = "GLOBAL";
 
     /**
      * This is the main variable of the settings. It contains the value of each settings
      * The key of this HashMap represents the name of the scope.
      */
-    private HashMap<String, Scope> scopes;
+    private LinkedHashMap<String, Scope> scopes;
 
     public Settings(){
-        scopes = new HashMap<>();
-        addScope("global");
+        scopes = new LinkedHashMap<>();
+        addScope(GLOBAL_SCOPE);
     }
 
     /**
@@ -30,11 +49,18 @@ public class Settings {
     public Object get(String scope, String key){
         //If the scope the user is trying to access is non existant
         if (this.scopes.get(scope) == null) {
+            //TODO throw exception
             return null;
         }
 
-        //Return the option associated with the key in the specified scope
-        return this.scopes.get(scope).getValue(key);
+        //Return the valye associated with the key in the specified scope. If the key doesnt exist, check in the global scope
+        Object value = this.scopes.get(scope).getValue(key);
+        if(value == null){
+            value = this.scopes.get(GLOBAL_SCOPE).getValue(key);
+        }
+
+
+        return value;
     }
 
     /**
@@ -84,13 +110,60 @@ public class Settings {
 
     /**
      * Show a JPanel where the use can view the settings and change them
-     * @param scopes - The scopes to show the settings for. For each scope, a tab will be added to the panel
      * @return true if successful, false otherwise
      */
-    public boolean showPanel(String... scopes){
-        //TODO
-        return false;
+    public boolean showPanel(){
+        //INIT
+        Stage stage = new Stage();
+        HashMap<String, Node> panels = new HashMap<>();
+        BorderPane borderPane = new BorderPane();
+        Scope globalScope = this.scopes.get(GLOBAL_SCOPE);
+
+        //Adding all the panels
+        for(String scopeString : this.scopes.keySet()){
+            Scope scope = this.scopes.get(scopeString);
+            panels.put(scopeString, this.scopes.get(scopeString).generatePanel(globalScope));
+        }
+
+        //SAVE BUTTON AND ITS PANEL
+        JFXButton saveButton = new JFXButton("Save");
+        saveButton.getStyleClass().add("high");
+        saveButton.setMaxWidth(Integer.MAX_VALUE);
+
+        //BOTTOM BUTTON
+        HBox bottom = new HBox(saveButton);
+        HBox.setHgrow(saveButton, Priority.ALWAYS);
+        bottom.setPadding(new Insets(10));
+
+        //ADDING LEFT PANEL (ALL THE SCOPES IN A LIST)
+        JFXListView<String> leftPanel = new JFXListView<>();
+        leftPanel.getItems().addAll(this.scopes.keySet());
+        leftPanel.getSelectionModel().select(0);
+        leftPanel.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+        leftPanel.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if(newVal == null) {
+                leftPanel.getSelectionModel().select(0);
+                borderPane.setCenter(panels.get(GLOBAL_SCOPE));
+            }
+            else{
+                borderPane.setCenter(panels.get(newVal));
+            }
+        });
+
+        //ADDING THE PANELS TO THE FRAME
+        Node centerPanel = panels.get(GLOBAL_SCOPE);
+        borderPane.setCenter(centerPanel);
+        borderPane.setLeft(leftPanel);
+        borderPane.setBottom(bottom);
+
+
+        Scene scene = new Scene(borderPane, 600, 400);
+        scene.getStylesheets().add("/css/general.css");
+        stage.setScene(scene);
+
+        stage.show();
+
+        return true;
     }
-
-
 }

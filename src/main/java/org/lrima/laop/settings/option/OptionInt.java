@@ -1,9 +1,12 @@
 package org.lrima.laop.settings.option;
 
+import javafx.scene.Node;
+import javafx.scene.control.Spinner;
+
 import javax.swing.*;
 
 public class OptionInt implements Option<Integer>{
-    private Integer value, max, min, step;
+    private Integer value = 0, max = Integer.MAX_VALUE, min = Integer.MIN_VALUE, step = 1;
 
     /**
      * Creates a new OptionInt
@@ -56,12 +59,13 @@ public class OptionInt implements Option<Integer>{
     }
 
     @Override
-    public JComponent generateComponent() {
-        JSpinner spinner = new JSpinner(new SpinnerNumberModel(value, min, max, step));
-        spinner.addChangeListener(e -> {
-            setValue((Integer) spinner.getValue());
+    public Node generateComponent() {
+        Spinner<Integer> spinner = new Spinner<>(min, max, value, step);
+        spinner.valueProperty().addListener((obs, oldVal, newVal)->{
+            value = newVal;
         });
 
+        spinner.setMaxWidth(Integer.MAX_VALUE);
 
         return spinner;
     }

@@ -1,6 +1,6 @@
 package org.lrima.laop.settings.option;
 
-import javax.swing.*;
+import javafx.scene.Node;
 
 /**
  * Interface that lets us map Types to Swing components.
@@ -26,5 +26,5 @@ public interface Option<T> {
      *
      * @return the generated JComponent
      */
-    JComponent generateComponent();
+    Node generateComponent();
 }

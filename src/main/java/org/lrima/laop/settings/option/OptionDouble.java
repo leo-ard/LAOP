@@ -1,5 +1,9 @@
 package org.lrima.laop.settings.option;
 
+import com.jfoenix.controls.JFXSpinner;
+import javafx.scene.Node;
+import javafx.scene.control.Spinner;
+
 import javax.swing.*;
 
 public class OptionDouble implements Option<Double> {
@@ -56,12 +60,11 @@ public class OptionDouble implements Option<Double> {
     }
 
     @Override
-    public JComponent generateComponent() {
-        JSpinner spinner = new JSpinner(new SpinnerNumberModel(value, min, max, step));
-        spinner.addChangeListener(e -> {
-            setValue((Double) spinner.getValue());
+    public Node generateComponent() {
+        Spinner<Double> spinner = new Spinner<>();
+        spinner.valueProperty().addListener((obs, oldVal, newVal)->{
+            value = newVal;
         });
-
 
         return spinner;
     }

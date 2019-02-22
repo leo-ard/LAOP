@@ -6,11 +6,15 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.lrima.laop.core.LAOP;
+import org.lrima.laop.settings.Settings;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ConfigurationStage extends Stage {
     ArrayList<Parent> scenes;
@@ -18,16 +22,30 @@ public class ConfigurationStage extends Stage {
 
     JFXButton left;
     JFXButton right;
-    BorderPane scene;
+    BorderPane root;
+
+    LAOP laop;
 
     public ConfigurationStage(){
-        this.setTitle("LAOP : configuration");
+        this.setTitle("LAOP : laop");
+
+        laop = new LAOP();
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("SETTING 1", "HAHAHA");
+        laop.addAlgorithm("test1212", ConfigurationController.class, hashMap);
+
 
         loadAllScenes();
 
         //Initialisation of the next and back button
         left = new JFXButton("next");
+        left.getStyleClass().add("raised");
+        left.getStyleClass().add("high");
+
         right = new JFXButton("back");
+        right.getStyleClass().add("raised");
+        right.getStyleClass().add("high");
 
         setButtonAccordingToState(state);
 
@@ -40,13 +58,15 @@ public class ConfigurationStage extends Stage {
         bottom.setPadding(new Insets(10,10,10,10));
 
         //Border layout to put them together
-        scene = new BorderPane();
-        scene.setBottom(bottom);
+        root = new BorderPane();
+        root.setBottom(bottom);
         state = -1;
         next();
 
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add("/css/general.css");
 
-        this.setScene(new Scene(scene));
+        this.setScene(scene);
     }
 
     private void loadAllScenes() {
@@ -58,7 +78,16 @@ public class ConfigurationStage extends Stage {
     private Parent load(String file) {
         URL url = getClass().getResource("/views/configuration/" + file + ".fxml");
         try {
-            return FXMLLoader.load(url);
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(url);
+            loader.load();
+            if(loader.getController() instanceof ConfigurationController){
+                ConfigurationController configurationController = loader.getController();
+                System.out.println("settoping " + url);
+                configurationController.setLAOP(laop);
+            }
+
+            return loader.getRoot();
         } catch (IOException e) {
             System.err.println("Could not load " + file +".fxml");
             return null;
@@ -71,6 +100,8 @@ public class ConfigurationStage extends Stage {
             left.setOnAction((e)-> launchDemo());
             right.setText("next");
             right.setOnAction((e)-> next());
+            right.setButtonType(JFXButton.ButtonType.RAISED);
+
         } else if(state > 0){
             left.setText("Go Back");
             left.setOnAction((e)-> back());
@@ -82,13 +113,13 @@ public class ConfigurationStage extends Stage {
 
     private void back() {
         state--;
-        scene.setCenter(scenes.get(state));
+        root.setCenter(scenes.get(state));
         setButtonAccordingToState(state);
     }
 
     private void next() {
         state++;
-        scene.setCenter(scenes.get(state));
+        root.setCenter(scenes.get(state));
         setButtonAccordingToState(state);
 
     }

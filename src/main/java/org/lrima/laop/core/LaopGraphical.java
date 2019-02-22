@@ -26,6 +26,8 @@ public class LaopGraphical extends Application {
     public void start(Stage stage) {
         ConfigurationStage configurationStage = new ConfigurationStage();
         configurationStage.show();
+
+
     }
 
 
