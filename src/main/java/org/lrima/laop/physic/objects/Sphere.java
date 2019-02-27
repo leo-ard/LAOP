@@ -1,8 +1,12 @@
 package org.lrima.laop.physic.objects;
 
+import org.lrima.laop.graphics.AffineTransformation;
 import org.lrima.laop.math.Vector3d;
+import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.Physicable;
 
+import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 
@@ -21,8 +25,8 @@ public class Sphere extends Physicable {
     }
 
     @Override
-    public Area getArea() {
-        return new Area(new Ellipse2D.Double(this.position.getX(), this.position.getY(), this.radius, this.radius));
+    public Shape getShape() {
+        return new Ellipse2D.Double(this.position.getX(), this.position.getY(), this.radius, this.radius);
     }
 
     @Override
@@ -32,6 +36,7 @@ public class Sphere extends Physicable {
             this.stopCheckingCollisionAt = System.currentTimeMillis();
             //Stop moving
             this.resetForces();
+            this.resetVelocity();
         }
     }
 }

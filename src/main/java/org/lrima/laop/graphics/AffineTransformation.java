@@ -69,4 +69,11 @@ public class AffineTransformation {
         return new Vector3d(x, y, z);
     }
 
+    public AffineTransform getWorldToObject() {
+        return worldToObject;
+    }
+
+    public AffineTransform getObjectToWorld() {
+        return objectToWorld;
+    }
 }
