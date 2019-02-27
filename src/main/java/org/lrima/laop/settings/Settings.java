@@ -37,7 +37,7 @@ public class Settings {
 
     public Settings(){
         scopes = new LinkedHashMap<>();
-        addScope(GLOBAL_SCOPE);
+        scopes.put(GLOBAL_SCOPE, new Scope());
     }
 
     /**
@@ -88,7 +88,10 @@ public class Settings {
      * @return true if successful, false otherwise
      */
     private boolean addScope(String scope){
-        this.scopes.put(scope, new Scope());
+        Scope newScope = new Scope();
+        newScope.setGlobalScope(this.scopes.get(GLOBAL_SCOPE));
+        this.scopes.put(scope, newScope);
+
 
         return true;
     }
@@ -109,20 +112,19 @@ public class Settings {
     }
 
     /**
-     * Show a JPanel where the use can view the settings and change them
+     * Show a JPanel where the use can view the settings and change them. An javaFx application must be started in order to run this function.
      * @return true if successful, false otherwise
      */
     public boolean showPanel(){
         //INIT
         Stage stage = new Stage();
         HashMap<String, Node> panels = new HashMap<>();
-        BorderPane borderPane = new BorderPane();
+        BorderPane rootNode = new BorderPane();
         Scope globalScope = this.scopes.get(GLOBAL_SCOPE);
 
         //Adding all the panels
         for(String scopeString : this.scopes.keySet()){
-            Scope scope = this.scopes.get(scopeString);
-            panels.put(scopeString, this.scopes.get(scopeString).generatePanel(globalScope));
+            panels.put(scopeString, this.scopes.get(scopeString).generatePanel());
         }
 
         //SAVE BUTTON AND ITS PANEL
@@ -144,21 +146,21 @@ public class Settings {
         leftPanel.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if(newVal == null) {
                 leftPanel.getSelectionModel().select(0);
-                borderPane.setCenter(panels.get(GLOBAL_SCOPE));
+                rootNode.setCenter(panels.get(GLOBAL_SCOPE));
             }
             else{
-                borderPane.setCenter(panels.get(newVal));
+                rootNode.setCenter(panels.get(newVal));
             }
         });
 
-        //ADDING THE PANELS TO THE FRAME
+        //ADDING THE PANELS TO THE ROOT NODE
         Node centerPanel = panels.get(GLOBAL_SCOPE);
-        borderPane.setCenter(centerPanel);
-        borderPane.setLeft(leftPanel);
-        borderPane.setBottom(bottom);
+        rootNode.setCenter(centerPanel);
+        rootNode.setLeft(leftPanel);
+        rootNode.setBottom(bottom);
 
-
-        Scene scene = new Scene(borderPane, 600, 400);
+        //ADDING STYLE
+        Scene scene = new Scene(rootNode, 600, 400);
         scene.getStylesheets().add("/css/general.css");
         stage.setScene(scene);
 

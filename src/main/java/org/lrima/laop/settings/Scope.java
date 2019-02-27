@@ -1,33 +1,35 @@
 package org.lrima.laop.settings;
 
-import com.jfoenix.controls.JFXButton;
-import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import org.lrima.laop.settings.option.Option;
 import org.lrima.laop.settings.option.OptionDouble;
 import org.lrima.laop.settings.option.OptionInt;
 import org.lrima.laop.settings.option.OptionString;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
  * @author Leonard Oeast OLeary and Clement Bisaillon
  */
 class Scope extends LinkedHashMap<String, Option> {
+    /**
+     * The global scope of this scope. Can be null, meaning that this scope is the global scope
+     */
+    Scope globalScope;
+
 
     /**
-     * Retrieve the option associated with a certain key
+     * Retrieve the option associated with a certain key. If this key doesnt exist, returns the one in the globalScope specified
      *
      * @param key - The key to retrieve the option from
      * @return the Object stored in the option or null if an error occurred.
      */
-    private Option getOption(String key) {
-        return get(key);
+    public Option get(String key) {
+        Option option = super.get(key);
+        if (option == null && globalScope != null) {
+            return globalScope.get(key);
+        }
+        return option;
     }
 
     /**
@@ -36,22 +38,48 @@ class Scope extends LinkedHashMap<String, Option> {
      * @param key - The key to retrive the option from
      * @return the Object stored in the option or null if the object doesnt exist
      */
-    Object getValue(String key){
-        Option value = this.get(key);
-        if(value != null)
-            return value.getValue();
+    public Object getValue(String key) {
+        if (exist(key)) {
+            return this.get(key).getValue();
+        }
+        else if(globalScope != null && globalScope.exist(key)){
+            return globalScope.get(key).getValue();
+        }
         return null;
+
     }
 
-    Object put(String key, Object value) {
+    /**
+     * Rewrites the put method to transform the values into Options before putting it in the array.
+     *
+     * @param key key with witch the value will be associated with
+     * @param value value at that key
+     * @return the object at the previous key (always an option)
+     */
+    public Object put(String key, Object value) {
         return super.put(key, transformToOption(value));
     }
 
+    /**
+     * Puts an entry with value of the global scope
+     *
+     * @param key key to retrieve the value in the global scope and to set it in the scope
+     */
+    public void putWithGlobalScopeDefault(String key){
+        this.put(key, globalScope.get(key).getValue());
+    }
+
+    /**
+     * Checks the type of the value and create an option according to it
+     *
+     * @param value The object to transform from
+     * @return An option that has the type Value
+     */
     private Option transformToOption(Object value) {
-        if(value instanceof Option) return (Option) value;
-        if(value instanceof String) return new OptionString((String)value);
-        if(value instanceof Integer) return new OptionInt((Integer)value);
-        if(value instanceof Double) return new OptionDouble((Double) value);
+        if (value instanceof Option) return (Option) value;
+        if (value instanceof String) return new OptionString((String) value);
+        if (value instanceof Integer) return new OptionInt((Integer) value);
+        if (value instanceof Double) return new OptionDouble((Double) value);
 
         throw new UnsupportedOperationException("The type : " + value.getClass() + " is not supported by the Option");
     }
@@ -59,57 +87,47 @@ class Scope extends LinkedHashMap<String, Option> {
     /**
      * Generates a javafx layout depending on the type of the values in the scope
      *
-     * @param globalScope The global scope to show the options that can be overrithen. If this is the globalScope, this variable must be null.
      * @return The javafx layout.
      */
-     Node generatePanel(Scope globalScope) {
+    Node generatePanel() {
+        ScopeModifierPanel scopeModifierPanel = new ScopeModifierPanel(this);
+        scopeModifierPanel.init();
+        return scopeModifierPanel;
+    }
 
-        GridPane centerPanel = new GridPane();
-        int i = 0;
-
-        SortedSet<String> allKeys = new ConcurrentSkipListSet(this.keySet());
-        allKeys.addAll(globalScope.keySet());
-
-
-        //For each key, adds an entry in the grid panel
-        for(String key : allKeys){
-            //TODO : format key
-            Option value = getOption(key);
-            Label keyLabel = new Label(key);
-            GridPane.setHgrow(keyLabel, Priority.ALWAYS);
-            centerPanel.add(keyLabel, 0, i);
-            Node component;
-
-            if(value == null){
-                component = globalScope.getOption(key).generateComponent();
-                keyLabel.setDisable(true);
-                component.setDisable(true);
-                component.setOnMouseClicked((e) ->{
-                    System.out.println("jdjdj");
-                    int row = GridPane.getRowIndex(component);
-                    Option currentValue = globalScope.getOption(key);
-                    centerPanel.getChildren().remove(component);
-                    this.put(key, currentValue.getValue());
-                    Node newComponent = currentValue.generateComponent();
-                    GridPane.setHgrow(newComponent, Priority.ALWAYS);
-                    centerPanel.add(newComponent, 1, row);
-                });
-            } else{
-                component = value.generateComponent();
-            }
-            GridPane.setHgrow(component, Priority.ALWAYS);
-            centerPanel.add(component, 1, i);
+    public void setGlobalScope(Scope scope) {
+        this.globalScope = scope;
+    }
 
 
-            i++;
+    private boolean exist(String key) {
+        return get(key) != null;
+    }
+
+    public Set<String> globalKeySet(){
+        if(globalScope == null)
+            return this.keySet();
+
+        Set<String> specificKeySet = new LinkedHashSet<>(super.keySet());
+        specificKeySet.addAll(globalScope.keySet());
+        return specificKeySet;
+    }
+
+    public Set<String> specificKeySet(){
+        if(globalScope == null){
+            return new LinkedHashSet<>();
         }
 
+        Set<String> specificKeySet = new LinkedHashSet<>(super.keySet());
+        specificKeySet.removeAll(globalScope.keySet());
+        return specificKeySet;
+    }
 
-        //VISUAL SETTINGS FOR THE GRID PANE
-        centerPanel.setPadding(new Insets(10));
-        centerPanel.setHgap(5);
-        centerPanel.setVgap(5);
+    public boolean isGlobalScope() {
+        return globalScope == null;
+    }
 
-        return centerPanel;
+    public boolean existLocal(String key) {
+        return super.get(key) == null;
     }
 }

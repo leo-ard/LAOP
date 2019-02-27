@@ -31,20 +31,18 @@ public class ConfigurationStage extends Stage {
 
         laop = new LAOP();
 
+        //TODO : TEMP
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("SETTING 1", "HAHAHA");
         laop.addAlgorithm("test1212", ConfigurationController.class, hashMap);
-
 
         loadAllScenes();
 
         //Initialisation of the next and back button
         left = new JFXButton("next");
-        left.getStyleClass().add("raised");
         left.getStyleClass().add("high");
 
         right = new JFXButton("back");
-        right.getStyleClass().add("raised");
         right.getStyleClass().add("high");
 
         setButtonAccordingToState(state);
