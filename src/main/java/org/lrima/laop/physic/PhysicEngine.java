@@ -11,16 +11,17 @@ import java.util.ArrayList;
  * @author Clement Bisaillon
  */
 public class PhysicEngine extends Thread {
-    static final double deltaT = 0.01;
+    static final double DELTA_T = 0.05;
+    static final double GRAVITY = 9.8;
+    static public final double GROUND_FRICTION_COEF = 0.6;
 
     private ArrayList<Physicable> objects;
-    private Vector3d gravity;
     private boolean running = true;
-    private int i = 0;
+    private double worldWidth;
 
-    PhysicEngine(){
+    PhysicEngine(double worldWidth){
         this.objects = new ArrayList<>();
-        this.gravity = new Vector3d(0, 0, -9.8);
+        this.worldWidth = worldWidth;
     }
 
     @Override
@@ -70,7 +71,16 @@ public class PhysicEngine extends Thread {
         }
     }
 
+    /**
+     * Add an object to the physic engine
+     * @param object the object to add
+     */
     void addObject(Physicable object){
+        //Add the gravity force to the object
         this.objects.add(object);
+    }
+
+    public double getWorldWidth() {
+        return worldWidth;
     }
 }

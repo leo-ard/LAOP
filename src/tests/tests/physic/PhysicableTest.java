@@ -17,7 +17,7 @@ public class PhysicableTest {
         Vector3d v1 = new Vector3d(1, 0, 0);
         Vector3d v2 = new Vector3d(-1, 0, 0);
 
-        Bloc b1 = new Bloc(5, 100, 200);
+        Bloc b1 = new Bloc(null, 5, 100, 200);
         b1.addForce(v1);
         b1.addForce(v2);
 
@@ -32,7 +32,7 @@ public class PhysicableTest {
         Vector3d v1 = new Vector3d(1, 0, 0);
         Vector3d v2 = new Vector3d(0, 2, 0);
 
-        Bloc b1 = new Bloc(5, 100, 200);
+        Bloc b1 = new Bloc(null, 5, 100, 200);
         b1.addForce(v1);
         b1.addForce(v2);
         Vector3d sumForces1 = b1.getSumForces();
