@@ -17,6 +17,7 @@ public abstract class Physicable {
     private Vector3d velocity;
     private double mass;
     protected ArrayList<Vector3d> forces;
+    protected ArrayList<Vector3d> angularForces;
     protected AffineTransformation transformation;
     protected ArrayList<Physicable> subObjects;
     protected double rotation;
@@ -96,6 +97,21 @@ public abstract class Physicable {
         //Get the force of the children
         for(Physicable child : this.getSubObjects()){
             sum = sum.add(child.getSumForces());
+        }
+
+        return sum;
+    }
+
+    public Vector3d getSumAngularForces(){
+        Vector3d sum = Vector3d.origin;
+
+        for(Vector3d force : this.angularForces){
+            sum = sum.add(force);
+        }
+
+        //Get the force of the children
+        for(Physicable child : this.getSubObjects()){
+            sum = sum.add(child.getSumAngularForces());
         }
 
         return sum;

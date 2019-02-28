@@ -48,6 +48,38 @@ public class Vector3d implements Cloneable {
     }
 
     /**
+     * Calculates the distance between two locations
+     * @param a the vector of the first position
+     * @param b the vector of the second position
+     * @return the distance between a and b
+     */
+    public static Vector3d distanceBetween(Vector3d a, Vector3d b){
+        return b.add(a.multiply(-1));
+    }
+
+    /**
+     * Calculated the angle between two vectors
+     * @param a the first vector
+     * @param b the second vector
+     * @return the smallest angle between a and b
+     */
+    public static double angleBetween(Vector3d a, Vector3d b){
+        double angle = Math.acos(a.dot(b) / (a.modulus() * b.modulus()));
+
+
+        return angle;
+    }
+
+    /**
+     * Calculates the dot product between this vector and another
+     * @param b the second vector
+     * @return the dot product between two vectors
+     */
+    public double dot(Vector3d b){
+        return this.x * b.getX() + this.y * b.getY() + this.z * b.getZ();
+    }
+
+    /**
      * Scale the vector by a certain factor
      * @param k the scaling factor
      * @return the scaled vector
@@ -103,6 +135,33 @@ public class Vector3d implements Cloneable {
 
     public void setZ(double z) {
         this.z = z;
+    }
+
+
+    /**
+     * Rotate the vector arround the Z axis
+     * @param tetha the angle of rotation
+     * @return the rotated vector
+     */
+    public Vector3d rotateZ(double tetha){
+        double x = this.x * Math.cos(tetha) - this.y * Math.sin(tetha);
+        double y = this.x * Math.sin(tetha) + this.y * Math.cos(tetha);
+
+        return new Vector3d(x, y, 0);
+    }
+
+    public Vector3d rotateZAround(double tetha, Vector3d axis){
+        double x = ((this.x - axis.getX()) * Math.cos(tetha)) - ((this.y - axis.getY()) * Math.sin(tetha)) + axis.getX();
+        double y = ((this.x - axis.getX()) * Math.sin(tetha)) + ((this.y - axis.getY()) * Math.cos(tetha)) + axis.getY();
+
+        return new Vector3d(x, y, 0);
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        Vector3d vec = (Vector3d) obj;
+        return vec.getX() == this.getX() && vec.getY() == this.getY() && vec.getZ() == this.getZ();
     }
 
     @Override

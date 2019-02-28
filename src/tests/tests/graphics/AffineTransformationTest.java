@@ -20,8 +20,6 @@ public class AffineTransformationTest {
 
         Vector3d transformedPos = af.worldToObject(pos);
 
-        System.out.println(transformedPos);
-
         Assert.assertEquals(400, transformedPos.getX(), this.deltaFloat);
         Assert.assertEquals(200, transformedPos.getY(), this.deltaFloat);
         Assert.assertEquals(0, transformedPos.getZ(), this.deltaFloat);

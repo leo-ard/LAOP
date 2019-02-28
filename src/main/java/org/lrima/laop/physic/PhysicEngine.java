@@ -11,9 +11,8 @@ import java.util.ArrayList;
  * @author Clement Bisaillon
  */
 public class PhysicEngine extends Thread {
-    static final double DELTA_T = 0.05;
+    static public final double DELTA_T = 0.05;
     static final double GRAVITY = 9.8;
-    static public final double GROUND_FRICTION_COEF = 0.6;
 
     private ArrayList<Physicable> objects;
     private boolean running = true;

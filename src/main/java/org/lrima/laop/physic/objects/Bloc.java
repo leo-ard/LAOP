@@ -36,7 +36,7 @@ public class Bloc extends Physicable {
         AffineTransform af = new AffineTransform();
         af.rotate(this.getRotation(), this.getCenter().getX(), this.getCenter().getY());
 
-        Shape nonRotatedShape = new Rectangle((int)position.getX(), (int)position.getY(), (int)this.width, (int)this.height);
+        Shape nonRotatedShape = new Rectangle((int)getPosition().getX(), (int)getPosition().getY(), (int)this.width, (int)this.height);
 
         return af.createTransformedShape(nonRotatedShape);
     }
@@ -73,26 +73,26 @@ public class Bloc extends Physicable {
     }
 
     public Vector3d getTopLeftPosition(){
-        double x = 0;
-        double y = 0;
-        return new Vector3d(x, y, 0);
+        double x = this.position.getX();
+        double y = this.position.getY();
+        return new Vector3d(x, y, 0).rotateZAround(this.getRotation(), this.getCenter());
     }
 
     public Vector3d getTopRightPosition(){
-        double x = this.width;
-        double y = 0;
-        return new Vector3d(x, y, 0);
+        double x = this.position.getX() + this.width;
+        double y = this.position.getY();
+        return (new Vector3d(x, y, 0)).rotateZAround(this.getRotation(), this.getCenter());
     }
 
     public Vector3d getBottomLeftPosition(){
-        double x = 0;
-        double y = this.height;
-        return new Vector3d(x, y, 0);
+        double x = this.position.getX();
+        double y = this.position.getY() + this.height;
+        return (new Vector3d(x, y, 0)).rotateZAround(this.getRotation(), this.getCenter());
     }
 
     public Vector3d getBottomRightPosition(){
-        double x = this.width;
-        double y = this.height;
-        return new Vector3d(x, y, 0);
+        double x = this.position.getX() + this.width;
+        double y = this.position.getY() + this.height;
+        return (new Vector3d(x, y, 0)).rotateZAround(this.getRotation(), this.getCenter());
     }
 }

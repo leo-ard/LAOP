@@ -89,4 +89,28 @@ public class Vector3dTest {
         Assert.assertEquals(1, addV.getZ(), this.floatError);
 
     }
+
+    @Test
+    public void distanceTest(){
+        Vector3d a = new Vector3d(1, 0, 1);
+        Vector3d b = new Vector3d(1, 1, 1);
+
+        Assert.assertEquals(new Vector3d(0, 1, 0), Vector3d.distanceBetween(a,b));
+    }
+
+    @Test
+    public void dotTest(){
+        Vector3d a = new Vector3d(1, 6, -4);
+        Vector3d b = new Vector3d(2, 6, 1);
+
+        Assert.assertEquals(34.0, a.dot(b), this.floatError);
+    }
+
+    @Test
+    public void angleTest(){
+        Vector3d a = new Vector3d(4, 3, 2);
+        Vector3d b = new Vector3d(6, -2, 3);
+
+        Assert.assertEquals(0.880624451, Vector3d.angleBetween(a, b), this.floatError);
+    }
 }

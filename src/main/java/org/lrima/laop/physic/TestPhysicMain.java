@@ -33,7 +33,7 @@ public class TestPhysicMain extends JPanel implements ActionListener {
         TestPhysicMain drawPanel = new TestPhysicMain();
         drawPanel.timer.start();
 
-        window.setSize(WORLD_WIDTH, 500);
+        window.setSize(WORLD_WIDTH, 900);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setBackground(Color.PINK);
 
@@ -52,7 +52,7 @@ public class TestPhysicMain extends JPanel implements ActionListener {
 //        sphere1.addForce(new Vector3d(-0.03, -0.05, 0));
 //        engine.addObject(sphere1);
 
-        car1.setPosition(new Vector3d(50, 50, 0));
+        car1.setPosition(new Vector3d(200, 200, 0));
         engine.addObject(car1);
 
         engine.run();
@@ -69,6 +69,14 @@ public class TestPhysicMain extends JPanel implements ActionListener {
 
         g2d.setColor(new Color(255, 0, 0, 100));
         g2d.fill(car1.getArea());
+
+        //Draw the vectors
+//        g2d.setColor(new Color(0, 255, 0, 100));
+//        for(Vector3d force : car1.getForces()){
+////            g2d.fillOval((int)force.getX(), (int)force.getY(), 20, 20);
+//            g2d.drawLine((int)car1.getPosition().getX(), (int)car1.getPosition().getY(), (int)force.getX(), (int)force.getY());
+//        }
+//        g2d.drawLine(0, 0, 100, 100);
     }
 
     @Override
