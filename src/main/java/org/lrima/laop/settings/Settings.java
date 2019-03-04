@@ -131,6 +131,9 @@ public class Settings {
         JFXButton saveButton = new JFXButton("Save");
         saveButton.getStyleClass().add("high");
         saveButton.setMaxWidth(Integer.MAX_VALUE);
+        saveButton.setOnAction((e) ->{
+            stage.close();
+        });
 
         //BOTTOM BUTTON
         HBox bottom = new HBox(saveButton);

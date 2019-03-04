@@ -10,6 +10,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.lrima.laop.core.LAOP;
 import org.lrima.laop.settings.Settings;
+import org.lrima.laop.simulation.SimulationBuffer;
+import org.lrima.laop.utils.Utils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -73,24 +75,18 @@ public class ConfigurationStage extends Stage {
         scenes.add(load("configuration"));
     }
 
-    private Parent load(String file) {
-        URL url = getClass().getResource("/views/configuration/" + file + ".fxml");
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(url);
-            loader.load();
-            if(loader.getController() instanceof ConfigurationController){
-                ConfigurationController configurationController = loader.getController();
-                System.out.println("settoping " + url);
-                configurationController.setLAOP(laop);
-            }
+    private Parent load(String name){
+        FXMLLoader loader = Utils.load(name);
 
-            return loader.getRoot();
-        } catch (IOException e) {
-            System.err.println("Could not load " + file +".fxml");
-            return null;
+        if(loader.getController() instanceof ConfigurationController){
+            ConfigurationController configurationController = loader.getController();
+            configurationController.setLAOP(laop);
         }
+
+        return loader.getRoot();
     }
+
+
 
     private void setButtonAccordingToState(int state){
         if(state == 0){
@@ -103,9 +99,16 @@ public class ConfigurationStage extends Stage {
         } else if(state > 0){
             left.setText("Go Back");
             left.setOnAction((e)-> back());
-            right.setText("next");
-            right.setOnAction((e)-> next());
+            right.setText("simulate");
+            right.setOnAction((e)-> simulate());
         }
+
+    }
+
+    private void simulate() {
+        this.close();
+        SimulationStage simulationStage = new SimulationStage(new SimulationBuffer());
+        simulationStage.show();
 
     }
 
