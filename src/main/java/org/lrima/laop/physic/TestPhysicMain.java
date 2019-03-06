@@ -11,6 +11,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 // THIS IS TEMPORARY
 
@@ -54,6 +56,40 @@ public class TestPhysicMain extends JPanel implements ActionListener {
 
         car1.setPosition(new Vector3d(200, 200, 0));
         engine.addObject(car1);
+
+        window.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+                    engine.togglePause();
+                }
+
+                //Move the car
+                if(e.getKeyCode() == KeyEvent.VK_D){
+                    //Right
+                    car1.addRotationToWheels(0.1);
+                }
+                if(e.getKeyCode() == KeyEvent.VK_A){
+                    //Left
+                    car1.addRotationToWheels(-0.1);
+                }
+                if(e.getKeyCode() == KeyEvent.VK_SPACE){
+                    //Thrust
+                    car1.addThrust(0.01);
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                super.keyReleased(e);
+
+                if(e.getKeyCode() == KeyEvent.VK_SPACE){
+                    car1.stopThrust();
+                }
+            }
+        });
+
 
         engine.run();
     }

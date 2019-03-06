@@ -71,12 +71,30 @@ public class Vector3d implements Cloneable {
     }
 
     /**
+     * Get the the unit orientation vector
+     * @return the orientation vector
+     */
+    public Vector3d orientation(){
+        return this.multiply(1/this.modulus());
+    }
+
+    /**
      * Calculates the dot product between this vector and another
      * @param b the second vector
      * @return the dot product between two vectors
      */
     public double dot(Vector3d b){
         return this.x * b.getX() + this.y * b.getY() + this.z * b.getZ();
+    }
+
+
+    /**
+     * Applies the cross product to the vector
+     * @param b the second vector
+     * @return the cros product between this vector and b
+     */
+    public Vector3d cross(Vector3d b){
+        return new Vector3d(y*b.getZ() - b.getY()*z, -x*b.getZ() + b.getX()*z, x*b.getY() - y*b.getX());
     }
 
     /**
@@ -138,18 +156,12 @@ public class Vector3d implements Cloneable {
     }
 
 
+
     /**
-     * Rotate the vector arround the Z axis
+     * Rotate the vector around an axis
      * @param tetha the angle of rotation
      * @return the rotated vector
      */
-    public Vector3d rotateZ(double tetha){
-        double x = this.x * Math.cos(tetha) - this.y * Math.sin(tetha);
-        double y = this.x * Math.sin(tetha) + this.y * Math.cos(tetha);
-
-        return new Vector3d(x, y, 0);
-    }
-
     public Vector3d rotateZAround(double tetha, Vector3d axis){
         double x = ((this.x - axis.getX()) * Math.cos(tetha)) - ((this.y - axis.getY()) * Math.sin(tetha)) + axis.getX();
         double y = ((this.x - axis.getX()) * Math.sin(tetha)) + ((this.y - axis.getY()) * Math.cos(tetha)) + axis.getY();

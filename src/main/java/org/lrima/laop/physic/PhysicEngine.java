@@ -11,8 +11,10 @@ import java.util.ArrayList;
  * @author Clement Bisaillon
  */
 public class PhysicEngine extends Thread {
-    static public final double DELTA_T = 0.05;
+    static public final double DELTA_T = 0.1;
     static final double GRAVITY = 9.8;
+
+    private volatile boolean pause = false;
 
     private ArrayList<Physicable> objects;
     private boolean running = true;
@@ -27,13 +29,15 @@ public class PhysicEngine extends Thread {
     public void run() {
         super.run();
         while(running){
-            try {
-                this.nextStep();
-                this.checkCollision();
+            if(!this.pause) {
+                try {
+                    this.nextStep();
+                    this.checkCollision();
 
-                Thread.sleep(1);
-            }catch (InterruptedException e){
-                System.err.println("Thread Stopped");
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    System.err.println("Thread Stopped");
+                }
             }
         }
     }
@@ -81,5 +85,17 @@ public class PhysicEngine extends Thread {
 
     public double getWorldWidth() {
         return worldWidth;
+    }
+
+    /**
+     * Set the simulation to pause or play
+     * @param pause true to set the simulation to pause, false otherwise
+     */
+    public void setPause(boolean pause){
+        this.pause = pause;
+    }
+
+    public void togglePause(){
+        this.pause = !pause;
     }
 }

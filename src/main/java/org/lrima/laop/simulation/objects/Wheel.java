@@ -1,5 +1,6 @@
 package org.lrima.laop.simulation.objects;
 
+import org.lrima.laop.math.MathUtils;
 import org.lrima.laop.math.Vector3d;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.objects.Bloc;
@@ -9,7 +10,7 @@ import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
 /**
- * Object representing the wheel of a car
+ * Physic object representing the wheel of a car
  * @author Clement Bisaillon
  */
 public class Wheel extends Bloc {
@@ -17,8 +18,8 @@ public class Wheel extends Bloc {
     private final static double WHEEL_WIDTH = 20;
     private final static double WHEEL_HEIGHT = 70;
     private final static double WHEEL_MASS = 200;
-    private final double ROLLING_RESISTANCE_COEF = 0.001;
-    private final double MAX_ROTATION = Math.PI / 4;
+    private final double ROLLING_RESISTANCE_COEF = 0.01;
+    private final double MAX_ROTATION = Math.PI / 3;
 
     private double thrust;
     private boolean canRotate;
@@ -28,7 +29,6 @@ public class Wheel extends Bloc {
     }
 
     private WheelLocation location;
-
     private Car car;
 
     /**
@@ -67,6 +67,10 @@ public class Wheel extends Bloc {
         return new Vector3d(x, y, 0);
     }
 
+    /**
+     * Set the thrust force of this wheel
+     * @param thrust the force
+     */
     public void setThrust(double thrust) {
         this.thrust = thrust;
     }
@@ -76,10 +80,16 @@ public class Wheel extends Bloc {
      * @return the resistance force of the wheel
      */
     public Vector3d getResistance(){
-        double friction = -this.getWeight().modulus() * this.ROLLING_RESISTANCE_COEF;
+        double friction = (this.getWeight().modulus() * this.ROLLING_RESISTANCE_COEF * this.car.getVelocity().modulus());
 
-        double x = Math.sin(this.getRotation()) * friction;
+        double x = -Math.sin(this.getRotation()) * friction;
         double y = Math.cos(this.getRotation()) * friction;
+
+        if(MathUtils.nearZero(x))
+            x = 0;
+        if(MathUtils.nearZero(y)){
+            y = 0;
+        }
 
         Vector3d resistance = new Vector3d(x, y, 0);
 
@@ -87,23 +97,14 @@ public class Wheel extends Bloc {
     }
 
     /**
-     * Get the force moment of this wheel
-     * @return the force moment
+     * Get the torque forces of this wheel
+     * @return The list of torques
      */
     public double getTorque(){
-        Vector3d distanceWheelCar = Vector3d.distanceBetween(this.getCenter(), car.getCenter());
-        Vector3d force = this.getResistance();
+        Vector3d distanceWheelCar = Vector3d.distanceBetween(car.getCenter(), this.getCenter());
+        Vector3d force = this.getSumForces();
 
-        //Used to check if the force is to the right or left of the distance vector
-        Vector3d rotatedForce = new Vector3d(force.getY(), force.getX(), 0);
-
-        double tetha = Math.PI - Vector3d.angleBetween(force, distanceWheelCar);
-
-        double sign = distanceWheelCar.dot(rotatedForce) > 0 ? -1 : 1;
-
-        double torque = distanceWheelCar.modulus() * force.modulus() * Math.sin(tetha) * sign;
-
-        return Double.isNaN(torque) ? 0 : torque;
+        return Math.pow(distanceWheelCar.cross(force).modulus() * (this.car.getRotation() - this.getRotation()), 3);
     }
 
     @Override
@@ -118,17 +119,10 @@ public class Wheel extends Bloc {
     }
 
     @Override
-    public Vector3d getSumAngularForces() {
-        Vector3d sumOfAngularForces = super.getSumAngularForces();
-        sumOfAngularForces = sumOfAngularForces.add(this.getResistance());
-
-        return sumOfAngularForces;
-    }
-
-    @Override
     public double getRotation() {
         double totalRotation = car.getRotation();
 
+        //If the wheel is free to rotate, its rotation is not based on the car's rotation
         if(this.canRotate){
             totalRotation = super.getRotation();
         }
@@ -169,7 +163,22 @@ public class Wheel extends Bloc {
         this.canRotate = canRotate;
     }
 
-    public boolean canRotate(){
-        return this.canRotate;
+    @Override
+    public void rotate(double rotation) {
+        super.rotate(rotation);
+
+        //Maximum rotation of MAX_ROTATION in both directions
+        if(Math.abs(this.car.getRotation() - this.getRotation()) > this.MAX_ROTATION){
+            //Cancel the rotation
+            this.rotation = this.rotation - rotation;
+        }
+    }
+
+    /**
+     * Add a thrust force to this wheel
+     * @param thrust the force
+     */
+    public void addThrust(double thrust){
+        this.thrust += thrust;
     }
 }

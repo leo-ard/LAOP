@@ -4,15 +4,10 @@ import org.lrima.laop.math.Vector3d;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.Physicable;
 import org.lrima.laop.physic.objects.Bloc;
-
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Path2D;
-import java.util.ArrayList;
 
 /**
- * Object representing a car
+ * Physic object representing a car
  * @author Clement Bisaillon
  */
 public class Car extends Bloc {
@@ -23,8 +18,12 @@ public class Car extends Bloc {
     private Wheel rightBackWheel;
 
     private double angularSpeed;
-    private double torque;
+    private double lastTorque;
 
+    /**
+     * Create a new car with mass 2000
+     * This method creates the four wheels and attach them to the car.
+     */
     public Car(){
         super(2000, 200, 400);
         this.angularSpeed = 0;
@@ -38,16 +37,10 @@ public class Car extends Bloc {
 
         this.leftBackWheel.setCanRotate(false);
         this.rightBackWheel.setCanRotate(false);
-        this.leftBackWheel.setThrust(30);
-        this.rightBackWheel.setThrust(30);
-
-        this.leftFrontWheel.rotate(-Math.PI/5);
-        this.rightFrontWheel.rotate(-Math.PI/5);
     }
 
     @Override
     protected void nextStep() {
-//        this.rotate(0.001);
         super.nextStep();
 
         //Calculates the total torque applied to the car
@@ -56,25 +49,15 @@ public class Car extends Bloc {
             Wheel w = (Wheel) p;
             totalTorque += w.getTorque();
         }
-        double angularAcceleration = 0.00000001 * totalTorque;
-        this.angularSpeed = this.angularSpeed + angularAcceleration * PhysicEngine.DELTA_T;
 
+        double angularAcceleration = 0.0000001 * totalTorque;
+        this.angularSpeed = this.angularSpeed + angularAcceleration * PhysicEngine.DELTA_T;
         this.rotation += (-this.angularSpeed * PhysicEngine.DELTA_T);
     }
 
     @Override
     public Area getArea() {
         Area carArea = super.getArea();
-
-//        Path2D path = new GeneralPath();
-//        path.moveTo(this.getTopLeftPosition().getX(), this.getTopLeftPosition().getY());
-//        path.lineTo(this.getTopRightPosition().getX(), this.getTopRightPosition().getY());
-//        path.lineTo(this.getBottomRightPosition().getX(), this.getBottomRightPosition().getY());
-//        path.lineTo(this.getBottomLeftPosition().getX(), this.getBottomLeftPosition().getY());
-//        path.closePath();
-//
-//        Area carArea = new Area(path);
-
 
         carArea.add(leftBackWheel.getArea());
         carArea.add(rightBackWheel.getArea());
@@ -84,19 +67,38 @@ public class Car extends Bloc {
         return carArea;
     }
 
+    /**
+     * @return The center position of the car in pixels
+     */
     public Vector3d getCenter(){
         return new Vector3d(this.getPosition().getX() + this.getWidth() / 2, this.getPosition().getY() + this.getHeight() / 2, 0);
     }
 
-    public double getTotalThrust(){
-        double thrust = 0;
-        for(Physicable w : this.getSubObjects()){
-            thrust += ((Wheel) w).getThrustForce().modulus();
-        }
+    /**
+     * Rotate the front wheels by a certain angle in radian
+     * @param rotation the rotation in radian
+     */
+    public void addRotationToWheels(double rotation){
+        this.leftFrontWheel.rotate(rotation);
+        this.rightFrontWheel.rotate(rotation);
+    }
 
-//        System.out.println(thrust);
+    /**
+     * Add a thrust to the two back wheels
+     * @param thrust the thrust
+     */
+    public void addThrust(double thrust){
+        this.rightBackWheel.addThrust(thrust);
+        this.leftBackWheel.addThrust(thrust);
+    }
 
-        return thrust;
+
+    /**
+     * Stop the thrust of the car by setting it to 0 for the two back wheels
+     */
+    public void stopThrust(){
+        this.rightBackWheel.setThrust(0);
+        this.leftBackWheel.setThrust(0);
     }
 
 }

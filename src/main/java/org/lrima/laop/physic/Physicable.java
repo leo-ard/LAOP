@@ -26,6 +26,9 @@ public abstract class Physicable {
     protected long stopCheckingCollisionAt;
     private final int MINIMUM_TIME_BEFORE_COLLISION_AGAIN = 100;
 
+    /**
+     * Create a new physic object with the default variables
+     */
     private Physicable(){
         this.position = Vector3d.origin;
         this.velocity = Vector3d.origin;
@@ -35,6 +38,11 @@ public abstract class Physicable {
         this.subObjects = new ArrayList<>();
     }
 
+    /**
+     * Create a new physic object from a position and a mass
+     * @param position the position of the object
+     * @param mass the mass of the object
+     */
     public Physicable(Vector3d position, double mass){
         this();
         this.position = position;
@@ -102,21 +110,6 @@ public abstract class Physicable {
         return sum;
     }
 
-    public Vector3d getSumAngularForces(){
-        Vector3d sum = Vector3d.origin;
-
-        for(Vector3d force : this.angularForces){
-            sum = sum.add(force);
-        }
-
-        //Get the force of the children
-        for(Physicable child : this.getSubObjects()){
-            sum = sum.add(child.getSumAngularForces());
-        }
-
-        return sum;
-    }
-
 
     /**
      * Calculates and set the position of the object and all its children depending on
@@ -133,7 +126,6 @@ public abstract class Physicable {
             childObject.setVelocity(this.velocity);
             childObject.nextStep();
         }
-
     }
 
     /**
@@ -218,10 +210,17 @@ public abstract class Physicable {
         return objects;
     }
 
+    /**
+     * @return The velocity of the object
+     */
     public Vector3d getVelocity() {
         return velocity;
     }
 
+    /**
+     * Applies a velocity to the object
+     * @param velocity the velocity of the object
+     */
     public void setVelocity(Vector3d velocity) {
         this.velocity = velocity;
     }
@@ -245,10 +244,16 @@ public abstract class Physicable {
         }
     }
 
+    /**
+     * @return the rotation of the object
+     */
     public double getRotation(){
         return this.rotation;
     }
 
+    /**
+     * @return the center of the object
+     */
     public Vector3d getCenter(){
         return Vector3d.origin;
     }
