@@ -1,6 +1,6 @@
-.scene{
-    -fx-background-color: #FFFFFF;
-}
+.root{
+    -fx-background-color: #ffffff;
+    -fx-mid-text-color: #303030;}
 
 .high{
     -fx-background-color : #3944ff;

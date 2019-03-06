@@ -46,6 +46,7 @@ public class OptionString implements Option<String>{
     @Override
     public Node generateComponent() {
         TextField textField = new TextField();
+        textField.textProperty().setValue(value);
         textField.textProperty().addListener((obs, oldVal, newVal)->{
             value = newVal;
         });

@@ -61,6 +61,7 @@ public class OptionInt implements Option<Integer>{
     @Override
     public Node generateComponent() {
         Spinner<Integer> spinner = new Spinner<>(min, max, value, step);
+        spinner.setEditable(true);
         spinner.valueProperty().addListener((obs, oldVal, newVal)->{
             value = newVal;
         });
