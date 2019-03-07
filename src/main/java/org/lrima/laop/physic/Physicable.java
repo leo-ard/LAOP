@@ -117,6 +117,7 @@ public abstract class Physicable {
      */
     protected void nextStep(){
         Vector3d sumOfForces = this.getSumForces();
+
         Vector3d acceleration = sumOfForces.multiply(1.0 / this.mass);
         this.velocity = this.velocity.add(acceleration.multiply(PhysicEngine.DELTA_T));
         this.position = this.position.add(this.velocity.multiply(PhysicEngine.DELTA_T));

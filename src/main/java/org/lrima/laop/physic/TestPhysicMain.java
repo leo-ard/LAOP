@@ -14,8 +14,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-// THIS IS TEMPORARY
 
+/**
+ * Temporary class to test physic engine
+ * @author Clement Bisaillon
+ */
 public class TestPhysicMain extends JPanel implements ActionListener {
 
     //To repaint every x seconds
@@ -42,18 +45,6 @@ public class TestPhysicMain extends JPanel implements ActionListener {
         window.getContentPane().add(drawPanel);
         window.setVisible(true);
 
-//        bloc.addForce(new Vector3d(1, 0, 0));
-//        bloc.addForce(new Vector3d(0.05, 0.1, 0));
-//        engine.addObject(bloc);
-//
-//        bloc2.setPosition(new Vector3d(600, 0, 0));
-//        bloc2.addForce(new Vector3d(-0.02, 0.05, 0));
-//        engine.addObject(bloc2);
-//
-//        sphere1.setPosition(new Vector3d(300, 400, 0));
-//        sphere1.addForce(new Vector3d(-0.03, -0.05, 0));
-//        engine.addObject(sphere1);
-
         car1.setPosition(new Vector3d(200, 200, 0));
         engine.addObject(car1);
 
@@ -76,7 +67,7 @@ public class TestPhysicMain extends JPanel implements ActionListener {
                 }
                 if(e.getKeyCode() == KeyEvent.VK_SPACE){
                     //Thrust
-                    car1.addThrust(0.01);
+                    car1.addThrust(0.1);
                 }
             }
 
@@ -99,20 +90,12 @@ public class TestPhysicMain extends JPanel implements ActionListener {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
-//        g2d.fill(bloc.getArea());
-//        g2d.fill(bloc2.getArea());
-//        g2d.fill(sphere1.getArea());
-
         g2d.setColor(new Color(255, 0, 0, 100));
         g2d.fill(car1.getArea());
 
-        //Draw the vectors
-//        g2d.setColor(new Color(0, 255, 0, 100));
-//        for(Vector3d force : car1.getForces()){
-////            g2d.fillOval((int)force.getX(), (int)force.getY(), 20, 20);
-//            g2d.drawLine((int)car1.getPosition().getX(), (int)car1.getPosition().getY(), (int)force.getX(), (int)force.getY());
-//        }
-//        g2d.drawLine(0, 0, 100, 100);
+        g2d.drawString("Hold A and D to rotate car", 20, 20);
+        g2d.drawString("Hold space to add a force to the car", 20, 40);
+
     }
 
     @Override

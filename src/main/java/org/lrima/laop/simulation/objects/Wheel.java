@@ -15,18 +15,18 @@ import java.util.ArrayList;
  */
 public class Wheel extends Bloc {
 
+    public enum WheelLocation {
+        FRONT_LEFT, FRONT_RIGHT, BACK_LEFT, BACK_RIGHT;
+    }
+
     private final static double WHEEL_WIDTH = 20;
     private final static double WHEEL_HEIGHT = 70;
     private final static double WHEEL_MASS = 200;
-    private final double ROLLING_RESISTANCE_COEF = 0.01;
+    private final double ROLLING_RESISTANCE_COEF = 0.001;
     private final double MAX_ROTATION = Math.PI / 3;
 
     private double thrust;
     private boolean canRotate;
-
-    public enum WheelLocation {
-        FRONT_LEFT, FRONT_RIGHT, BACK_LEFT, BACK_RIGHT;
-    }
 
     private WheelLocation location;
     private Car car;
@@ -39,7 +39,6 @@ public class Wheel extends Bloc {
     public Wheel(Car car, WheelLocation location){
         super(WHEEL_MASS, WHEEL_WIDTH, WHEEL_HEIGHT);
 
-        Vector3d position = Vector3d.origin;
         this.car = car;
         this.thrust = 0;
         this.location = location;
@@ -79,19 +78,23 @@ public class Wheel extends Bloc {
      * Get the resistance force of the wheel on the ground
      * @return the resistance force of the wheel
      */
-    public Vector3d getResistance(){
-        double friction = (this.getWeight().modulus() * this.ROLLING_RESISTANCE_COEF * this.car.getVelocity().modulus());
+    public Vector3d getVelocityResistance(){
+        Vector3d resistance = this.car.getVelocity().multiply(this.getWeight().modulus() * this.ROLLING_RESISTANCE_COEF);
 
-        double x = -Math.sin(this.getRotation()) * friction;
-        double y = Math.cos(this.getRotation()) * friction;
+        //Flip the vector
+        resistance = new Vector3d(resistance.getX() * -1 , resistance.getY() * -1, 0);
 
-        if(MathUtils.nearZero(x))
-            x = 0;
-        if(MathUtils.nearZero(y)){
-            y = 0;
-        }
+        return resistance;
+    }
 
-        Vector3d resistance = new Vector3d(x, y, 0);
+    public Vector3d getAngularResistance(){
+        Vector3d radius = Vector3d.distanceBetween(this.getCenter(), this.car.getCenter());
+        Vector3d resistance = new Vector3d(-1 * radius.getX(), radius.getY(), 0);
+
+        resistance = resistance.multiply(this.car.getAngularSpeed());
+
+//        System.out.println(resistance);
+        System.out.println(this.car.getAngularSpeed());
 
         return resistance;
     }
@@ -104,7 +107,10 @@ public class Wheel extends Bloc {
         Vector3d distanceWheelCar = Vector3d.distanceBetween(car.getCenter(), this.getCenter());
         Vector3d force = this.getSumForces();
 
-        return Math.pow(distanceWheelCar.cross(force).modulus() * (this.car.getRotation() - this.getRotation()), 3);
+        double torque = (this.car.getRotation() - this.getRotation());
+
+
+        return torque;
     }
 
     @Override
@@ -113,7 +119,8 @@ public class Wheel extends Bloc {
 
         //Add the thrust and the resistance to the forces
         sumOfForces = sumOfForces.add(this.getThrustForce());
-        sumOfForces = sumOfForces.add(this.getResistance());
+        sumOfForces = sumOfForces.add(this.getVelocityResistance());
+        sumOfForces = sumOfForces.add(this.getAngularResistance());
 
         return sumOfForces;
     }

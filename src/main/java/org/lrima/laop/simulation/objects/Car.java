@@ -43,15 +43,21 @@ public class Car extends Bloc {
     protected void nextStep() {
         super.nextStep();
 
+        System.out.println("====");
         //Calculates the total torque applied to the car
         double totalTorque = 0;
         for(Physicable p : this.getSubObjects()){
             Wheel w = (Wheel) p;
             totalTorque += w.getTorque();
+
         }
 
-        double angularAcceleration = 0.0000001 * totalTorque;
+        System.out.println(this.getPosition());
+
+
+        double angularAcceleration = 0.001 * totalTorque;
         this.angularSpeed = this.angularSpeed + angularAcceleration * PhysicEngine.DELTA_T;
+
         this.rotation += (-this.angularSpeed * PhysicEngine.DELTA_T);
     }
 
@@ -101,4 +107,7 @@ public class Car extends Bloc {
         this.leftBackWheel.setThrust(0);
     }
 
+    public double getAngularSpeed() {
+        return angularSpeed;
+    }
 }
