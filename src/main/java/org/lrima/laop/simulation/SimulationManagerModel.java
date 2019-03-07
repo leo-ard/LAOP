@@ -5,10 +5,8 @@ import java.util.ArrayList;
 public class SimulationManagerModel {
     private ArrayList<SimulationModel> simulationModels;
     private int maxSimulation;
-    //HashMap<String, Option> options;
 
     /**
-     *
      * @param maxSimulation the simulation's maximum per batch
      */
     public SimulationManagerModel(int maxSimulation){

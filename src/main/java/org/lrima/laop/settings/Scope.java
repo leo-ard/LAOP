@@ -95,15 +95,27 @@ class Scope extends LinkedHashMap<String, Option> {
         return scopeModifierPanel;
     }
 
+    /**
+     * Sets a global scope to the current scope
+     *
+     * @param scope the global scope
+     */
     public void setGlobalScope(Scope scope) {
         this.globalScope = scope;
     }
 
 
+    /**
+     * @param key the key
+     * @return true if the key exist, false otherwise
+     */
     private boolean exist(String key) {
         return get(key) != null;
     }
 
+    /**
+     * @return The global key.
+     */
     public Set<String> globalKeySet(){
         if(globalScope == null)
             return this.keySet();
@@ -113,6 +125,9 @@ class Scope extends LinkedHashMap<String, Option> {
         return specificKeySet;
     }
 
+    /**
+     * @return a specific key set (every key that isn't in the global scope)
+     */
     public Set<String> specificKeySet(){
         if(globalScope == null){
             return new LinkedHashSet<>();
@@ -123,10 +138,19 @@ class Scope extends LinkedHashMap<String, Option> {
         return specificKeySet;
     }
 
+    /**
+     * @return true if this scope is global, false other
+     */
     public boolean isGlobalScope() {
         return globalScope == null;
     }
 
+    /**
+     * Checks if the this key is local or not
+     *
+     * @param key the key to check
+     * @return true if the key is local, false otherwise
+     */
     public boolean existLocal(String key) {
         return super.get(key) == null;
     }

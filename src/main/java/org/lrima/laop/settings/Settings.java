@@ -2,23 +2,17 @@ package org.lrima.laop.settings;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
-import org.lrima.laop.core.LAOP;
-import org.lrima.laop.settings.option.Option;
 
-import javax.swing.*;
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Stores the settings in different scopes and allows the user to get and set the values of the

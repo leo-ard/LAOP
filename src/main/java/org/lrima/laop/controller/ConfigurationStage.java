@@ -5,27 +5,37 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import org.lrima.laop.core.LAOP;
-import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.SimulationBuffer;
 import org.lrima.laop.utils.Utils;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Class that controls the transitions between the configuration panels (with next and back button)
+ *
+ * @author Léonard
+ */
 public class ConfigurationStage extends Stage {
+    /**
+     *  Array of all the panels that must be displayed
+     */
     ArrayList<Parent> scenes;
-    int state;
+
+    /**
+     *  Indicates which panel is displayed
+     */
+    int panelIndex;
 
     JFXButton left;
     JFXButton right;
     BorderPane root;
-
     LAOP laop;
 
     public ConfigurationStage(){
@@ -47,7 +57,7 @@ public class ConfigurationStage extends Stage {
         right = new JFXButton("back");
         right.getStyleClass().add("high");
 
-        setButtonAccordingToState(state);
+        setButtonLabels(panelIndex);
 
         //Bottom panel with the next and back buttons
         Region region = new Region();
@@ -60,7 +70,7 @@ public class ConfigurationStage extends Stage {
         //Border layout to put them together
         root = new BorderPane();
         root.setBottom(bottom);
-        state = -1;
+        panelIndex = -1;
         next();
 
         Scene scene = new Scene(root);
@@ -69,12 +79,21 @@ public class ConfigurationStage extends Stage {
         this.setScene(scene);
     }
 
+    /**
+     * Loads all the scene that must be displayed
+     */
     private void loadAllScenes() {
         scenes = new ArrayList<>();
         scenes.add(load("home"));
         scenes.add(load("configuration"));
     }
 
+    /**
+     * Loads a panel according to the name. Checks within the files for that panel (extension .fxml) and returns it.
+     *
+     * @param name The name of the panel to load
+     * @return The loaded panel
+     */
     private Parent load(String name){
         FXMLLoader loader = Utils.load(name);
 
@@ -86,17 +105,20 @@ public class ConfigurationStage extends Stage {
         return loader.getRoot();
     }
 
-
-
-    private void setButtonAccordingToState(int state){
-        if(state == 0){
+    /**
+     *  Checks the panelIndex of the panel and changes the label of the button accordingly
+     *
+     * @param panelIdex the stage of the panel
+     */
+    private void setButtonLabels(int panelIdex){
+        if(panelIdex == 0){
             left.setText("demo");
             left.setOnAction((e)-> launchDemo());
             right.setText("next");
             right.setOnAction((e)-> next());
             right.setButtonType(JFXButton.ButtonType.RAISED);
 
-        } else if(state > 0){
+        } else if(panelIdex > 0){
             left.setText("Go Back");
             left.setOnAction((e)-> back());
             right.setText("simulate");
@@ -105,6 +127,9 @@ public class ConfigurationStage extends Stage {
 
     }
 
+    /**
+     * Launches the simulation
+     */
     private void simulate() {
         this.close();
         SimulationStage simulationStage = new SimulationStage(new SimulationBuffer());
@@ -112,16 +137,22 @@ public class ConfigurationStage extends Stage {
 
     }
 
+    /**
+     * Displays the previous panel
+     */
     private void back() {
-        state--;
-        root.setCenter(scenes.get(state));
-        setButtonAccordingToState(state);
+        panelIndex--;
+        root.setCenter(scenes.get(panelIndex));
+        setButtonLabels(panelIndex);
     }
 
+    /**
+     * Displays the next panel
+     */
     private void next() {
-        state++;
-        root.setCenter(scenes.get(state));
-        setButtonAccordingToState(state);
+        panelIndex++;
+        root.setCenter(scenes.get(panelIndex));
+        setButtonLabels(panelIndex);
 
     }
 

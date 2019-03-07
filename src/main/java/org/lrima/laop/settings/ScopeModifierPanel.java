@@ -6,7 +6,6 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Spinner;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import org.lrima.laop.settings.option.Option;
@@ -20,13 +19,20 @@ import java.util.Set;
 public class ScopeModifierPanel extends GridPane {
     Scope scope;
 
-
+    /**
+     * Creates a pane that displays the scope. Within the pane, the values of the scope can be modified
+     *
+     * @param scope The scope of the pane to display
+     */
     public ScopeModifierPanel(Scope scope) {
         super();
         this.scope = scope;
     }
 
 
+    /**
+     *  Initialise this panel to look good
+     */
     public void init(){
         setPadding(new Insets(10));
         setHgap(5);
@@ -62,6 +68,15 @@ public class ScopeModifierPanel extends GridPane {
 
     }
 
+    /**
+     * Handles the checkboxes that make some values global or local
+     *
+     * @param b
+     * @param old
+     * @param newVal
+     * @param overriteGlobal
+     * @param key
+     */
     private void handleCheckBoxListener(ObservableValue<? extends Boolean> b, Boolean old, Boolean newVal, CheckBox overriteGlobal, String key) {
         int row = GridPane.getRowIndex(overriteGlobal);
         Node componentToReplace = this.getNodeByRowColumnIndex(1, row);
