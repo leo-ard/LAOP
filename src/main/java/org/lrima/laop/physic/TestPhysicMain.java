@@ -67,7 +67,7 @@ public class TestPhysicMain extends JPanel implements ActionListener {
                 }
                 if(e.getKeyCode() == KeyEvent.VK_SPACE){
                     //Thrust
-                    car1.addThrust(0.1);
+                    car1.addThrust(0.4);
                 }
             }
 

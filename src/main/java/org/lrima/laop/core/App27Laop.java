@@ -20,12 +20,12 @@ public class App27Laop {
         JButton testPhysic = new JButton("Test Physique");
 
         testConfig.addActionListener(e -> {
-            frame.setVisible(false);
+            frame.dispose();
             new Thread(() -> Application.launch(LaopGraphical.class)).start();
         });
 
         testPhysic.addActionListener(e -> {
-            frame.setVisible(false);
+            frame.dispose();
             new Thread(){
                 public void run() {
                     TestPhysicMain.main(new String[]{});}

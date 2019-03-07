@@ -1,6 +1,7 @@
 package org.lrima.laop.physic;
 
 import org.lrima.laop.graphics.AffineTransformation;
+import org.lrima.laop.math.MathUtils;
 import org.lrima.laop.math.Vector3d;
 
 import java.awt.*;
@@ -15,6 +16,7 @@ import java.util.Arrays;
 public abstract class Physicable {
     protected Vector3d position;
     private Vector3d velocity;
+    protected double angularSpeed;
     private double mass;
     protected ArrayList<Vector3d> forces;
     protected ArrayList<Vector3d> angularForces;
@@ -119,7 +121,16 @@ public abstract class Physicable {
         Vector3d sumOfForces = this.getSumForces();
 
         Vector3d acceleration = sumOfForces.multiply(1.0 / this.mass);
+
+
+        //Or else the car never stops
+        if(MathUtils.nearZero(acceleration.modulus(), 0.000001)){
+            acceleration = Vector3d.origin;
+            this.resetVelocity();
+        }
+
         this.velocity = this.velocity.add(acceleration.multiply(PhysicEngine.DELTA_T));
+
         this.position = this.position.add(this.velocity.multiply(PhysicEngine.DELTA_T));
 
         //Make all sub-objects move with the parent
@@ -148,7 +159,9 @@ public abstract class Physicable {
     /**
      * Resets the velocity of the object
      */
-    protected void resetVelocity() {this.velocity = Vector3d.origin;}
+    protected void resetVelocity() {
+        this.velocity = Vector3d.origin;
+    }
 
     /**
      * Get the area of the object to check for collisions
@@ -265,5 +278,9 @@ public abstract class Physicable {
      */
     public Vector3d getWeight(){
         return new Vector3d(0, 0, -(this.mass * PhysicEngine.GRAVITY));
+    }
+
+    public double getAngularSpeed() {
+        return angularSpeed;
     }
 }

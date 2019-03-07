@@ -1,5 +1,6 @@
 package org.lrima.laop.simulation.objects;
 
+import org.lrima.laop.math.MathUtils;
 import org.lrima.laop.math.Vector3d;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.Physicable;
@@ -17,7 +18,6 @@ public class Car extends Bloc {
     private Wheel leftBackWheel;
     private Wheel rightBackWheel;
 
-    private double angularSpeed;
     private double lastTorque;
 
     /**
@@ -43,22 +43,22 @@ public class Car extends Bloc {
     protected void nextStep() {
         super.nextStep();
 
-        System.out.println("====");
-        //Calculates the total torque applied to the car
-        double totalTorque = 0;
+        double totalRotation = this.getRotation() * 4;
         for(Physicable p : this.getSubObjects()){
             Wheel w = (Wheel) p;
-            totalTorque += w.getTorque();
-
+            totalRotation -= w.getRotation();
         }
 
-        System.out.println(this.getPosition());
+        totalRotation *= 0.0001;
 
-
-        double angularAcceleration = 0.001 * totalTorque;
-        this.angularSpeed = this.angularSpeed + angularAcceleration * PhysicEngine.DELTA_T;
-
-        this.rotation += (-this.angularSpeed * PhysicEngine.DELTA_T);
+        if(!MathUtils.nearZero(totalRotation, 0.000001)) {
+            double angularAcceleration = totalRotation;
+            this.angularSpeed = this.angularSpeed + angularAcceleration * PhysicEngine.DELTA_T;
+            this.rotation += (-this.angularSpeed * PhysicEngine.DELTA_T);
+        }
+        else{
+            this.angularSpeed = 0;
+        }
     }
 
     @Override
@@ -107,7 +107,7 @@ public class Car extends Bloc {
         this.leftBackWheel.setThrust(0);
     }
 
-    public double getAngularSpeed() {
-        return angularSpeed;
+    public double getFronWheelsRotation(){
+        return (this.rightFrontWheel.getRotation() + this.leftFrontWheel.getRotation()) / 2;
     }
 }

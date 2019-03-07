@@ -6,8 +6,15 @@ package org.lrima.laop.math;
  * @author Clement Bisaillon
  */
 public class MathUtils {
-    private static final double floatDelta = 0.0001;
+    private static final double FLOAT_DELTA = 0.0001;
 
+
+    public static double normalDistribution(double x, double max, double translate){
+        double firstTerm = 1/(max*Math.sqrt(2*Math.PI));
+        double secondTerm = Math.exp(-Math.pow((x-translate),2)/(2*Math.pow(max,2)));
+
+        return firstTerm * secondTerm;
+    }
 
     /**
      * Used to know if a decimal number is near zero. The precision is 0.0001.
@@ -15,7 +22,17 @@ public class MathUtils {
      * @return true if the number is near 0, false otherwise.
      */
     public static boolean nearZero(double number){
-        if(Math.abs(number) < MathUtils.floatDelta){
+        return nearZero(number, FLOAT_DELTA);
+    }
+
+    /**
+     * Used to know if a decimal number is near zero with a certain error
+     * @param number the number
+     * @param error the error
+     * @return true if the number is near zero, false otherwise
+     */
+    public static boolean nearZero(double number, double error){
+        if(number < error && number > -error){
             return true;
         }
         else{

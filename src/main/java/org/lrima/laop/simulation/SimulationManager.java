@@ -119,6 +119,7 @@ public class SimulationManager implements Runnable{
                 return false;
             }
         }
+
         currentSimulation = new Simulation(this, simulationManagerModel.getSimulationModel(batchCount));
         currentSimulationRunning = true;
 

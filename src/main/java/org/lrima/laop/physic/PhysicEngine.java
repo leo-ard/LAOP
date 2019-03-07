@@ -1,8 +1,5 @@
 package org.lrima.laop.physic;
 
-import org.lrima.laop.math.Vector2d;
-import org.lrima.laop.math.Vector3d;
-
 import java.awt.geom.Area;
 import java.util.ArrayList;
 
