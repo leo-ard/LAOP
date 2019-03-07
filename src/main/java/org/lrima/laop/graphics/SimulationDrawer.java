@@ -1,8 +1,13 @@
 package org.lrima.laop.graphics;
 
+import com.jfoenix.controls.JFXSlider;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
@@ -11,17 +16,24 @@ import org.lrima.laop.simulation.SimulationBuffer;
 
 import java.util.ArrayList;
 
+
 /**
  * Class that draws the simulation into the canvas according to the buffer
  */
-public class SimulationDrawer {
+public class SimulationDrawer implements Runnable{
     Canvas canvas;
     SimulationBuffer buffer;
     Affine affineTransform;
     double mouseXPressed, mouseYPressed;
 
+    Thread autoDrawThread;
+    boolean running;
+    int timeBetweenFrames;
+
     int currentStep;
     double currentZoom = 0;
+
+    Slider slider;
 
     /**
      * Draws the simulation into the canvas according to the buffer
@@ -85,6 +97,8 @@ public class SimulationDrawer {
     public void drawStep(int time){
         currentStep = time;
 
+        if(this.slider != null) this.slider.setValue(time);
+
         ArrayList<CarInfo> cars = buffer.getCars(time);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setFill(Color.GRAY);
@@ -100,4 +114,35 @@ public class SimulationDrawer {
         gc.setTransform(new Affine());
     }
 
+
+    public void startAutodraw(int timeBetweenFrames){
+        this.autoDrawThread = new Thread(this);
+        this.autoDrawThread.start();
+
+        this.running = true;
+        this.timeBetweenFrames = timeBetweenFrames;
+    }
+
+    public void stopAutoDraw(){
+        this.running = false;
+    }
+
+    @Override
+    public void run() {
+        while(running){
+            currentStep++;
+            if(currentStep >= buffer.getSize()) currentStep = 0;
+            repaint();
+
+            try {
+                Thread.sleep(timeBetweenFrames);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void setSlider(JFXSlider slider){
+        this.slider = slider;
+    }
 }

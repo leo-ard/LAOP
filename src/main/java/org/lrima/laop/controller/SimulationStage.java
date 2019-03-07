@@ -8,12 +8,11 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.lrima.laop.graphics.SimulationDrawer;
+import org.lrima.laop.simulation.CarInfo;
 import org.lrima.laop.simulation.SimulationBuffer;
 import org.lrima.laop.simulation.SimulationSnapshot;
-import org.lrima.laop.simulation.objects.Car;
 
 /**
  * Class that displays the simulation with the side panels
@@ -29,40 +28,20 @@ public class SimulationStage extends Stage {
     public SimulationStage(SimulationBuffer buffer){
         this.setTitle("LAOP : Simulation");
         this.buffer = buffer;
-        this.canvas = new Canvas(500, 500);
+        this.canvas = new Canvas(1280, 720);
 
-        SimulationSnapshot snapshot = new SimulationSnapshot();
-        snapshot.addCar(new Car());
-        this.buffer.addSnapshot(snapshot);
+        for(int i = 0; i < 100; i++){
+            SimulationSnapshot snapshot = new SimulationSnapshot();
+            snapshot.addCar(new CarInfo(i*10, i*10, 10, 30, -45));
+            snapshot.addCar(new CarInfo(i*11 + 20, i*11, 10, 30, -45));
+            snapshot.addCar(new CarInfo(i*20 + 40, i*10, 10, 30, -45));
+            snapshot.addCar(new CarInfo(i*15 - 20,  i*10, 10, 30, -45));
+            snapshot.addCar(new CarInfo(i*10 - 40, i*10, 10, 30, -45));
 
-        snapshot = new SimulationSnapshot();
-        snapshot.addCar(0, 0, 100, 100);
-        this.buffer.addSnapshot(snapshot);
-
-        snapshot = new SimulationSnapshot();
-        snapshot.addCar(10, 10, 100, 100);
-        this.buffer.addSnapshot(snapshot);
-
-        snapshot = new SimulationSnapshot();
-        snapshot.addCar(30, 30, 100, 100);
-        this.buffer.addSnapshot(snapshot);
-
-        snapshot = new SimulationSnapshot();
-        snapshot.addCar(50, 50, 100, 100);
-        this.buffer.addSnapshot(snapshot);
-
-        snapshot = new SimulationSnapshot();
-        snapshot.addCar(100, 100, 100, 100);
-        this.buffer.addSnapshot(snapshot);
+            this.buffer.addSnapshot(snapshot);
+        }
 
         this.loadAllScenes();
-
-        this.simulationDrawer = new SimulationDrawer(canvas, buffer);
-        this.simulationDrawer.drawStep(0);
-
-
-        canvas.getGraphicsContext2D().setFill(Color.BLUE);
-        canvas.getGraphicsContext2D().strokeLine(0, 0, 10, 10);
     }
 
     /**
@@ -88,6 +67,17 @@ public class SimulationStage extends Stage {
      */
     private HBox timeLine() {
         Button button = new Button(">");
+
+        button.setOnAction(e ->{
+            if(button.getText().equals(">")){
+                this.simulationDrawer.startAutodraw(100);
+                button.setText("||");
+            }
+            else{
+                this.simulationDrawer.stopAutoDraw();
+                button.setText(">");
+            }
+        });
 
         JFXSlider slider = new JFXSlider();
         slider.setMax(buffer.getSize()-1);
@@ -116,6 +106,10 @@ public class SimulationStage extends Stage {
         HBox.setHgrow(slider, Priority.ALWAYS);
 
         hBox.setStyle("-fx-background-color: blue");
+        this.simulationDrawer = new SimulationDrawer(canvas, buffer);
+        this.simulationDrawer.drawStep(0);
+
+        this.simulationDrawer.setSlider(slider);
 
         return hBox;
 

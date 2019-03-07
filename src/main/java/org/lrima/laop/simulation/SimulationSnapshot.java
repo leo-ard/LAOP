@@ -37,4 +37,8 @@ public class SimulationSnapshot {
     public ArrayList<CarInfo> getCars() {
         return cars;
     }
+
+    public void addCar(CarInfo carInfo) {
+        cars.add(carInfo);
+    }
 }
