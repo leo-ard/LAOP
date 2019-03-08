@@ -1,10 +1,8 @@
 package org.lrima.laop.core;
 
-import com.sun.source.tree.Scope;
-import org.lrima.laop.settings.Settings;
+import org.lrima.laop.settings.*;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
