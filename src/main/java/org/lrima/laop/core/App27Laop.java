@@ -4,6 +4,8 @@ import javafx.application.Application;
 import org.lrima.laop.physic.TestPhysicMain;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Temporary class to launch different parts of the application
@@ -19,17 +21,27 @@ public class App27Laop {
         JButton testConfig = new JButton("Test configuration");
         JButton testPhysic = new JButton("Test Physique");
 
-        testConfig.addActionListener(e -> {
-            frame.dispose();
-            new Thread(() -> Application.launch(LaopGraphical.class)).start();
+        testConfig.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                new Thread(){
+                    public void run() {
+                        Application.launch(LaopGraphical.class);
+                    }
+                }.start();
+            }
         });
 
-        testPhysic.addActionListener(e -> {
-            frame.dispose();
-            new Thread(){
-                public void run() {
-                    TestPhysicMain.main(new String[]{});}
-            }.start();
+        testPhysic.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                new Thread(){
+                    public void run() {
+                        TestPhysicMain.main(new String[]{});}
+                }.start();
+            }
         });
 
 

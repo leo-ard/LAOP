@@ -9,15 +9,15 @@
     <version>0.0.1</version>
 
     <properties>
-        <java.version>10.2</java.version>
-        <maven.compiler.source>10.2</maven.compiler.source>
-        <maven.compiler.target>10.2</maven.compiler.target>
+        <java.version>10</java.version>
+        <maven.compiler.source>10</maven.compiler.source>
+        <maven.compiler.target>10</maven.compiler.target>
     </properties>
 
     <build>
         <resources>
             <resource>
-                <directory>src/main/resources</directory>
+                <directory>resources</directory>
                 <includes>
                     <include>**</include>
                 </includes>
@@ -33,8 +33,15 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>RELEASE</version>
+            <version>4.12</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>javafx</artifactId>
+            <version>2.2.3</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/jfxrt.jar</systemPath>
         </dependency>
     </dependencies>
 

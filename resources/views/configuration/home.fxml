@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="147.0" layoutY="14.0" text="LAOP">
+         <font>
+            <Font size="65.0" />
+         </font>
+      </Label>
+      <Label layoutX="14.0" layoutY="116.0" prefHeight="232.0" prefWidth="420.0" text="Bacon ipsum dolor amet corned beef alcatra strip steak meatloaf doner pork chop, sirloin brisket jowl. Pork sirloin pork belly andouille flank kevin. Sirloin tail tri-tip beef ribs chuck short loin. Tenderloin buffalo prosciutto bresaola sausage meatloaf. Burgdoggen t-bone capicola venison porchetta ribeye turkey short loin ball tip. Swine picanha t-bone tri-tip alcatra jowl. Meatloaf chicken pork belly ball tip pastrami.&#10;&#10;Rump sausage ground round turkey andouille boudin corned beef ribeye pork loin brisket cow fatback pork chop flank landjaeger. Pig short loin ground round picanha shank. Picanha sirloin brisket tri-tip spare ribs pancetta buffalo kevin boudin shankle. Tri-tip shoulder pig fatback biltong corned beef ham hock flank ribeye rump bacon alcatra kielbasa. Kielbasa fatback shankle capicola shoulder, ball tip pork loin short loin pig turducken short ribs." textAlignment="JUSTIFY" wrapText="true" />
+   </children>
+</AnchorPane>

@@ -11,7 +11,7 @@ import java.util.*;
 /**
  * @author Leonard Oeast OLeary and Clement Bisaillon
  */
-class Scope extends LinkedHashMap<String, Option> {
+public class Scope extends LinkedHashMap<String, Option> {
     /**
      * The global scope of this scope. Can be null, meaning that this scope is the global scope
      */

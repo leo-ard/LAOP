@@ -130,7 +130,6 @@ public abstract class Physicable {
         }
 
         this.velocity = this.velocity.add(acceleration.multiply(PhysicEngine.DELTA_T));
-
         this.position = this.position.add(this.velocity.multiply(PhysicEngine.DELTA_T));
 
         //Make all sub-objects move with the parent
