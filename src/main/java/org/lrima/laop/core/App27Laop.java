@@ -21,7 +21,11 @@ public class App27Laop {
 
         testConfig.addActionListener(e -> {
             frame.dispose();
-            new Thread(() -> Application.launch(LaopGraphical.class)).start();
+            new Thread(){
+                public void run() {
+                    Application.launch(LaopGraphical.class);
+                }
+            }.start();
         });
 
         testPhysic.addActionListener(e -> {
