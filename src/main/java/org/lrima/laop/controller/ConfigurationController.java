@@ -27,6 +27,7 @@ public class ConfigurationController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //table.getColumns().add(new JFXTreeTableColumn<>());
+        //todo: C'est quoi ca?
         System.out.println("ii");
 
     }

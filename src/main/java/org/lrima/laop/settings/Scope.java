@@ -6,7 +6,9 @@ import org.lrima.laop.settings.option.OptionDouble;
 import org.lrima.laop.settings.option.OptionInt;
 import org.lrima.laop.settings.option.OptionString;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * @author Leonard Oeast OLeary and Clement Bisaillon

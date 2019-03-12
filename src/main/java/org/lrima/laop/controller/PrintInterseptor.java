@@ -1,11 +1,9 @@
 package org.lrima.laop.controller;
 
-import javafx.event.ActionEvent;
 import org.lrima.laop.utils.Action;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.logging.Handler;
 
 public class PrintInterseptor extends PrintStream {
     Action<String> action;

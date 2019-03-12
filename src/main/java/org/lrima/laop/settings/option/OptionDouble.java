@@ -1,10 +1,7 @@
 package org.lrima.laop.settings.option;
 
-import com.jfoenix.controls.JFXSpinner;
 import javafx.scene.Node;
 import javafx.scene.control.Spinner;
-
-import javax.swing.*;
 
 public class OptionDouble implements Option<Double> {
     private Double value, max, min, step;

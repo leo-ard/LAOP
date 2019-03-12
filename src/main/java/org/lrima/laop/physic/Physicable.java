@@ -29,7 +29,7 @@ public abstract class Physicable {
     private final int MINIMUM_TIME_BEFORE_COLLISION_AGAIN = 100;
 
     /**
-     * Create a new physic object with the default variables
+     * Create a new java.physic object with the default variables
      */
     private Physicable(){
         this.position = Vector3d.origin;
@@ -41,7 +41,7 @@ public abstract class Physicable {
     }
 
     /**
-     * Create a new physic object from a position and a mass
+     * Create a new java.physic object from a position and a mass
      * @param position the position of the object
      * @param mass the mass of the object
      */
@@ -130,6 +130,10 @@ public abstract class Physicable {
         }
 
         this.velocity = this.velocity.add(acceleration.multiply(PhysicEngine.DELTA_T));
+
+        //Makes the velocity the same direction as the orientation of the car
+        this.velocity = this.velocity.projection(this.getDirection());
+
         this.position = this.position.add(this.velocity.multiply(PhysicEngine.DELTA_T));
 
         //Make all sub-objects move with the parent
@@ -272,11 +276,21 @@ public abstract class Physicable {
     }
 
     /**
-     * Get the weight vector of this object based on the gravity of the physic engine
+     * Get the weight vector of this object based on the gravity of the java.physic engine
      * @return the weight of the object
      */
     public Vector3d getWeight(){
         return new Vector3d(0, 0, -(this.mass * PhysicEngine.GRAVITY));
+    }
+
+    /**
+     * Get the direction of the physicable object
+     * @return the direction
+     */
+    public Vector3d getDirection(){
+        Vector3d v = new Vector3d(0, 1, 0);
+
+        return v.rotateZAround(this.rotation, Vector3d.origin);
     }
 
     public double getAngularSpeed() {

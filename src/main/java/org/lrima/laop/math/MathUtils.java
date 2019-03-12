@@ -2,7 +2,7 @@ package org.lrima.laop.math;
 
 
 /**
- * Class for math utilities that are not present in the java Math class
+ * Class for java.math utilities that are not present in the java Math class
  * @author Clement Bisaillon
  */
 public class MathUtils {

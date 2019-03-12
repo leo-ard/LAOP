@@ -1,14 +1,10 @@
 package org.lrima.laop.simulation.objects;
 
-import org.lrima.laop.math.MathUtils;
 import org.lrima.laop.math.Vector3d;
-import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.objects.Bloc;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.util.ArrayList;
-import java.util.Vector;
 
 /**
  * Physic object representing the wheel of a car
@@ -88,6 +84,11 @@ public class Wheel extends Bloc {
         resistance = new Vector3d(resistance.getX() * -1 , resistance.getY() * -1, 0);
 
         return resistance;
+    }
+
+    @Override
+    protected void nextStep() {
+
     }
 
     @Override

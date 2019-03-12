@@ -1,10 +1,7 @@
 package org.lrima.laop.physic;
 
 
-import org.lrima.laop.math.Vector2d;
 import org.lrima.laop.math.Vector3d;
-import org.lrima.laop.physic.objects.Bloc;
-import org.lrima.laop.physic.objects.Sphere;
 import org.lrima.laop.simulation.objects.Car;
 
 import javax.swing.*;
@@ -16,7 +13,7 @@ import java.awt.event.KeyEvent;
 
 
 /**
- * Temporary class to test physic engine
+ * Temporary class to test java.physic engine
  * @author Clement Bisaillon
  */
 public class TestPhysicMain extends JPanel implements ActionListener {
@@ -27,9 +24,6 @@ public class TestPhysicMain extends JPanel implements ActionListener {
     private final static int WORLD_WIDTH = 800;
 
     private static PhysicEngine engine = new PhysicEngine(WORLD_WIDTH);
-    private static Bloc bloc = new Bloc(1, 100, 200);
-    private static Bloc bloc2 = new Bloc(0.5, 200, 50);
-    private static Sphere sphere1 = new Sphere(2, 70);
 
     private static Car car1 = new Car();
 

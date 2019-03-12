@@ -72,7 +72,7 @@ public class PhysicEngine extends Thread {
     }
 
     /**
-     * Add an object to the physic engine
+     * Add an object to the java.physic engine
      * @param object the object to add
      */
     void addObject(Physicable object){

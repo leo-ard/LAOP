@@ -1,8 +1,8 @@
 package tests.math;
 
-import org.lrima.laop.math.Vector2d;
 import org.junit.Assert;
 import org.junit.Test;
+import org.lrima.laop.math.Vector2d;
 
 
 /**

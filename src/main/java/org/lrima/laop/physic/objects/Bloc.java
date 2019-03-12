@@ -1,14 +1,10 @@
 package org.lrima.laop.physic.objects;
 
-import org.lrima.laop.graphics.AffineTransformation;
 import org.lrima.laop.math.Vector3d;
-import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.Physicable;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Area;
-import java.awt.geom.Ellipse2D;
 
 /**
  * @author Clement Bisaillon
@@ -19,7 +15,7 @@ public class Bloc extends Physicable {
     protected double height;
 
     /**
-     * Creates a bloc physic object with a position, a mass and its dimensions
+     * Creates a bloc java.physic object with a position, a mass and its dimensions
      * @param position the position of the object
      * @param mass the mass of the object
      * @param width the width of the object
@@ -32,7 +28,7 @@ public class Bloc extends Physicable {
     }
 
     /**
-     * Creates a bloc physic object with a mass and a dimension.
+     * Creates a bloc java.physic object with a mass and a dimension.
      * @param mass the mass of the object
      * @param width the width of the object
      * @param height the height of the object

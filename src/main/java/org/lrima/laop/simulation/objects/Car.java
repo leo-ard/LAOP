@@ -5,6 +5,7 @@ import org.lrima.laop.math.Vector3d;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.Physicable;
 import org.lrima.laop.physic.objects.Bloc;
+
 import java.awt.geom.Area;
 
 /**
@@ -42,6 +43,7 @@ public class Car extends Bloc {
     @Override
     protected void nextStep() {
         super.nextStep();
+
 
         double totalRotation = this.getRotation() * 4;
         for(Physicable p : this.getSubObjects()){
@@ -109,5 +111,12 @@ public class Car extends Bloc {
 
     public double getFronWheelsRotation(){
         return (this.rightFrontWheel.getRotation() + this.leftFrontWheel.getRotation()) / 2;
+    }
+
+    @Override
+    public Vector3d getDirection(){
+        Vector3d v = new Vector3d(0, 1, 0);
+
+        return v.rotateZAround(this.getFronWheelsRotation(), Vector3d.origin);
     }
 }

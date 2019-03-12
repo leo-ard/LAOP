@@ -11,7 +11,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import org.lrima.laop.core.LAOP;
-import org.lrima.laop.simulation.SimulationBuffer;
 import org.lrima.laop.utils.Utils;
 
 import java.util.ArrayList;
@@ -132,7 +131,7 @@ public class ConfigurationStage extends Stage {
      */
     private void simulate() {
         this.close();
-        SimulationStage simulationStage = new SimulationStage(new SimulationBuffer());
+        SimulationStage simulationStage = new SimulationStage();
         simulationStage.show();
 
     }

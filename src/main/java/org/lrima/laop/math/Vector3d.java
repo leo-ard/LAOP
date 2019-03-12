@@ -169,6 +169,15 @@ public class Vector3d implements Cloneable {
         return new Vector3d(x, y, 0);
     }
 
+    /**
+     * Project a vector on another
+     * @param b the second vector
+     * @return the vector projected on vector2
+     */
+    public Vector3d projection(Vector3d b){
+        return b.normalize().multiply(this.dot(b)/Math.pow(b.modulus(),2));
+    }
+
 
     @Override
     public boolean equals(Object obj) {

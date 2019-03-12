@@ -1,10 +1,7 @@
 package org.lrima.laop.settings.option;
 
 import javafx.scene.Node;
-import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
-
-import javax.swing.*;
 
 public class OptionString implements Option<String>{
     private String value, regex;

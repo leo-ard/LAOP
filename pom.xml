@@ -17,10 +17,7 @@
     <build>
         <resources>
             <resource>
-                <directory>resources</directory>
-                <includes>
-                    <include>**</include>
-                </includes>
+                <directory>src/resources</directory>
             </resource>
         </resources>
     </build>

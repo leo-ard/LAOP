@@ -2,19 +2,17 @@ package org.lrima.laop.simulation;
 
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Area;
 import java.util.Map;
 
 import static java.util.Map.entry;
 
 /**
  *  Class that keeps all the information about one car for the buffer
+ * @author Leonard Oest OLeary
  */
 public class CarInfo {
     public double x, y, width, height, tilt;
