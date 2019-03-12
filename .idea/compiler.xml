@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="LAOP_alpha" target="10" />
+      <module name="LAOP_alpha" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>

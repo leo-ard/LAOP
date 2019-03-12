@@ -6,9 +6,8 @@ import javafx.scene.transform.Affine;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.util.HashMap;
 import java.util.Map;
-
-import static java.util.Map.entry;
 
 /**
  *  Class that keeps all the information about one car for the buffer
@@ -35,12 +34,15 @@ public class CarInfo {
     }
 
     public Map<String, Object> getInformationHashmap() {
-        return Map.ofEntries(
-                entry("x", x),
-                entry("y", y),
-                entry("Longeur", width),
-                entry("Largeur", height),
-                entry("Angle", tilt));
+        Map<String, Object> information = new HashMap<>();
+
+        information.put("x", x);
+        information.put("y", y);
+        information.put("Longeur", width);
+        information.put("Largeur", height);
+        information.put("Angle", tilt);
+
+        return information;
 
     }
 
