@@ -9,6 +9,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/junit-4.13-beta-2"/>
+	<classpathentry kind="lib" path="/LAOP_alpha/lib/jfoenix-8.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/jfxrt.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.13-beta-2.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jfoenix-8.0.8"/>
