@@ -1,4 +1,4 @@
-package tests.physic;
+package java.physic;
 
 import org.junit.Assert;
 import org.junit.Test;
