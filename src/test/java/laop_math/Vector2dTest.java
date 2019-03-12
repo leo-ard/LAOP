@@ -1,4 +1,4 @@
-package java.laop_math;
+package laop_math;
 
 import org.junit.Assert;
 import org.junit.Test;

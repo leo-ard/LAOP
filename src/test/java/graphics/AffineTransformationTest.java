@@ -1,4 +1,4 @@
-package java.graphics;
+package graphics;
 
 import org.junit.Assert;
 import org.junit.Test;
