@@ -111,65 +111,12 @@ public class SimulationStage extends Stage {
     }
 
     /**
-     * Creates and returns all the nodes to create a timeline.
-     *
-     * @return The nodes to create the timeline
-     */
-    private HBox timeLine() {
-        Button button = new Button(">");
-
-        button.setOnAction(e ->{
-            if(button.getText().equals(">")){
-                this.simulationDrawer.startAutodraw(100);
-                button.setText("||");
-            }
-            else{
-                this.simulationDrawer.stopAutoDraw();
-                button.setText(">");
-            }
-        });
-
-        JFXSlider slider = new JFXSlider();
-        slider.setMax(buffer.getSize()-1);
-        slider.setValue(0);
-        slider.setMinorTickCount(1);
-        slider.setMaxWidth(Integer.MAX_VALUE);
-        slider.valueProperty().addListener((obs, oldVal, newVal) -> {
-            int currentValue = (int)Math.round(newVal.doubleValue());
-            int oldValue = (int)Math.round(oldVal.doubleValue());
-
-            System.out.println(currentValue + " " + oldValue);
-
-            if(currentValue != oldValue)
-                setTime(currentValue);
-        });
-
-
-        HBox.setMargin(slider, new Insets(7,0,7,0));
-
-        Button button1 = new Button("Next gen");
-
-        HBox hBox = new HBox(button, slider, button1);
-        hBox.setSpacing(10);
-        hBox.setPadding(new Insets(5));
-
-        HBox.setHgrow(slider, Priority.ALWAYS);
-
-        hBox.setStyle("-fx-background-color: blue");
-        this.simulationDrawer.drawStep(0);
-
-        this.simulationDrawer.setSlider(slider);
-
-        return hBox;
-
-    }
-
-    /**
      * Creates and return the console pane
      *
      * @return The console pane
      */
     private Node console() {
+        //TODO séparer ce component dans on propre component
         VBox console = new VBox();
         console.setAlignment(Pos.BOTTOM_LEFT);
 

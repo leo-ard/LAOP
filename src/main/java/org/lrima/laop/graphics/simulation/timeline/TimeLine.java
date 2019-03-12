@@ -26,40 +26,50 @@ public class TimeLine extends HBox {
     }
 
     private void configure(){
-        this.createTimeSlider();
-        Button nextGenButton = new Button("Next gen");
+        Button button = new Button(">");
 
-        this.getChildren().addAll(playButton, this.timeSlider, nextGenButton);
-        this.setSpacing(10);
-        this.setPadding(new Insets(5));
-        HBox.setHgrow(this.timeSlider, Priority.ALWAYS);
-        this.setStyle("-fx-background-color: blue");
+        button.setOnAction(e ->{
+            if(button.getText().equals(">")){
+                this.simulationDrawer.startAutodraw(100);
+                button.setText("||");
+            }
+            else{
+                this.simulationDrawer.stopAutoDraw();
+                button.setText(">");
+            }
+        });
 
-        //View the first frame
-        this.simulationDrawer.drawStep(0);
-    }
-
-    /**
-     * Creates the time slider
-     * @author Leonard Oest OLeary
-     */
-    private void createTimeSlider(){
-        this.timeSlider = new JFXSlider();
-        this.timeSlider.setMax(buffer.getSize()-1);
-        this.timeSlider.setValue(0);
-        this.timeSlider.setMinorTickCount(1);
-        this.timeSlider.setMaxWidth(Integer.MAX_VALUE);
-        this.timeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+        JFXSlider slider = new JFXSlider();
+        slider.setMax(buffer.getSize()-1);
+        slider.setValue(0);
+        slider.setMinorTickCount(1);
+        slider.setMaxWidth(Integer.MAX_VALUE);
+        slider.valueProperty().addListener((obs, oldVal, newVal) -> {
             int currentValue = (int)Math.round(newVal.doubleValue());
             int oldValue = (int)Math.round(oldVal.doubleValue());
+
+            System.out.println(currentValue + " " + oldValue);
 
             if(currentValue != oldValue)
                 setTime(currentValue);
         });
-        HBox.setMargin(this.timeSlider, new Insets(7,0,7,0));
-        this.simulationDrawer.setSlider(this.timeSlider);
-    }
 
+
+        HBox.setMargin(slider, new Insets(7,0,7,0));
+
+        Button button1 = new Button("Next gen");
+
+        this.getChildren().addAll(button, slider, button1);
+        setSpacing(10);
+        setPadding(new Insets(5));
+
+        HBox.setHgrow(slider, Priority.ALWAYS);
+
+        setStyle("-fx-background-color: rgb(255, 255, 255, 0.5)");
+        this.simulationDrawer.drawStep(0);
+
+        this.simulationDrawer.setSlider(slider);
+    }
     /**
      * Sets the time at which we want the simulation to be displayed at
      *
