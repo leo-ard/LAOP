@@ -1,19 +1,31 @@
 package org.lrima.laop.graphics;
 
 import com.jfoenix.controls.JFXSlider;
+import com.jfoenix.utils.JFXUtilities;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
+import org.lrima.laop.controller.InspectorPane;
 import org.lrima.laop.simulation.CarInfo;
 import org.lrima.laop.simulation.SimulationBuffer;
+import org.lrima.laop.utils.ObjectGetter;
+import org.lrima.laop.utils.Utils;
 
+import java.awt.*;
+import java.awt.geom.RectangularShape;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 
@@ -21,30 +33,33 @@ import java.util.ArrayList;
  * Class that draws the simulation into the canvas according to the buffer
  */
 public class SimulationDrawer implements Runnable{
-    Canvas canvas;
-    SimulationBuffer buffer;
-    Affine affineTransform;
-    double mouseXPressed, mouseYPressed;
+    private Canvas canvas;
+    private SimulationBuffer buffer;
+    private InspectorPane inspector;
 
-    Thread autoDrawThread;
-    boolean running;
-    int timeBetweenFrames;
+    private Affine affineTransform;
+    private double mouseXPressed, mouseYPressed;
 
-    int currentStep;
-    double currentZoom = 0;
+    private Thread autoDrawThread;
+    private boolean running;
+    private int timeBetweenFrames;
 
-    Slider slider;
+    private int currentStep;
+    private double currentZoom = 0;
+
+    private Slider slider;
 
     /**
      * Draws the simulation into the canvas according to the buffer
-     *
-     * @param canvas The canvas to draw on
+     *  @param canvas The canvas to draw on
      * @param buffer The buffer to take the information from
+     * @param inspector
      */
-    public SimulationDrawer(Canvas canvas, SimulationBuffer buffer) {
+    public SimulationDrawer(Canvas canvas, SimulationBuffer buffer, InspectorPane inspector) {
         this.canvas = canvas;
         this.buffer = buffer;
         this.affineTransform = new Affine();
+        this.inspector = inspector;
 
         this.canvas.setOnMousePressed(e -> {
             mouseXPressed = (int) e.getX();
@@ -69,24 +84,52 @@ public class SimulationDrawer implements Runnable{
 
             double zoom = Math.exp(oldZoom - currentZoom);
 
-            Point2D point = new Point2D(0, 0);
-            try {
-                point = this.affineTransform.inverseTransform(e.getX(), e.getY());
-                System.out.println(point);
-            } catch (NonInvertibleTransformException e1) {}
-
+            Point2D point = this.inverseTransform(e.getX(), e.getY());
 
             this.affineTransform.appendScale(zoom, zoom, point);
 
             repaint();
         });
+
+        this.canvas.setOnMouseClicked(e -> {
+            Point2D transformedPoints = null;
+            transformedPoints = this.inverseTransform(e.getX(), e.getY());
+
+            ArrayList<CarInfo> snap = this.buffer.getCars(currentStep);
+
+            for(int i = 0; i < snap.size(); i++){
+                if(snap.get(i).getArea().contains(transformedPoints.getX(), transformedPoints.getY())){
+                    final int currentIndex = i;
+                    inspector.setObject(()-> getCurrent().get(currentIndex));
+                    repaint();
+                }
+            }
+
+
+        });
+
+    }
+
+    private ArrayList<CarInfo> getCurrent() {
+        return this.buffer.getCars(currentStep);
+    }
+
+    private Point2D inverseTransform(double x, double y) {
+        try {
+            return this.affineTransform.inverseTransform(x, y);
+        } catch (NonInvertibleTransformException e1) {}
+        return new Point2D(0, 0);
+    }
+
+    private Point2D inverseTransform(Point2D p){
+        return this.inverseTransform(p.getX(), p.getY());
     }
 
     /**
      * Repaints over the canvas
      */
-    private void repaint() {
-        drawStep(currentStep);
+    public void repaint() {
+        Platform.runLater(()-> drawStep(currentStep));
     }
 
     /**
@@ -96,24 +139,47 @@ public class SimulationDrawer implements Runnable{
      */
     public void drawStep(int time){
         currentStep = time;
-
-        if(this.slider != null) this.slider.setValue(time);
-
         ArrayList<CarInfo> cars = buffer.getCars(time);
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.setFill(Color.GRAY);
+
+        gc.setFill(Color.rgb(180,200, 250 ));
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         gc.setTransform(this.affineTransform);
 
-        gc.setFill(Color.BLACK);
+        //drawGrid(gc);
+
         for(CarInfo car : cars) {
+            if(inspector.getSelectedObject() == car)
+                gc.setFill(Color.RED);
+            else
+                gc.setFill(Color.BLUE);
             car.draw(gc);
         }
 
         gc.setTransform(new Affine());
     }
 
+    private void drawGrid(GraphicsContext gc) {
+        Point2D p1 = new Point2D(0, 0);
+        p1 = this.inverseTransform(p1);
+        Point2D p2 = new Point2D(canvas.getWidth(), canvas.getHeight());
+        p2 = this.inverseTransform(p2);
+
+        gc.setFill(Color.RED);
+
+        int division = 100;
+
+        //System.out.println(p1);
+        gc.setLineWidth(1);
+
+        for(int i = (int)(p1.getX()/division); i < p2.getX(); i+=division){
+            for(int j = (int)(p1.getY()/division); j < p2.getY(); j+=division){
+                gc.strokeLine(i, p1.getY(), i, p2.getY());
+                gc.strokeLine(p1.getX(), j, p2.getX(), j);
+            }
+        }
+    }
 
     public void startAutodraw(int timeBetweenFrames){
         this.autoDrawThread = new Thread(this);
@@ -130,10 +196,13 @@ public class SimulationDrawer implements Runnable{
     @Override
     public void run() {
         while(running){
-            currentStep++;
-            if(currentStep >= buffer.getSize()) currentStep = 0;
-            repaint();
-
+            Platform.runLater(()->{
+                currentStep++;
+                if(currentStep >= buffer.getSize()) currentStep = 0;
+                inspector.update();
+                if(this.slider != null) this.slider.setValue(currentStep);
+                drawStep(currentStep);
+            });
             try {
                 Thread.sleep(timeBetweenFrames);
             } catch (InterruptedException e) {

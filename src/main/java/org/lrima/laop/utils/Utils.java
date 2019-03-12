@@ -1,6 +1,7 @@
 package org.lrima.laop.utils;
 
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Point2D;
 
 import java.io.IOException;
 import java.net.URL;

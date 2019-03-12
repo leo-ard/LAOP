@@ -5,6 +5,14 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
+import java.util.Map;
+
+import static java.util.Map.entry;
+
 /**
  *  Class that keeps all the information about one car for the buffer
  */
@@ -28,6 +36,16 @@ public class CarInfo {
         this.tilt = tilt;
     }
 
+    public Map<String, Object> getInformationHashmap() {
+        return Map.ofEntries(
+                entry("x", x),
+                entry("y", y),
+                entry("Longeur", width),
+                entry("Largeur", height),
+                entry("Angle", tilt));
+
+    }
+
     /**
      * Draws the car
      *
@@ -40,10 +58,18 @@ public class CarInfo {
         Affine temp = gc.getTransform();
         gc.setTransform(affine);
 
-        gc.setFill(Color.RED);
-
         gc.fillRect(x, y, width, height);
 
         gc.setTransform(temp);
+    }
+
+    public Shape getArea(){
+        Rectangle.Double rectangle2D = new Rectangle.Double(x, y, width, height);
+        AffineTransform affineTransform = new AffineTransform();
+        affineTransform.translate(x, y);
+        affineTransform.rotate(Math.toRadians(tilt));
+        affineTransform.translate(-x, -y);
+
+        return affineTransform.createTransformedShape(rectangle2D);
     }
 }
