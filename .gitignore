@@ -1,4 +1,18 @@
-.idea/*
-target/*
 LAOP.iml
-/target/
+
+# User-specific stuff:
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries
+.idea/vcs.xml
+.idea/jsLibraryMappings.xml
+
+# Gradle:
+.idea/gradle.xml
+.idea/libraries
+
+## File-based project format:
+*.iws
+
+# IntelliJ
+/target/*
