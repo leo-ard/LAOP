@@ -2,6 +2,8 @@ package org.lrima.laop.simulation;
 
 import java.util.ArrayList;
 
+import org.lrima.laop.simulation.data.SimulationModel;
+
 public class SimulationManagerModel {
     private ArrayList<SimulationModel> simulationModels;
     private int maxSimulation;

@@ -1,4 +1,4 @@
-package org.lrima.laop.simulation;
+package org.lrima.laop.simulation.data;
 
 public class SimulationModel {
     //For test purposes

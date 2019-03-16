@@ -1,10 +1,7 @@
 package org.lrima.laop.graphics.panels;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-
-import org.lrima.laop.simulation.SimulationModel;
-import org.lrima.laop.simulation.listeners.BatchListener;
+import org.lrima.laop.simulation.data.GenerationData;
+import org.lrima.laop.simulation.data.SimulationModel;
 import org.lrima.laop.simulation.listeners.SimulationListener;
 
 import javafx.geometry.Insets;
@@ -28,11 +25,13 @@ public class ChartPanel extends HBox implements SimulationListener {
 	private LineChart<Number, Number> chart;
 	private Pane parentPane;
 	private SimulationModel simulation;
+	private int generationNumber;
 	
 	private XYChart.Series<Number, Number> averageFitnessSerie;
 	
 	public ChartPanel(Pane parentPane) {
 		this.parentPane = parentPane;
+		this.generationNumber = 0;
 		
 		this.setPadding(new Insets(10, 10, 10, 10));
 		setStyle( "-fx-background-color: rgb(255, 255, 255, 0.5)");
@@ -46,8 +45,6 @@ public class ChartPanel extends HBox implements SimulationListener {
 	 * Creates the axis and configure the chart
 	 */
 	private void setupChart() {
-		
-		
 		this.xAxis = new NumberAxis("Generation", 0, 10, 1);
 		this.yAxis = new NumberAxis("Score", 0, 500, 100);
 		this.chart = new LineChart<>(xAxis, yAxis);
@@ -75,13 +72,19 @@ public class ChartPanel extends HBox implements SimulationListener {
 
 	@Override
 	public void allGenerationEnd() {
-		//1. reset the chart
+		//Reset the series and the generation count
+		this.generationNumber = 0;
+		this.averageFitnessSerie.getData().clear();
 	}
 
 	@Override
-	public void generationEnd() {
-		//1. get the data of the past generation
-		//2. add a new data to the serie
-		//
+	public void generationEnd(GenerationData pastGeneration) {
+		//Add new data to the series from the pas generation
+		XYChart.Data<Number, Number> data = new XYChart.Data(this.generationNumber, pastGeneration.getAverageFitness());
+		
+		//Add the data to the chart
+		this.averageFitnessSerie.getData().add(data);
+		
+		this.generationNumber++;
 	}
 }
