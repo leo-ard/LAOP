@@ -1,17 +1,21 @@
 package org.lrima.laop.controller;
 
-import javafx.beans.value.ChangeListener;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.layout.*;
-import javafx.stage.Stage;
-
+import org.lrima.laop.graphics.panels.ChartPanel;
 import org.lrima.laop.graphics.panels.ConsolePanel;
 import org.lrima.laop.graphics.panels.InspectorPanel;
 import org.lrima.laop.graphics.panels.simulation.timeline.TimeLine;
 import org.lrima.laop.simulation.CarInfo;
 import org.lrima.laop.simulation.SimulationBuffer;
 import org.lrima.laop.simulation.SimulationSnapshot;
+
+import javafx.beans.value.ChangeListener;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 /**
  * Class that displays the simulation with the side panels
@@ -23,9 +27,12 @@ public class SimulationStage extends Stage {
     private Canvas canvas;
     private TimeLine timeLine;
 
+    private BorderPane rootPane;
+    
     private SimulationDrawer simulationDrawer;
     private InspectorPanel inspector;
     private ConsolePanel consolePanel;
+    private ChartPanel chartPanel;
 
     /**
      * Initialize a new simulation stage with a new simulation buffer
@@ -42,9 +49,12 @@ public class SimulationStage extends Stage {
         this.setTitle("LAOP : Simulation");
         this.buffer = buffer;
         //todo: creer constantes pour width et height
+        this.rootPane = new BorderPane();
+        
         this.canvas = new Canvas(1280, 720);
         this.inspector = new InspectorPanel();
         this.consolePanel = new ConsolePanel();
+        this.chartPanel = new ChartPanel(this.rootPane);
 
         //TEMPORARY PROVIDER
         for(int i = 0; i < 100; i++){
@@ -65,7 +75,7 @@ public class SimulationStage extends Stage {
      * Adds all the layouts with their components to root Pane
      */
     private void loadAllScenes() {
-        BorderPane rootPane = new BorderPane();
+        
 
         this.simulationDrawer = new SimulationDrawer(canvas, buffer, inspector);
         this.timeLine = new TimeLine(this.simulationDrawer, this.buffer);
@@ -86,7 +96,13 @@ public class SimulationStage extends Stage {
         clickerPane.setVisible(false);
 
         rootPane.setCenter(clickerPane);
-        rootPane.setBottom(timeLine);
+        
+        //Add the timeLine and the chart panel to the bottom
+        VBox bottomPanelBox = new VBox();
+        bottomPanelBox.getChildren().addAll(this.timeLine, this.chartPanel);
+        
+        rootPane.setBottom(bottomPanelBox);
+        
         rootPane.setRight(inspector);
 
         rootPane.setLeft(this.consolePanel);
