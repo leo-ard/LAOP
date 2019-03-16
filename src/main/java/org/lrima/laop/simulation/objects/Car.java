@@ -36,18 +36,47 @@ public class Car extends Bloc {
         this.leftBackWheel.setCanRotate(false);
         this.rightBackWheel.setCanRotate(false);
     }
+    
+    @Override
+    public Vector3d getSumForces() {
+    	Vector3d sum = Vector3d.origin;
+
+        for(Vector3d force : this.forces){
+            sum = sum.add(force);
+        }
+
+        //Get the force of the children
+        for(Physicable child : this.getSubObjects()){
+            sum = sum.add(child.getSumForces());
+        }
+        
+        //Get the rotation friction force
+//        sum = sum.add(this.getAngularResistance());
+
+        return sum;
+    }
 
     @Override
     protected void nextStep() {
-        super.nextStep();
+    	Vector3d sumOfForces = this.getSumForces();
 
-        double totalRotation = this.getRotation() * 4;
-        for(Physicable p : this.getSubObjects()){
-            Wheel w = (Wheel) p;
-            totalRotation -= w.getRotation();
+        Vector3d acceleration = sumOfForces.multiply(1.0 / this.getMass());
+
+
+        //Or else the car never stops
+        if(MathUtils.nearZero(acceleration.modulus(), 0.000001)){
+            acceleration = Vector3d.origin;
+            this.resetVelocity();
         }
 
-        totalRotation *= 0.0001;
+        this.addVelocity(acceleration.multiply(PhysicEngine.DELTA_T));
+
+  
+        this.addPosition(this.getVelocity().multiply(PhysicEngine.DELTA_T));
+
+        double totalRotation = this.getRotation() - this.getFromWheelsRotation();
+
+        totalRotation *= 0.0001 * this.getVelocity().modulus();
 
         if(!MathUtils.nearZero(totalRotation, 0.000001)) {
             double angularAcceleration = totalRotation;
@@ -55,8 +84,23 @@ public class Car extends Bloc {
             this.rotation += (-this.angularVelocity * PhysicEngine.DELTA_T);
         }
         else{
+        	if(this.angularVelocity != 0) {
+        		this.setVelocity(this.getDirection().normalize().multiply(this.getVelocity().modulus()));
+        	}
             this.angularVelocity = 0;
+            
         }
+    }
+    
+    /**
+     * @return The angular resistance force
+     */
+    private Vector3d getAngularResistance() {
+    	Vector3d direction = this.getDirection().multiply(-1);
+    	Vector3d tangent = new Vector3d(direction.getY(), -direction.getX(), 0);
+    	Vector3d resistance = direction.multiply(this.angularVelocity * this.getWeight().modulus() * 0.2);
+    	
+    	return resistance;
     }
 
     @Override

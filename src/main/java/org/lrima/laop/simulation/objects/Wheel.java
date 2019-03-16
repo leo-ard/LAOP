@@ -19,7 +19,7 @@ public class Wheel extends Bloc {
     private final static double WHEEL_WIDTH = 2;
     private final static double WHEEL_HEIGHT = 7;
     private final static double WHEEL_MASS = 200;
-    private final double ROLLING_RESISTANCE_COEF = 0.0001;
+    public final static double ROLLING_RESISTANCE_COEF = 0.0001;
     private final double MAX_ROTATION = Math.PI / 3;
 
     private double thrust;
@@ -69,7 +69,7 @@ public class Wheel extends Bloc {
      */
     public Vector3d getVelocityResistance(){
         Vector3d resistance = this.car.getVelocity().multiply(this.getWeight().modulus() * this.ROLLING_RESISTANCE_COEF);
-
+        
         //Flip the vector
         resistance = new Vector3d(resistance.getX() * -1 , resistance.getY() * -1, 0);
 
@@ -77,13 +77,11 @@ public class Wheel extends Bloc {
     }
 
     @Override
-    protected void nextStep() {
-
-    }
+    protected void nextStep() {}
 
     @Override
     public Vector3d getSumForces() {
-        Vector3d sumOfForces = super.getSumForces();
+        Vector3d sumOfForces = Vector3d.origin;
 
         //Add the thrust and the resistance to the forces
         sumOfForces = sumOfForces.add(this.getThrustForce());

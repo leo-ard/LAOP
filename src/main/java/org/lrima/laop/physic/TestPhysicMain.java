@@ -60,11 +60,11 @@ public class TestPhysicMain extends JPanel implements ActionListener {
                 //Move the car
                 if(e.getKeyCode() == KeyEvent.VK_D){
                     //Right
-                    engine.getObjects().forEach(car->((Car)car).addRotationToWheels(0.1));
+                    engine.getObjects().forEach(car->((Car)car).addRotationToWheels(0.05));
                 }
                 if(e.getKeyCode() == KeyEvent.VK_A){
                     //Left
-                    engine.getObjects().forEach(car->((Car)car).addRotationToWheels(-0.1));
+                    engine.getObjects().forEach(car->((Car)car).addRotationToWheels(-0.05));
                 }
                 if(e.getKeyCode() == KeyEvent.VK_SPACE){
                     //Thrust

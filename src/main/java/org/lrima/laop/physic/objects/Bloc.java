@@ -9,7 +9,7 @@ import java.awt.geom.AffineTransform;
 /**
  * @author Clement Bisaillon
  */
-public class Bloc extends Physicable {
+public abstract class Bloc extends Physicable {
 
     protected double width;
     protected double height;
@@ -83,8 +83,8 @@ public class Bloc extends Physicable {
      * @return top-left corner's position in pixels
      */
     public Vector3d getTopLeftPosition(){
-        double x = this.position.getX();
-        double y = this.position.getY();
+        double x = this.getPosition().getX();
+        double y = this.getPosition().getY();
         return new Vector3d(x, y, 0).rotateZAround(this.getRotation(), this.getCenter());
     }
 
@@ -92,8 +92,8 @@ public class Bloc extends Physicable {
      * @return top-right corner's position in pixels
      */
     public Vector3d getTopRightPosition(){
-        double x = this.position.getX() + this.width;
-        double y = this.position.getY();
+        double x = this.getPosition().getX() + this.width;
+        double y = this.getPosition().getY();
         return (new Vector3d(x, y, 0)).rotateZAround(this.getRotation(), this.getCenter());
     }
 
@@ -101,8 +101,8 @@ public class Bloc extends Physicable {
      * @return bottom-left corner's position in pixels
      */
     public Vector3d getBottomLeftPosition(){
-        double x = this.position.getX();
-        double y = this.position.getY() + this.height;
+        double x = this.getPosition().getX();
+        double y = this.getPosition().getY() + this.height;
         return (new Vector3d(x, y, 0)).rotateZAround(this.getRotation(), this.getCenter());
     }
 
@@ -110,8 +110,8 @@ public class Bloc extends Physicable {
      * @return top-right corner's position in pixels
      */
     public Vector3d getBottomRightPosition(){
-        double x = this.position.getX() + this.width;
-        double y = this.position.getY() + this.height;
+        double x = this.getPosition().getX() + this.width;
+        double y = this.getPosition().getY() + this.height;
         return (new Vector3d(x, y, 0)).rotateZAround(this.getRotation(), this.getCenter());
     }
 }

@@ -14,7 +14,7 @@ import java.util.Arrays;
  * @author Clement Bisaillon
  */
 public abstract class Physicable {
-    protected Vector3d position;
+    private Vector3d position;
     private Vector3d velocity;
     protected double rotation;
     protected double angularVelocity;
@@ -66,7 +66,7 @@ public abstract class Physicable {
      * Add a new velocity to the object
      * @param velocity - the velocity to add
      */
-    public void addVelocity(Vector3d velocity) {this.velocity.add(velocity);}
+    public void addVelocity(Vector3d velocity) {this.velocity = this.velocity.add(velocity);}
 
     /**
      * Set the position of the physicable object
@@ -96,51 +96,14 @@ public abstract class Physicable {
      * Get the resulting force from all the forces on the object
      * @return the resulting force
      */
-    public Vector3d getSumForces(){
-        Vector3d sum = Vector3d.origin;
-
-        for(Vector3d force : this.forces){
-            sum = sum.add(force);
-        }
-
-        //Get the force of the children
-        for(Physicable child : this.getSubObjects()){
-            sum = sum.add(child.getSumForces());
-        }
-
-        return sum;
-    }
+    public abstract Vector3d getSumForces();
 
 
     /**
      * Calculates and set the position of the object and all its children depending on
      * the sum of the forces applied to them
      */
-    protected void nextStep(){
-        Vector3d sumOfForces = this.getSumForces();
-
-        Vector3d acceleration = sumOfForces.multiply(1.0 / this.mass);
-
-
-        //Or else the car never stops
-        if(MathUtils.nearZero(acceleration.modulus(), 0.000001)){
-            acceleration = Vector3d.origin;
-            this.resetVelocity();
-        }
-
-        this.velocity = this.velocity.add(acceleration.multiply(PhysicEngine.DELTA_T));
-
-        //Makes the velocity the same direction as the orientation of the car
-        this.velocity = this.velocity.projection(this.getDirection());
-
-        this.position = this.position.add(this.velocity.multiply(PhysicEngine.DELTA_T));
-
-        //Make all sub-objects move with the parent
-        for(Physicable childObject : this.getSubObjects()) {
-            childObject.setVelocity(this.velocity);
-            childObject.nextStep();
-        }
-    }
+    protected abstract void nextStep();
 
     /**
      * Check if the object can collide. It is necessary to stop reacting to collisions for a small
@@ -295,4 +258,22 @@ public abstract class Physicable {
     public double getAngularVelocity() {
         return angularVelocity;
     }
+    
+    /**
+     * 
+     * @return The mass of the object
+     */
+    protected double getMass() {
+    	return this.mass;
+    }
+    
+    /**
+     * Translate the position of the object
+     * @param position the translation vector
+     */
+    protected void addPosition(Vector3d position) {
+    	this.position = this.position.add(position);
+    }
+    
+    
 }
