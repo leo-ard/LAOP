@@ -13,10 +13,11 @@ public class GenerationData {
 		this.generationNumber = generationNumber;
 	}
 	
-	/*
+	/**
 	 * @return the average fitness score of the generation
 	 */
 	public double getAverageFitness() {
-		return 17.3;
+		//temporary
+		return (Math.random() * 1000) * ((Math.random() > 0.5) ? 1 : -1);
 	}
 }

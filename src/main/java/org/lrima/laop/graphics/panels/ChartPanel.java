@@ -26,12 +26,16 @@ public class ChartPanel extends HBox implements SimulationListener {
 	private Pane parentPane;
 	private SimulationModel simulation;
 	private int generationNumber;
+	private double maxY;
+	private double minY;
 	
 	private XYChart.Series<Number, Number> averageFitnessSerie;
 	
 	public ChartPanel(Pane parentPane) {
 		this.parentPane = parentPane;
 		this.generationNumber = 0;
+		this.maxY = 0;
+		this.minY = 0;
 		
 		this.setPadding(new Insets(10, 10, 10, 10));
 		setStyle( "-fx-background-color: rgb(255, 255, 255, 0.5)");
@@ -45,7 +49,7 @@ public class ChartPanel extends HBox implements SimulationListener {
 	 * Creates the axis and configure the chart
 	 */
 	private void setupChart() {
-		this.xAxis = new NumberAxis("Generation", 0, 10, 1);
+		this.xAxis = new NumberAxis("Generation", 0, 0, 1);
 		this.yAxis = new NumberAxis("Score", 0, 500, 100);
 		this.chart = new LineChart<>(xAxis, yAxis);
 		
@@ -58,12 +62,6 @@ public class ChartPanel extends HBox implements SimulationListener {
 		//Average fitness serie
 		this.averageFitnessSerie = new XYChart.Series<>();
 		this.averageFitnessSerie.setName("Average fitness");
-		this.averageFitnessSerie.getData().add(new XYChart.Data<Number, Number>(0, 20));
-		this.averageFitnessSerie.getData().add(new XYChart.Data<Number, Number>(1, 50));
-		this.averageFitnessSerie.getData().add(new XYChart.Data<Number, Number>(2, 100));
-		this.averageFitnessSerie.getData().add(new XYChart.Data<Number, Number>(3, 200));
-		this.averageFitnessSerie.getData().add(new XYChart.Data<Number, Number>(4, 240));
-		this.averageFitnessSerie.getData().add(new XYChart.Data<Number, Number>(5, 230));
 		this.chart.getData().add(this.averageFitnessSerie);
 		
 		this.getChildren().add(this.chart);
@@ -79,8 +77,21 @@ public class ChartPanel extends HBox implements SimulationListener {
 
 	@Override
 	public void generationEnd(GenerationData pastGeneration) {
-		//Add new data to the series from the pas generation
-		XYChart.Data<Number, Number> data = new XYChart.Data(this.generationNumber, pastGeneration.getAverageFitness());
+		//Add new data to the series from the past generation
+		double averageFitnessScore = pastGeneration.getAverageFitness();
+		XYChart.Data<Number, Number> data = new XYChart.Data(this.generationNumber, averageFitnessScore);
+		
+		//Change the bounds of the chart
+		if(averageFitnessScore > this.maxY) {
+			this.maxY = averageFitnessScore;
+		}
+		else if(averageFitnessScore < this.minY) {
+			this.minY = averageFitnessScore;
+		}
+		
+		this.yAxis.setLowerBound(this.minY);
+		this.yAxis.setUpperBound(this.maxY);
+		this.xAxis.setUpperBound(this.generationNumber + 1);
 		
 		//Add the data to the chart
 		this.averageFitnessSerie.getData().add(data);
