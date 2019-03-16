@@ -1,7 +1,8 @@
-package org.lrima.laop.graphics.simulation.timeline;
+package org.lrima.laop.graphics.panels.simulation.timeline;
+
+import org.lrima.laop.controller.SimulationDrawer;
 
 import javafx.scene.control.Button;
-import org.lrima.laop.graphics.simulation.SimulationDrawer;
 
 /**
  * The play button of the simulation drawer timeline

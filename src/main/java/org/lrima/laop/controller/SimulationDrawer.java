@@ -1,4 +1,4 @@
-package org.lrima.laop.graphics.simulation;
+package org.lrima.laop.controller;
 
 import com.jfoenix.controls.JFXSlider;
 import javafx.application.Platform;
@@ -9,7 +9,8 @@ import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
-import org.lrima.laop.controller.InspectorPane;
+
+import org.lrima.laop.graphics.panels.InspectorPanel;
 import org.lrima.laop.simulation.CarInfo;
 import org.lrima.laop.simulation.SimulationBuffer;
 
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 public class SimulationDrawer implements Runnable{
     private Canvas canvas;
     private SimulationBuffer buffer;
-    private InspectorPane inspector;
+    private InspectorPanel inspector;
 
     private Affine affineTransform;
     private double mouseXPressed, mouseYPressed;
@@ -42,7 +43,7 @@ public class SimulationDrawer implements Runnable{
      * @param buffer The buffer to take the information from
      * @param inspector
      */
-    public SimulationDrawer(Canvas canvas, SimulationBuffer buffer, InspectorPane inspector) {
+    public SimulationDrawer(Canvas canvas, SimulationBuffer buffer, InspectorPanel inspector) {
         this.canvas = canvas;
         this.buffer = buffer;
         this.affineTransform = new Affine();
@@ -182,6 +183,8 @@ public class SimulationDrawer implements Runnable{
 
     @Override
     public void run() {
+    	
+    	
         while(running){
             Platform.runLater(()->{
                 currentStep++;

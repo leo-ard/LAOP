@@ -1,11 +1,12 @@
-package org.lrima.laop.graphics.simulation.timeline;
+package org.lrima.laop.graphics.panels.simulation.timeline;
 
 import com.jfoenix.controls.JFXSlider;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import org.lrima.laop.graphics.simulation.SimulationDrawer;
+
+import org.lrima.laop.controller.SimulationDrawer;
 import org.lrima.laop.simulation.SimulationBuffer;
 
 /**

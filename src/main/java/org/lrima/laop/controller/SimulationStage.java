@@ -1,27 +1,17 @@
 package org.lrima.laop.controller;
 
-import com.jfoenix.controls.JFXSlider;
 import javafx.beans.value.ChangeListener;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
-import org.lrima.laop.controller.InspectorPane;
-import org.lrima.laop.graphics.simulation.SimulationDrawer;
-import org.lrima.laop.graphics.simulation.timeline.TimeLine;
+
+import org.lrima.laop.graphics.panels.ConsolePanel;
+import org.lrima.laop.graphics.panels.InspectorPanel;
+import org.lrima.laop.graphics.panels.simulation.timeline.TimeLine;
 import org.lrima.laop.simulation.CarInfo;
 import org.lrima.laop.simulation.SimulationBuffer;
 import org.lrima.laop.simulation.SimulationSnapshot;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Class that displays the simulation with the side panels
@@ -34,7 +24,8 @@ public class SimulationStage extends Stage {
     private TimeLine timeLine;
 
     private SimulationDrawer simulationDrawer;
-    private InspectorPane inspector;
+    private InspectorPanel inspector;
+    private ConsolePanel consolePanel;
 
     /**
      * Initialize a new simulation stage with a new simulation buffer
@@ -52,7 +43,8 @@ public class SimulationStage extends Stage {
         this.buffer = buffer;
         //todo: creer constantes pour width et height
         this.canvas = new Canvas(1280, 720);
-        this.inspector = new InspectorPane();
+        this.inspector = new InspectorPanel();
+        this.consolePanel = new ConsolePanel();
 
         //TEMPORARY PROVIDER
         for(int i = 0; i < 100; i++){
@@ -86,7 +78,7 @@ public class SimulationStage extends Stage {
             canvas.setWidth(canvasHolder.getWidth());
             simulationDrawer.repaint();
         };
-
+        
         canvasHolder.widthProperty().addListener(updateWidthHeight);
         canvasHolder.heightProperty().addListener(updateWidthHeight);
 
@@ -97,7 +89,7 @@ public class SimulationStage extends Stage {
         rootPane.setBottom(timeLine);
         rootPane.setRight(inspector);
 
-        rootPane.setLeft(console());
+        rootPane.setLeft(this.consolePanel);
         canvas.setPickOnBounds(false);
         rootPane.setPickOnBounds(false);
 
@@ -108,40 +100,6 @@ public class SimulationStage extends Stage {
         scene.getStylesheets().add("/css/general.css");
 
         this.setScene(scene);
-    }
-
-    /**
-     * Creates and return the console pane
-     *
-     * @return The console pane
-     */
-    private Node console() {
-        //TODO séparer ce component dans on propre component
-        VBox console = new VBox();
-        console.setAlignment(Pos.BOTTOM_LEFT);
-
-        ScrollPane scrollPane = new ScrollPane(console);
-        scrollPane.setVvalue(1);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-
-        System.setOut(new PrintInterseptor(System.out, (s)->{
-            double oldValue = scrollPane.getVvalue();
-
-            String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-            Text prefix = new Text(String.format("[%s] ", time));
-            prefix.setStyle("-fx-font-weight: bold;");
-            Text suffix = new Text(s);
-
-            TextFlow textFlow = new TextFlow(prefix, suffix);
-            console.getChildren().add(textFlow);
-
-            scrollPane.layout();
-
-            if(oldValue == 1.0) scrollPane.setVvalue(1.0);
-        }));
-
-        return scrollPane;
     }
 
     /**

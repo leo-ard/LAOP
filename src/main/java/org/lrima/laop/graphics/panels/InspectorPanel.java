@@ -1,4 +1,4 @@
-package org.lrima.laop.controller;
+package org.lrima.laop.graphics.panels;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -11,10 +11,10 @@ import org.lrima.laop.utils.ObjectGetter;
 
 import java.util.Map;
 
-public class InspectorPane extends VBox {
+public class InspectorPanel extends VBox {
     ObjectGetter<Object> objectGetter;
 
-    public InspectorPane(){
+    public InspectorPanel(){
         super();
 
         this.setSpacing(20);
