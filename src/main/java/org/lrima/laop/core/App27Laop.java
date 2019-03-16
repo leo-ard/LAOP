@@ -16,8 +16,7 @@ public class App27Laop {
     public static void main(String[] args) {
         JFrame frame = new JFrame();
         JPanel panel = new JPanel();
-
-
+        
         JButton testConfig = new JButton("Test configuration");
         JButton testPhysic = new JButton("Test Physique");
 
@@ -43,7 +42,6 @@ public class App27Laop {
                 }.start();
             }
         });
-
 
 
         panel.add(testConfig);

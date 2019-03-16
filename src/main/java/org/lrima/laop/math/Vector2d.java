@@ -5,10 +5,9 @@ package org.lrima.laop.math;
  * @author Clement Bisaillon
  */
 public class Vector2d implements Cloneable {
+    public static Vector2d origin = new Vector2d(0, 0);
     private double x;
     private double y;
-
-    private static Vector2d origin = new Vector2d(0, 0);
 
     /**
      * Creates a new two dimensions vector from two values

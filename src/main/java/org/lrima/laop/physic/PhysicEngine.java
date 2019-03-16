@@ -22,6 +22,10 @@ public class PhysicEngine extends Thread {
         this.worldWidth = worldWidth;
     }
 
+    public ArrayList<Physicable> getObjects() {
+        return objects;
+    }
+
     @Override
     public void run() {
         super.run();

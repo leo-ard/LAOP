@@ -16,15 +16,14 @@ public class Wheel extends Bloc {
         FRONT_LEFT, FRONT_RIGHT, BACK_LEFT, BACK_RIGHT;
     }
 
-    private final static double WHEEL_WIDTH = 20;
-    private final static double WHEEL_HEIGHT = 70;
+    private final static double WHEEL_WIDTH = 2;
+    private final static double WHEEL_HEIGHT = 7;
     private final static double WHEEL_MASS = 200;
     private final double ROLLING_RESISTANCE_COEF = 0.0001;
     private final double MAX_ROTATION = Math.PI / 3;
 
     private double thrust;
     private boolean canRotate;
-    private Vector3d lastTorqueForce;
 
     private WheelLocation location;
     private Car car;
@@ -41,17 +40,8 @@ public class Wheel extends Bloc {
         this.thrust = 0;
         this.location = location;
         this.canRotate = true;
-        this.lastTorqueForce = Vector3d.origin;
 
         this.setPosition(this.getPosition());
-    }
-
-    @Override
-    public Shape getShape() {
-        AffineTransform af = new AffineTransform();
-        af.rotate(this.getRotation(), this.getCenter().getX(), this.getCenter().getY());
-        Shape nonRotatedShape = new Rectangle((int)getPosition().getX(), (int)getPosition().getY(), (int)this.width, (int)this.height);
-        return af.createTransformedShape(nonRotatedShape);
     }
 
     /**
@@ -59,8 +49,8 @@ public class Wheel extends Bloc {
      * @return the thrust force of the wheel
      */
     public Vector3d getThrustForce(){
-        double x = -Math.sin(this.car.getFronWheelsRotation()) * this.thrust;
-        double y = Math.cos(this.car.getFronWheelsRotation()) * this.thrust;
+        double x = -Math.sin(this.car.getFromWheelsRotation()) * this.thrust;
+        double y = Math.cos(this.car.getFromWheelsRotation()) * this.thrust;
 
         return new Vector3d(x, y, 0);
     }

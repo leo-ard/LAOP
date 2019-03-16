@@ -25,7 +25,7 @@ public class TestPhysicMain extends JPanel implements ActionListener {
 
     private static PhysicEngine engine = new PhysicEngine(WORLD_WIDTH);
 
-    private static Car car1 = new Car();
+    //private static Car car1 = new Car();
 
     public static void main(String[] args) {
         JFrame window = new JFrame();
@@ -39,8 +39,15 @@ public class TestPhysicMain extends JPanel implements ActionListener {
         window.getContentPane().add(drawPanel);
         window.setVisible(true);
 
-        car1.setPosition(new Vector3d(200, 200, 0));
-        engine.addObject(car1);
+        for(int i = 1; i < 2; i++){
+            for(int j = 1; j < 2; j++){
+                Car car = new Car();
+                car.setPosition(new Vector3d(200*i, 200*j, 0));
+                engine.addObject(car);
+
+            }
+        }
+
 
         window.addKeyListener(new KeyAdapter() {
             @Override
@@ -53,15 +60,16 @@ public class TestPhysicMain extends JPanel implements ActionListener {
                 //Move the car
                 if(e.getKeyCode() == KeyEvent.VK_D){
                     //Right
-                    car1.addRotationToWheels(0.1);
+                    engine.getObjects().forEach(car->((Car)car).addRotationToWheels(0.1));
                 }
                 if(e.getKeyCode() == KeyEvent.VK_A){
                     //Left
-                    car1.addRotationToWheels(-0.1);
+                    engine.getObjects().forEach(car->((Car)car).addRotationToWheels(-0.1));
                 }
                 if(e.getKeyCode() == KeyEvent.VK_SPACE){
                     //Thrust
-                    car1.addThrust(0.4);
+                    engine.getObjects().forEach(car->((Car)car).addThrust(0.4));
+
                 }
             }
 
@@ -70,7 +78,7 @@ public class TestPhysicMain extends JPanel implements ActionListener {
                 super.keyReleased(e);
 
                 if(e.getKeyCode() == KeyEvent.VK_SPACE){
-                    car1.stopThrust();
+                    engine.getObjects().forEach(car->((Car)car).stopThrust());
                 }
             }
         });
@@ -85,7 +93,10 @@ public class TestPhysicMain extends JPanel implements ActionListener {
         Graphics2D g2d = (Graphics2D) g;
 
         g2d.setColor(new Color(255, 0, 0, 100));
-        g2d.fill(car1.getArea());
+
+        for(Physicable physicable : engine.getObjects()){
+            g2d.fill(physicable.getArea());
+        }
 
         g2d.drawString("Hold A and D to rotate car", 20, 20);
         g2d.drawString("Hold space to add a force to the car", 20, 40);

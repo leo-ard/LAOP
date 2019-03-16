@@ -1,7 +1,7 @@
 package org.lrima.laop.physic;
 
-import org.lrima.laop.graphics.AffineTransformation;
 import org.lrima.laop.math.MathUtils;
+import org.lrima.laop.math.Vector2d;
 import org.lrima.laop.math.Vector3d;
 
 import java.awt.*;
@@ -16,17 +16,16 @@ import java.util.Arrays;
 public abstract class Physicable {
     protected Vector3d position;
     private Vector3d velocity;
-    protected double angularSpeed;
+    protected double rotation;
+    protected double angularVelocity;
     private double mass;
     protected ArrayList<Vector3d> forces;
-    protected ArrayList<Vector3d> angularForces;
-    protected AffineTransformation transformation;
     protected ArrayList<Physicable> subObjects;
-    protected double rotation;
 
     //Used to disable collision detection right after the collision happened
     protected long stopCheckingCollisionAt;
     private final int MINIMUM_TIME_BEFORE_COLLISION_AGAIN = 100;
+
 
     /**
      * Create a new java.physic object with the default variables
@@ -293,7 +292,7 @@ public abstract class Physicable {
         return v.rotateZAround(this.rotation, Vector3d.origin);
     }
 
-    public double getAngularSpeed() {
-        return angularSpeed;
+    public double getAngularVelocity() {
+        return angularVelocity;
     }
 }

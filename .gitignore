@@ -6,6 +6,8 @@ LAOP.iml
 .idea/dictionaries
 .idea/vcs.xml
 .idea/jsLibraryMappings.xml
+.idea/compiler.xml
+.idea/modules.xml
 
 # Gradle:
 .idea/gradle.xml
@@ -16,3 +18,4 @@ LAOP.iml
 
 # IntelliJ
 /target/*
+/target/

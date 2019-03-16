@@ -13,21 +13,18 @@ import java.awt.geom.Area;
  * @author Clement Bisaillon
  */
 public class Car extends Bloc {
-
     private Wheel leftFrontWheel;
     private Wheel rightFrontWheel;
     private Wheel leftBackWheel;
     private Wheel rightBackWheel;
-
-    private double lastTorque;
 
     /**
      * Create a new car with mass 2000
      * This method creates the four wheels and attach them to the car.
      */
     public Car(){
-        super(2000, 200, 400);
-        this.angularSpeed = 0;
+        super(2000, 20, 40);
+        this.angularVelocity = 0;
 
         this.leftBackWheel = new Wheel(this, Wheel.WheelLocation.BACK_LEFT);
         this.rightFrontWheel = new Wheel(this, Wheel.WheelLocation.FRONT_RIGHT);
@@ -44,7 +41,6 @@ public class Car extends Bloc {
     protected void nextStep() {
         super.nextStep();
 
-
         double totalRotation = this.getRotation() * 4;
         for(Physicable p : this.getSubObjects()){
             Wheel w = (Wheel) p;
@@ -55,11 +51,11 @@ public class Car extends Bloc {
 
         if(!MathUtils.nearZero(totalRotation, 0.000001)) {
             double angularAcceleration = totalRotation;
-            this.angularSpeed = this.angularSpeed + angularAcceleration * PhysicEngine.DELTA_T;
-            this.rotation += (-this.angularSpeed * PhysicEngine.DELTA_T);
+            this.angularVelocity = this.angularVelocity + angularAcceleration * PhysicEngine.DELTA_T;
+            this.rotation += (-this.angularVelocity * PhysicEngine.DELTA_T);
         }
         else{
-            this.angularSpeed = 0;
+            this.angularVelocity = 0;
         }
     }
 
@@ -109,7 +105,7 @@ public class Car extends Bloc {
         this.leftBackWheel.setThrust(0);
     }
 
-    public double getFronWheelsRotation(){
+    public double getFromWheelsRotation(){
         return (this.rightFrontWheel.getRotation() + this.leftFrontWheel.getRotation()) / 2;
     }
 
@@ -117,6 +113,6 @@ public class Car extends Bloc {
     public Vector3d getDirection(){
         Vector3d v = new Vector3d(0, 1, 0);
 
-        return v.rotateZAround(this.getFronWheelsRotation(), Vector3d.origin);
+        return v.rotateZAround(this.getFromWheelsRotation(), Vector3d.origin);
     }
 }
