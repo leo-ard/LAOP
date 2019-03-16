@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 
 import org.lrima.laop.simulation.SimulationModel;
+import org.lrima.laop.simulation.listeners.BatchListener;
+import org.lrima.laop.simulation.listeners.SimulationListener;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Side;
@@ -19,7 +21,7 @@ import javafx.scene.layout.Pane;
  * of the cars by the generation number
  * @author Clement Bisaillon
  */
-public class ChartPanel extends HBox {
+public class ChartPanel extends HBox implements SimulationListener {
 
 	private NumberAxis xAxis;
 	private NumberAxis yAxis;
@@ -38,8 +40,6 @@ public class ChartPanel extends HBox {
 		this.setPrefHeight(200);
 		
 		this.setupChart();
-		
-		
 	}
 	
 	/**
@@ -71,5 +71,17 @@ public class ChartPanel extends HBox {
 		
 		this.getChildren().add(this.chart);
 		
+	}
+
+	@Override
+	public void allGenerationEnd() {
+		//1. reset the chart
+	}
+
+	@Override
+	public void generationEnd() {
+		//1. get the data of the past generation
+		//2. add a new data to the serie
+		//
 	}
 }

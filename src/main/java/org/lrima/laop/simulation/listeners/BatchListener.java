@@ -1,6 +1,6 @@
-package org.lrima.laop.simulation;
+package org.lrima.laop.simulation.listeners;
 
-public interface SimulationListener {
+public interface BatchListener {
     void simulationFinished();
     void batchFinished();
     void simulationManagerFinished();

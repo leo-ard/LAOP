@@ -1,6 +1,7 @@
 package org.lrima.laop.simulation;
 
 import org.lrima.laop.simulation.exeptions.SimulationStillRunningExeption;
+import org.lrima.laop.simulation.listeners.BatchListener;
 import org.lrima.laop.simulation.map.Map;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class SimulationManager implements Runnable{
     //TODO : put in settings
     private double msBetweenUpdates = 300;
 
-    private ArrayList<SimulationListener> simulationListeners;
+    private ArrayList<BatchListener> simulationListeners;
     private Simulation currentSimulation;
 
 
@@ -47,7 +48,7 @@ public class SimulationManager implements Runnable{
         simulationThread.start();
     }
 
-    public void addSimulationListener(SimulationListener simulationListener){
+    public void addSimulationListener(BatchListener simulationListener){
         this.simulationListeners.add(simulationListener);
     }
 
@@ -102,7 +103,7 @@ public class SimulationManager implements Runnable{
     private boolean iterateSimulation() {
         //TODO : maybe not the best to detect that it's the first run
         if(simulationCount != -1)
-            simulationListeners.forEach(SimulationListener::simulationFinished);
+            simulationListeners.forEach(BatchListener::simulationFinished);
 
         int maxSimulation = simulationManagerModel.getMaxSimulation();
         int maxBatch = simulationManagerModel.getMaxBatch();
@@ -110,12 +111,12 @@ public class SimulationManager implements Runnable{
 
         //true if the batch finished
         if(simulationCount >= maxSimulation){
-            simulationListeners.forEach(SimulationListener::batchFinished);
+            simulationListeners.forEach(BatchListener::batchFinished);
 
             simulationCount = 0;
             batchCount ++;
             if(batchCount >= maxBatch){
-                simulationListeners.forEach(SimulationListener::simulationManagerFinished);
+                simulationListeners.forEach(BatchListener::simulationManagerFinished);
                 return false;
             }
         }
