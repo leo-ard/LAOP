@@ -127,25 +127,27 @@ public class SimulationDrawer implements Runnable{
      */
     public void drawStep(int time){
         currentStep = time;
-        ArrayList<CarInfo> cars = buffer.getCars(time);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-
-        gc.setFill(Color.rgb(180,200, 250 ));
-        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-        gc.setTransform(this.affineTransform);
-
-        //drawGrid(gc);
-
-        for(CarInfo car : cars) {
-            if(inspector.getSelectedObject() == car)
-                gc.setFill(Color.RED);
-            else
-                gc.setFill(Color.BLUE);
-            car.draw(gc);
+        if(buffer.getSize() > 0) {
+	        ArrayList<CarInfo> cars = buffer.getCars(time);
+	        GraphicsContext gc = canvas.getGraphicsContext2D();
+	
+	        gc.setFill(Color.rgb(180,200, 250 ));
+	        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+	
+	        gc.setTransform(this.affineTransform);
+	
+	        //drawGrid(gc);
+	
+	        for(CarInfo car : cars) {
+	            if(inspector.getSelectedObject() == car)
+	                gc.setFill(Color.RED);
+	            else
+	                gc.setFill(Color.BLUE);
+	            car.draw(gc);
+	        }
+	
+	        gc.setTransform(new Affine());
         }
-
-        gc.setTransform(new Affine());
     }
 
     private void drawGrid(GraphicsContext gc) {
@@ -203,4 +205,5 @@ public class SimulationDrawer implements Runnable{
     public void setSlider(JFXSlider slider){
         this.slider = slider;
     }
+
 }

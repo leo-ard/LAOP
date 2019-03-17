@@ -1,6 +1,8 @@
 package org.lrima.laop.graphics.panels.simulation.timeline;
 
 import com.jfoenix.controls.JFXSlider;
+import com.sun.media.jfxmedia.events.BufferProgressEvent;
+
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
@@ -8,16 +10,18 @@ import javafx.scene.layout.Priority;
 
 import org.lrima.laop.controller.SimulationDrawer;
 import org.lrima.laop.simulation.SimulationBuffer;
+import org.lrima.laop.simulation.listeners.BufferListener;
 
 /**
  * The timeline reusable component
  * @author Clement Bisaillon
  */
-public class TimeLine extends HBox {
+public class TimeLine extends HBox implements BufferListener {
     private SimulationDrawer simulationDrawer;
     private PlayButton playButton;
     private JFXSlider timeSlider;
     private SimulationBuffer buffer;
+    private JFXSlider slider;
 
     public TimeLine(SimulationDrawer simulationDrawer, SimulationBuffer buffer){
         this.simulationDrawer = simulationDrawer;
@@ -39,9 +43,11 @@ public class TimeLine extends HBox {
                 button.setText(">");
             }
         });
+        
+        this.slider = new JFXSlider();
 
-        JFXSlider slider = new JFXSlider();
-        slider.setMax(buffer.getSize()-1);
+        
+        slider.setMax(buffer.getSize());
         slider.setValue(0);
         slider.setMinorTickCount(1);
         slider.setMaxWidth(Integer.MAX_VALUE);
@@ -65,7 +71,6 @@ public class TimeLine extends HBox {
         HBox.setHgrow(slider, Priority.ALWAYS);
 
         setStyle("-fx-background-color: rgb(255, 255, 255, 0.5)");
-        this.simulationDrawer.drawStep(0);
 
         this.simulationDrawer.setSlider(slider);
     }
@@ -78,4 +83,12 @@ public class TimeLine extends HBox {
     private void setTime(int time) {
         this.simulationDrawer.drawStep(time);
     }
+
+	@Override
+	public void newSnapshot() {
+		this.slider.setMax(buffer.getSize());
+		if(buffer.getSize() <= 1) {
+			this.simulationDrawer.drawStep(0);
+		}
+	}
 }

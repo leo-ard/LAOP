@@ -21,9 +21,8 @@ public class TestPhysicMain extends JPanel implements ActionListener {
     //To repaint every x seconds
     private Timer timer=new Timer(10, this);
 
-    private final static int WORLD_WIDTH = 800;
 
-    private static PhysicEngine engine = new PhysicEngine(WORLD_WIDTH);
+    private static PhysicEngine engine = new PhysicEngine(null);
 
     //private static Car car1 = new Car();
 

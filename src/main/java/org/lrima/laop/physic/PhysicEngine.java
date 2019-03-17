@@ -37,12 +37,12 @@ public class PhysicEngine extends Thread {
         this.simulationListeners = new ArrayList<>();
         
         //Create the cars
-        for(int i = 0 ; i < 1 ; i++) {
+        for(int i = 0 ; i < 10 ; i++) {
         	Car car = new Car();
         	
         	car.addThrust(Math.random() * 100000);
         	
-        	car.setRotation(Math.toRadians(45));
+        	car.setRotation(Math.random());
         	this.addObject(car);
         }
     }

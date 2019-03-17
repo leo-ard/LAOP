@@ -63,6 +63,8 @@ public class SimulationStage extends Stage implements SimulationListener {
         this.consolePanel = new ConsolePanel();
         this.chartPanel = new ChartPanel(this.rootPane);
         
+        this.loadAllScenes();
+        
         this.runSimulation();
 
         //TEMPORARY PROVIDER
@@ -87,34 +89,28 @@ public class SimulationStage extends Stage implements SimulationListener {
     private void runSimulation() {
     	this.physicEngine = new PhysicEngine(this.buffer);
     	this.physicEngine.start();
-    	try {
-    		this.physicEngine.join();
-    	}catch(Exception e) {
-    		e.printStackTrace();
-    	}
-    	this.loadAllScenes();
     }
 
     /**
      * Adds all the layouts with their components to root Pane
      */
     private void loadAllScenes() {
-        
-
         this.simulationDrawer = new SimulationDrawer(canvas, buffer, inspector);
         this.timeLine = new TimeLine(this.simulationDrawer, this.buffer);
+        
+        this.buffer.addBufferListener(this.timeLine);
 
         Pane canvasHolder = new Pane(canvas);
 
         //CANVAS
-        ChangeListener<Number> updateWidthHeight = (observable, oldValue, newValue) -> {
-            canvas.setHeight(canvasHolder.getHeight());
-            canvas.setWidth(canvasHolder.getWidth());
-            simulationDrawer.repaint();
-        };
-        
-        canvasHolder.widthProperty().addListener(updateWidthHeight);
-        canvasHolder.heightProperty().addListener(updateWidthHeight);
+//        ChangeListener<Number> updateWidthHeight = (observable, oldValue, newValue) -> {
+//            canvas.setHeight(canvasHolder.getHeight());
+//            canvas.setWidth(canvasHolder.getWidth());
+//            simulationDrawer.repaint();
+//        };
+//        
+//        canvasHolder.widthProperty().addListener(updateWidthHeight);
+//        canvasHolder.heightProperty().addListener(updateWidthHeight);
 
         Pane clickerPane = new Pane();
         clickerPane.setVisible(false);
