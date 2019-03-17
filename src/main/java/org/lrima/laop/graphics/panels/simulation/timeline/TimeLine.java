@@ -49,8 +49,6 @@ public class TimeLine extends HBox {
             int currentValue = (int)Math.round(newVal.doubleValue());
             int oldValue = (int)Math.round(oldVal.doubleValue());
 
-            System.out.println(currentValue + " " + oldValue);
-
             if(currentValue != oldValue)
                 setTime(currentValue);
         });

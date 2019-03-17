@@ -62,20 +62,20 @@ public class ConsolePanel extends VBox {
             scrollPane.layout();
         }));
 		
-		System.setErr(new PrintInterseptor(System.err, (s)->{
-            String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-            Text prefix = new Text(String.format("ERROR at [%s] ", time));
-            prefix.setFill(Color.RED);
-            prefix.setStyle("-fx-font-weight: bold;");
-            Text suffix = new Text(s);
-            suffix.setFill(Color.RED);
-
-            TextFlow textFlow = new TextFlow(prefix, suffix);
-            textFlow.setMaxWidth(MAX_WIDTH);
-            this.getChildren().add(textFlow);
-
-            scrollPane.layout();
-        }));
+//		System.setErr(new PrintInterseptor(System.err, (s)->{
+//            String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+//            Text prefix = new Text(String.format("ERROR at [%s] ", time));
+//            prefix.setFill(Color.RED);
+//            prefix.setStyle("-fx-font-weight: bold;");
+//            Text suffix = new Text(s);
+//            suffix.setFill(Color.RED);
+//
+//            TextFlow textFlow = new TextFlow(prefix, suffix);
+//            textFlow.setMaxWidth(MAX_WIDTH);
+//            this.getChildren().add(textFlow);
+//
+//            scrollPane.layout();
+//        }));
 	}
 
 }

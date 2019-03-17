@@ -158,7 +158,6 @@ public class SimulationDrawer implements Runnable{
 
         int division = 100;
 
-        //System.out.println(p1);
         gc.setLineWidth(1);
 
         for(int i = (int)(p1.getX()/division); i < p2.getX(); i+=division){

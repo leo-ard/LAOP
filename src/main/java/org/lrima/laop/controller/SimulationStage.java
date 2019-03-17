@@ -4,9 +4,12 @@ import org.lrima.laop.graphics.panels.ChartPanel;
 import org.lrima.laop.graphics.panels.ConsolePanel;
 import org.lrima.laop.graphics.panels.InspectorPanel;
 import org.lrima.laop.graphics.panels.simulation.timeline.TimeLine;
+import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.simulation.CarInfo;
 import org.lrima.laop.simulation.SimulationBuffer;
 import org.lrima.laop.simulation.SimulationSnapshot;
+import org.lrima.laop.simulation.data.GenerationData;
+import org.lrima.laop.simulation.listeners.SimulationListener;
 
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Scene;
@@ -22,7 +25,7 @@ import javafx.stage.Stage;
  *
  * @author Léonard
  */
-public class SimulationStage extends Stage {
+public class SimulationStage extends Stage implements SimulationListener {
     private SimulationBuffer buffer;
     private Canvas canvas;
     private TimeLine timeLine;
@@ -33,6 +36,11 @@ public class SimulationStage extends Stage {
     private InspectorPanel inspector;
     private ConsolePanel consolePanel;
     private ChartPanel chartPanel;
+    
+    private PhysicEngine physicEngine;
+    
+    private final double WINDOW_WIDTH = 1280;
+    private final double WINDOW_HEIGHT = 720;
 
     /**
      * Initialize a new simulation stage with a new simulation buffer
@@ -48,27 +56,43 @@ public class SimulationStage extends Stage {
     public SimulationStage(SimulationBuffer buffer){
         this.setTitle("LAOP : Simulation");
         this.buffer = buffer;
-        //todo: creer constantes pour width et height
         this.rootPane = new BorderPane();
         
-        this.canvas = new Canvas(1280, 720);
+        this.canvas = new Canvas(WINDOW_WIDTH, WINDOW_HEIGHT);
         this.inspector = new InspectorPanel();
         this.consolePanel = new ConsolePanel();
         this.chartPanel = new ChartPanel(this.rootPane);
+        
+        this.runSimulation();
 
         //TEMPORARY PROVIDER
-        for(int i = 0; i < 100; i++){
-            SimulationSnapshot snapshot = new SimulationSnapshot();
+//        for(int i = 0; i < 100; i++){
+//            SimulationSnapshot snapshot = new SimulationSnapshot();
+//
+//            for(int j = 0; j < 100; j++){
+//                snapshot.addCar(new CarInfo(i*10 + j*15, i*10, 10, 30, -45));
+//            }
+//
+//            this.buffer.addSnapshot(snapshot);
+//        }
+        
 
-            for(int j = 0; j < 100; j++){
-                snapshot.addCar(new CarInfo(i*10 + j*15, i*10, 10, 30, -45));
-
-            }
-
-            this.buffer.addSnapshot(snapshot);
-        }
-
-        this.loadAllScenes();
+    
+    }
+    
+    /**
+     * Run the physic engine with some cars in it
+     * @author Clement Bisaillon
+     */
+    private void runSimulation() {
+    	this.physicEngine = new PhysicEngine(this.buffer);
+    	this.physicEngine.start();
+    	try {
+    		this.physicEngine.join();
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    	this.loadAllScenes();
     }
 
     /**
@@ -105,7 +129,7 @@ public class SimulationStage extends Stage {
         
         rootPane.setRight(inspector);
 
-        rootPane.setLeft(this.consolePanel);
+//        rootPane.setLeft(this.consolePanel);
         canvas.setPickOnBounds(false);
         rootPane.setPickOnBounds(false);
 
@@ -126,4 +150,15 @@ public class SimulationStage extends Stage {
     private void setTime(int time) {
         this.simulationDrawer.drawStep(time);
     }
+
+	@Override
+	public void allGenerationEnd() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void generationEnd(GenerationData pastGeneration) {
+		
+	}
 }

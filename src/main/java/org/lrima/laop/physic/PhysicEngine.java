@@ -3,6 +3,12 @@ package org.lrima.laop.physic;
 import java.awt.geom.Area;
 import java.util.ArrayList;
 
+import org.lrima.laop.math.Vector3d;
+import org.lrima.laop.simulation.SimulationBuffer;
+import org.lrima.laop.simulation.SimulationSnapshot;
+import org.lrima.laop.simulation.listeners.SimulationListener;
+import org.lrima.laop.simulation.objects.Car;
+
 /**
  *
  * @author Clement Bisaillon
@@ -16,10 +22,29 @@ public class PhysicEngine extends Thread {
     private ArrayList<Physicable> objects;
     private boolean running = true;
     private double worldWidth;
+    
+    //////Temporary
+    private final int MAX_ITERATION = 200;
+    private int CURRENT_ITERATION = 0;
+    //////Temporary
+    
+    private SimulationBuffer simulationBuffer;
+    private ArrayList<SimulationListener> simulationListeners;
 
-    PhysicEngine(double worldWidth){
+    public PhysicEngine(SimulationBuffer buffer){
+    	this.simulationBuffer = buffer;
         this.objects = new ArrayList<>();
-        this.worldWidth = worldWidth;
+        this.simulationListeners = new ArrayList<>();
+        
+        //Create the cars
+        for(int i = 0 ; i < 1 ; i++) {
+        	Car car = new Car();
+        	
+        	car.addThrust(Math.random() * 100000);
+        	
+        	car.setRotation(Math.toRadians(45));
+        	this.addObject(car);
+        }
     }
 
     public ArrayList<Physicable> getObjects() {
@@ -29,18 +54,50 @@ public class PhysicEngine extends Thread {
     @Override
     public void run() {
         super.run();
-        while(running){
+        while(running && (this.CURRENT_ITERATION < this.MAX_ITERATION)){
             if(!this.pause) {
                 try {
+                	//Save the state of the cars in the buffer
+                	this.saveCarsState();
+                	
                     this.nextStep();
                     this.checkCollision();
-
+                    
+                    this.CURRENT_ITERATION++;
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
                     System.err.println("Thread Stopped");
                 }
             }
         }
+        
+        this.fireSimulationEnd();
+    }
+    
+    /**
+     * Notify the simulation listeners that the simulation ended
+     */
+    private void fireSimulationEnd() {
+    	for(SimulationListener listener : this.simulationListeners) {
+    		listener.generationEnd(null);
+    	}
+    }
+    
+    /**
+     * Save the state of each cars in a simulation snapshot then
+     * adds it to the simulation buffer
+     */
+    private void saveCarsState() {
+    	SimulationSnapshot snapshot = new SimulationSnapshot();
+    	
+    	for(Physicable object : this.objects) {
+    		if(object instanceof Car) {
+    			Car car = (Car) object;
+    			snapshot.addCar(car.getSnapShotInfo());
+    		}
+    	}
+    	
+    	this.simulationBuffer.addSnapshot(snapshot);
     }
 
     /**
@@ -98,5 +155,13 @@ public class PhysicEngine extends Thread {
 
     public void togglePause(){
         this.pause = !pause;
+    }
+    
+    /**
+     * Add a simulation listener
+     * @param listener the listener
+     */
+    public void addSimulationListener(SimulationListener listener) {
+    	this.simulationListeners.add(listener);
     }
 }

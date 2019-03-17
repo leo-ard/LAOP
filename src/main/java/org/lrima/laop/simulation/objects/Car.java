@@ -5,6 +5,7 @@ import org.lrima.laop.math.Vector3d;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.Physicable;
 import org.lrima.laop.physic.objects.Bloc;
+import org.lrima.laop.simulation.CarInfo;
 
 import java.awt.geom.Area;
 
@@ -158,5 +159,21 @@ public class Car extends Bloc {
         Vector3d v = new Vector3d(0, 1, 0);
 
         return v.rotateZAround(this.getFromWheelsRotation(), Vector3d.origin);
+    }
+    
+    /**
+     * Used to save the state of the car in the simulation buffer
+     * @return the state of the state
+     */
+    public CarInfo getSnapShotInfo() {
+    	return new CarInfo(this.getPosition().getX(), this.getPosition().getY(), this.width, this.height, Math.toDegrees(this.rotation));
+    }
+    
+    /**
+     * Set the rotation of this car
+     * @param theta
+     */
+    public void setRotation(double theta) {
+    	this.addRotationToWheels(theta);
     }
 }
