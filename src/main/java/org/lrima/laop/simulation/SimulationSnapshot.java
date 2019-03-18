@@ -22,11 +22,7 @@ public class SimulationSnapshot {
      * @param car the car to be added
      */
     public void addCar(Car car){
-        cars.add(new CarInfo(car.getPosition().getX(), car.getPosition().getY(), car.getWidth(), car.getHeight(), 0));
-    }
-
-    public void addCar(int x, int y, int w, int h) {
-        cars.add(new CarInfo(x, y, w, h, Math.PI * 10));
+        cars.add(new CarInfo(car));
     }
 
     /**

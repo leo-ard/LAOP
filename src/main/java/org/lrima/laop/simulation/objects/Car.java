@@ -61,16 +61,16 @@ public class Car extends Bloc {
     protected void nextStep() {
     	Vector3d sumOfForces = this.getSumForces();
 
-        Vector3d acceleration = sumOfForces.multiply(1.0 / this.getMass());
+        this.setAcceleration(sumOfForces.multiply(1.0 / this.getMass()));
 
 
         //Or else the car never stops
-        if(MathUtils.nearZero(acceleration.modulus(), 0.000001)){
-            acceleration = Vector3d.origin;
+        if(MathUtils.nearZero(getAcceleration().modulus(), 0.000001)){
+        	this.setAcceleration(Vector3d.origin);
             this.resetVelocity();
         }
 
-        this.addVelocity(acceleration.multiply(PhysicEngine.DELTA_T));
+        this.addVelocity(getAcceleration().multiply(PhysicEngine.DELTA_T));
 
   
         this.addPosition(this.getVelocity().multiply(PhysicEngine.DELTA_T));
@@ -166,7 +166,7 @@ public class Car extends Bloc {
      * @return the state of the state
      */
     public CarInfo getSnapShotInfo() {
-    	return new CarInfo(this.getPosition().getX(), this.getPosition().getY(), this.width, this.height, Math.toDegrees(this.rotation));
+    	return new CarInfo(this);
     }
     
     /**

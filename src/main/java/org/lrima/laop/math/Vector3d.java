@@ -189,4 +189,16 @@ public class Vector3d implements Cloneable {
     public String toString() {
         return "("+ this.x +" ; "+ this.y +" ; " + this.z +")";
     }
+    
+    /**
+     * Display the vector with each component having only 2 decimals
+     * @return the formated string of this vector
+     */
+    public String toFormatedString() {
+    	String xFormated = String.format("%.2f", this.x);
+    	String yFormated = String.format("%.2f", this.y);
+    	String zFormated = String.format("%.2f", this.z);
+    	
+    	return "(" + xFormated + " ; " + yFormated + " ; " + zFormated + ")";
+    }
 }

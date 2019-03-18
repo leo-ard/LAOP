@@ -1,46 +1,55 @@
 package org.lrima.laop.simulation;
 
-import javafx.geometry.Point2D;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.transform.Affine;
-
-import java.awt.*;
+import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.lrima.laop.math.Vector3d;
+import org.lrima.laop.simulation.objects.Car;
+
+import javafx.geometry.Point2D;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.transform.Affine;
 
 /**
  *  Class that keeps all the information about one car for the buffer
  * @author Leonard Oest OLeary
  */
 public class CarInfo {
-    public double x, y, width, height, tilt;
+    private double x;
+    private double y;
+    private double width;
+    private double height;
+    private double tilt;
+    private Vector3d velociy;
+    private Vector3d acceleration;
 
     /**
-     * Creates a new car with the specified attributes
-     *
-     * @param x position x
-     * @param y position y
-     * @param width
-     * @param height
-     * @param tilt the rotation
+     * Retrieve information from a car
+     * @param car the car
      */
-    public CarInfo(double x, double y, double width, double height, double tilt) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.tilt = tilt;
+    public CarInfo(Car car) {
+    	this.x = car.getPosition().getX();
+    	this.y = car.getPosition().getY();
+    	this.width = car.getWidth();
+    	this.height = car.getHeight();
+    	this.tilt = Math.toDegrees(car.getRotation());
+    	this.velociy = car.getVelocity();
+    	this.acceleration = car.getAcceleration();
     }
 
-    public Map<String, Object> getInformationHashmap() {
-        Map<String, Object> information = new HashMap<>();
+    public Map<String, String> getInformationHashmap() {
+        Map<String, String> information = new HashMap<>();
 
-        information.put("x", x);
-        information.put("y", y);
-        information.put("Longeur", width);
-        information.put("Largeur", height);
-        information.put("Angle", tilt);
+        information.put("x", String.format("%.2f", x));
+        information.put("y", String.format("%.2f", y));
+        information.put("Longeur", String.format("%.2f", width));
+        information.put("Largeur", String.format("%.2f", height));
+        information.put("Angle", String.format("%.2f", tilt));
+        information.put("Velocity", velociy.toFormatedString());
+        information.put("Acceleration", acceleration.toFormatedString());
 
         return information;
 

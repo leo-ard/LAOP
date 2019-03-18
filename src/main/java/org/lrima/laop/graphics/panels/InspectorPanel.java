@@ -52,8 +52,8 @@ public class InspectorPanel extends VBox {
 
         this.setAlignment(Pos.TOP_LEFT);
 
-        for(Map.Entry<String, Object> entry : car.getInformationHashmap().entrySet()){
-            add(new Label(entry.getKey() + " : "+ entry.getValue().toString()));
+        for(String key : car.getInformationHashmap().keySet()){
+            add(new Label(key + " : "+ car.getInformationHashmap().get(key)));
         }
 
     }

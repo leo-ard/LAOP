@@ -16,6 +16,7 @@ import java.util.Arrays;
 public abstract class Physicable {
     private Vector3d position;
     private Vector3d velocity;
+    private Vector3d acceleration;
     protected double rotation;
     protected double angularVelocity;
     private double mass;
@@ -33,6 +34,7 @@ public abstract class Physicable {
     private Physicable(){
         this.position = Vector3d.origin;
         this.velocity = Vector3d.origin;
+        this.acceleration = Vector3d.origin;
         this.mass = 0;
         this.rotation = 0;
         this.forces = new ArrayList<>();
@@ -275,5 +277,20 @@ public abstract class Physicable {
     	this.position = this.position.add(position);
     }
     
+    
+    /**
+     * @return The acceleration of the car
+     */
+    public Vector3d getAcceleration() {
+    	return this.acceleration;
+    }
+    
+    /**
+     * Set the acceleration of the car
+     * @param acc the acceleration
+     */
+    public void setAcceleration(Vector3d acc) {
+    	this.acceleration = acc;
+    }
     
 }
