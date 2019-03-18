@@ -18,6 +18,7 @@ import java.awt.event.KeyEvent;
  */
 public class TestPhysicMain extends JPanel implements ActionListener {
 
+    private static final int WORLD_WIDTH = 3000;
     //To repaint every x seconds
     private Timer timer=new Timer(10, this);
 

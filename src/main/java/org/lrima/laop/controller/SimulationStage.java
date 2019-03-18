@@ -103,14 +103,14 @@ public class SimulationStage extends Stage implements SimulationListener {
         Pane canvasHolder = new Pane(canvas);
 
         //CANVAS
-//        ChangeListener<Number> updateWidthHeight = (observable, oldValue, newValue) -> {
-//            canvas.setHeight(canvasHolder.getHeight());
-//            canvas.setWidth(canvasHolder.getWidth());
-//            simulationDrawer.repaint();
-//        };
-//        
-//        canvasHolder.widthProperty().addListener(updateWidthHeight);
-//        canvasHolder.heightProperty().addListener(updateWidthHeight);
+        ChangeListener<Number> updateWidthHeight = (observable, oldValue, newValue) -> {
+            canvas.setHeight(rootPane.getHeight());
+            canvas.setWidth(rootPane.getWidth());
+            simulationDrawer.repaint();
+        };
+
+        rootPane.widthProperty().addListener(updateWidthHeight);
+        rootPane.heightProperty().addListener(updateWidthHeight);
 
         Pane clickerPane = new Pane();
         clickerPane.setVisible(false);
