@@ -11,8 +11,12 @@ import org.lrima.laop.utils.ObjectGetter;
 
 import java.util.Map;
 
+/**
+ * Inspect an élément
+ * @author Léonard
+ */
 public class InspectorPanel extends VBox {
-    ObjectGetter<Object> objectGetter;
+    ObjectGetter<? extends Inspectable> objectGetter;
 
     public InspectorPanel(){
         super();
@@ -23,9 +27,12 @@ public class InspectorPanel extends VBox {
         this.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5)");
     }
 
+    /**
+     * Génère le panneau quand aucune voiture n'est selecté
+     */
     private void generateUnselectPane() {
         this.setAlignment(Pos.CENTER);
-        Label selectItem = new Label("SELECT AN ITEM PLZ");
+        Label selectItem = new Label("Clique sur une voiture !");
         this.add(selectItem);
     }
 
@@ -34,43 +41,41 @@ public class InspectorPanel extends VBox {
      *
      * @param object
      */
-    public void generatePane(Object object){
+    public void generatePane(Inspectable object){
         this.getChildren().clear();
-        if(object instanceof CarInfo){
-            genCarInfo((CarInfo)object);
-        }else{
-            generateUnselectPane();
-        }
-
-
+        object.generatePanel(this);
     }
 
-    private void genCarInfo(CarInfo car) {
-        Label titleLabel = new Label("CAR INFORMATION");
-        titleLabel.setFont(new Font(18));
-        add(titleLabel);
-
-        this.setAlignment(Pos.TOP_LEFT);
-
-        for(String key : car.getInformationHashmap().keySet()){
-            add(new Label(key + " : "+ car.getInformationHashmap().get(key)));
-        }
-    }
-
+    /**
+     * Met à jour ce panneau
+     */
     public void update(){
         if(this.objectGetter != null)
         generatePane(this.objectGetter.getObject());
     }
 
-    private void add(Node e){
+    /**
+     * Ajoute un élément aux enfants de ce panneau
+     *
+     * @param e l'élément
+     */
+    public void add(Node e){
         this.getChildren().add(e);
     }
 
-    public void setObject(ObjectGetter<Object> objectGetter) {
+    /**
+     * Attribut l'object qui doit être utilisé par une interface
+     *
+     * @param objectGetter l'interface qui retourneras en tous temps l'objet à dessiner
+     */
+    public void setObject(ObjectGetter<? extends Inspectable> objectGetter) {
         this.objectGetter = objectGetter;
         update();
     }
 
+    /**
+     * @return l'objet associer à l'objet qui est retournée par l'ObjectGetter
+     */
     public Object getSelectedObject(){
         if(objectGetter == null) return null;
         return this.objectGetter.getObject();

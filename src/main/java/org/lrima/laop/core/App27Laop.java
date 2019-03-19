@@ -12,7 +12,6 @@ import java.awt.event.ActionListener;
  * @author Clement Bisaillon
  */
 public class App27Laop {
-
     public static void main(String[] args) {
         JFrame frame = new JFrame();
         JPanel panel = new JPanel();
@@ -20,27 +19,18 @@ public class App27Laop {
         JButton testConfig = new JButton("Test configuration");
         JButton testPhysic = new JButton("Test Physique");
 
-        testConfig.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.dispose();
-                new Thread(){
-                    public void run() {
-                        Application.launch(LaopGraphical.class);
-                    }
-                }.start();
-            }
+        testConfig.addActionListener(e -> {
+            frame.dispose();
+            new Thread(() ->
+                    Application.launch(LaopGraphical.class)
+            ).start();
         });
 
-        testPhysic.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.dispose();
-                new Thread(){
-                    public void run() {
-                        TestPhysicMain.main(new String[]{});}
-                }.start();
-            }
+        testPhysic.addActionListener(e -> {
+            frame.dispose();
+            new Thread(() ->
+                    TestPhysicMain.main(new String[]{})
+            ).start();
         });
 
 

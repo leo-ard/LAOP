@@ -5,6 +5,10 @@ import org.lrima.laop.utils.Action;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+/**
+ * Classe utilisée pour intercepter les System.out.print et leurs attribuer une autre action. Par exemple, elle est utilisée dans pour afficher les résultats dans la console.
+ * @author Léonard
+ */
 public class PrintInterseptor extends PrintStream {
     Action<String> action;
 

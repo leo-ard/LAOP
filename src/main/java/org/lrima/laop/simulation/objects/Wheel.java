@@ -11,6 +11,9 @@ import java.awt.geom.AffineTransform;
  * @author Clement Bisaillon
  */
 public class Wheel extends Bloc {
+    private final double MAX_TRUST = 10;
+    private final double MAX_ROTATION = Math.PI / 3;
+
 
     public enum WheelLocation {
         FRONT_LEFT, FRONT_RIGHT, BACK_LEFT, BACK_RIGHT;
@@ -20,7 +23,6 @@ public class Wheel extends Bloc {
     private final static double WHEEL_HEIGHT = 7;
     private final static double WHEEL_MASS = 200;
     public final static double ROLLING_RESISTANCE_COEF = 0.0001;
-    private final double MAX_ROTATION = Math.PI / 3;
 
     private double thrust;
     private boolean canRotate;
@@ -61,6 +63,9 @@ public class Wheel extends Bloc {
      */
     public void setThrust(double thrust) {
         this.thrust = thrust;
+        if(this.thrust > MAX_TRUST){
+            this.thrust = MAX_TRUST;
+        }
     }
 
     /**

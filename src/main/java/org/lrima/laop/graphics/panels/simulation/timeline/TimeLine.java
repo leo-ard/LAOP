@@ -14,12 +14,11 @@ import org.lrima.laop.simulation.listeners.BufferListener;
 
 /**
  * The timeline reusable component
- * @author Clement Bisaillon
+ * @author Léonard
  */
 public class TimeLine extends HBox implements BufferListener {
     private SimulationDrawer simulationDrawer;
     private PlayButton playButton;
-    private JFXSlider timeSlider;
     private SimulationBuffer buffer;
     private JFXSlider slider;
 

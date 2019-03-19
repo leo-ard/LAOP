@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 import org.lrima.laop.simulation.data.SimulationModel;
 
+/**
+ *
+ * Classe qui permet de créé une simulation
+ */
 public class SimulationManagerModel {
     private ArrayList<SimulationModel> simulationModels;
     private int maxSimulation;

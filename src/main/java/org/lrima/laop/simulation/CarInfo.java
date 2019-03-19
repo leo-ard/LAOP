@@ -6,6 +6,11 @@ import java.awt.geom.AffineTransform;
 import java.util.HashMap;
 import java.util.Map;
 
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.text.Font;
+import org.lrima.laop.graphics.panels.Inspectable;
+import org.lrima.laop.graphics.panels.InspectorPanel;
 import org.lrima.laop.math.Vector3d;
 import org.lrima.laop.simulation.objects.Car;
 
@@ -17,7 +22,7 @@ import javafx.scene.transform.Affine;
  *  Class that keeps all the information about one car for the buffer
  * @author Leonard Oest OLeary
  */
-public class CarInfo {
+public class CarInfo implements Inspectable {
     private double x;
     private double y;
     private double width;
@@ -40,7 +45,10 @@ public class CarInfo {
     	this.acceleration = car.getAcceleration();
     }
 
-    public Map<String, String> getInformationHashmap() {
+    /**
+     * @return Toute l'information qui doit etre affichée dans l'inspecteur sous forme de hashmap
+     */
+    private Map<String, String> getInformationHashmap() {
         Map<String, String> information = new HashMap<>();
 
         information.put("x", String.format("%.2f", x));
@@ -72,6 +80,9 @@ public class CarInfo {
         gc.setTransform(temp);
     }
 
+    /**
+     * @return l'aréa de la voiture
+     */
     public Shape getArea(){
         Rectangle.Double rectangle2D = new Rectangle.Double(x, y, width, height);
         AffineTransform affineTransform = new AffineTransform();
@@ -80,5 +91,18 @@ public class CarInfo {
         affineTransform.translate(-x, -y);
 
         return affineTransform.createTransformedShape(rectangle2D);
+    }
+
+    @Override
+    public void generatePanel(InspectorPanel inspectorPanel) {
+        Label titleLabel = new Label("CAR INFORMATION");
+        titleLabel.setFont(new Font(18));
+        inspectorPanel.add(titleLabel);
+
+        inspectorPanel.setAlignment(Pos.TOP_LEFT);
+
+        for(String key : this.getInformationHashmap().keySet()){
+            inspectorPanel.add(new Label(key + " : "+ this.getInformationHashmap().get(key)));
+        }
     }
 }

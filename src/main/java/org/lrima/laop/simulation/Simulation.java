@@ -2,6 +2,11 @@ package org.lrima.laop.simulation;
 
 import org.lrima.laop.simulation.data.SimulationModel;
 
+/**
+ * Classe qui gère une simulation
+ *
+ * @author Léonard
+ */
 class Simulation{
     private SimulationManager simulationManager;
     private SimulationModel simulationmodel;

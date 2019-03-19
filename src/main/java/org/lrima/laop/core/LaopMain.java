@@ -2,6 +2,11 @@ package org.lrima.laop.core;
 
 import javafx.application.Application;
 
+/**
+ * Exécute LAOP avec une interface visuelle
+ *
+ * @author Léonard
+ */
 public class LaopMain {
 
     public static void main(String[] args){

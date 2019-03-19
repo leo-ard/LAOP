@@ -6,6 +6,7 @@ import org.lrima.laop.simulation.listeners.BufferListener;
 
 /**
  * Class that keeps the information necessary to be able to have a timeline
+ * @author Léonard
  */
 public class SimulationBuffer  {
     /**

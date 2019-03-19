@@ -5,6 +5,10 @@ import javafx.fxml.FXMLLoader;
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * Classe utilitaire
+ * @author Léonard
+ */
 public class Utils {
 
     /**

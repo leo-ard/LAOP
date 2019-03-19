@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 /**
  *  A snapshot of the simulation
- *
+ * @author Léonard
  */
 public class SimulationSnapshot {
     ArrayList<CarInfo> cars;

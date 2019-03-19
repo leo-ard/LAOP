@@ -3,6 +3,11 @@ package org.lrima.laop.settings.option;
 import javafx.scene.Node;
 import javafx.scene.control.Spinner;
 
+/**
+ * Classe qui permet d'utiliser un Integer comme option
+ *
+ * @author Léonard
+ */
 public class OptionInt implements Option<Integer>{
     private Integer value = 0, max = Integer.MAX_VALUE, min = Integer.MIN_VALUE, step = 1;
 

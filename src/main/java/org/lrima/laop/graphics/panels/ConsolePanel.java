@@ -18,10 +18,8 @@ import javafx.scene.text.TextFlow;
 /**
  * Class to show the console panel
  * @author Leonard Oest OLeary
- *
  */
 public class ConsolePanel extends VBox {
-
 	private ScrollPane scrollPane;
 	private final int MAX_WIDTH = 200;
 	
