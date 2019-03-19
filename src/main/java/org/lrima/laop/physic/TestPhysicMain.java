@@ -31,21 +31,14 @@ public class TestPhysicMain extends JPanel implements ActionListener {
         TestPhysicMain drawPanel = new TestPhysicMain();
         drawPanel.timer.start();
 
-        window.setSize(WORLD_WIDTH, 900);
+        window.setSize(500, 900);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setBackground(Color.PINK);
 
         window.getContentPane().add(drawPanel);
         window.setVisible(true);
-
-        for(int i = 1; i < 2; i++){
-            for(int j = 1; j < 2; j++){
-                Car car = new Car();
-                car.setPosition(new Vector3d(200*i, 200*j, 0));
-                engine.addObject(car);
-
-            }
-        }
+        
+        engine.addObject(new Car());
 
 
         window.addKeyListener(new KeyAdapter() {

@@ -18,6 +18,8 @@ public class Car extends Bloc {
     private Wheel rightFrontWheel;
     private Wheel leftBackWheel;
     private Wheel rightBackWheel;
+    
+    private static double  MAX_VELOCITY;
 
     /**
      * Create a new car with mass 2000
@@ -99,7 +101,7 @@ public class Car extends Bloc {
     private Vector3d getAngularResistance() {
     	Vector3d direction = this.getDirection().multiply(-1);
     	Vector3d tangent = new Vector3d(direction.getY(), -direction.getX(), 0);
-    	Vector3d resistance = direction.multiply(this.angularVelocity * this.getWeight().modulus() * 0.2);
+    	Vector3d resistance = tangent.multiply(this.angularVelocity * this.getWeight().modulus() * 0.2);
     	
     	return resistance;
     }

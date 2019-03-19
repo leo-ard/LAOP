@@ -55,7 +55,6 @@ public class InspectorPanel extends VBox {
         for(String key : car.getInformationHashmap().keySet()){
             add(new Label(key + " : "+ car.getInformationHashmap().get(key)));
         }
-
     }
 
     public void update(){

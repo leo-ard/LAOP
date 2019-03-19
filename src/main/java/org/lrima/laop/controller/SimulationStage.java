@@ -125,7 +125,7 @@ public class SimulationStage extends Stage implements SimulationListener {
         
         rootPane.setRight(inspector);
 
-//        rootPane.setLeft(this.consolePanel);
+        rootPane.setLeft(this.consolePanel);
         canvas.setPickOnBounds(false);
         rootPane.setPickOnBounds(false);
 

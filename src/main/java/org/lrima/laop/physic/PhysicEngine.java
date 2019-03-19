@@ -24,7 +24,7 @@ public class PhysicEngine extends Thread {
     private double worldWidth;
     
     //////Temporary
-    private final int MAX_ITERATION = 200;
+    private final int MAX_ITERATION = 20000;
     private int CURRENT_ITERATION = 0;
     //////Temporary
     
@@ -37,13 +37,16 @@ public class PhysicEngine extends Thread {
         this.simulationListeners = new ArrayList<>();
         
         //Create the cars
-        for(int i = 0 ; i < 10 ; i++) {
-        	Car car = new Car();
-        	
-        	car.addThrust(Math.random() * 100000);
-        	
-        	car.setRotation(Math.random());
-        	this.addObject(car);
+        //Temporary
+        if(this.simulationBuffer != null) {
+	        for(int i = 0 ; i < 10 ; i++) {
+	        	Car car = new Car();
+	        	
+	        	car.addThrust(Math.random() * 100000);
+	        	
+	        	car.setRotation(Math.random());
+	        	this.addObject(car);
+	        }
         }
     }
 
@@ -88,16 +91,18 @@ public class PhysicEngine extends Thread {
      * adds it to the simulation buffer
      */
     private void saveCarsState() {
-    	SimulationSnapshot snapshot = new SimulationSnapshot();
-    	
-    	for(Physicable object : this.objects) {
-    		if(object instanceof Car) {
-    			Car car = (Car) object;
-    			snapshot.addCar(car.getSnapShotInfo());
-    		}
+    	if(this.simulationBuffer != null) {
+	    	SimulationSnapshot snapshot = new SimulationSnapshot();
+	    	
+	    	for(Physicable object : this.objects) {
+	    		if(object instanceof Car) {
+	    			Car car = (Car) object;
+	    			snapshot.addCar(car.getSnapShotInfo());
+	    		}
+	    	}
+	    	
+	    	this.simulationBuffer.addSnapshot(snapshot);
     	}
-    	
-    	this.simulationBuffer.addSnapshot(snapshot);
     }
 
     /**
