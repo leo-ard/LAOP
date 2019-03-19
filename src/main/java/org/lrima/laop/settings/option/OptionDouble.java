@@ -3,6 +3,11 @@ package org.lrima.laop.settings.option;
 import javafx.scene.Node;
 import javafx.scene.control.Spinner;
 
+/**
+ * Classe qui permet d'utiliser un double comme option
+ *
+ * @author Léonard
+ */
 public class OptionDouble implements Option<Double> {
     private Double value, max, min, step;
 

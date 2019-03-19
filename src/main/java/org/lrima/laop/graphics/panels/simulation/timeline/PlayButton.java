@@ -6,10 +6,10 @@ import javafx.scene.control.Button;
 
 /**
  * The play button of the simulation drawer timeline
- * @author Clement Bisaillon
+ * @author Léonard
  */
 public class PlayButton extends Button {
-    private boolean isPlaying = true;
+    private boolean isPlaying;
     private SimulationDrawer simulationDrawer;
 
     /**
@@ -20,9 +20,9 @@ public class PlayButton extends Button {
         this.isPlaying = play;
         this.simulationDrawer = simulationDrawer;
         this.setStatus();
-        this.setOnAction(e -> {
-            setIsPlaying(!isPlaying);
-        });
+        this.setOnAction(e ->
+            setIsPlaying(!isPlaying)
+        );
     }
 
     /**

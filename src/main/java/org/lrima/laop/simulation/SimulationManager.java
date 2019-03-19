@@ -6,6 +6,10 @@ import org.lrima.laop.simulation.map.Map;
 
 import java.util.ArrayList;
 
+/**
+ * Classe qui gère toutes les simulations en cours
+ * @author Léonard
+ */
 public class SimulationManager implements Runnable{
     //keep track of the simulation and the batch number
     private int simulationCount, batchCount;

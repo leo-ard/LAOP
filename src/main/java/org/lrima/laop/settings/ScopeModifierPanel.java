@@ -14,7 +14,7 @@ import java.util.Set;
 
 /**
  * JavaFX Pane to display a scope. Within the pane, the values of the scope can be modified
- *
+ * @author Léonard
  */
 public class ScopeModifierPanel extends GridPane {
     Scope scope;

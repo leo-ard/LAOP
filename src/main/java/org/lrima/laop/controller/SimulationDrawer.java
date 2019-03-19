@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 /**
  * Class that draws the simulation into the canvas according to the buffer
+ * @author Léonard
  */
 public class SimulationDrawer implements Runnable{
     private Canvas canvas;
@@ -102,6 +103,13 @@ public class SimulationDrawer implements Runnable{
         return this.buffer.getCars(currentStep);
     }
 
+    /**
+     * Retourne la transformation inverse du point, ou le point (0, 0) si la transformation inverse ne peut pas être faite
+     *
+     * @param x la position x
+     * @param y la position y
+     * @return La transformation inverse du point
+     */
     private Point2D inverseTransform(double x, double y) {
         try {
             return this.affineTransform.inverseTransform(x, y);
@@ -109,6 +117,12 @@ public class SimulationDrawer implements Runnable{
         return new Point2D(0, 0);
     }
 
+    /**
+     * Retourne la transformation inverse du point, ou le point (0, 0) si la transformation inverse ne peut pas être faite
+     *
+     * @param p la position
+     * @return La transformation inverse du point
+     */
     private Point2D inverseTransform(Point2D p){
         return this.inverseTransform(p.getX(), p.getY());
     }
@@ -150,26 +164,11 @@ public class SimulationDrawer implements Runnable{
         }
     }
 
-    private void drawGrid(GraphicsContext gc) {
-        Point2D p1 = new Point2D(0, 0);
-        p1 = this.inverseTransform(p1);
-        Point2D p2 = new Point2D(canvas.getWidth(), canvas.getHeight());
-        p2 = this.inverseTransform(p2);
-
-        gc.setFill(Color.RED);
-
-        int division = 100;
-
-        gc.setLineWidth(1);
-
-        for(int i = (int)(p1.getX()/division); i < p2.getX(); i+=division){
-            for(int j = (int)(p1.getY()/division); j < p2.getY(); j+=division){
-                gc.strokeLine(i, p1.getY(), i, p2.getY());
-                gc.strokeLine(p1.getX(), j, p2.getX(), j);
-            }
-        }
-    }
-
+    /**
+     * Commence a faire défiler automatiquement le curseur (lancer l'animation)
+     *
+     * @param timeBetweenFrames le temps entre le déplacement du curseur
+     */
     public void startAutodraw(int timeBetweenFrames){
         this.autoDrawThread = new Thread(this);
         this.autoDrawThread.start();
@@ -178,6 +177,9 @@ public class SimulationDrawer implements Runnable{
         this.timeBetweenFrames = timeBetweenFrames;
     }
 
+    /**
+     * Arrete de faire défiler le curseur automatiquement
+     */
     public void stopAutoDraw(){
         this.running = false;
     }
@@ -202,6 +204,11 @@ public class SimulationDrawer implements Runnable{
         }
     }
 
+    /**
+     * Attribut le slider qui doit etre assossier avec ce Drawer.
+     *
+     * @param slider le slider
+     */
     public void setSlider(JFXSlider slider){
         this.slider = slider;
     }

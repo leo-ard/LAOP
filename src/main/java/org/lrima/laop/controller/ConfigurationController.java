@@ -19,6 +19,9 @@ public class ConfigurationController implements Initializable {
     @FXML
     JFXTreeTableView table;
 
+    /**
+     * Called on click of the button configure
+     */
     @FXML
     public void onConfigurerClick(){
         laop.showConfigurations();
@@ -26,16 +29,10 @@ public class ConfigurationController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //table.getColumns().add(new JFXTreeTableColumn<>());
-        //todo: C'est quoi ca?
-        System.out.println("ii");
-
     }
 
 
     public void setLAOP(LAOP laop){
-        System.out.println("setup LAOP" + laop);
-
         this.laop = laop;
     }
 

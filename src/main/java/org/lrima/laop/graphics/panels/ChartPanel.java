@@ -19,7 +19,6 @@ import javafx.scene.layout.Pane;
  * @author Clement Bisaillon
  */
 public class ChartPanel extends HBox implements SimulationListener {
-
 	private NumberAxis xAxis;
 	private NumberAxis yAxis;
 	private LineChart<Number, Number> chart;

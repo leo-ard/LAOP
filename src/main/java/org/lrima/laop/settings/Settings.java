@@ -108,6 +108,7 @@ public class Settings {
     /**
      * Show a JPanel where the use can view the settings and change them. An javaFx application must be started in order to run this function.
      * @return true if successful, false otherwise
+     * @author Léonard
      */
     public boolean showPanel(){
         //INIT

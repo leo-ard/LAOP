@@ -3,6 +3,11 @@ package org.lrima.laop.settings.option;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 
+/**
+ * Classe qui permet d'utiliser un String comme option
+ *
+ * @author Léonard
+ */
 public class OptionString implements Option<String>{
     private String value, regex;
 
