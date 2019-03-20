@@ -1,5 +1,6 @@
 package org.lrima.laop.controller;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -14,7 +15,7 @@ import org.lrima.laop.graphics.panels.InspectorPanel;
 import org.lrima.laop.graphics.panels.simulation.timeline.TimeLine;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.simulation.SimulationBuffer;
-import org.lrima.laop.simulation.data.GenerationData;
+import org.lrima.laop.simulation.SimulationSnapshot;
 
 /**
  * Class that displays the simulation with the side panels
@@ -58,24 +59,15 @@ public class SimulationStage extends Stage {
         this.inspector = new InspectorPanel();
         this.consolePanel = new ConsolePanel();
         this.chartPanel = new ChartPanel(this.rootPane);
+
+        this.setOnCloseRequest(e->{
+            Platform.exit();
+            System.exit(0);
+        });
         
         this.loadAllScenes();
         
         this.runSimulation();
-
-        //TEMPORARY PROVIDER
-//        for(int i = 0; i < 100; i++){
-//            SimulationSnapshot snapshot = new SimulationSnapshot();
-//
-//            for(int j = 0; j < 100; j++){
-//                snapshot.addCar(new CarInfo(i*10 + j*15, i*10, 10, 30, -45));
-//            }
-//
-//            this.buffer.addSnapshot(snapshot);
-//        }
-        
-
-    
     }
     
     /**
@@ -94,7 +86,7 @@ public class SimulationStage extends Stage {
         this.simulationDrawer = new SimulationDrawer(canvas, buffer, inspector);
         this.timeLine = new TimeLine(this.simulationDrawer, this.buffer);
         
-        this.buffer.addBufferListener(this.timeLine);
+        this.buffer.setOnSnapshotAdded(this::handleNewSnapshow);
 
         //CANVAS
         ChangeListener<Number> updateWidthHeight = (observable, oldValue, newValue) -> {
@@ -129,6 +121,14 @@ public class SimulationStage extends Stage {
         scene.getStylesheets().add("/css/general.css");
 
         this.setScene(scene);
+    }
+
+    private void handleNewSnapshow(SimulationSnapshot snapshot) {
+        timeLine.setSliderMax(buffer.getSize()-1);
+        if(timeLine.getRealTime()){
+            simulationDrawer.drawStep(buffer.getSize()-1);
+        }
+
     }
 
     /**

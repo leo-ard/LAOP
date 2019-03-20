@@ -5,6 +5,7 @@ import com.sun.media.jfxmedia.events.BufferProgressEvent;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
@@ -16,11 +17,12 @@ import org.lrima.laop.simulation.listeners.BufferListener;
  * The timeline reusable component
  * @author Léonard
  */
-public class TimeLine extends HBox implements BufferListener {
+public class TimeLine extends HBox {
     private SimulationDrawer simulationDrawer;
     private PlayButton playButton;
     private SimulationBuffer buffer;
     private JFXSlider slider;
+    private CheckBox checkBox;
 
     public TimeLine(SimulationDrawer simulationDrawer, SimulationBuffer buffer){
         this.simulationDrawer = simulationDrawer;
@@ -42,6 +44,10 @@ public class TimeLine extends HBox implements BufferListener {
                 button.setText(">");
             }
         });
+
+        checkBox = new CheckBox("");
+        checkBox.selectedProperty().setValue(false);
+        checkBox.selectedProperty().addListener((obs, oldVal, newVal) -> this.slider.setDisable(newVal));
         
         this.slider = new JFXSlider();
 
@@ -55,7 +61,7 @@ public class TimeLine extends HBox implements BufferListener {
             int oldValue = (int)Math.round(oldVal.doubleValue());
 
             if(currentValue != oldValue)
-                setTime(currentValue);
+                this.simulationDrawer.drawStep(currentValue);
         });
 
 
@@ -63,7 +69,7 @@ public class TimeLine extends HBox implements BufferListener {
 
         Button button1 = new Button("Next gen");
 
-        this.getChildren().addAll(button, slider, button1);
+        this.getChildren().addAll(button, slider, checkBox, button1);
         setSpacing(10);
         setPadding(new Insets(5));
 
@@ -73,21 +79,13 @@ public class TimeLine extends HBox implements BufferListener {
 
         this.simulationDrawer.setSlider(slider);
     }
-    /**
-     * Sets the time at which we want the simulation to be displayed at
-     *
-     * @param time The time
-     * @author Leonard Oest OLeary
-     */
-    private void setTime(int time) {
-        this.simulationDrawer.drawStep(time);
+
+    public void setSliderMax(int max) {
+        this.slider.setMax(max);
     }
 
-	@Override
-	public void newSnapshot() {
-		this.slider.setMax(buffer.getSize());
-		if(buffer.getSize() <= 1) {
-			this.simulationDrawer.drawStep(0);
-		}
-	}
+    public boolean getRealTime() {
+        return checkBox.selectedProperty().get();
+
+    }
 }

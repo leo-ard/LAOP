@@ -2,7 +2,9 @@ package org.lrima.laop.simulation;
 
 import java.util.ArrayList;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.LocatorEx;
 import org.lrima.laop.simulation.listeners.BufferListener;
+import org.lrima.laop.utils.Action;
 
 /**
  * Class that keeps the information necessary to be able to have a timeline
@@ -13,7 +15,7 @@ public class SimulationBuffer  {
      * Arrays of every snapshot at each simulation step
      */
     private ArrayList<SimulationSnapshot> snapshots;
-    private ArrayList<BufferListener> bufferListeners;
+    private ArrayList<Action<SimulationSnapshot>> bufferListeners;
 
     /**
      * Creates a new Buffer
@@ -30,26 +32,17 @@ public class SimulationBuffer  {
      */
     public void addSnapshot(SimulationSnapshot snapshot) {
         this.snapshots.add(snapshot);
-        this.fireNewSnapshot();
+        //Notify all listeners
+        this.bufferListeners.forEach(snapshotAction -> snapshotAction.handle(snapshot));
     }
-    
+
     /**
-     * Notify the listeners that a new snapshot has been added
-     * @author Clement Bisaillon
+     * Set a new Action when a snapshot is added to the buffer
      */
-    private void fireNewSnapshot() {
-    	for(BufferListener listener : this.bufferListeners) {
-    		listener.newSnapshot();
-    	}
+    public void setOnSnapshotAdded(Action<SimulationSnapshot> action){
+        bufferListeners.add(action);
     }
-    
-    /**
-     * Add a new buffer listener
-     * @param listener the listener
-     */
-    public void addBufferListener(BufferListener listener) {
-    	this.bufferListeners.add(listener);
-    }
+
 
     /**
      * Returns the car at that time step
@@ -67,7 +60,7 @@ public class SimulationBuffer  {
     /**
      * @return the size of the array
      */
-    public double getSize() {
+    public int getSize() {
         return this.snapshots.size();
     }
 }

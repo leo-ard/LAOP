@@ -140,6 +140,7 @@ public class SimulationDrawer implements Runnable{
      * @param time the time to draw the state of the car from
      */
     public void drawStep(int time){
+        if(this.slider != null) this.slider.setValue(currentStep);
         currentStep = time;
         if(buffer.getSize() > 0) {
 	        ArrayList<CarInfo> cars = buffer.getCars(time);
@@ -191,7 +192,6 @@ public class SimulationDrawer implements Runnable{
                 currentStep++;
                 if(currentStep >= buffer.getSize()) currentStep = 0;
                 inspector.update();
-                if(this.slider != null) this.slider.setValue(currentStep);
                 drawStep(currentStep);
             });
             try {
