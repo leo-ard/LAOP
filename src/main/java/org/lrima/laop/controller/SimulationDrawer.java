@@ -186,8 +186,6 @@ public class SimulationDrawer implements Runnable{
 
     @Override
     public void run() {
-    	
-    	
         while(running){
             Platform.runLater(()->{
                 currentStep++;
