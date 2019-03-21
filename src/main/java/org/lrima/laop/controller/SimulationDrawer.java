@@ -12,6 +12,7 @@ import javafx.scene.transform.NonInvertibleTransformException;
 
 import org.lrima.laop.graphics.panels.inspector.InspectorPanel;
 import org.lrima.laop.simulation.CarInfo;
+import org.lrima.laop.simulation.Simulation;
 import org.lrima.laop.simulation.SimulationBuffer;
 
 import java.util.ArrayList;
@@ -23,8 +24,9 @@ import java.util.ArrayList;
  */
 public class SimulationDrawer implements Runnable{
     private Canvas canvas;
-    private SimulationBuffer buffer;
     private InspectorPanel inspector;
+
+    private Simulation simulation;
 
     private Affine affineTransform;
     private double mouseXPressed, mouseYPressed;
@@ -44,9 +46,9 @@ public class SimulationDrawer implements Runnable{
      * @param buffer The buffer to take the information from
      * @param inspector
      */
-    public SimulationDrawer(Canvas canvas, SimulationBuffer buffer, InspectorPanel inspector) {
+    public SimulationDrawer(Canvas canvas, Simulation buffer, InspectorPanel inspector) {
         this.canvas = canvas;
-        this.buffer = buffer;
+        this.simulation = buffer;
         this.affineTransform = new Affine();
         this.inspector = inspector;
 
@@ -84,7 +86,7 @@ public class SimulationDrawer implements Runnable{
             Point2D transformedPoints = null;
             transformedPoints = this.inverseTransform(e.getX(), e.getY());
 
-            ArrayList<CarInfo> snap = this.buffer.getCars(currentStep);
+            ArrayList<CarInfo> snap = this.simulation.getBuffer().getCars(currentStep);
 
             for(int i = 0; i < snap.size(); i++){
                 if(snap.get(i).getArea().contains(transformedPoints.getX(), transformedPoints.getY())){
@@ -100,7 +102,7 @@ public class SimulationDrawer implements Runnable{
     }
 
     private ArrayList<CarInfo> getCurrent() {
-        return this.buffer.getCars(currentStep);
+        return this.simulation.getBuffer().getCars(currentStep);
     }
 
     /**
@@ -140,9 +142,10 @@ public class SimulationDrawer implements Runnable{
      * @param time the time to draw the state of the car from
      */
     public void drawStep(int time){
+        if(this.slider != null) this.slider.setValue(currentStep);
         currentStep = time;
-        if(buffer.getSize() > 0) {
-	        ArrayList<CarInfo> cars = buffer.getCars(time);
+        if(this.simulation.getBuffer().getSize() > 0) {
+	        ArrayList<CarInfo> cars = this.simulation.getBuffer().getCars(time);
 	        GraphicsContext gc = canvas.getGraphicsContext2D();
 	
 	        gc.setFill(Color.rgb(180,200, 250 ));
@@ -186,14 +189,11 @@ public class SimulationDrawer implements Runnable{
 
     @Override
     public void run() {
-    	
-    	
         while(running){
             Platform.runLater(()->{
                 currentStep++;
-                if(currentStep >= buffer.getSize()) currentStep = 0;
+                if(currentStep >= this.simulation.getBuffer().getSize()) currentStep = 0;
                 inspector.update();
-                if(this.slider != null) this.slider.setValue(currentStep);
                 drawStep(currentStep);
             });
             try {

@@ -1,10 +1,7 @@
 package org.lrima.laop.settings;
 
 import javafx.scene.Node;
-import org.lrima.laop.settings.option.Option;
-import org.lrima.laop.settings.option.OptionDouble;
-import org.lrima.laop.settings.option.OptionInt;
-import org.lrima.laop.settings.option.OptionString;
+import org.lrima.laop.settings.option.*;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -82,6 +79,7 @@ public class Scope extends LinkedHashMap<String, Option> {
         if (value instanceof String) return new OptionString((String) value);
         if (value instanceof Integer) return new OptionInt((Integer) value);
         if (value instanceof Double) return new OptionDouble((Double) value);
+        if (value instanceof Class<?>) return new OptionClass((Class<?>) value);
 
         throw new UnsupportedOperationException("The type : " + value.getClass() + " is not supported by the Option");
     }

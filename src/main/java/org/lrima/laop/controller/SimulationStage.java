@@ -1,20 +1,30 @@
 package org.lrima.laop.controller;
 
-import javafx.beans.value.ChangeListener;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+import org.lrima.laop.controller.components.PlayButton;
 import org.lrima.laop.graphics.panels.ChartPanel;
 import org.lrima.laop.graphics.panels.ConsolePanel;
 import org.lrima.laop.graphics.panels.inspector.InspectorPanel;
-import org.lrima.laop.graphics.panels.simulation.timeline.TimeLine;
-import org.lrima.laop.physic.PhysicEngine;
+import org.lrima.laop.simulation.Simulation;
 import org.lrima.laop.simulation.SimulationBuffer;
-import org.lrima.laop.simulation.data.GenerationData;
+
+import com.jfoenix.controls.JFXSlider;
+
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
 
 /**
  * Class that displays the simulation with the side panels
@@ -22,52 +32,42 @@ import org.lrima.laop.simulation.data.GenerationData;
  * @author Léonard
  */
 public class SimulationStage extends Stage {
-    private SimulationBuffer buffer;
+    private final Simulation simulation;
     private Canvas canvas;
-    private TimeLine timeLine;
 
-    private BorderPane rootPane;
-    
     private SimulationDrawer simulationDrawer;
     private InspectorPanel inspector;
     private ConsolePanel consolePanel;
     private ChartPanel chartPanel;
-    
-    private PhysicEngine physicEngine;
-    
+
     private final double WINDOW_WIDTH = 1280;
     private final double WINDOW_HEIGHT = 720;
-    
-    //Temporaire
-    private final int NUMBER_OF_BATCH = 2;
-    private final int NUMBER_OF_SIMULATION = 10;
-    private final int NUMBER_OF_GENERATION = 10;
-    //
 
-    /**
-     * Initialize a new simulation stage with a new simulation buffer
-     */
-    public SimulationStage(){
-        this(new SimulationBuffer());
-    }
+
+    private CheckBox checkBoxRealTime;
+    private JFXSlider sliderTimeLine;
 
     /**
      * Initialize a new simulation stage with a specific simulation buffer
-     * @param buffer the simulation buffer to initialize the simulation stage with
+     * @param simulation the simulation to initialize the simulation stage with
      */
-    public SimulationStage(SimulationBuffer buffer){
+    public SimulationStage(Simulation simulation){
         this.setTitle("LAOP : Simulation");
-        this.buffer = buffer;
-        this.rootPane = new BorderPane();
-        
+        this.simulation = simulation;
+
         this.canvas = new Canvas(WINDOW_WIDTH, WINDOW_HEIGHT);
         this.inspector = new InspectorPanel();
         this.consolePanel = new ConsolePanel();
-        this.chartPanel = new ChartPanel(this.rootPane);
+        this.simulationDrawer = new SimulationDrawer(canvas, simulation, inspector);
+        this.chartPanel = new ChartPanel();
+
+
+        this.setOnCloseRequest(e->{
+            Platform.exit();
+            System.exit(0);
+        });
         
         this.loadAllScenes();
-        
-        this.runSimulation();
 
         //TEMPORARY PROVIDER
 //        for(int i = 0; i < 100; i++){
@@ -83,26 +83,14 @@ public class SimulationStage extends Stage {
 
     
     }
-    
-    /**
-     * Run the physic engine with some cars in it
-     * @author Clement Bisaillon
-     */
-    private void runSimulation() {
-    	
-    	//Generation
-    	this.physicEngine = new PhysicEngine(this.buffer);
-    	this.physicEngine.start();
-    }
 
     /**
      * Adds all the layouts with their components to root Pane
      */
     private void loadAllScenes() {
-        this.simulationDrawer = new SimulationDrawer(canvas, buffer, inspector);
-        this.timeLine = new TimeLine(this.simulationDrawer, this.buffer);
-        
-        this.buffer.addBufferListener(this.timeLine);
+        Node timeLine = timeline();
+
+        BorderPane rootPane = new BorderPane();
 
         //CANVAS
         ChangeListener<Number> updateWidthHeight = (observable, oldValue, newValue) -> {
@@ -114,14 +102,14 @@ public class SimulationStage extends Stage {
         rootPane.widthProperty().addListener(updateWidthHeight);
         rootPane.heightProperty().addListener(updateWidthHeight);
 
-        Pane clickerPane = new Pane();
-        clickerPane.setVisible(false);
+        Pane blankPane = new Pane();
+        blankPane.setVisible(false);
 
-        rootPane.setCenter(clickerPane);
+        rootPane.setCenter(blankPane);
         
         //Add the timeLine and the chart panel to the bottom
         VBox bottomPanelBox = new VBox();
-        bottomPanelBox.getChildren().addAll(this.timeLine, this.chartPanel);
+        bottomPanelBox.getChildren().addAll(timeLine, this.chartPanel);
         
         rootPane.setBottom(bottomPanelBox);
         rootPane.setRight(inspector);
@@ -133,10 +121,72 @@ public class SimulationStage extends Stage {
         StackPane rootrootPane = new StackPane(canvas, rootPane);
 
 
+        this.simulationDrawer.setSlider(sliderTimeLine);
+        this.simulation.getBuffer().setOnSnapshotAdded(this::handleNewSnapshot);
+
         Scene scene = new Scene(rootrootPane);
         scene.getStylesheets().add("/css/general.css");
 
         this.setScene(scene);
+    }
+
+    /**
+     * Creates all the elements that compose the Timeline
+     *
+     * @return the elements of the timeline
+     */
+    private HBox timeline() {
+        //TODO : Probablement que c'est bien de l'encapsuler, mais il faut penser à comment le faire si on veut qu'il soit réutilisable
+        HBox root = new HBox();
+
+        PlayButton button = new PlayButton(
+                (b)-> {
+                    if(b)
+                        this.simulationDrawer.startAutodraw(100);
+                    else
+                        this.simulationDrawer.stopAutoDraw();
+                });
+
+        checkBoxRealTime = new CheckBox("");
+        checkBoxRealTime.selectedProperty().setValue(false);
+        checkBoxRealTime.selectedProperty().addListener((obs, oldVal, newVal) -> this.sliderTimeLine.setDisable(newVal));
+
+        sliderTimeLine = new JFXSlider();
+
+        sliderTimeLine.setMax(simulation.getBuffer().getSize());
+        sliderTimeLine.setValue(0);
+        sliderTimeLine.setMinorTickCount(1);
+        sliderTimeLine.setMaxWidth(Integer.MAX_VALUE);
+        sliderTimeLine.valueProperty().addListener((obs, oldVal, newVal) -> {
+            int currentValue = (int)Math.round(newVal.doubleValue());
+            int oldValue = (int)Math.round(oldVal.doubleValue());
+
+            if(currentValue != oldValue)
+                this.simulationDrawer.drawStep(currentValue);
+        });
+
+
+        HBox.setMargin(sliderTimeLine, new Insets(7,0,7,0));
+
+        Button button1 = new Button("Next gen");
+
+        root.getChildren().addAll(button, sliderTimeLine, checkBoxRealTime, button1);
+        root.setSpacing(10);
+        root.setPadding(new Insets(5));
+
+        HBox.setHgrow(sliderTimeLine, Priority.ALWAYS);
+
+        root.setStyle("-fx-background-color: rgb(255, 255, 255, 0.5)");
+
+        return root;
+    }
+
+    private void handleNewSnapshot(SimulationBuffer buffer) {
+        sliderTimeLine.setMax(buffer.getSize()-1);
+        if(checkBoxRealTime.selectedProperty().get() && buffer.getSize() != 0){
+            simulationDrawer.drawStep(buffer.getSize()-1);
+        }
+
     }
 
     /**

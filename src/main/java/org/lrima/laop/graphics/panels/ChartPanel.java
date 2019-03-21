@@ -1,5 +1,6 @@
 package org.lrima.laop.graphics.panels;
 
+import javafx.scene.layout.Priority;
 import org.lrima.laop.simulation.data.GenerationData;
 import org.lrima.laop.simulation.data.SimulationModel;
 import org.lrima.laop.simulation.listeners.SimulationListener;
@@ -22,7 +23,6 @@ public class ChartPanel extends HBox implements SimulationListener {
 	private NumberAxis xAxis;
 	private NumberAxis yAxis;
 	private LineChart<Number, Number> chart;
-	private Pane parentPane;
 	private SimulationModel simulation;
 	private int generationNumber;
 	private double maxY;
@@ -30,8 +30,7 @@ public class ChartPanel extends HBox implements SimulationListener {
 	
 	private XYChart.Series<Number, Number> averageFitnessSerie;
 	
-	public ChartPanel(Pane parentPane) {
-		this.parentPane = parentPane;
+	public ChartPanel() {
 		this.generationNumber = 0;
 		this.maxY = 0;
 		this.minY = 0;
@@ -40,7 +39,8 @@ public class ChartPanel extends HBox implements SimulationListener {
 		setStyle("-fx-background-color: rgb(255, 255, 255, 0.5)");
 		
 		this.setPrefHeight(200);
-		
+		HBox.setHgrow(this, Priority.ALWAYS);
+
 		this.setupChart();
 	}
 	
@@ -55,9 +55,8 @@ public class ChartPanel extends HBox implements SimulationListener {
 		this.chart.setTitle("Fitness score by generation");
 		this.chart.setCreateSymbols(false);
 		this.chart.setLegendSide(Side.RIGHT);
-		//Chart always take full width
-		this.chart.prefWidthProperty().bind(parentPane.widthProperty());
-		
+		ChartPanel.setHgrow(chart, Priority.ALWAYS);
+
 		//Average fitness serie
 		this.averageFitnessSerie = new XYChart.Series<>();
 		this.averageFitnessSerie.setName("Average fitness");

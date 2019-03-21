@@ -1,6 +1,7 @@
 package org.lrima.laop.settings.option;
 
 import javafx.scene.Node;
+import org.lrima.laop.utils.ObjectGetter;
 
 /**
  * Interface that lets us map Types to Swing components.
@@ -9,7 +10,6 @@ import javafx.scene.Node;
  * @author leonard
  */
 public interface Option<T> {
-
     /**
      * @return the value of the option
      */
