@@ -23,7 +23,7 @@ import javafx.stage.Stage;
 import org.lrima.laop.controller.components.PlayButton;
 import org.lrima.laop.graphics.panels.ChartPanel;
 import org.lrima.laop.graphics.panels.ConsolePanel;
-import org.lrima.laop.graphics.panels.InspectorPanel;
+import org.lrima.laop.graphics.panels.inspector.InspectorPanel;
 import org.lrima.laop.simulation.Simulation;
 import org.lrima.laop.simulation.SimulationBuffer;
 
