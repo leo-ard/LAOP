@@ -1,8 +1,10 @@
-package org.lrima.laop.graphics.panels.simulation.timeline;
+package org.lrima.laop.controller.components;
 
 import org.lrima.laop.controller.SimulationDrawer;
 
 import javafx.scene.control.Button;
+
+import java.util.function.Consumer;
 
 /**
  * The play button of the simulation drawer timeline
@@ -10,26 +12,21 @@ import javafx.scene.control.Button;
  */
 public class PlayButton extends Button {
     private boolean isPlaying;
-    private SimulationDrawer simulationDrawer;
+
+    private Consumer<Boolean> whenToggled;
 
     /**
      * Initialize a pause button with a certain state
      * @param play false if pause, true otherwise
      */
-    public PlayButton(boolean play, SimulationDrawer simulationDrawer){
-        this.isPlaying = play;
-        this.simulationDrawer = simulationDrawer;
+    public PlayButton(Consumer<Boolean> whenToggled){
+        this.isPlaying = false;
+        this.whenToggled = whenToggled;
+
         this.setStatus();
         this.setOnAction(e ->
             setIsPlaying(!isPlaying)
         );
-    }
-
-    /**
-     * Initialize a pause button with the state play to true
-     */
-    public PlayButton(SimulationDrawer simulationDrawer){
-        this(false, simulationDrawer);
     }
 
     /**
@@ -53,13 +50,11 @@ public class PlayButton extends Button {
      * Set the text of the button depending on its state
      */
     private void setStatus(){
-        if(this.isPlaying){
+        if(this.isPlaying)
             this.setText("||");
-            this.simulationDrawer.startAutodraw(100);
-        }
-        else{
+        else
             this.setText(">");
-            this.simulationDrawer.stopAutoDraw();
-        }
+
+        whenToggled.accept(this.isPlaying);
     }
 }

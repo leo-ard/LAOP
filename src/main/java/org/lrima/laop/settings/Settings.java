@@ -11,8 +11,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.lang.reflect.Array;
+import java.util.*;
 
 /**
  * Stores the settings in different scopes and allows the user to get and set the values of the
@@ -28,6 +28,7 @@ public class Settings {
      * The key of this HashMap represents the name of the scope.
      */
     private LinkedHashMap<String, Scope> scopes;
+
 
     public Settings(){
         scopes = new LinkedHashMap<>();
@@ -103,6 +104,22 @@ public class Settings {
 
         this.scopes.remove(scope);
         return true;
+    }
+
+    /**
+     * Checks if the scope exist
+     *
+     * @param scope the scope to check
+     * @return true if the scope exist, false otherwise
+     */
+    public boolean scopeExist(String scope){
+        return this.scopes.get(scope) == null;
+    }
+
+    public ArrayList<String> getScopes(){
+        ArrayList<String> scopeArray = new ArrayList<>(scopes.keySet());
+        scopeArray.remove(GLOBAL_SCOPE);
+        return scopeArray;
     }
 
     /**

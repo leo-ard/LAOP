@@ -24,47 +24,35 @@ public class PhysicEngine extends Thread {
     private double worldWidth;
     
     //////Temporary
-    private final int MAX_ITERATION = 20000;
+    private final int MAX_ITERATION = 2000;
     private int CURRENT_ITERATION = 0;
     //////Temporary
     
     private SimulationBuffer simulationBuffer;
-    private ArrayList<SimulationListener> simulationListeners;
 
     public PhysicEngine(SimulationBuffer buffer){
     	this.simulationBuffer = buffer;
         this.objects = new ArrayList<>();
-        this.simulationListeners = new ArrayList<>();
-        
-        //Create the cars
-        //Temporary
-        if(this.simulationBuffer != null) {
-	        for(int i = 0 ; i < 10 ; i++) {
-	        	Car car = new Car();
-	        	
-	        	car.addThrust(Math.random() * 100000);
-	        	
-	        	car.setRotation(Math.random());
-	        	this.addObject(car);
-	        }
-        }
     }
 
     public ArrayList<Physicable> getObjects() {
         return objects;
     }
 
+    /**
+     * Optionnal
+     */
     @Override
     public void run() {
-        super.run();
+        //TODO : Condition : quand les voitures sont encore toutes vivante et qu'il reste du temps
         while(running && (this.CURRENT_ITERATION < this.MAX_ITERATION)){
             if(!this.pause) {
                 try {
-                	//Save the state of the cars in the buffer
-                	this.saveCarsState();
-                	
                     this.nextStep();
-                    this.checkCollision();
+//                    this.checkCollision();
+
+                    //save the car's state in the buffer
+                    this.saveCarsState();
                     
                     this.CURRENT_ITERATION++;
                     Thread.sleep(1);
@@ -73,17 +61,6 @@ public class PhysicEngine extends Thread {
                 }
             }
         }
-        
-        this.fireSimulationEnd();
-    }
-    
-    /**
-     * Notify the simulation listeners that the simulation ended
-     */
-    private void fireSimulationEnd() {
-    	for(SimulationListener listener : this.simulationListeners) {
-    		listener.generationEnd(null);
-    	}
     }
     
     /**
@@ -160,13 +137,5 @@ public class PhysicEngine extends Thread {
 
     public void togglePause(){
         this.pause = !pause;
-    }
-    
-    /**
-     * Add a simulation listener
-     * @param listener the listener
-     */
-    public void addSimulationListener(SimulationListener listener) {
-    	this.simulationListeners.add(listener);
     }
 }

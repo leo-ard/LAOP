@@ -15,7 +15,7 @@ public class SimulationBuffer  {
      * Arrays of every snapshot at each simulation step
      */
     private ArrayList<SimulationSnapshot> snapshots;
-    private ArrayList<Action<SimulationSnapshot>> bufferListeners;
+    private ArrayList<Action<SimulationBuffer>> bufferListeners;
 
     /**
      * Creates a new Buffer
@@ -33,13 +33,13 @@ public class SimulationBuffer  {
     public void addSnapshot(SimulationSnapshot snapshot) {
         this.snapshots.add(snapshot);
         //Notify all listeners
-        this.bufferListeners.forEach(snapshotAction -> snapshotAction.handle(snapshot));
+        this.bufferListeners.forEach(snapshotAction -> snapshotAction.handle(this));
     }
 
     /**
      * Set a new Action when a snapshot is added to the buffer
      */
-    public void setOnSnapshotAdded(Action<SimulationSnapshot> action){
+    public void setOnSnapshotAdded(Action<SimulationBuffer> action){
         bufferListeners.add(action);
     }
 
@@ -62,5 +62,9 @@ public class SimulationBuffer  {
      */
     public int getSize() {
         return this.snapshots.size();
+    }
+
+    public void clear() {
+        snapshots = new ArrayList<>();
     }
 }
