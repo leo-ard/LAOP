@@ -37,6 +37,10 @@ public class LAOP {
         settings.set(Settings.GLOBAL_SCOPE, KEY_NUMBER_OF_CARS, DEFAULT_NUMBER_OF_CARS);
         settings.set(Settings.GLOBAL_SCOPE, KEY_TIME_LIMIT, DEFAULT_TIME_LIMIT);
         settings.set(Settings.GLOBAL_SCOPE, KEY_NUMBER_OF_SIMULATION, DEFAULT_NUMBER_OF_SIMULATION);
+        settings.set(Settings.GLOBAL_SCOPE, KEY_NUMBER_OF_GENERATIONS, DEFAULT_NUMBER_OF_GENERATIONS);
+
+
+
     }
 
     /**
@@ -103,5 +107,8 @@ public class LAOP {
 
     public static final int DEFAULT_TIME_LIMIT = 100;
     public static final String KEY_TIME_LIMIT = "TIME LIMIT";
+
+    public static final int DEFAULT_NUMBER_OF_GENERATIONS = 10;
+    public static final String KEY_NUMBER_OF_GENERATIONS = "NUMBER OF GENERATIONS";
 
 }

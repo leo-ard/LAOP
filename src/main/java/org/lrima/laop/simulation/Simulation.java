@@ -14,11 +14,17 @@ public class Simulation implements Runnable{
     private Settings settings;
 
     private String currentScope;
+    private int simulationCount;
+    private int batchCount;
+    private int generationCount;
+
     private Thread simulationThread;
 
     ArrayList<Action<Simulation>> onSimulationFinish;
     ArrayList<Action<Simulation>> onGenerationFinish;
     ArrayList<Action<Simulation>> onBatchFinished;
+
+    private boolean autoRun;
 
     public Simulation(SimulationBuffer simulationBuffer, HashMap<String, Class<?>> algorithms, Settings settings) {
         this.simulationBuffer = simulationBuffer;
@@ -28,12 +34,8 @@ public class Simulation implements Runnable{
         this.onSimulationFinish = new ArrayList<>();
         this.onGenerationFinish = new ArrayList<>();
 
-        initialise();
-    }
-
-    private void initialise() {
-
-
+        this.currentScope = this.settings.getLocalScopes().get(0);
+        this.autoRun = true;
     }
 
     private ArrayList configureCar(){
@@ -69,25 +71,52 @@ public class Simulation implements Runnable{
 
     @Override
     public void run() {
-        for(String scope : settings.getScopes()){
-            currentScope = scope;
-            for(int i = 0; i < (Integer) settings.get(scope, LAOP.KEY_NUMBER_OF_SIMULATION); i++){
-                ArrayList<Car> carsArrayList = configureCar();
+        this.step();
+    }
 
-                simulationBuffer.clear();
-                PhysicEngine physicEngine = new PhysicEngine(simulationBuffer);
-                physicEngine.getObjects().addAll(carsArrayList);
+    private void step(){
+        incrementGeneration();
+        simulateGeneration();
+    }
 
-                //TODO : faire les generations
-                physicEngine.run();
+    private void incrementGeneration(){
+        generationCount ++;
+        if(generationCount > (int) settings.get(currentScope, LAOP.KEY_NUMBER_OF_GENERATIONS)){
+            generationCount = 0;
+            simulationCount++;
+            this.onSimulationFinish.forEach(simulationAction -> simulationAction.handle(this));
+        }
 
-                this.onSimulationFinish.forEach(simulationAction -> simulationAction.handle(this));
-            }
-
-
+        if(simulationCount > (int) settings.get(currentScope, LAOP.KEY_NUMBER_OF_SIMULATION)){
+            simulationCount = 0;
+            batchCount++;
+            currentScope = settings.getLocalScopes().get(batchCount);
             this.onBatchFinished.forEach(simulationAction -> simulationAction.handle(this));
         }
     }
+
+    private void simulateGeneration(){
+        simulationBuffer.clear();
+        PhysicEngine physicEngine = new PhysicEngine(simulationBuffer);
+
+        //First generation
+        if(generationCount == 0)
+            physicEngine.getObjects().addAll(configureCar());
+        else
+            physicEngine.getObjects().addAll(configureCar());
+
+        physicEngine.setOnPhysicEngineFinish(engine -> {
+            if(this.autoRun)
+                this.step();
+        });
+        physicEngine.start();
+    }
+
+    private ArrayList<Car> alterCars() {
+        return new ArrayList<>();
+
+    }
+
 
     public void setOnSimulationFinish(Action<Simulation> onSimulationFinish) {
         this.onSimulationFinish.add(onSimulationFinish);
@@ -99,5 +128,13 @@ public class Simulation implements Runnable{
 
     public void setOnGenerationFinish(Action<Simulation> onGenerationFinish){
         this.onGenerationFinish.add(onGenerationFinish);
+    }
+
+    public void setAutoRun(boolean autoRun) {
+        this.autoRun = autoRun;
+    }
+
+    public boolean getAutoRun() {
+        return autoRun;
     }
 }

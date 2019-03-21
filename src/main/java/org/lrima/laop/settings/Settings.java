@@ -141,7 +141,7 @@ public class Settings {
         return this.scopes.get(scope) == null;
     }
 
-    public ArrayList<String> getScopes(){
+    public ArrayList<String> getLocalScopes(){
         ArrayList<String> scopeArray = new ArrayList<>(scopes.keySet());
         scopeArray.remove(GLOBAL_SCOPE);
         return scopeArray;

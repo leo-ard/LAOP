@@ -1,6 +1,7 @@
 package org.lrima.laop.physic;
 
 import java.awt.geom.Area;
+import java.lang.reflect.AccessibleObject;
 import java.util.ArrayList;
 
 import org.lrima.laop.math.Vector3d;
@@ -8,6 +9,8 @@ import org.lrima.laop.simulation.SimulationBuffer;
 import org.lrima.laop.simulation.SimulationSnapshot;
 import org.lrima.laop.simulation.listeners.SimulationListener;
 import org.lrima.laop.simulation.objects.Car;
+import org.lrima.laop.utils.Action;
+import org.lrima.laop.utils.BlankAction;
 
 /**
  *
@@ -22,9 +25,11 @@ public class PhysicEngine extends Thread {
     private ArrayList<Physicable> objects;
     private boolean running = true;
     private double worldWidth;
+
+    private ArrayList<Action<PhysicEngine>> onPhysicEngineFinish;
     
     //////Temporary
-    private final int MAX_ITERATION = 2000;
+    private final int MAX_ITERATION = 20;
     private int CURRENT_ITERATION = 0;
     //////Temporary
     
@@ -33,6 +38,7 @@ public class PhysicEngine extends Thread {
     public PhysicEngine(SimulationBuffer buffer){
     	this.simulationBuffer = buffer;
         this.objects = new ArrayList<>();
+        onPhysicEngineFinish = new ArrayList<>();
     }
 
     public ArrayList<Physicable> getObjects() {
@@ -61,6 +67,8 @@ public class PhysicEngine extends Thread {
                 }
             }
         }
+
+        this.onPhysicEngineFinish.forEach(action -> action.handle(this));
     }
     
     /**
@@ -137,5 +145,9 @@ public class PhysicEngine extends Thread {
 
     public void togglePause(){
         this.pause = !pause;
+    }
+
+    public void setOnPhysicEngineFinish(Action<PhysicEngine> onPhysicEngineFinish) {
+        this.onPhysicEngineFinish.add(onPhysicEngineFinish);
     }
 }

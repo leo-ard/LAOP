@@ -1,12 +1,5 @@
 package org.lrima.laop.controller;
 
-import org.lrima.laop.controller.components.PlayButton;
-import org.lrima.laop.graphics.panels.ChartPanel;
-import org.lrima.laop.graphics.panels.ConsolePanel;
-import org.lrima.laop.graphics.panels.inspector.InspectorPanel;
-import org.lrima.laop.simulation.Simulation;
-import org.lrima.laop.simulation.SimulationBuffer;
-
 import com.jfoenix.controls.JFXSlider;
 
 import javafx.application.Platform;
@@ -27,6 +20,12 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.lrima.laop.controller.components.PlayButton;
+import org.lrima.laop.graphics.panels.ChartPanel;
+import org.lrima.laop.graphics.panels.ConsolePanel;
+import org.lrima.laop.graphics.panels.InspectorPanel;
+import org.lrima.laop.simulation.Simulation;
+import org.lrima.laop.simulation.SimulationBuffer;
 
 
 /**
@@ -45,11 +44,9 @@ public class SimulationStage extends Stage {
 
     private final double WINDOW_WIDTH = 1280;
     private final double WINDOW_HEIGHT = 720;
-
-
     private CheckBox checkBoxRealTime;
     private JFXSlider sliderTimeLine;
-    
+
     private MenuBar menuBar;
 
     /**
@@ -66,7 +63,7 @@ public class SimulationStage extends Stage {
         this.simulationDrawer = new SimulationDrawer(canvas, simulation, inspector);
         this.chartPanel = new ChartPanel();
         this.configureMenu();
-        
+
 
 
         this.setOnCloseRequest(e->{
@@ -75,20 +72,6 @@ public class SimulationStage extends Stage {
         });
         
         this.loadAllScenes();
-
-        //TEMPORARY PROVIDER
-//        for(int i = 0; i < 100; i++){
-//            SimulationSnapshot snapshot = new SimulationSnapshot();
-//
-//            for(int j = 0; j < 100; j++){
-//                snapshot.addCar(new CarInfo(i*10 + j*15, i*10, 10, 30, -45));
-//            }
-//
-//            this.buffer.addSnapshot(snapshot);
-//        }
-        
-
-    
     }
 
     /**
@@ -99,22 +82,16 @@ public class SimulationStage extends Stage {
 
         BorderPane rootPane = new BorderPane();
 
-        //CANVAS
-        ChangeListener<Number> updateWidthHeight = (observable, oldValue, newValue) -> {
-            canvas.setHeight(rootPane.getHeight());
-            canvas.setWidth(rootPane.getWidth());
-            simulationDrawer.repaint();
-        };
 
-        rootPane.widthProperty().addListener(updateWidthHeight);
-        rootPane.heightProperty().addListener(updateWidthHeight);
+
+
 
         Pane blankPane = new Pane();
         blankPane.setVisible(false);
-        
+
         rootPane.setTop(this.menuBar);
-        rootPane.setCenter(blankPane);
-        
+        //rootPane.setCenter(blankPane);
+
         //Add the timeLine and the chart panel to the bottom
         VBox bottomPanelBox = new VBox();
         bottomPanelBox.getChildren().addAll(timeLine, this.chartPanel);
@@ -128,6 +105,16 @@ public class SimulationStage extends Stage {
 
         StackPane rootrootPane = new StackPane(canvas, rootPane);
 
+        //CANVAS
+        ChangeListener<Number> updateWidthHeight = (observable, oldValue, newValue) -> {
+            canvas.setHeight(rootrootPane.getHeight());
+            canvas.setWidth(rootrootPane.getWidth());
+            simulationDrawer.repaint();
+        };
+
+        rootrootPane.widthProperty().addListener(updateWidthHeight);
+        rootrootPane.heightProperty().addListener(updateWidthHeight);
+
 
         this.simulationDrawer.setSlider(sliderTimeLine);
         this.simulation.getBuffer().setOnSnapshotAdded(this::handleNewSnapshot);
@@ -137,14 +124,14 @@ public class SimulationStage extends Stage {
 
         this.setScene(scene);
     }
-    
+
     /**
      * Cree le menu au dessus de la fenetre avec des boutons
      * @author Clement Bisaillon
      */
     private void configureMenu() {
     	this.menuBar = new MenuBar();
-    	
+
     	Menu windowMenu = new Menu("Window");
     	CheckMenuItem showConsole = new CheckMenuItem("Console");
     	CheckMenuItem showCharts = new CheckMenuItem("Charts");
@@ -152,27 +139,27 @@ public class SimulationStage extends Stage {
     	showConsole.setSelected(true);
     	showCharts.setSelected(true);
     	showCarInfo.setSelected(true);
-    	
+
     	//Les actions quand nous cliquons sur les boutons
     	showConsole.selectedProperty().addListener((obs, oldVal, newVal) -> {
     		this.consolePanel.setVisible(newVal);
     		this.consolePanel.setManaged(newVal);
     	});
-    	
+
     	showCharts.selectedProperty().addListener((obs, oldVal, newVal) -> {
     		this.chartPanel.setVisible(newVal);
     		this.chartPanel.setManaged(newVal);
     	});
-    	
+
     	showCarInfo.selectedProperty().addListener((obs, oldVal, newVal) -> {
     		this.inspector.setVisible(newVal);
     		this.inspector.setManaged(newVal);
     	});
-    	
+
     	windowMenu.getItems().add(showConsole);
     	windowMenu.getItems().add(showCharts);
     	windowMenu.getItems().add(showCarInfo);
-    	
+
     	this.menuBar.getMenus().add(windowMenu);
     }
 
@@ -211,10 +198,15 @@ public class SimulationStage extends Stage {
                 this.simulationDrawer.drawStep(currentValue);
         });
 
+        sliderTimeLine.setOnMousePressed(e -> this.simulationDrawer.stopAutoDraw());
+
 
         HBox.setMargin(sliderTimeLine, new Insets(7,0,7,0));
 
         Button button1 = new Button("Next gen");
+        button1.setOnAction( e-> {
+            this.simulation.run();
+        });
 
         root.getChildren().addAll(button, sliderTimeLine, checkBoxRealTime, button1);
         root.setSpacing(10);
