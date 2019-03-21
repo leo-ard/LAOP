@@ -9,8 +9,9 @@ import java.util.Map;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
-import org.lrima.laop.graphics.panels.Inspectable;
-import org.lrima.laop.graphics.panels.InspectorPanel;
+
+import org.lrima.laop.graphics.panels.inspector.Inspectable;
+import org.lrima.laop.graphics.panels.inspector.InspectorPanel;
 import org.lrima.laop.math.Vector3d;
 import org.lrima.laop.simulation.objects.Car;
 

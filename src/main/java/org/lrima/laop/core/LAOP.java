@@ -88,7 +88,6 @@ public class LAOP {
         if(simulationDisplayMode == simulationDisplayMode.WITH_INTERFACE){
             SimulationStage simulationStage = new SimulationStage(simulation);
             simulationStage.show();
-            System.out.println("haha");
         }
 
         simulation.start();

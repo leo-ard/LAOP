@@ -39,8 +39,6 @@ public class ConsolePanel extends VBox {
         this.getStyleClass().add("console-panel");
         
         this.setOut();
-        
-        System.err.println("ERROR TEST ASDFASDFASDFASDFASDFA");
 	}
 	
 	/**

@@ -1,4 +1,4 @@
-package org.lrima.laop.graphics.panels;
+package org.lrima.laop.graphics.panels.inspector;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

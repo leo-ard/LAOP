@@ -1,6 +1,7 @@
 package org.lrima.laop.controller;
 
 import com.jfoenix.controls.JFXSlider;
+
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;
@@ -9,7 +10,15 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.layout.*;
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.lrima.laop.controller.components.PlayButton;
 import org.lrima.laop.graphics.panels.ChartPanel;
@@ -38,6 +47,8 @@ public class SimulationStage extends Stage {
     private CheckBox checkBoxRealTime;
     private JFXSlider sliderTimeLine;
 
+    private MenuBar menuBar;
+
     /**
      * Initialize a new simulation stage with a specific simulation buffer
      * @param simulation the simulation to initialize the simulation stage with
@@ -45,13 +56,14 @@ public class SimulationStage extends Stage {
     public SimulationStage(Simulation simulation){
         this.setTitle("LAOP : Simulation");
         this.simulation = simulation;
-        this.simulation.setAutoRun(false);
 
         this.canvas = new Canvas(WINDOW_WIDTH, WINDOW_HEIGHT);
         this.inspector = new InspectorPanel();
         this.consolePanel = new ConsolePanel();
         this.simulationDrawer = new SimulationDrawer(canvas, simulation, inspector);
         this.chartPanel = new ChartPanel();
+        this.configureMenu();
+
 
 
         this.setOnCloseRequest(e->{
@@ -77,8 +89,9 @@ public class SimulationStage extends Stage {
         Pane blankPane = new Pane();
         blankPane.setVisible(false);
 
+        rootPane.setTop(this.menuBar);
         //rootPane.setCenter(blankPane);
-        
+
         //Add the timeLine and the chart panel to the bottom
         VBox bottomPanelBox = new VBox();
         bottomPanelBox.getChildren().addAll(timeLine, this.chartPanel);
@@ -113,6 +126,44 @@ public class SimulationStage extends Stage {
     }
 
     /**
+     * Cree le menu au dessus de la fenetre avec des boutons
+     * @author Clement Bisaillon
+     */
+    private void configureMenu() {
+    	this.menuBar = new MenuBar();
+
+    	Menu windowMenu = new Menu("Window");
+    	CheckMenuItem showConsole = new CheckMenuItem("Console");
+    	CheckMenuItem showCharts = new CheckMenuItem("Charts");
+    	CheckMenuItem showCarInfo = new CheckMenuItem("Car info");
+    	showConsole.setSelected(true);
+    	showCharts.setSelected(true);
+    	showCarInfo.setSelected(true);
+
+    	//Les actions quand nous cliquons sur les boutons
+    	showConsole.selectedProperty().addListener((obs, oldVal, newVal) -> {
+    		this.consolePanel.setVisible(newVal);
+    		this.consolePanel.setManaged(newVal);
+    	});
+
+    	showCharts.selectedProperty().addListener((obs, oldVal, newVal) -> {
+    		this.chartPanel.setVisible(newVal);
+    		this.chartPanel.setManaged(newVal);
+    	});
+
+    	showCarInfo.selectedProperty().addListener((obs, oldVal, newVal) -> {
+    		this.inspector.setVisible(newVal);
+    		this.inspector.setManaged(newVal);
+    	});
+
+    	windowMenu.getItems().add(showConsole);
+    	windowMenu.getItems().add(showCharts);
+    	windowMenu.getItems().add(showCarInfo);
+
+    	this.menuBar.getMenus().add(windowMenu);
+    }
+
+    /**
      * Creates all the elements that compose the Timeline
      *
      * @return the elements of the timeline
@@ -143,9 +194,8 @@ public class SimulationStage extends Stage {
             int currentValue = (int)Math.round(newVal.doubleValue());
             int oldValue = (int)Math.round(oldVal.doubleValue());
 
-            if(currentValue != oldValue){
+            if(currentValue != oldValue)
                 this.simulationDrawer.drawStep(currentValue);
-            }
         });
 
         sliderTimeLine.setOnMousePressed(e -> this.simulationDrawer.stopAutoDraw());

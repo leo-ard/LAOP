@@ -2,13 +2,11 @@ package org.lrima.laop.simulation;
 
 import org.lrima.laop.core.LAOP;
 import org.lrima.laop.physic.PhysicEngine;
-import org.lrima.laop.physic.Physicable;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.objects.Car;
 import org.lrima.laop.utils.Action;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 public class Simulation implements Runnable{

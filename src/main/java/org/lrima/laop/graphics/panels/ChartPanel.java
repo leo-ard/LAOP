@@ -36,7 +36,7 @@ public class ChartPanel extends HBox implements SimulationListener {
 		this.minY = 0;
 		
 		this.setPadding(new Insets(10, 10, 10, 10));
-		setStyle( "-fx-background-color: rgb(255, 255, 255, 0.5)");
+		setStyle("-fx-background-color: rgb(255, 255, 255, 0.5)");
 		
 		this.setPrefHeight(200);
 		HBox.setHgrow(this, Priority.ALWAYS);
