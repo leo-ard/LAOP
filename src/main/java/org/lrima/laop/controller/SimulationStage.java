@@ -45,6 +45,7 @@ public class SimulationStage extends Stage {
     public SimulationStage(Simulation simulation){
         this.setTitle("LAOP : Simulation");
         this.simulation = simulation;
+        this.simulation.setAutoRun(false);
 
         this.canvas = new Canvas(WINDOW_WIDTH, WINDOW_HEIGHT);
         this.inspector = new InspectorPanel();
@@ -69,20 +70,14 @@ public class SimulationStage extends Stage {
 
         BorderPane rootPane = new BorderPane();
 
-        //CANVAS
-        ChangeListener<Number> updateWidthHeight = (observable, oldValue, newValue) -> {
-            canvas.setHeight(rootPane.getHeight());
-            canvas.setWidth(rootPane.getWidth());
-            simulationDrawer.repaint();
-        };
 
-        rootPane.widthProperty().addListener(updateWidthHeight);
-        rootPane.heightProperty().addListener(updateWidthHeight);
+
+
 
         Pane blankPane = new Pane();
         blankPane.setVisible(false);
 
-        rootPane.setCenter(blankPane);
+        //rootPane.setCenter(blankPane);
         
         //Add the timeLine and the chart panel to the bottom
         VBox bottomPanelBox = new VBox();
@@ -96,6 +91,16 @@ public class SimulationStage extends Stage {
         rootPane.setPickOnBounds(false);
 
         StackPane rootrootPane = new StackPane(canvas, rootPane);
+
+        //CANVAS
+        ChangeListener<Number> updateWidthHeight = (observable, oldValue, newValue) -> {
+            canvas.setHeight(rootrootPane.getHeight());
+            canvas.setWidth(rootrootPane.getWidth());
+            simulationDrawer.repaint();
+        };
+
+        rootrootPane.widthProperty().addListener(updateWidthHeight);
+        rootrootPane.heightProperty().addListener(updateWidthHeight);
 
 
         this.simulationDrawer.setSlider(sliderTimeLine);
@@ -138,14 +143,20 @@ public class SimulationStage extends Stage {
             int currentValue = (int)Math.round(newVal.doubleValue());
             int oldValue = (int)Math.round(oldVal.doubleValue());
 
-            if(currentValue != oldValue)
+            if(currentValue != oldValue){
                 this.simulationDrawer.drawStep(currentValue);
+            }
         });
+
+        sliderTimeLine.setOnMousePressed(e -> this.simulationDrawer.stopAutoDraw());
 
 
         HBox.setMargin(sliderTimeLine, new Insets(7,0,7,0));
 
         Button button1 = new Button("Next gen");
+        button1.setOnAction( e-> {
+            this.simulation.run();
+        });
 
         root.getChildren().addAll(button, sliderTimeLine, checkBoxRealTime, button1);
         root.setSpacing(10);
