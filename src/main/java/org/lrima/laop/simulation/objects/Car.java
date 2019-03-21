@@ -19,7 +19,7 @@ public class Car extends Bloc {
     private Wheel leftBackWheel;
     private Wheel rightBackWheel;
     
-    private static double  MAX_VELOCITY;
+    private static double  MAX_VELOCITY = 300;
 
     /**
      * Create a new car with mass 2000
@@ -73,6 +73,10 @@ public class Car extends Bloc {
         }
 
         this.addVelocity(getAcceleration().multiply(PhysicEngine.DELTA_T));
+        
+        if(this.getVelocity().modulus() > this.MAX_VELOCITY) {
+        	this.setVelocity(this.getVelocity().normalize().multiply(this.MAX_VELOCITY));
+        }
 
   
         this.addPosition(this.getVelocity().multiply(PhysicEngine.DELTA_T));

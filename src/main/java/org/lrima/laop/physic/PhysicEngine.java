@@ -39,12 +39,12 @@ public class PhysicEngine extends Thread {
         //Create the cars
         //Temporary
         if(this.simulationBuffer != null) {
-	        for(int i = 0 ; i < 10 ; i++) {
+	        for(int i = 0 ; i < 1 ; i++) {
 	        	Car car = new Car();
 	        	
 	        	car.addThrust(Math.random() * 100000);
 	        	
-	        	car.setRotation(Math.random());
+	        	car.setRotation(Math.toRadians(45));
 	        	this.addObject(car);
 	        }
         }

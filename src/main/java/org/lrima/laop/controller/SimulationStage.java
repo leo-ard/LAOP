@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.lrima.laop.graphics.panels.ChartPanel;
 import org.lrima.laop.graphics.panels.ConsolePanel;
-import org.lrima.laop.graphics.panels.InspectorPanel;
+import org.lrima.laop.graphics.panels.inspector.InspectorPanel;
 import org.lrima.laop.graphics.panels.simulation.timeline.TimeLine;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.simulation.SimulationBuffer;
@@ -37,6 +37,12 @@ public class SimulationStage extends Stage {
     
     private final double WINDOW_WIDTH = 1280;
     private final double WINDOW_HEIGHT = 720;
+    
+    //Temporaire
+    private final int NUMBER_OF_BATCH = 2;
+    private final int NUMBER_OF_SIMULATION = 10;
+    private final int NUMBER_OF_GENERATION = 10;
+    //
 
     /**
      * Initialize a new simulation stage with a new simulation buffer
@@ -83,6 +89,8 @@ public class SimulationStage extends Stage {
      * @author Clement Bisaillon
      */
     private void runSimulation() {
+    	
+    	//Generation
     	this.physicEngine = new PhysicEngine(this.buffer);
     	this.physicEngine.start();
     }
