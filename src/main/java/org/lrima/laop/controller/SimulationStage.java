@@ -17,6 +17,9 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -46,6 +49,8 @@ public class SimulationStage extends Stage {
 
     private CheckBox checkBoxRealTime;
     private JFXSlider sliderTimeLine;
+    
+    private MenuBar menuBar;
 
     /**
      * Initialize a new simulation stage with a specific simulation buffer
@@ -60,6 +65,8 @@ public class SimulationStage extends Stage {
         this.consolePanel = new ConsolePanel();
         this.simulationDrawer = new SimulationDrawer(canvas, simulation, inspector);
         this.chartPanel = new ChartPanel();
+        this.configureMenu();
+        
 
 
         this.setOnCloseRequest(e->{
@@ -104,7 +111,8 @@ public class SimulationStage extends Stage {
 
         Pane blankPane = new Pane();
         blankPane.setVisible(false);
-
+        
+        rootPane.setTop(this.menuBar);
         rootPane.setCenter(blankPane);
         
         //Add the timeLine and the chart panel to the bottom
@@ -128,6 +136,44 @@ public class SimulationStage extends Stage {
         scene.getStylesheets().add("/css/general.css");
 
         this.setScene(scene);
+    }
+    
+    /**
+     * Cree le menu au dessus de la fenetre avec des boutons
+     * @author Clement Bisaillon
+     */
+    private void configureMenu() {
+    	this.menuBar = new MenuBar();
+    	
+    	Menu windowMenu = new Menu("Window");
+    	CheckMenuItem showConsole = new CheckMenuItem("Console");
+    	CheckMenuItem showCharts = new CheckMenuItem("Charts");
+    	CheckMenuItem showCarInfo = new CheckMenuItem("Car info");
+    	showConsole.setSelected(true);
+    	showCharts.setSelected(true);
+    	showCarInfo.setSelected(true);
+    	
+    	//Les actions quand nous cliquons sur les boutons
+    	showConsole.selectedProperty().addListener((obs, oldVal, newVal) -> {
+    		this.consolePanel.setVisible(newVal);
+    		this.consolePanel.setManaged(newVal);
+    	});
+    	
+    	showCharts.selectedProperty().addListener((obs, oldVal, newVal) -> {
+    		this.chartPanel.setVisible(newVal);
+    		this.chartPanel.setManaged(newVal);
+    	});
+    	
+    	showCarInfo.selectedProperty().addListener((obs, oldVal, newVal) -> {
+    		this.inspector.setVisible(newVal);
+    		this.inspector.setManaged(newVal);
+    	});
+    	
+    	windowMenu.getItems().add(showConsole);
+    	windowMenu.getItems().add(showCharts);
+    	windowMenu.getItems().add(showCarInfo);
+    	
+    	this.menuBar.getMenus().add(windowMenu);
     }
 
     /**

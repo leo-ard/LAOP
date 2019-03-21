@@ -72,7 +72,6 @@ public class Simulation implements Runnable{
         for(String scope : settings.getScopes()){
             currentScope = scope;
             for(int i = 0; i < (Integer) settings.get(scope, LAOP.KEY_NUMBER_OF_SIMULATION); i++){
-                System.out.println(i);
                 ArrayList<Car> carsArrayList = configureCar();
 
                 simulationBuffer.clear();
