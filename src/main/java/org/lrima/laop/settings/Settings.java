@@ -1,18 +1,23 @@
 package org.lrima.laop.settings;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Optional;
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
+
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.lang.reflect.Array;
-import java.util.*;
 
 /**
  * Stores the settings in different scopes and allows the user to get and set the values of the
@@ -28,11 +33,18 @@ public class Settings {
      * The key of this HashMap represents the name of the scope.
      */
     private LinkedHashMap<String, Scope> scopes;
+    
+    /**
+     * The table of scopes in the settings panel
+     */
+    private JFXListView<String> scopeListTable;
 
 
     public Settings(){
         scopes = new LinkedHashMap<>();
         scopes.put(GLOBAL_SCOPE, new Scope());
+        
+        this.scopeListTable = new JFXListView<>();
     }
 
     /**
@@ -82,13 +94,26 @@ public class Settings {
      * @param scope - the name of the scope. This field is not case-sensitive
      * @return true if successful, false otherwise
      */
-    private boolean addScope(String scope){
+    private void addScope(String scope){
         Scope newScope = new Scope();
         newScope.setGlobalScope(this.scopes.get(GLOBAL_SCOPE));
         this.scopes.put(scope, newScope);
-
-
-        return true;
+    }
+    
+    /**
+     * Add a scope when the user clicks the add algorithm button
+     */
+    private void addScope() {
+    	//Ask for the name of the scope
+    	TextInputDialog scopeNameDialog = new TextInputDialog();
+    	scopeNameDialog.setTitle("Scope name");
+    	scopeNameDialog.setHeaderText("Choose a name for the new scope");
+    	Optional<String> scopeName = scopeNameDialog.showAndWait();
+    	
+    	scopeName.ifPresent(name -> {
+    		this.addScope(name);
+    		this.reloadScopeTable();
+    	});
     }
 
     /**
@@ -128,6 +153,7 @@ public class Settings {
      * @author Léonard
      */
     public boolean showPanel(){
+    	
         //INIT
         Stage stage = new Stage();
         HashMap<String, Node> panels = new HashMap<>();
@@ -141,7 +167,7 @@ public class Settings {
 
         //SAVE BUTTON AND ITS PANEL
         JFXButton saveButton = new JFXButton("Save");
-        saveButton.getStyleClass().add("high");
+        saveButton.getStyleClass().add("btn");
         saveButton.setMaxWidth(Integer.MAX_VALUE);
         saveButton.setOnAction((e) ->{
             stage.close();
@@ -153,14 +179,24 @@ public class Settings {
         bottom.setPadding(new Insets(10));
 
         //ADDING LEFT PANEL (ALL THE SCOPES IN A LIST)
-        JFXListView<String> leftPanel = new JFXListView<>();
-        leftPanel.getItems().addAll(this.scopes.keySet());
-        leftPanel.getSelectionModel().select(0);
-        leftPanel.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        VBox scopeList = new VBox();
+        scopeList.setVgrow(scopeListTable, Priority.ALWAYS);
+        
+        //Le bouton pour ajouter un algorithme
+        JFXButton addAlgorithmButton = new JFXButton("Add algorithm");
+        addAlgorithmButton.setOnAction((event) -> {
+        	this.addScope();
+        });
+        addAlgorithmButton.setMaxWidth(Double.MAX_VALUE);
+        addAlgorithmButton.getStyleClass().add("btn");
+        scopeList.getChildren().addAll(scopeListTable, addAlgorithmButton);
+        
+        this.reloadScopeTable();
+        scopeListTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-        leftPanel.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+        scopeListTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if(newVal == null) {
-                leftPanel.getSelectionModel().select(0);
+                scopeListTable.getSelectionModel().select(0);
                 rootNode.setCenter(panels.get(GLOBAL_SCOPE));
             }
             else{
@@ -171,7 +207,7 @@ public class Settings {
         //ADDING THE PANELS TO THE ROOT NODE
         Node centerPanel = panels.get(GLOBAL_SCOPE);
         rootNode.setCenter(centerPanel);
-        rootNode.setLeft(leftPanel);
+        rootNode.setLeft(scopeList);
         rootNode.setBottom(bottom);
 
         //ADDING STYLE
@@ -182,5 +218,11 @@ public class Settings {
         stage.show();
 
         return true;
+    }
+    
+    private void reloadScopeTable() {
+    	this.scopeListTable.getItems().clear();
+    	this.scopeListTable.getItems().addAll(this.scopes.keySet());
+        this.scopeListTable.getSelectionModel().select(0);
     }
 }

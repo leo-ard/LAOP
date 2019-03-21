@@ -89,7 +89,7 @@ public class Scope extends LinkedHashMap<String, Option> {
      *
      * @return The javafx layout.
      */
-    Node generatePanel() {
+    public Node generatePanel() {
         ScopeModifierPanel scopeModifierPanel = new ScopeModifierPanel(this);
         scopeModifierPanel.init();
         return scopeModifierPanel;

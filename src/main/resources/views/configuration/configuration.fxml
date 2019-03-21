@@ -11,7 +11,7 @@
       <JFXButton layoutX="137.0" layoutY="174.0" onAction="#onConfigurerClick" prefHeight="61.0" prefWidth="190.0" text="Configurer">
          <styleClass>
             <String fx:value="raised" />
-            <String fx:value="high" />
+            <String fx:value="btn" />
          </styleClass></JFXButton>
       <JFXTreeTableView fx:id="table" layoutX="26.0" layoutY="422.0" prefHeight="140.0" prefWidth="400.0" />
    </children>

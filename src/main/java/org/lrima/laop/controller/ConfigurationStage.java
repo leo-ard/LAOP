@@ -53,10 +53,10 @@ public class ConfigurationStage extends Stage {
 
         //Initialisation of the next and back button
         left = new JFXButton("next");
-        left.getStyleClass().add("high");
+        left.getStyleClass().add("btn");
 
         right = new JFXButton("back");
-        right.getStyleClass().add("high");
+        right.getStyleClass().add("btn");
 
         setButtonLabels(panelIndex);
 

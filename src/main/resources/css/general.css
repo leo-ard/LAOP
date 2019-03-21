@@ -2,7 +2,7 @@
     -fx-background-color: #ffffff;
     -fx-mid-text-color: #303030;}
 
-.high{
+.btn{
     -fx-background-color : #3944ff;
     -fx-text-fill : #FFFFFF;
     -jfx-button-type: RAISED;
@@ -26,4 +26,8 @@
 
 .jfx-slider > .track {
     -fx-background-color: blue;
+}
+
+.btn{
+	
 }
