@@ -51,10 +51,10 @@ public class SimulationBuffer  {
      * @return the array of cars at that simulation step
      */
     public ArrayList<CarInfo> getCars(int time) {
-    	if(this.snapshots.size() > 0) {
+    	if(this.snapshots.size() > 0 && time >= 0) {
     		return this.snapshots.get(time).getCars();
     	}
-    	return null;
+    	return new ArrayList<>();
     }
 
     /**

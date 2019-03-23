@@ -62,6 +62,7 @@ public class SimulationStage extends Stage {
         this.inspector = new InspectorPanel();
         this.consolePanel = new ConsolePanel();
         this.simulationDrawer = new SimulationDrawer(canvas, simulation, inspector);
+        this.simulationDrawer.start();
         this.chartPanel = new ChartPanel();
         this.configureMenu();
 
@@ -72,13 +73,16 @@ public class SimulationStage extends Stage {
         
         this.loadAllScenes();
 
-        this.simulation.getBuffer().setOnSnapshotAdded(this::handleNewSnapshot);
-//        this.simulation.setAutoRun(false);
+        this.simulation.setAutoRun(true);
         this.simulation.setOnGenerationFinish(this::handleGenerationFinish);
     }
 
+    /**
+     * Called when the generations finished
+     *
+     * @param simulation the simulation
+     */
     private void handleGenerationFinish(Simulation simulation) {
-        System.out.println("ENABLE");
         btnGenFinish.setDisable(false);
     }
 
@@ -113,7 +117,6 @@ public class SimulationStage extends Stage {
         ChangeListener<Number> updateWidthHeight = (observable, oldValue, newValue) -> {
             canvas.setHeight(rootrootPane.getHeight());
             canvas.setWidth(rootrootPane.getWidth());
-            simulationDrawer.repaint();
         };
 
         rootrootPane.widthProperty().addListener(updateWidthHeight);
@@ -177,14 +180,19 @@ public class SimulationStage extends Stage {
         PlayButton button = new PlayButton(
                 (b)-> {
                     if(b)
-                        this.simulationDrawer.startAutodraw(100);
+                        this.simulationDrawer.startAutodraw(2);
                     else
                         this.simulationDrawer.stopAutoDraw();
                 });
 
         checkBoxRealTime = new CheckBox("");
         checkBoxRealTime.selectedProperty().setValue(false);
-        checkBoxRealTime.selectedProperty().addListener((obs, oldVal, newVal) -> this.sliderTimeLine.setDisable(newVal));
+        checkBoxRealTime.selectedProperty().addListener((obs, oldVal, newVal) -> {
+            this.sliderTimeLine.setDisable(newVal);
+            button.setDisable(newVal);
+            button.setIsPlaying(false);
+            simulationDrawer.setRealTime(newVal);
+        });
 
         sliderTimeLine = new JFXSlider();
 
@@ -197,7 +205,7 @@ public class SimulationStage extends Stage {
             int oldValue = (int)Math.round(oldVal.doubleValue());
 
             if(currentValue != oldValue)
-                this.simulationDrawer.drawStep(currentValue);
+                this.simulationDrawer.setCurrentStep(currentValue);
         });
 
         sliderTimeLine.setOnMousePressed(e -> this.simulationDrawer.stopAutoDraw());
@@ -221,21 +229,5 @@ public class SimulationStage extends Stage {
         root.setStyle("-fx-background-color: rgb(255, 255, 255, 0.5)");
 
         return root;
-    }
-
-    private void handleNewSnapshot(SimulationBuffer buffer) {
-        sliderTimeLine.setMax(buffer.getSize()-1);
-        if(checkBoxRealTime.selectedProperty().get() && buffer.getSize() != 0){
-            simulationDrawer.drawStep(buffer.getSize()-1);
-        }
-    }
-
-    /**
-     * Sets the time at which we want the simulation to be displayed at
-     *
-     * @param time The time
-     */
-    private void setTime(int time) {
-        this.simulationDrawer.drawStep(time);
     }
 }

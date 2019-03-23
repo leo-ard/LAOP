@@ -1,7 +1,7 @@
 package org.lrima.laop.controller;
 
 import com.jfoenix.controls.JFXSlider;
-import javafx.application.Platform;
+import javafx.animation.AnimationTimer;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -14,15 +14,17 @@ import org.lrima.laop.graphics.panels.inspector.InspectorPanel;
 import org.lrima.laop.simulation.CarInfo;
 import org.lrima.laop.simulation.Simulation;
 import org.lrima.laop.simulation.SimulationBuffer;
+import org.lrima.laop.simulation.objects.Car;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  * Class that draws the simulation into the canvas according to the buffer
  * @author Léonard
  */
-public class SimulationDrawer implements Runnable{
+public class SimulationDrawer{
     private Canvas canvas;
     private InspectorPanel inspector;
 
@@ -31,14 +33,18 @@ public class SimulationDrawer implements Runnable{
     private Affine affineTransform;
     private double mouseXPressed, mouseYPressed;
 
-    private Thread autoDrawThread;
-    private boolean running;
-    private int timeBetweenFrames;
-
     private int currentStep;
     private double currentZoom = 0;
 
     private Slider slider;
+    private boolean autoDraw;
+    private int frameWait;
+    private int frameCount;
+    private boolean realTime;
+
+    private Point2D clicked;
+    private ArrayList<CarInfo> currentCars;
+
 
     /**
      * Draws the simulation into the canvas according to the buffer
@@ -65,8 +71,6 @@ public class SimulationDrawer implements Runnable{
             mouseXPressed = e.getX();
 
             this.affineTransform.appendTranslation(deltaX, deltaY);
-
-            repaint();
         });
 
         this.canvas.setOnScroll(e -> {
@@ -78,31 +82,60 @@ public class SimulationDrawer implements Runnable{
             Point2D point = this.inverseTransform(e.getX(), e.getY());
 
             this.affineTransform.appendScale(zoom, zoom, point);
-
-            repaint();
         });
 
         this.canvas.setOnMouseClicked(e -> {
-            Point2D transformedPoints = null;
-            transformedPoints = this.inverseTransform(e.getX(), e.getY());
-
-            ArrayList<CarInfo> snap = this.simulation.getBuffer().getCars(currentStep);
-
-            for(int i = 0; i < snap.size(); i++){
-                if(snap.get(i).getArea().contains(transformedPoints.getX(), transformedPoints.getY())){
-                    final int currentIndex = i;
-                    inspector.setObject(()-> getCurrent().get(currentIndex));
-                    repaint();
-                }
-            }
-
-
+            clicked = new Point2D(e.getX(), e.getY());
         });
 
     }
 
-    private ArrayList<CarInfo> getCurrent() {
-        return this.simulation.getBuffer().getCars(currentStep);
+    /**
+     * Start the javafx thread to update the canvas at fixed rate.
+     *
+     */
+    public void start(){
+        AnimationTimer animationTimer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                SimulationBuffer simulationBuffer = simulation.getBuffer();
+                int size = simulationBuffer.getSize();
+                slider.setMax(size-1);
+
+                if(realTime){
+                    slider.setValue(size-1);
+                    currentStep = size-1;
+                }else if(autoDraw){
+                    if(frameCount >= frameWait){
+                        slider.setValue(currentStep);
+                        currentStep++;
+                        frameCount = 0;
+                    }
+
+                    frameCount++;
+                }
+                else{
+                    slider.setValue(currentStep);
+                }
+
+                if(currentStep >= size){
+                    currentStep = 0;
+                }
+
+                if(size > 0)
+                    currentCars = simulation.getBuffer().getCars(currentStep);
+
+                //HANDLE CLICK
+                if(clicked != null){
+                    handleClick(clicked);
+                    clicked = null;
+                }
+                inspector.update();
+
+                drawStep();
+            }
+        };
+        animationTimer.start();
     }
 
     /**
@@ -130,21 +163,10 @@ public class SimulationDrawer implements Runnable{
     }
 
     /**
-     * Repaints over the canvas
-     */
-    public void repaint() {
-        Platform.runLater(()-> drawStep(currentStep));
-    }
-
-    /**
      * Draws the state of the cars at the specified time
-     *
-     * @param time the time to draw the state of the car from
-     */
-    public void drawStep(int time){
-        currentStep = time;
+     **/
+    private void drawStep(){
         if(this.simulation.getBuffer().getSize() > 0) {
-	        ArrayList<CarInfo> cars = this.simulation.getBuffer().getCars(time);
 	        GraphicsContext gc = canvas.getGraphicsContext2D();
 	
 	        gc.setFill(Color.rgb(180,200, 250 ));
@@ -154,7 +176,7 @@ public class SimulationDrawer implements Runnable{
 	
 	        //drawGrid(gc);
 	
-	        for(CarInfo car : cars) {
+	        for(CarInfo car : currentCars) {
 	            if(inspector.getSelectedObject() == car)
 	                gc.setFill(Color.RED);
 	            else
@@ -167,43 +189,29 @@ public class SimulationDrawer implements Runnable{
     }
 
     /**
+     * Sets the current step of the buffer to be displayed
+     *
+     * @param currentStep the step
+     */
+    public void setCurrentStep(int currentStep) {
+        this.currentStep = currentStep;
+    }
+
+    /**
      * Commence a faire défiler automatiquement le curseur (lancer l'animation)
      *
-     * @param timeBetweenFrames le temps entre le déplacement du curseur
+     * @param frameWait le nombre de frame entre chaque changement de valeur
      */
-    public void startAutodraw(int timeBetweenFrames){
-        this.autoDrawThread = new Thread(this);
-        this.autoDrawThread.start();
-
-        this.running = true;
-        this.timeBetweenFrames = timeBetweenFrames;
+    public void startAutodraw(int frameWait){
+        this.frameWait = frameWait;
+        this.autoDraw = true;
     }
 
     /**
      * Arrete de faire défiler le curseur automatiquement
      */
     public void stopAutoDraw(){
-        this.running = false;
-    }
-
-    @Override
-    public void run() {
-        while(running){
-            Platform.runLater(()->{
-                currentStep++;
-                if(currentStep >= this.simulation.getBuffer().getSize())
-                    currentStep = 0;
-                if(slider != null)
-                    this.slider.setValue(currentStep);
-                inspector.update();
-                drawStep(currentStep);
-            });
-            try {
-                Thread.sleep(timeBetweenFrames);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        this.autoDraw = false;
     }
 
     /**
@@ -213,5 +221,26 @@ public class SimulationDrawer implements Runnable{
      */
     public void setSlider(JFXSlider slider){
         this.slider = slider;
+    }
+
+    public void setRealTime(Boolean newVal) {
+        this.realTime = newVal;
+    }
+
+    private void handleClick(Point2D e){
+        Point2D transformedPoints = this.inverseTransform(e.getX(), e.getY());
+
+        for(int i = 0; i < currentCars.size(); i++){
+            if(currentCars.get(i).getArea().contains(transformedPoints.getX(), transformedPoints.getY())){
+                final int currentIndex = i;
+                inspector.setObject(()-> getCurrent().get(currentIndex));
+                return;
+            }
+        }
+        inspector.setObject(null);
+    }
+
+    private ArrayList<CarInfo> getCurrent() {
+        return currentCars;
     }
 }

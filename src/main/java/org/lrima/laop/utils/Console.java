@@ -38,7 +38,7 @@ public class Console {
 
     private static void warnListeners(LogType logtype, String s){
         listeners.forEach(c -> c.accept(logtype, s));
-        System.out.printf("[%s] %s", logtype.getPrefix(), s);
+        //System.out.printf("[%s] %s\n", logtype.getPrefix(), s);
     }
 
     public enum LogType {
