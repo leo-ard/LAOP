@@ -92,6 +92,8 @@ public class SimulationDrawer implements Runnable{
                 if(snap.get(i).getArea().contains(transformedPoints.getX(), transformedPoints.getY())){
                     final int currentIndex = i;
                     inspector.setObject(()-> getCurrent().get(currentIndex));
+                    inspector.setVisible(true);
+                    inspector.setManaged(true);
                     repaint();
                 }
             }

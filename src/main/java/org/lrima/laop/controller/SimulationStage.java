@@ -57,12 +57,13 @@ public class SimulationStage extends Stage {
     public SimulationStage(Simulation simulation){
         this.setTitle("LAOP : Simulation");
         this.simulation = simulation;
+        simulation.setAutoRun(false);
 
         this.canvas = new Canvas(WINDOW_WIDTH, WINDOW_HEIGHT);
         this.inspector = new InspectorPanel();
         this.consolePanel = new ConsolePanel();
         this.simulationDrawer = new SimulationDrawer(canvas, simulation, inspector);
-        this.chartPanel = new ChartPanel();
+        this.chartPanel = new ChartPanel(simulation);
         this.configureMenu();
 
         this.setOnCloseRequest(e->{
@@ -78,7 +79,6 @@ public class SimulationStage extends Stage {
     }
 
     private void handleGenerationFinish(Simulation simulation) {
-        System.out.println("ENABLE");
         btnGenFinish.setDisable(false);
     }
 
@@ -157,6 +157,11 @@ public class SimulationStage extends Stage {
     		this.inspector.setVisible(newVal);
     		this.inspector.setManaged(newVal);
     	});
+    	
+    	//Two way bind with the inspector panel (When you click a car)
+    	this.inspector.visibleProperty().addListener((obs, oldVal, newVal) -> {
+    		showCarInfo.setSelected(newVal);
+    	});
 
     	windowMenu.getItems().add(showConsole);
     	windowMenu.getItems().add(showCharts);
@@ -209,7 +214,6 @@ public class SimulationStage extends Stage {
         btnGenFinish.setOnAction( e-> {
             btnGenFinish.setDisable(true);
             this.simulation.nextGen();
-            System.out.println("DISABLE");
         });
 
         root.getChildren().addAll(button, sliderTimeLine, checkBoxRealTime, btnGenFinish);

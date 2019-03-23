@@ -1,14 +1,14 @@
 package org.lrima.laop.simulation;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.lrima.laop.core.LAOP;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.settings.Settings;
+import org.lrima.laop.simulation.data.GenerationData;
 import org.lrima.laop.simulation.objects.Car;
 import org.lrima.laop.utils.Action;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
 
 public class Simulation {
     private SimulationBuffer simulationBuffer;
@@ -107,11 +107,7 @@ public class Simulation {
         simulationBuffer.clear();
         PhysicEngine physicEngine = new PhysicEngine(simulationBuffer);
 
-        //First generation
-        if(generationCount == 0)
-            physicEngine.getObjects().addAll(configureCar());
-        else
-            physicEngine.getObjects().addAll(configureCar());
+        physicEngine.getObjects().addAll(configureCar());
 
         physicEngine.setOnPhysicEngineFinish(engine -> {
             if(this.autoRun)
@@ -123,6 +119,18 @@ public class Simulation {
     private ArrayList<Car> alterCars() {
         return new ArrayList<>();
 
+    }
+    
+    /**
+     * Get the generation data of the current generation
+     * Used to populate the chart panel
+     * @author Clement Bisaillon
+     * @return the generation data of the current generation
+     */
+    public GenerationData getGenerationData() {
+    	GenerationData data = new GenerationData(this.generationCount);
+    	
+    	return data;
     }
 
 
