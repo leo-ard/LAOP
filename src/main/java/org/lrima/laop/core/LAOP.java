@@ -90,6 +90,10 @@ public class LAOP {
             simulationStage.show();
         }
 
+        simulation.setOnGenerationFinish(sim->Console.info("Generation %s fini", sim.getGenerationCount()));
+        simulation.setOnSimulationFinish(sim->Console.info("Simulation %s fini", sim.getSimulationCount()));
+        simulation.setOnBatchFinished(sim->Console.info("Batch %s fini", sim.getBatchCount()));
+
         simulation.start();
     }
 

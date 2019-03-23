@@ -48,6 +48,7 @@ public class SimulationStage extends Stage {
     private JFXSlider sliderTimeLine;
 
     private MenuBar menuBar;
+    private Button btnGenFinish;
 
     /**
      * Initialize a new simulation stage with a specific simulation buffer
@@ -64,14 +65,21 @@ public class SimulationStage extends Stage {
         this.chartPanel = new ChartPanel();
         this.configureMenu();
 
-
-
         this.setOnCloseRequest(e->{
             Platform.exit();
             System.exit(0);
         });
         
         this.loadAllScenes();
+
+        this.simulation.getBuffer().setOnSnapshotAdded(this::handleNewSnapshot);
+//        this.simulation.setAutoRun(false);
+        this.simulation.setOnGenerationFinish(this::handleGenerationFinish);
+    }
+
+    private void handleGenerationFinish(Simulation simulation) {
+        System.out.println("ENABLE");
+        btnGenFinish.setDisable(false);
     }
 
     /**
@@ -81,10 +89,6 @@ public class SimulationStage extends Stage {
         Node timeLine = timeline();
 
         BorderPane rootPane = new BorderPane();
-
-
-
-
 
         Pane blankPane = new Pane();
         blankPane.setVisible(false);
@@ -115,9 +119,7 @@ public class SimulationStage extends Stage {
         rootrootPane.widthProperty().addListener(updateWidthHeight);
         rootrootPane.heightProperty().addListener(updateWidthHeight);
 
-
         this.simulationDrawer.setSlider(sliderTimeLine);
-        this.simulation.getBuffer().setOnSnapshotAdded(this::handleNewSnapshot);
 
         Scene scene = new Scene(rootrootPane);
         scene.getStylesheets().add("/css/general.css");
@@ -203,12 +205,14 @@ public class SimulationStage extends Stage {
 
         HBox.setMargin(sliderTimeLine, new Insets(7,0,7,0));
 
-        Button button1 = new Button("Next gen");
-        button1.setOnAction( e-> {
-            this.simulation.run();
+        btnGenFinish = new Button("Next gen");
+        btnGenFinish.setOnAction( e-> {
+            btnGenFinish.setDisable(true);
+            this.simulation.nextGen();
+            System.out.println("DISABLE");
         });
 
-        root.getChildren().addAll(button, sliderTimeLine, checkBoxRealTime, button1);
+        root.getChildren().addAll(button, sliderTimeLine, checkBoxRealTime, btnGenFinish);
         root.setSpacing(10);
         root.setPadding(new Insets(5));
 
@@ -224,7 +228,6 @@ public class SimulationStage extends Stage {
         if(checkBoxRealTime.selectedProperty().get() && buffer.getSize() != 0){
             simulationDrawer.drawStep(buffer.getSize()-1);
         }
-
     }
 
     /**

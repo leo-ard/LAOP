@@ -8,8 +8,9 @@ import org.lrima.laop.utils.Action;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 
-public class Simulation implements Runnable{
+public class Simulation {
     private SimulationBuffer simulationBuffer;
     private Settings settings;
 
@@ -18,11 +19,11 @@ public class Simulation implements Runnable{
     private int batchCount;
     private int generationCount;
 
-    private Thread simulationThread;
-
     ArrayList<Action<Simulation>> onSimulationFinish;
     ArrayList<Action<Simulation>> onGenerationFinish;
     ArrayList<Action<Simulation>> onBatchFinished;
+    ArrayList<Action<Simulation>> onEnd;
+
 
     private boolean autoRun;
 
@@ -33,6 +34,7 @@ public class Simulation implements Runnable{
         this.onBatchFinished = new ArrayList<>();
         this.onSimulationFinish = new ArrayList<>();
         this.onGenerationFinish = new ArrayList<>();
+        this.onEnd = new ArrayList<>();
 
         this.currentScope = this.settings.getLocalScopes().get(0);
         this.autoRun = true;
@@ -60,38 +62,44 @@ public class Simulation implements Runnable{
     }
 
 
-    public void start() {
-        simulationThread = new Thread(this);
-        simulationThread.start();
-    }
 
     public SimulationBuffer getBuffer() {
         return simulationBuffer;
     }
 
-    @Override
-    public void run() {
-        this.step();
-    }
-
-    private void step(){
-        incrementGeneration();
+    public void nextGen(){
         simulateGeneration();
+        incrementGeneration();
     }
 
     private void incrementGeneration(){
+        //FIRE LISTENERS
+        this.onGenerationFinish.forEach(simulationAction -> simulationAction.handle(this));
         generationCount ++;
+
+        //CHECK IF GENERATION IS OUT OF BOUNDS
         if(generationCount > (int) settings.get(currentScope, LAOP.KEY_NUMBER_OF_GENERATIONS)){
+            //FIRE LISTENERS
+            this.onSimulationFinish.forEach(simulationAction -> simulationAction.handle(this));
             generationCount = 0;
             simulationCount++;
-            this.onSimulationFinish.forEach(simulationAction -> simulationAction.handle(this));
-        }
 
-        if(simulationCount > (int) settings.get(currentScope, LAOP.KEY_NUMBER_OF_SIMULATION)){
-            simulationCount = 0;
-            batchCount++;
-            currentScope = settings.getLocalScopes().get(batchCount);
-            this.onBatchFinished.forEach(simulationAction -> simulationAction.handle(this));
+            //CHECK IF SIMULATION IS OUT OF BOUND
+            if(simulationCount > (int) settings.get(currentScope, LAOP.KEY_NUMBER_OF_SIMULATION)){
+                //FIRE LISTENERS
+                this.onBatchFinished.forEach(simulationAction -> simulationAction.handle(this));
+
+                simulationCount = 0;
+                batchCount++;
+
+                //CHECK IF BATCHES ARE FINISHED
+                if(batchCount < settings.getLocalScopes().size()){
+                    currentScope = settings.getLocalScopes().get(batchCount);
+                }
+                else{
+                    this.onEnd.forEach(simulationAction -> simulationAction.handle(this));
+                }
+            }
         }
     }
 
@@ -107,7 +115,7 @@ public class Simulation implements Runnable{
 
         physicEngine.setOnPhysicEngineFinish(engine -> {
             if(this.autoRun)
-                this.step();
+                this.nextGen();
         });
         physicEngine.start();
     }
@@ -130,11 +138,31 @@ public class Simulation implements Runnable{
         this.onGenerationFinish.add(onGenerationFinish);
     }
 
+    public void setOnEnd(Action<Simulation> onEnd) {
+        this.onEnd.add(onEnd);
+    }
+
     public void setAutoRun(boolean autoRun) {
         this.autoRun = autoRun;
     }
 
     public boolean getAutoRun() {
         return autoRun;
+    }
+
+    public void start() {
+        this.nextGen();
+    }
+
+    public int getGenerationCount() {
+        return generationCount;
+    }
+
+    public int getSimulationCount() {
+        return simulationCount;
+    }
+
+    public int getBatchCount() {
+        return batchCount;
     }
 }

@@ -3,6 +3,9 @@ package org.lrima.laop.graphics.panels;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import javafx.application.Platform;
+import javafx.scene.Node;
+import javafx.scene.layout.HBox;
 import org.lrima.laop.controller.PrintInterseptor;
 
 
@@ -14,49 +17,55 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import org.lrima.laop.utils.Console;
+
+import javax.swing.event.TreeModelEvent;
 
 /**
  * Class to show the console panel
  * @author Leonard Oest OLeary
  */
-public class ConsolePanel extends VBox {
-	private ScrollPane scrollPane;
+public class ConsolePanel extends ScrollPane {
 	private final int MAX_WIDTH = 200;
-	
-	public ConsolePanel() {
+    private VBox vBox;
+
+    public ConsolePanel() {
 		super();
-		this.setAlignment(Pos.TOP_LEFT);
+
+		vBox = new VBox();
+		this.setContent(vBox);
+        vBox.setAlignment(Pos.TOP_LEFT);
         
-        this.scrollPane = new ScrollPane(this);
-        this.scrollPane.setVvalue(1);
-        this.scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        this.scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        
-        this.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5)");
-        this.setPrefWidth(MAX_WIDTH);
-        
-        //Todo: Ne fonctionne pas. Voir general.css
-        this.getStyleClass().add("console-panel");
-        
+        setVvalue(1);
+        setHbarPolicy(ScrollBarPolicy.NEVER);
+        setVbarPolicy(ScrollBarPolicy.NEVER);
+
+        vBox.setPrefWidth(MAX_WIDTH);
+
         this.setOut();
 	}
-	
-	/**
+
+    /**
 	 * Set how the system handles the message reception
 	 */
 	private void setOut() {
-		System.setOut(new PrintInterseptor(System.out, (s)->{
+        Console.addListener((logType, s)->{
             String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-            Text prefix = new Text(String.format("[%s] ", time));
+            Text prefix = new Text(String.format("[%s] %s ", logType.getPrefix(), time));
+            prefix.setFill(logType.getColor());
             prefix.setStyle("-fx-font-weight: bold;");
             Text suffix = new Text(s);
+            suffix.setFill(logType.getColor().saturate());
 
             TextFlow textFlow = new TextFlow(prefix, suffix);
             textFlow.setMaxWidth(MAX_WIDTH);
-            this.getChildren().add(textFlow);
 
-            scrollPane.layout();
-        }));
+            Platform.runLater(()-> {
+                vBox.getChildren().add(textFlow);
+                this.layout();
+            });
+
+        });
 		
 //		System.setErr(new PrintInterseptor(System.err, (s)->{
 //            String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
