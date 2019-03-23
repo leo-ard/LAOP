@@ -29,7 +29,7 @@ public class PhysicEngine extends Thread {
     private ArrayList<Action<PhysicEngine>> onPhysicEngineFinish;
     
     //////Temporary
-    private final int MAX_ITERATION = 20;
+    private final int MAX_ITERATION = 200;
     private int CURRENT_ITERATION = 0;
     //////Temporary
     

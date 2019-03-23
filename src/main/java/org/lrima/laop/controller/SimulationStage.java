@@ -63,7 +63,7 @@ public class SimulationStage extends Stage {
         this.consolePanel = new ConsolePanel();
         this.simulationDrawer = new SimulationDrawer(canvas, simulation, inspector);
         this.simulationDrawer.start();
-        this.chartPanel = new ChartPanel();
+        this.chartPanel = new ChartPanel(simulation);
         this.configureMenu();
 
         this.setOnCloseRequest(e->{
@@ -161,6 +161,11 @@ public class SimulationStage extends Stage {
     		this.inspector.setManaged(newVal);
     	});
 
+    	//Two way bind with the inspector panel (When you click a car)
+    	this.inspector.visibleProperty().addListener((obs, oldVal, newVal) -> {
+    		showCarInfo.setSelected(newVal);
+    	});
+
     	windowMenu.getItems().add(showConsole);
     	windowMenu.getItems().add(showCharts);
     	windowMenu.getItems().add(showCarInfo);
@@ -217,7 +222,6 @@ public class SimulationStage extends Stage {
         btnGenFinish.setOnAction( e-> {
             btnGenFinish.setDisable(true);
             this.simulation.nextGen();
-            System.out.println("DISABLE");
         });
 
         root.getChildren().addAll(button, sliderTimeLine, checkBoxRealTime, btnGenFinish);

@@ -1,9 +1,9 @@
 package org.lrima.laop.graphics.panels;
 
-import javafx.scene.layout.Priority;
+import org.lrima.laop.simulation.Simulation;
 import org.lrima.laop.simulation.data.GenerationData;
 import org.lrima.laop.simulation.data.SimulationModel;
-import org.lrima.laop.simulation.listeners.SimulationListener;
+import org.lrima.laop.utils.Action;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Side;
@@ -11,7 +11,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 
 /**
  * Panel to show to progression of the current simulation.
@@ -19,7 +19,7 @@ import javafx.scene.layout.Pane;
  * of the cars by the generation number
  * @author Clement Bisaillon
  */
-public class ChartPanel extends HBox implements SimulationListener {
+public class ChartPanel extends HBox {
 	private NumberAxis xAxis;
 	private NumberAxis yAxis;
 	private LineChart<Number, Number> chart;
@@ -30,7 +30,7 @@ public class ChartPanel extends HBox implements SimulationListener {
 	
 	private XYChart.Series<Number, Number> averageFitnessSerie;
 	
-	public ChartPanel() {
+	public ChartPanel(Simulation simulation) {
 		this.generationNumber = 0;
 		this.maxY = 0;
 		this.minY = 0;
@@ -40,6 +40,13 @@ public class ChartPanel extends HBox implements SimulationListener {
 		
 		this.setPrefHeight(200);
 		HBox.setHgrow(this, Priority.ALWAYS);
+		
+		simulation.setOnGenerationFinish( (sim) -> {
+			this.generationEnd(sim.getGenerationData());
+		});
+		simulation.setOnSimulationFinish((sim) -> {
+			this.allGenerationEnd();
+		});
 
 		this.setupChart();
 	}
@@ -52,8 +59,8 @@ public class ChartPanel extends HBox implements SimulationListener {
 		this.yAxis = new NumberAxis("Score", 0, 500, 100);
 		this.chart = new LineChart<>(xAxis, yAxis);
 		
-		this.chart.setTitle("Fitness score by generation");
-		this.chart.setCreateSymbols(false);
+//		this.chart.setTitle("Fitness score by generation");
+//		this.chart.setCreateSymbols(false);
 		this.chart.setLegendSide(Side.RIGHT);
 		ChartPanel.setHgrow(chart, Priority.ALWAYS);
 
@@ -66,14 +73,18 @@ public class ChartPanel extends HBox implements SimulationListener {
 		
 	}
 
-	@Override
 	public void allGenerationEnd() {
 		//Reset the series and the generation count
 		this.generationNumber = 0;
 		this.averageFitnessSerie.getData().clear();
+		this.maxY = 0;
+		this.minY = 0;
+		
+		this.yAxis.setLowerBound(this.minY);
+		this.yAxis.setUpperBound(this.maxY);
+		this.xAxis.setUpperBound(this.generationNumber);
 	}
 
-	@Override
 	public void generationEnd(GenerationData pastGeneration) {
 		//Add new data to the series from the past generation
 		double averageFitnessScore = pastGeneration.getAverageFitness();
@@ -89,7 +100,7 @@ public class ChartPanel extends HBox implements SimulationListener {
 		
 		this.yAxis.setLowerBound(this.minY);
 		this.yAxis.setUpperBound(this.maxY);
-		this.xAxis.setUpperBound(this.generationNumber + 1);
+		this.xAxis.setUpperBound(this.generationNumber);
 		
 		//Add the data to the chart
 		this.averageFitnessSerie.getData().add(data);
