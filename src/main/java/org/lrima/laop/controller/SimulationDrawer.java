@@ -122,15 +122,16 @@ public class SimulationDrawer{
                     currentStep = 0;
                 }
 
-                if(size > 0)
-                    currentCars = simulation.getBuffer().getCars(currentStep);
+                if(size > 0){
+                    currentCars = simulationBuffer.getCars(currentStep);
+                }
 
                 //HANDLE CLICK
                 if(clicked != null){
                     handleClick(clicked);
                     clicked = null;
                 }
-                inspector.update();
+                //inspector.update();
 
                 drawStep();
             }

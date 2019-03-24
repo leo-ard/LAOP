@@ -73,7 +73,7 @@ public class SimulationStage extends Stage {
         
         this.loadAllScenes();
 
-        this.simulation.setAutoRun(true);
+        this.simulation.setAutoRun(false);
         this.simulation.setOnGenerationFinish(this::handleGenerationFinish);
     }
 

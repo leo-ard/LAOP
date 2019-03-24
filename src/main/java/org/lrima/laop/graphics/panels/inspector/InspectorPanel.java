@@ -31,10 +31,7 @@ public class InspectorPanel extends VBox {
      * Génère le panneau quand aucune voiture n'est selecté
      */
     private void generateUnselectPane() {
-        this.getChildren().clear();
-        this.setAlignment(Pos.CENTER);
-        Label selectItem = new Label("Clique sur une voiture !");
-        this.add(selectItem);
+        this.setVisible(false);
     }
 
     /**
@@ -43,6 +40,7 @@ public class InspectorPanel extends VBox {
      * @param object
      */
     public void generatePane(Inspectable object){
+        this.setVisible(true);
         this.getChildren().clear();
         object.generatePanel(this);
     }
