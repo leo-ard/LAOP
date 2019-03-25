@@ -1,4 +1,4 @@
-package org.lrima.laop.controller;
+package org.lrima.laop.ui.controllers;
 
 import com.jfoenix.controls.JFXTreeTableView;
 import javafx.fxml.FXML;

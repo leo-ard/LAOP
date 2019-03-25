@@ -1,4 +1,4 @@
-package org.lrima.laop.controller;
+package org.lrima.laop.ui;
 
 import com.jfoenix.controls.JFXSlider;
 import javafx.animation.AnimationTimer;
@@ -14,10 +14,8 @@ import org.lrima.laop.graphics.panels.inspector.InspectorPanel;
 import org.lrima.laop.simulation.CarInfo;
 import org.lrima.laop.simulation.Simulation;
 import org.lrima.laop.simulation.SimulationBuffer;
-import org.lrima.laop.simulation.objects.Car;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**

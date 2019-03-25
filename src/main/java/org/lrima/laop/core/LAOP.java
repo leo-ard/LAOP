@@ -1,6 +1,6 @@
 package org.lrima.laop.core;
 
-import org.lrima.laop.controller.SimulationStage;
+import org.lrima.laop.ui.SimulationStage;
 import org.lrima.laop.settings.Scope;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.Simulation;

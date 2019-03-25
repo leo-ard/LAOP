@@ -5,7 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import java.lang.String?>
-<AnchorPane prefHeight="600.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.lrima.laop.controller.ConfigurationController">
+<AnchorPane prefHeight="600.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.lrima.laop.ui.controllers.ConfigurationController">
    <children>
       <Label layoutX="196.0" layoutY="26.0" text="Configuration" />
       <JFXButton layoutX="137.0" layoutY="174.0" onAction="#onConfigurerClick" prefHeight="61.0" prefWidth="190.0" text="Configurer">

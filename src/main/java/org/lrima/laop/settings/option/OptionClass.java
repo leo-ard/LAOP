@@ -1,9 +1,6 @@
 package org.lrima.laop.settings.option;
 
-import org.lrima.laop.controller.ConfigurationStage;
-
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;

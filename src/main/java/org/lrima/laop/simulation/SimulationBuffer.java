@@ -2,8 +2,6 @@ package org.lrima.laop.simulation;
 
 import java.util.ArrayList;
 
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.LocatorEx;
-import org.lrima.laop.simulation.listeners.BufferListener;
 import org.lrima.laop.utils.Action;
 
 /**

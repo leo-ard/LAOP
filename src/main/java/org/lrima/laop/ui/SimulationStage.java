@@ -1,4 +1,4 @@
-package org.lrima.laop.controller;
+package org.lrima.laop.ui;
 
 import com.jfoenix.controls.JFXSlider;
 import javafx.application.Platform;
@@ -10,7 +10,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import org.lrima.laop.controller.components.PlayButton;
+import org.lrima.laop.ui.components.PlayButton;
 import org.lrima.laop.graphics.panels.ChartPanel;
 import org.lrima.laop.graphics.panels.ConsolePanel;
 import org.lrima.laop.graphics.panels.inspector.InspectorPanel;

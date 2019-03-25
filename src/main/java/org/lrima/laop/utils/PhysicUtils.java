@@ -31,14 +31,9 @@ public class PhysicUtils {
     }
 
     public static Vector2d directionResistance(Vector2d direction, Vector2d velocity) {
-        double projection = velocity.dot(direction);
+        double c = 15;
 
-        Vector2d resistance = velocity.subtract(direction.multiply(projection));
-
-        System.out.println("projection : " + direction.multiply(projection));
-        System.out.println("resis" + resistance);
-
-
-        return resistance.multiply(-10);
+        Vector2d resistance = velocity.subtract(direction.project(velocity));
+        return resistance.multiply(-c);
     }
 }

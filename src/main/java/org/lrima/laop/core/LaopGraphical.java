@@ -2,10 +2,6 @@ package org.lrima.laop.core;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import org.lrima.laop.controller.ConfigurationStage;
-import org.lrima.laop.controller.SimulationStage;
-import org.lrima.laop.settings.Settings;
-import org.lrima.laop.simulation.SimulationBuffer;
 
 import java.util.HashMap;
 

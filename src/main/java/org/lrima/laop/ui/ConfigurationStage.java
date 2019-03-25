@@ -1,4 +1,4 @@
-package org.lrima.laop.controller;
+package org.lrima.laop.ui;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXMLLoader;
@@ -11,8 +11,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import org.lrima.laop.core.LAOP;
-import org.lrima.laop.simulation.Simulation;
-import org.lrima.laop.simulation.SimulationBuffer;
+import org.lrima.laop.ui.controllers.ConfigurationController;
 import org.lrima.laop.utils.Utils;
 
 import java.util.ArrayList;

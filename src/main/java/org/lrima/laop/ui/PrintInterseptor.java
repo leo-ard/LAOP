@@ -1,4 +1,4 @@
-package org.lrima.laop.controller;
+package org.lrima.laop.ui;
 
 import org.lrima.laop.utils.Action;
 

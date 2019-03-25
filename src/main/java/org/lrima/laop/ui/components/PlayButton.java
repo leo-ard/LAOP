@@ -1,6 +1,4 @@
-package org.lrima.laop.controller.components;
-
-import org.lrima.laop.controller.SimulationDrawer;
+package org.lrima.laop.ui.components;
 
 import javafx.scene.control.Button;
 

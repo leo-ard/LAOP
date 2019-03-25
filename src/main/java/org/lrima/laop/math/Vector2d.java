@@ -46,7 +46,7 @@ public class Vector2d implements Cloneable {
 
     /**
      * Multiply two vectors
-     * @param k the scaling factor
+     * @param v the othe vector
      * @return the scaled vector
      */
     public Vector2d multiply(Vector2d v){
@@ -80,7 +80,7 @@ public class Vector2d implements Cloneable {
     }
 
     /**
-     * Rotate the vector according to the angle
+     * Rotate the vector according to the angle in radians
      */
     public Vector2d rotate(double tetha, Vector2d axis){
         double x = ((this.x - axis.getX()) * Math.cos(tetha)) - ((this.y - axis.getY()) * Math.sin(tetha)) + axis.getX();
@@ -99,23 +99,65 @@ public class Vector2d implements Cloneable {
         return String.format("[%.2f, %.2f]", this.x, this.y);
     }
 
+    /**
+     * Power a vector by a factor i
+     *
+     * @param i the power
+     * @return a new vector with power i
+     */
     public Vector2d power(int i) {
         return new Vector2d(Math.pow(this.x, i), Math.pow(this.y, i));
     }
 
+    /**
+     * Power a vector by a factor 2
+     * Faster (calcul related) then the other method power(2)
+     *
+     * @return a new vector with power 2
+     */
     public Vector2d power2() {
         return new Vector2d(this.x * this.x, this.y * this.y);
     }
 
+    /**
+     * Created a vector that posses -1, 0 or 1 in its values indicating witch sign is the vector at that coordonate
+     *
+     * @return a new vector with the proprieties listed above
+     */
     public Vector2d sign() {
         return new Vector2d(Math.signum(this.x), Math.signum(this.y));
     }
 
+    /**
+     * Do the dot product between two vectors
+     *
+     * @param v the other vector
+     * @return the dot product between this and v
+     */
     public double dot(Vector2d v) {
         return this.x * v.x + this.y * v.y;
     }
 
+    /**
+     * Substrat two vectors.
+     *
+     * @param v the other vector
+     * @return a new vector with that is the subtraction of the two others.
+     */
     public Vector2d subtract(Vector2d v) {
         return new Vector2d(this.x - v.x, this.y - v.y);
+    }
+
+    /**
+     * Project one vector unto the other
+     *
+     * @param v the other vector
+     * @return a new vector that is the projection of one over the other
+     */
+    public Vector2d project(Vector2d v){
+        double dot = v.x * this.x + v.y * this.y;
+        double x = this.x * dot;
+        double y = this.y * dot;
+        return new Vector2d(x, y);
     }
 }
