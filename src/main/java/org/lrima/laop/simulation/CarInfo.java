@@ -12,12 +12,16 @@ import javafx.scene.text.Font;
 
 import org.lrima.laop.graphics.panels.inspector.Inspectable;
 import org.lrima.laop.graphics.panels.inspector.InspectorPanel;
+import org.lrima.laop.math.Vector2d;
 import org.lrima.laop.math.Vector3d;
+import org.lrima.laop.physic.PhysicEngine;
+import org.lrima.laop.physic.objects.Box;
 import org.lrima.laop.simulation.objects.Car;
 
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.transform.Affine;
+import org.lrima.laop.simulation.objects.SimpleCar;
 
 /**
  *  Class that keeps all the information about one car for the buffer
@@ -29,21 +33,21 @@ public class CarInfo implements Inspectable {
     private double width;
     private double height;
     private double tilt;
-    private Vector3d velociy;
-    private Vector3d acceleration;
+    private Vector2d velociy;
+    private Vector2d acceleration;
 
     /**
      * Retrieve information from a car
      * @param car the car
      */
-    public CarInfo(Car car) {
-    	this.x = car.getPosition().getX();
-    	this.y = car.getPosition().getY();
-    	this.width = car.getWidth();
-    	this.height = car.getHeight();
-    	this.tilt = Math.toDegrees(car.getRotation());
-    	this.velociy = car.getVelocity();
-    	this.acceleration = car.getAcceleration();
+    public CarInfo(Box car) {
+        this.x = car.getPosition().getX();
+        this.y = car.getPosition().getY();
+        this.width = car.getWidth();
+        this.height = car.getHeight();
+        this.tilt = Math.toDegrees(car.getRotation());
+        this.velociy = car.getVelocity();
+        this.acceleration = car.getAcceleration();
     }
 
     /**
@@ -57,8 +61,8 @@ public class CarInfo implements Inspectable {
         information.put("Longeur", String.format("%.2f", width));
         information.put("Largeur", String.format("%.2f", height));
         information.put("Angle", String.format("%.2f", tilt));
-        information.put("Velocity", velociy.toFormatedString());
-        information.put("Acceleration", acceleration.toFormatedString());
+        information.put("Velocity", velociy.toString());
+        information.put("Acceleration", acceleration.toString());
 
         return information;
 
@@ -71,7 +75,7 @@ public class CarInfo implements Inspectable {
      */
     public void draw(GraphicsContext gc) {
         Affine affine = new Affine(gc.getTransform());
-        affine.appendRotation(tilt, new Point2D(x, y));
+        affine.appendRotation(tilt, new Point2D(x + width/2, y + height/2));
 
         Affine temp = gc.getTransform();
         gc.setTransform(affine);
@@ -87,9 +91,9 @@ public class CarInfo implements Inspectable {
     public Shape getArea(){
         Rectangle.Double rectangle2D = new Rectangle.Double(x, y, width, height);
         AffineTransform affineTransform = new AffineTransform();
-        affineTransform.translate(x, y);
+        affineTransform.translate(x + width/2, y + height/2);
         affineTransform.rotate(Math.toRadians(tilt));
-        affineTransform.translate(-x, -y);
+        affineTransform.translate(-x - width/2, -y - height/2);
 
         return affineTransform.createTransformedShape(rectangle2D);
     }

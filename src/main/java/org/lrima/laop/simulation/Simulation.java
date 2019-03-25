@@ -3,11 +3,16 @@ package org.lrima.laop.simulation;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import org.lrima.laop.core.LAOP;
+import org.lrima.laop.math.Vector2d;
+import org.lrima.laop.network.ManualCarContoller;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.data.GenerationData;
 import org.lrima.laop.simulation.objects.Car;
+import org.lrima.laop.simulation.objects.SimpleCar;
 import org.lrima.laop.utils.Action;
 
 public class Simulation {
@@ -26,6 +31,7 @@ public class Simulation {
 
 
     private boolean autoRun;
+    private Stage mainScene;
 
     public Simulation(SimulationBuffer simulationBuffer, HashMap<String, Class<?>> algorithms, Settings settings) {
         this.simulationBuffer = simulationBuffer;
@@ -45,15 +51,15 @@ public class Simulation {
 
         //Create the cars
         //Temporary
-        ArrayList<Car> cars = new ArrayList<>();
+        ArrayList<SimpleCar> cars = new ArrayList<>();
 
         if(this.simulationBuffer != null) {
-	        for(int i = 0 ; i < 10 ; i++) {
-	        	Car car = new Car();
+	        for(int i = 0 ; i < 1 ; i++) {
+	        	SimpleCar car = new SimpleCar(Vector2d.origin, new ManualCarContoller(mainScene));
 
-	        	car.addThrust(Math.random() * 100000);
+	        	//car.addThrust(Math.random() * 100000);
 
-	        	car.setRotation(Math.random());
+	        	//car.setRotation(Math.random());
 	        	cars.add(car);
 	        }
         }
@@ -172,5 +178,13 @@ public class Simulation {
 
     public int getBatchCount() {
         return batchCount;
+    }
+
+    /**
+     * ONLY USED TO CONTROL THE CAR WITH THE KEYBORD (need key listeners)
+     * @param mainScene the main JAVAFX scene
+     */
+    public void setMainScene(Stage mainScene) {
+        this.mainScene = mainScene;
     }
 }

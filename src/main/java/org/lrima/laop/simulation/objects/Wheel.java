@@ -1,16 +1,14 @@
 package org.lrima.laop.simulation.objects;
 
+import org.lrima.laop.math.Vector2d;
 import org.lrima.laop.math.Vector3d;
-import org.lrima.laop.physic.objects.Bloc;
-
-import java.awt.*;
-import java.awt.geom.AffineTransform;
+import org.lrima.laop.physic.objects.Box;
 
 /**
  * Physic object representing the wheel of a car
  * @author Clement Bisaillon
  */
-public class Wheel extends Bloc {
+public class Wheel extends Box {
     private final double MAX_TRUST = 10;
     private final double MAX_ROTATION = Math.PI / 3;
 
@@ -42,19 +40,17 @@ public class Wheel extends Bloc {
         this.thrust = 0;
         this.location = location;
         this.canRotate = true;
-
-        this.setPosition(this.getPosition());
     }
 
     /**
      * Get the thrust force of the wheel
      * @return the thrust force of the wheel
      */
-    public Vector3d getThrustForce(){
+    public Vector2d getThrustForce(){
         double x = -Math.sin(this.car.getFromWheelsRotation()) * this.thrust;
         double y = Math.cos(this.car.getFromWheelsRotation()) * this.thrust;
 
-        return new Vector3d(x, y, 0);
+        return new Vector2d(x, y);
     }
 
     /**
@@ -72,11 +68,11 @@ public class Wheel extends Bloc {
      * Get the resistance force of the wheel on the ground
      * @return the resistance force of the wheel
      */
-    public Vector3d getVelocityResistance(){
-        Vector3d resistance = this.car.getVelocity().multiply(this.getWeight().modulus() * this.ROLLING_RESISTANCE_COEF);
+    public Vector2d getVelocityResistance(){
+        Vector2d resistance = this.car.getVelocity().multiply(this.getWeight() * this.ROLLING_RESISTANCE_COEF);
         
         //Flip the vector
-        resistance = new Vector3d(resistance.getX() * -1 , resistance.getY() * -1, 0);
+        resistance = new Vector2d(resistance.getX() * -1 , resistance.getY() * -1);
 
         return resistance;
     }
@@ -84,9 +80,8 @@ public class Wheel extends Bloc {
     @Override
     protected void nextStep() {}
 
-    @Override
-    public Vector3d getSumForces() {
-        Vector3d sumOfForces = Vector3d.origin;
+    public Vector2d getSumForces() {
+        Vector2d sumOfForces = Vector2d.origin;
 
         //Add the thrust and the resistance to the forces
         sumOfForces = sumOfForces.add(this.getThrustForce());
@@ -109,9 +104,9 @@ public class Wheel extends Bloc {
 
 
     @Override
-    public Vector3d getPosition() {
+    public Vector2d getPosition() {
         //Place the wheels correctly
-        Vector3d position = Vector3d.origin;
+        Vector2d position = Vector2d.origin;
         switch(location){
             case FRONT_LEFT:
                 position = car.getBottomLeftPosition();
@@ -127,12 +122,12 @@ public class Wheel extends Bloc {
                 break;
         }
 
-        return position.add(new Vector3d(-WHEEL_WIDTH / 2, -WHEEL_HEIGHT / 2, 0));
+        return position.add(new Vector2d(-WHEEL_WIDTH / 2, -WHEEL_HEIGHT / 2));
     }
 
     @Override
-    public Vector3d getCenter() {
-        return new Vector3d(this.getPosition().getX() + this.width / 2, this.getPosition().getY() + this.height / 2, 0);
+    public Vector2d getCenter() {
+        return new Vector2d(this.getPosition().getX() + this.width / 2, this.getPosition().getY() + this.height / 2);
     }
 
 

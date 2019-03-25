@@ -4,7 +4,10 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import org.lrima.laop.controller.ConfigurationStage;
 import org.lrima.laop.controller.SimulationStage;
+import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.SimulationBuffer;
+
+import java.util.HashMap;
 
 /**
  * Launch the LAOP platform with a graphical interface
@@ -20,11 +23,12 @@ public class LaopGraphical extends Application {
 
     @Override
     public void start(Stage stage) {
-        ConfigurationStage configurationStage = new ConfigurationStage();
-        configurationStage.show();
+//        ConfigurationStage configurationStage = new ConfigurationStage();
+//        configurationStage.show();
 
-//        SimulationStage simulationStage = new SimulationStage(new SimulationBuffer());
-//        simulationStage.show();
+        LAOP laop = new LAOP();
+        laop.addAlgorithm("test1212", LaopGraphical.class, new HashMap<>());
+        laop.startSimulation(LAOP.SimulationDisplayMode.WITH_INTERFACE);
 
 
     }

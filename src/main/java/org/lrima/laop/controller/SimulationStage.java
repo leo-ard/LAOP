@@ -1,31 +1,20 @@
 package org.lrima.laop.controller;
 
 import com.jfoenix.controls.JFXSlider;
-
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.lrima.laop.controller.components.PlayButton;
 import org.lrima.laop.graphics.panels.ChartPanel;
 import org.lrima.laop.graphics.panels.ConsolePanel;
 import org.lrima.laop.graphics.panels.inspector.InspectorPanel;
 import org.lrima.laop.simulation.Simulation;
-import org.lrima.laop.simulation.SimulationBuffer;
 
 
 /**
@@ -75,6 +64,9 @@ public class SimulationStage extends Stage {
 
         this.simulation.setAutoRun(false);
         this.simulation.setOnGenerationFinish(this::handleGenerationFinish);
+        this.simulation.setMainScene(this);
+
+        this.checkBoxRealTime.selectedProperty().setValue(true);
     }
 
     /**
@@ -166,11 +158,16 @@ public class SimulationStage extends Stage {
     		showCarInfo.setSelected(newVal);
     	});
 
-    	windowMenu.getItems().add(showConsole);
-    	windowMenu.getItems().add(showCharts);
-    	windowMenu.getItems().add(showCarInfo);
+    	windowMenu.getItems().addAll(showConsole, showCharts, showCarInfo);
 
-    	this.menuBar.getMenus().add(windowMenu);
+    	Menu view = new Menu("View");
+
+    	MenuItem resetView = new MenuItem("Reset View");
+    	resetView.setOnAction(e -> simulationDrawer.resetView());
+
+    	view.getItems().add(resetView);
+
+    	this.menuBar.getMenus().addAll(windowMenu, view);
     }
 
     /**

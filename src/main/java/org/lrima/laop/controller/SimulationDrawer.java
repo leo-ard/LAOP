@@ -58,6 +58,8 @@ public class SimulationDrawer{
         this.affineTransform = new Affine();
         this.inspector = inspector;
 
+        this.resetView();
+
         this.canvas.setOnMousePressed(e -> {
             mouseXPressed = (int) e.getX();
             mouseYPressed = (int) e.getY();
@@ -243,5 +245,10 @@ public class SimulationDrawer{
 
     private ArrayList<CarInfo> getCurrent() {
         return currentCars;
+    }
+
+    public void resetView(){
+        this.affineTransform.setToIdentity();
+        this.affineTransform.appendTranslation(canvas.getWidth()/2, canvas.getHeight()/2);
     }
 }

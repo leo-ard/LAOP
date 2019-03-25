@@ -1,16 +1,18 @@
 package org.lrima.laop.physic.objects;
 
+import org.lrima.laop.math.Vector2d;
 import org.lrima.laop.math.Vector3d;
 import org.lrima.laop.physic.Physicable;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
+import java.awt.geom.Rectangle2D;
 
 /**
  * @author Clement Bisaillon
  */
-public abstract class Bloc extends Physicable {
-
+public abstract class Box extends Physicable {
     protected double width;
     protected double height;
 
@@ -21,7 +23,7 @@ public abstract class Bloc extends Physicable {
      * @param width the width of the object
      * @param height the height of the object
      */
-    public Bloc(Vector3d position, double mass, double width, double height){
+    public Box(Vector2d position, double mass, double width, double height){
         super(position, mass);
         this.width = width;
         this.height = height;
@@ -33,21 +35,10 @@ public abstract class Bloc extends Physicable {
      * @param width the width of the object
      * @param height the height of the object
      */
-    public Bloc(double mass, double width, double height){
+    public Box(double mass, double width, double height){
         super(mass);
         this.width = width;
         this.height = height;
-    }
-
-
-    @Override
-    public Shape getShape() {
-        AffineTransform af = new AffineTransform();
-        af.rotate(this.getRotation(), this.getCenter().getX(), this.getCenter().getY());
-
-        Shape nonRotatedShape = new Rectangle((int)getPosition().getX(), (int)getPosition().getY(), (int)this.width, (int)this.height);
-
-        return af.createTransformedShape(nonRotatedShape);
     }
 
     @Override
@@ -82,36 +73,44 @@ public abstract class Bloc extends Physicable {
     /**
      * @return top-left corner's position in pixels
      */
-    public Vector3d getTopLeftPosition(){
+    public Vector2d getTopLeftPosition(){
         double x = this.getPosition().getX();
         double y = this.getPosition().getY();
-        return new Vector3d(x, y, 0).rotateZAround(this.getRotation(), this.getCenter());
+        return new Vector2d(x, y).rotate(this.getRotation(), this.getCenter());
     }
 
     /**
      * @return top-right corner's position in pixels
      */
-    public Vector3d getTopRightPosition(){
+    public Vector2d getTopRightPosition(){
         double x = this.getPosition().getX() + this.width;
         double y = this.getPosition().getY();
-        return (new Vector3d(x, y, 0)).rotateZAround(this.getRotation(), this.getCenter());
+        return new Vector2d(x, y).rotate(this.getRotation(), this.getCenter());
     }
 
     /**
      * @return bottom-left corner's position in pixels
      */
-    public Vector3d getBottomLeftPosition(){
+    public Vector2d getBottomLeftPosition(){
         double x = this.getPosition().getX();
         double y = this.getPosition().getY() + this.height;
-        return (new Vector3d(x, y, 0)).rotateZAround(this.getRotation(), this.getCenter());
+        return (new Vector2d(x, y)).rotate(this.getRotation(), this.getCenter());
     }
 
     /**
      * @return top-right corner's position in pixels
      */
-    public Vector3d getBottomRightPosition(){
+    public Vector2d getBottomRightPosition(){
         double x = this.getPosition().getX() + this.width;
         double y = this.getPosition().getY() + this.height;
-        return (new Vector3d(x, y, 0)).rotateZAround(this.getRotation(), this.getCenter());
+        return new Vector2d(x, y).rotate(this.getRotation(), this.getCenter());
+    }
+
+    public Vector2d getCenter(){
+        return this.position.add(new Vector2d(this.width/2, this.height/2));
+    }
+
+    public Area getArea(){
+        return new Area(new Rectangle2D.Double(this.position.getX(), this.position.getY(), this.width, this.height));
     }
 }

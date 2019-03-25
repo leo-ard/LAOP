@@ -1,10 +1,10 @@
 package org.lrima.laop.simulation.objects;
 
 import org.lrima.laop.math.MathUtils;
+import org.lrima.laop.math.Vector2d;
 import org.lrima.laop.math.Vector3d;
 import org.lrima.laop.physic.PhysicEngine;
-import org.lrima.laop.physic.Physicable;
-import org.lrima.laop.physic.objects.Bloc;
+import org.lrima.laop.physic.objects.Box;
 import org.lrima.laop.simulation.CarInfo;
 
 import java.awt.geom.Area;
@@ -13,7 +13,7 @@ import java.awt.geom.Area;
  * Physic object representing a car
  * @author Clement Bisaillon
  */
-public class Car extends Bloc {
+public class Car extends Box {
     private Wheel leftFrontWheel;
     private Wheel rightFrontWheel;
     private Wheel leftBackWheel;
@@ -34,22 +34,19 @@ public class Car extends Bloc {
         this.leftFrontWheel = new Wheel(this, Wheel.WheelLocation.FRONT_LEFT);
         this.rightBackWheel = new Wheel(this, Wheel.WheelLocation.BACK_RIGHT);
 
-        this.addSubObject(leftBackWheel, rightBackWheel, leftFrontWheel, rightFrontWheel);
-
         this.leftBackWheel.setCanRotate(false);
         this.rightBackWheel.setCanRotate(false);
     }
     
-    @Override
-    public Vector3d getSumForces() {
-    	Vector3d sum = Vector3d.origin;
+    public Vector2d getSumForces() {
+    	Vector2d sum = Vector2d.origin;
 
-        for(Vector3d force : this.forces){
+        for(Vector2d force : this.forces){
             sum = sum.add(force);
         }
 
         //Get the force of the children
-        for(Physicable child : this.getSubObjects()){
+        for(Wheel child : this.getAllWeels()){
             sum = sum.add(child.getSumForces());
         }
         
@@ -59,16 +56,20 @@ public class Car extends Bloc {
         return sum;
     }
 
+    private Wheel[] getAllWeels() {
+        return new Wheel[]{leftBackWheel, leftFrontWheel, rightBackWheel, rightFrontWheel};
+    }
+
     @Override
     protected void nextStep() {
-    	Vector3d sumOfForces = this.getSumForces();
+    	Vector2d sumOfForces = this.getSumForces();
 
-        this.setAcceleration(sumOfForces.multiply(1.0 / this.getMass()));
+        this.acceleration = sumOfForces.multiply(1.0 / this.getMass());
 
 
         //Or else the car never stops
         if(MathUtils.nearZero(getAcceleration().modulus(), 0.000001)){
-        	this.setAcceleration(Vector3d.origin);
+        	this.acceleration = Vector2d.origin;
             this.resetVelocity();
         }
 
@@ -92,7 +93,7 @@ public class Car extends Bloc {
         }
         else{
         	if(this.angularVelocity != 0) {
-        		this.setVelocity(this.getDirection().normalize().multiply(this.getVelocity().modulus()));
+        		this.velocity = this.getDirection().normalize().multiply(this.getVelocity().modulus());
         	}
             this.angularVelocity = 0;
             
@@ -102,10 +103,10 @@ public class Car extends Bloc {
     /**
      * @return The angular resistance force
      */
-    private Vector3d getAngularResistance() {
-    	Vector3d direction = this.getDirection().multiply(-1);
-    	Vector3d tangent = new Vector3d(direction.getY(), -direction.getX(), 0);
-    	Vector3d resistance = tangent.multiply(this.angularVelocity * this.getWeight().modulus() * 0.2);
+    private Vector2d getAngularResistance() {
+    	Vector2d direction = this.getDirection().multiply(-1);
+    	Vector2d tangent = new Vector2d(direction.getY(), -direction.getX());
+    	Vector2d resistance = tangent.multiply(this.angularVelocity * this.getWeight() * 0.2);
     	
     	return resistance;
     }
@@ -125,8 +126,8 @@ public class Car extends Bloc {
     /**
      * @return The center position of the car in pixels
      */
-    public Vector3d getCenter(){
-        return new Vector3d(this.getPosition().getX() + this.getWidth() / 2, this.getPosition().getY() + this.getHeight() / 2, 0);
+    public Vector2d getCenter(){
+        return new Vector2d(this.getPosition().getX() + this.getWidth() / 2, this.getPosition().getY() + this.getHeight() / 2);
     }
 
     /**
@@ -161,10 +162,10 @@ public class Car extends Bloc {
     }
 
     @Override
-    public Vector3d getDirection(){
-        Vector3d v = new Vector3d(0, 1, 0);
+    public Vector2d getDirection(){
+        Vector2d v = new Vector2d(0, 1);
 
-        return v.rotateZAround(this.getFromWheelsRotation(), Vector3d.origin);
+        return v.rotate(this.getFromWheelsRotation(), Vector2d.origin);
     }
     
     /**

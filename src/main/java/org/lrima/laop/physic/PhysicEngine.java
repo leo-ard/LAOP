@@ -5,12 +5,16 @@ import java.lang.reflect.AccessibleObject;
 import java.util.ArrayList;
 
 import org.lrima.laop.math.Vector3d;
+import org.lrima.laop.physic.objects.Box;
+import org.lrima.laop.simulation.CarInfo;
 import org.lrima.laop.simulation.SimulationBuffer;
 import org.lrima.laop.simulation.SimulationSnapshot;
 import org.lrima.laop.simulation.listeners.SimulationListener;
 import org.lrima.laop.simulation.objects.Car;
+import org.lrima.laop.simulation.objects.SimpleCar;
 import org.lrima.laop.utils.Action;
 import org.lrima.laop.utils.BlankAction;
+import sun.java2d.pipe.SpanShapeRenderer;
 
 /**
  *
@@ -29,7 +33,7 @@ public class PhysicEngine extends Thread {
     private ArrayList<Action<PhysicEngine>> onPhysicEngineFinish;
     
     //////Temporary
-    private final int MAX_ITERATION = 200;
+    private final int MAX_ITERATION = 30000;
     private int CURRENT_ITERATION = 0;
     //////Temporary
     
@@ -80,9 +84,8 @@ public class PhysicEngine extends Thread {
 	    	SimulationSnapshot snapshot = new SimulationSnapshot();
 	    	
 	    	for(Physicable object : this.objects) {
-	    		if(object instanceof Car) {
-	    			Car car = (Car) object;
-	    			snapshot.addCar(car.getSnapShotInfo());
+	    		if(object instanceof Box) {
+	    			snapshot.addCar(new CarInfo((Box)object));
 	    		}
 	    	}
 	    	

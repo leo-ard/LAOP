@@ -1,5 +1,7 @@
 package org.lrima.laop.math;
 
+import java.util.Vector;
+
 /**
  * Stores a two dimensions vector
  * @author Clement Bisaillon
@@ -43,6 +45,16 @@ public class Vector2d implements Cloneable {
     }
 
     /**
+     * Multiply two vectors
+     * @param k the scaling factor
+     * @return the scaled vector
+     */
+    public Vector2d multiply(Vector2d v){
+        return new Vector2d(this.x * v.x, this.y * v.y);
+    }
+
+
+    /**
      * Adds two vectors together
      * @param v2 the second vector to add
      * @return the resulting vector from the addition
@@ -67,10 +79,35 @@ public class Vector2d implements Cloneable {
         return this.multiply(1/this.modulus());
     }
 
+    /**
+     * Rotate the vector according to the angle
+     */
+    public Vector2d rotate(double tetha, Vector2d axis){
+        double x = ((this.x - axis.getX()) * Math.cos(tetha)) - ((this.y - axis.getY()) * Math.sin(tetha)) + axis.getX();
+        double y = ((this.x - axis.getX()) * Math.sin(tetha)) + ((this.y - axis.getY()) * Math.cos(tetha)) + axis.getY();
+        return new Vector2d(x, y);
+    }
+
     public double getX() {
         return x;
     }
     public double getY() {
         return y;
+    }
+
+    public String toString(){
+        return String.format("[%.2f, %.2f]", this.x, this.y);
+    }
+
+    public Vector2d power(int i) {
+        return new Vector2d(Math.pow(this.x, i), Math.pow(this.y, i));
+    }
+
+    public Vector2d power2() {
+        return new Vector2d(this.x * this.x, this.y * this.y);
+    }
+
+    public Vector2d sign() {
+        return new Vector2d(Math.signum(this.x), Math.signum(this.y));
     }
 }
