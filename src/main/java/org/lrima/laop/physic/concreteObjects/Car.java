@@ -1,11 +1,10 @@
-package org.lrima.laop.simulation.objects;
+package org.lrima.laop.physic.concreteObjects;
 
-import org.lrima.laop.math.MathUtils;
-import org.lrima.laop.math.Vector2d;
-import org.lrima.laop.math.Vector3d;
+import org.lrima.laop.utils.MathUtils;
+import org.lrima.laop.utils.math.Vector2d;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.objects.Box;
-import org.lrima.laop.simulation.CarInfo;
+import org.lrima.laop.simulation.data.CarInfo;
 
 import java.awt.geom.Area;
 

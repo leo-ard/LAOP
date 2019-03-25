@@ -1,4 +1,4 @@
-package org.lrima.laop.math;
+package org.lrima.laop.utils.math;
 
 /**
  * Stores a three dimensions vector

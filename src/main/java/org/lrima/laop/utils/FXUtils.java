@@ -9,7 +9,7 @@ import java.net.URL;
  * Classe utilitaire
  * @author Léonard
  */
-public class Utils {
+public class FXUtils {
 
     /**
      * Returns the loader of the specified .fxml file
@@ -18,7 +18,7 @@ public class Utils {
      * @return the loader
      */
     public static FXMLLoader load(String file) {
-        URL url = Utils.class.getResource("/views/configuration/" + file + ".fxml");
+        URL url = FXUtils.class.getResource("/views/configuration/" + file + ".fxml");
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(url);

@@ -1,6 +1,4 @@
-package org.lrima.laop.math;
-
-import java.util.Vector;
+package org.lrima.laop.utils.math;
 
 /**
  * Stores a two dimensions vector

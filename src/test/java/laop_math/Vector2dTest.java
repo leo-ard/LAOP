@@ -2,7 +2,7 @@ package laop_math;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.lrima.laop.math.Vector2d;
+import org.lrima.laop.utils.math.Vector2d;
 
 
 /**

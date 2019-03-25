@@ -1,6 +1,6 @@
-package org.lrima.laop.graphics;
+package org.lrima.laop.physic.test;
 
-import org.lrima.laop.math.Vector3d;
+import org.lrima.laop.utils.math.Vector3d;
 
 import java.awt.geom.AffineTransform;
 

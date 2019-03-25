@@ -2,8 +2,8 @@ package graphics;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.lrima.laop.graphics.AffineTransformation;
-import org.lrima.laop.math.Vector3d;
+import org.lrima.laop.physic.test.AffineTransformation;
+import org.lrima.laop.utils.math.Vector3d;
 
 /**
  * Test the class AffineTransformation

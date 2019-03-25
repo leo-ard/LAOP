@@ -1,7 +1,6 @@
-package org.lrima.laop.simulation.objects;
+package org.lrima.laop.physic.concreteObjects;
 
-import org.lrima.laop.math.Vector2d;
-import org.lrima.laop.math.Vector3d;
+import org.lrima.laop.utils.math.Vector2d;
 import org.lrima.laop.physic.objects.Box;
 
 /**

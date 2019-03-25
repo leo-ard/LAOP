@@ -1,11 +1,8 @@
 package org.lrima.laop.physic.objects;
 
-import org.lrima.laop.math.Vector2d;
-import org.lrima.laop.math.Vector3d;
+import org.lrima.laop.utils.math.Vector2d;
 import org.lrima.laop.physic.Physicable;
 
-import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 

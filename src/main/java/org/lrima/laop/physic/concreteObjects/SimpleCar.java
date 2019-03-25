@@ -1,7 +1,7 @@
-package org.lrima.laop.simulation.objects;
+package org.lrima.laop.physic.concreteObjects;
 
-import org.lrima.laop.math.MathUtils;
-import org.lrima.laop.math.Vector2d;
+import org.lrima.laop.utils.MathUtils;
+import org.lrima.laop.utils.math.Vector2d;
 import org.lrima.laop.network.CarController;
 import org.lrima.laop.physic.objects.Box;
 import org.lrima.laop.utils.PhysicUtils;

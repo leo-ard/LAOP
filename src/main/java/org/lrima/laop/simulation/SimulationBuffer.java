@@ -2,7 +2,8 @@ package org.lrima.laop.simulation;
 
 import java.util.ArrayList;
 
-import org.lrima.laop.utils.Action;
+import org.lrima.laop.simulation.data.CarInfo;
+import org.lrima.laop.utils.Actions.Action;
 
 /**
  * Class that keeps the information necessary to be able to have a timeline

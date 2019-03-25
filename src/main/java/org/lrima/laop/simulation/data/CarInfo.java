@@ -1,4 +1,4 @@
-package org.lrima.laop.simulation;
+package org.lrima.laop.simulation.data;
 
 import java.awt.Rectangle;
 import java.awt.Shape;
@@ -10,18 +10,14 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 
-import org.lrima.laop.graphics.panels.inspector.Inspectable;
-import org.lrima.laop.graphics.panels.inspector.InspectorPanel;
-import org.lrima.laop.math.Vector2d;
-import org.lrima.laop.math.Vector3d;
-import org.lrima.laop.physic.PhysicEngine;
+import org.lrima.laop.ui.panels.inspector.Inspectable;
+import org.lrima.laop.ui.panels.inspector.InspectorPanel;
+import org.lrima.laop.utils.math.Vector2d;
 import org.lrima.laop.physic.objects.Box;
-import org.lrima.laop.simulation.objects.Car;
 
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.transform.Affine;
-import org.lrima.laop.simulation.objects.SimpleCar;
 
 /**
  *  Class that keeps all the information about one car for the buffer

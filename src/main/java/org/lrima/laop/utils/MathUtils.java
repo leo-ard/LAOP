@@ -1,5 +1,7 @@
-package org.lrima.laop.math;
+package org.lrima.laop.utils;
 
+
+import org.lrima.laop.utils.math.Vector2d;
 
 /**
  * Class for java.math utilities that are not present in the java Math class

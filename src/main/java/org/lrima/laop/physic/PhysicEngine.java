@@ -4,10 +4,10 @@ import java.awt.geom.Area;
 import java.util.ArrayList;
 
 import org.lrima.laop.physic.objects.Box;
-import org.lrima.laop.simulation.CarInfo;
+import org.lrima.laop.simulation.data.CarInfo;
 import org.lrima.laop.simulation.SimulationBuffer;
 import org.lrima.laop.simulation.SimulationSnapshot;
-import org.lrima.laop.utils.Action;
+import org.lrima.laop.utils.Actions.Action;
 
 /**
  *
@@ -87,7 +87,7 @@ public class PhysicEngine extends Thread {
     }
 
     /**
-     * Move the objects in the simulation
+     * Move the concreteObjects in the simulation
      */
     private void nextStep(){
         for (Physicable object : objects) {
@@ -122,7 +122,7 @@ public class PhysicEngine extends Thread {
      * Add an object to the java.physic engine
      * @param object the object to add
      */
-    void addObject(Physicable object){
+    public void addObject(Physicable object){
         //Add the gravity force to the object
         this.objects.add(object);
     }

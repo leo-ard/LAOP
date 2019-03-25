@@ -12,7 +12,7 @@ import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import org.lrima.laop.core.LAOP;
 import org.lrima.laop.ui.controllers.ConfigurationController;
-import org.lrima.laop.utils.Utils;
+import org.lrima.laop.utils.FXUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -95,7 +95,7 @@ public class ConfigurationStage extends Stage {
      * @return The loaded panel
      */
     private Parent load(String name){
-        FXMLLoader loader = Utils.load(name);
+        FXMLLoader loader = FXUtils.load(name);
 
         if(loader.getController() instanceof ConfigurationController){
             ConfigurationController configurationController = loader.getController();

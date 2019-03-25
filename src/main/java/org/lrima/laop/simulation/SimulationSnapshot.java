@@ -1,6 +1,7 @@
 package org.lrima.laop.simulation;
 
-import org.lrima.laop.simulation.objects.Car;
+import org.lrima.laop.simulation.data.CarInfo;
+import org.lrima.laop.physic.concreteObjects.Car;
 
 import java.util.ArrayList;
 

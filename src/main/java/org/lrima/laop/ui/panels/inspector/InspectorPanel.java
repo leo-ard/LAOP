@@ -1,15 +1,9 @@
-package org.lrima.laop.graphics.panels.inspector;
+package org.lrima.laop.ui.panels.inspector;
 
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import org.lrima.laop.simulation.CarInfo;
-import org.lrima.laop.utils.ObjectGetter;
-
-import java.util.Map;
+import org.lrima.laop.utils.Actions.ObjectGetter;
 
 /**
  * Inspect an élément

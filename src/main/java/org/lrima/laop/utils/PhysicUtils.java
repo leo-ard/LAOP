@@ -1,6 +1,6 @@
 package org.lrima.laop.utils;
 
-import org.lrima.laop.math.Vector2d;
+import org.lrima.laop.utils.math.Vector2d;
 
 import java.util.ArrayList;
 

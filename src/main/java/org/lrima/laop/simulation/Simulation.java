@@ -3,17 +3,16 @@ package org.lrima.laop.simulation;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.lrima.laop.core.LAOP;
-import org.lrima.laop.math.Vector2d;
+import org.lrima.laop.utils.math.Vector2d;
 import org.lrima.laop.network.ManualCarContoller;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.data.GenerationData;
-import org.lrima.laop.simulation.objects.Car;
-import org.lrima.laop.simulation.objects.SimpleCar;
-import org.lrima.laop.utils.Action;
+import org.lrima.laop.physic.concreteObjects.Car;
+import org.lrima.laop.physic.concreteObjects.SimpleCar;
+import org.lrima.laop.utils.Actions.Action;
 
 public class Simulation {
     private SimulationBuffer simulationBuffer;

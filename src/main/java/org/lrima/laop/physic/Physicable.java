@@ -1,13 +1,9 @@
 package org.lrima.laop.physic;
 
-import org.lrima.laop.math.MathUtils;
-import org.lrima.laop.math.Vector2d;
-import org.lrima.laop.math.Vector3d;
+import org.lrima.laop.utils.math.Vector2d;
 
-import java.awt.*;
 import java.awt.geom.Area;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Class that can be simulated physicaly

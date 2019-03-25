@@ -1,11 +1,9 @@
 package org.lrima.laop.core;
 
 import javafx.application.Application;
-import org.lrima.laop.physic.TestPhysicMain;
+import org.lrima.laop.physic.test.TestPhysicMain;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Temporary class to launch different parts of the application

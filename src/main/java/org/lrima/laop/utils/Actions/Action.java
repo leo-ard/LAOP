@@ -1,4 +1,4 @@
-package org.lrima.laop.utils;
+package org.lrima.laop.utils.Actions;
 
 /**
  * Une acton. Peut être nimporte quoi et elle est utilisée dans les listeners de notre application

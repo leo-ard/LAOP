@@ -1,4 +1,4 @@
-package org.lrima.laop.utils;
+package org.lrima.laop.utils.Actions;
 
 /**
  * Retourne un objet de type T
