@@ -29,4 +29,16 @@ public class PhysicUtils {
         double c = 50;
         return velocity.multiply(carControl * c).multiply(-1);
     }
+
+    public static Vector2d directionResistance(Vector2d direction, Vector2d velocity) {
+        double projection = velocity.dot(direction);
+
+        Vector2d resistance = velocity.subtract(direction.multiply(projection));
+
+        System.out.println("projection : " + direction.multiply(projection));
+        System.out.println("resis" + resistance);
+
+
+        return resistance.multiply(-10);
+    }
 }

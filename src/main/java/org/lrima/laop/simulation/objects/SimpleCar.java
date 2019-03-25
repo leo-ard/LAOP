@@ -30,9 +30,7 @@ public class SimpleCar extends Box {
         this.forces.add(new Vector2d(0, 2 * carControls[0]).rotate(this.rotation, Vector2d.origin));
         this.forces.add(PhysicUtils.breakForce(this.velocity, carControls[1]));
         this.forces.add(PhysicUtils.airResistance(this.velocity));
-
-        System.out.println("Break " + this.forces.get(1));
-        System.out.println(this.velocity);
+        this.forces.add(PhysicUtils.directionResistance(this.getDirection(), this.velocity));
 
         this.acceleration = PhysicUtils.accelFromForces(forces, this.mass);
 

@@ -110,4 +110,12 @@ public class Vector2d implements Cloneable {
     public Vector2d sign() {
         return new Vector2d(Math.signum(this.x), Math.signum(this.y));
     }
+
+    public double dot(Vector2d v) {
+        return this.x * v.x + this.y * v.y;
+    }
+
+    public Vector2d subtract(Vector2d v) {
+        return new Vector2d(this.x - v.x, this.y - v.y);
+    }
 }
