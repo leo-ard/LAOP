@@ -1,5 +1,6 @@
 package org.lrima.laop.simulation;
 
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -47,11 +48,8 @@ public class Simulation {
         this.currentScope = this.settings.getLocalScopes().get(0);
         this.autoRun = true;
 
-        map = new SimulationMap();
-        map.getObjects().add(new StaticLineObject(-50, -50, 100, -50));
-        map.getObjects().add(new StaticLineObject(100, -50, 100, 200));
-        map.getObjects().add(new StaticLineObject(100, 200, -50, 200));
-        map.getObjects().add(new StaticLineObject(-50, 200, -50, -50));
+        map = new SimulationMap(new Rectangle2D.Double(-1000, 1000, -1000, 1000));
+//        map.randomize(5);
         map.bakeArea();
 
     }
