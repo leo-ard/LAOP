@@ -1,5 +1,6 @@
 package org.lrima.laop.simulation;
 
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,7 +57,7 @@ public class Simulation {
         this.currentScope = this.settings.getLocalScopes().get(0);
         this.autoRun = true;
         
-        map = new SimulationMap(new Rectangle2D.Double(-600, -600, 600, 600));
+        map = new SimulationMap(10);
         map.bakeArea();
 
     }
@@ -71,7 +72,8 @@ public class Simulation {
 
         if(this.simulationBuffer != null) {
 	        for(int i = 0 ; i < 1 ; i++) {
-	        	SimpleCar car = new SimpleCar(Vector2d.origin, generateCurrentNetwork());
+	        	Point2D start = map.getStartPoint();
+	        	SimpleCar car = new SimpleCar(new Vector2d(start.getX(), start.getY()), generateCurrentNetwork());
 
 	        	cars.add(car);
 	        }
