@@ -6,7 +6,6 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.lrima.laop.physic.staticobjects.StaticObject;
 import org.lrima.laop.utils.math.RandomUtils;
 
