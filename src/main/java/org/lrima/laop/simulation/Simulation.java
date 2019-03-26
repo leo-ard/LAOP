@@ -1,20 +1,23 @@
 package org.lrima.laop.simulation;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import javafx.stage.Stage;
 import org.lrima.laop.core.LAOP;
-import org.lrima.laop.physic.staticobjects.StaticLineObject;
-import org.lrima.laop.simulation.map.SimulationMap;
-import org.lrima.laop.utils.math.Vector2d;
-import org.lrima.laop.network.ManualCarController;
+import org.lrima.laop.network.LearningAlgorithm;
+import org.lrima.laop.network.carcontrollers.CarController;
+import org.lrima.laop.network.carcontrollers.ManualCarController;
 import org.lrima.laop.physic.PhysicEngine;
-import org.lrima.laop.settings.Settings;
-import org.lrima.laop.simulation.data.GenerationData;
 import org.lrima.laop.physic.concreteObjects.Car;
 import org.lrima.laop.physic.concreteObjects.SimpleCar;
+import org.lrima.laop.physic.staticobjects.StaticLineObject;
+import org.lrima.laop.settings.Settings;
+import org.lrima.laop.simulation.data.GenerationData;
+import org.lrima.laop.simulation.map.SimulationMap;
 import org.lrima.laop.utils.Actions.Action;
+import org.lrima.laop.utils.math.Vector2d;
+
+import java.util.ArrayList;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class Simulation {
     private SimulationBuffer simulationBuffer;
@@ -30,12 +33,14 @@ public class Simulation {
     ArrayList<Action<Simulation>> onBatchFinished;
     ArrayList<Action<Simulation>> onEnd;
 
-
     private boolean autoRun;
     private Stage mainScene;
     private SimulationMap map;
 
-    public Simulation(SimulationBuffer simulationBuffer, HashMap<String, Class<?>> algorithms, Settings settings) {
+    private LearningAlgorithm<? extends CarController> currentLearningAlgorithm;
+    private PhysicEngine engine;
+
+    public Simulation(SimulationBuffer simulationBuffer, Settings settings) {
         this.simulationBuffer = simulationBuffer;
         this.settings = settings;
 
@@ -54,27 +59,24 @@ public class Simulation {
 
     }
 
-    private ArrayList configureCar(){
+    private ArrayList<SimpleCar> configureCar(){
         //TODO ConfigureCars depending on settings and currentScope
 
         //Create the cars
         //Temporary
         ArrayList<SimpleCar> cars = new ArrayList<>();
+        this.currentLearningAlgorithm = this.generateLearningAlgorithm();
 
         if(this.simulationBuffer != null) {
 	        for(int i = 0 ; i < 1 ; i++) {
-	        	SimpleCar car = new SimpleCar(Vector2d.origin, new ManualCarController(mainScene));
+	        	SimpleCar car = new SimpleCar(Vector2d.origin, generateCurrentNetwork());
 
-	        	//car.addThrust(Math.random() * 100000);
-
-	        	//car.setRotation(Math.random());
 	        	cars.add(car);
 	        }
         }
 
         return cars;
     }
-
 
 
     public SimulationBuffer getBuffer() {
@@ -109,6 +111,8 @@ public class Simulation {
                 //CHECK IF BATCHES ARE FINISHED
                 if(batchCount < settings.getLocalScopes().size()){
                     currentScope = settings.getLocalScopes().get(batchCount);
+                    currentLearningAlgorithm = this.generateLearningAlgorithm();
+
                 }
                 else{
                     this.onEnd.forEach(simulationAction -> simulationAction.handle(this));
@@ -117,22 +121,46 @@ public class Simulation {
         }
     }
 
+    private CarController generateCurrentNetwork() {
+        Class<? extends CarController> carClass = (Class<? extends CarController>) settings.get(currentScope, LAOP.KEY_NETWORK_CLASS);
+
+        return new ManualCarController(mainScene);
+//        try {
+//            return carClass.newInstance();
+//        } catch (InstantiationException | IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return null;
+    }
+
+    private LearningAlgorithm<? extends CarController> generateLearningAlgorithm() {
+        Class<? extends LearningAlgorithm> learningClass = (Class<? extends LearningAlgorithm>) settings.get(currentScope, LAOP.KEY_LEARNING_CLASS);
+
+        try {
+            return learningClass.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     private void simulateGeneration(){
         simulationBuffer.clear();
-        PhysicEngine physicEngine = new PhysicEngine(simulationBuffer, map);
+        engine = new PhysicEngine(simulationBuffer, map);
 
-        physicEngine.getObjects().addAll(configureCar());
+        engine.getObjects().addAll(configureCar());
 
-        physicEngine.setOnPhysicEngineFinish(engine -> {
+        engine.setOnPhysicEngineFinish(engine -> {
             if(this.autoRun)
                 this.nextGen();
         });
-        physicEngine.start();
+        engine.start();
     }
 
     private ArrayList<Car> alterCars() {
         return new ArrayList<>();
-
     }
     
     /**
@@ -186,6 +214,10 @@ public class Simulation {
 
     public int getBatchCount() {
         return batchCount;
+    }
+
+    public PhysicEngine getEngine() {
+        return engine;
     }
 
     /**

@@ -1,5 +1,8 @@
 package org.lrima.laop.core;
 
+import org.lrima.laop.network.LearningAlgorithm;
+import org.lrima.laop.network.carcontrollers.CarController;
+import org.lrima.laop.network.concreteNetworks.NEAT;
 import org.lrima.laop.ui.SimulationStage;
 import org.lrima.laop.settings.Scope;
 import org.lrima.laop.settings.Settings;
@@ -20,10 +23,8 @@ public class LAOP {
     static final Class<? extends Object> FULLY_CONNECTED = Scope.class;
 
     Settings settings;
-    HashMap<String, Class<? extends Object>> algorithms;
 
     public LAOP(){
-        algorithms = new HashMap<>();
         settings = new Settings();
         defaultSettings();
 
@@ -38,9 +39,6 @@ public class LAOP {
         settings.set(Settings.GLOBAL_SCOPE, KEY_TIME_LIMIT, DEFAULT_TIME_LIMIT);
         settings.set(Settings.GLOBAL_SCOPE, KEY_NUMBER_OF_SIMULATION, DEFAULT_NUMBER_OF_SIMULATION);
         settings.set(Settings.GLOBAL_SCOPE, KEY_NUMBER_OF_GENERATIONS, DEFAULT_NUMBER_OF_GENERATIONS);
-
-
-
     }
 
     /**
@@ -50,13 +48,12 @@ public class LAOP {
      * @param algorithmClass la classe de l'algorithme
      * @param settings les configurations de l'algorithme
      */
-    public void addAlgorithm(String label, Class<? extends Object> algorithmClass, HashMap<String, Object> settings){
+    public void addAlgorithm(String label, Class<? extends CarController> algorithmClass, Class<? extends LearningAlgorithm> learningClass, HashMap<String, Object> settings){
         if(settings.get(label) != null)
             throw new KeyAlreadyExistsException("The label "+label+" has already been assigned");
 
-        algorithms.put(label, algorithmClass);
-
-        this.settings.set(label, "algorithm", algorithmClass);
+        this.settings.set(label, LAOP.KEY_NETWORK_CLASS, algorithmClass);
+        this.settings.set(label, LAOP.KEY_LEARNING_CLASS, learningClass);
         settings.forEach((k, v) -> this.settings.set(label, k, v));
     }
 
@@ -83,7 +80,7 @@ public class LAOP {
 
     public void startSimulation(SimulationDisplayMode simulationDisplayMode){
         SimulationBuffer simulationBuffer = new SimulationBuffer();
-        Simulation simulation = new Simulation(simulationBuffer, algorithms, settings);
+        Simulation simulation = new Simulation(simulationBuffer, settings);
 
         if(simulationDisplayMode == simulationDisplayMode.WITH_INTERFACE){
             SimulationStage simulationStage = new SimulationStage(simulation);
@@ -114,5 +111,10 @@ public class LAOP {
 
     public static final int DEFAULT_NUMBER_OF_GENERATIONS = 10;
     public static final String KEY_NUMBER_OF_GENERATIONS = "NUMBER OF GENERATIONS";
+
+    public static final String KEY_NETWORK_CLASS = "NEURAL_NETWORK_CLASS";
+    public static final String KEY_LEARNING_CLASS = "LEARNING_ALGORITHM_CLASS";
+
+
 
 }
