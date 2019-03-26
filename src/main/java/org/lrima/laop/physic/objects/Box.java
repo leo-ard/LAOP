@@ -3,6 +3,8 @@ package org.lrima.laop.physic.objects;
 import org.lrima.laop.utils.math.Vector2d;
 import org.lrima.laop.physic.Physicable;
 
+import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 
@@ -108,6 +110,10 @@ public abstract class Box extends Physicable {
     }
 
     public Area getArea(){
-        return new Area(new Rectangle2D.Double(this.position.getX(), this.position.getY(), this.width, this.height));
+        Rectangle.Double rect = new Rectangle2D.Double(this.position.getX(), this.position.getY(), this.width, this.height);
+        AffineTransform at = new AffineTransform();
+        at.rotate(this.rotation, this.position.getX() + width/2, this.position.getY()+height/2);
+
+        return new Area(at.createTransformedShape(rect));
     }
 }
