@@ -1,6 +1,15 @@
 package org.lrima.laop.ui;
 
+import java.util.ArrayList;
+
+import org.lrima.laop.simulation.Simulation;
+import org.lrima.laop.simulation.SimulationBuffer;
+import org.lrima.laop.simulation.data.CarInfo;
+import org.lrima.laop.ui.panels.inspector.InspectorPanel;
+
 import com.jfoenix.controls.JFXSlider;
+import com.sun.javafx.geom.Area;
+
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
@@ -9,13 +18,6 @@ import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
-
-import org.lrima.laop.ui.panels.inspector.InspectorPanel;
-import org.lrima.laop.simulation.data.CarInfo;
-import org.lrima.laop.simulation.Simulation;
-import org.lrima.laop.simulation.SimulationBuffer;
-
-import java.util.ArrayList;
 
 
 /**
@@ -175,8 +177,9 @@ public class SimulationDrawer{
 	
 	        gc.setTransform(this.affineTransform);
 
+	        //Draw the map
 	        simulation.getMap().getObjects().forEach(staticObject -> staticObject.draw(gc));
-
+	        
 	        for(CarInfo car : currentCars) {
 	            if(inspector.getSelectedObject() == car)
 	                gc.setFill(Color.RED);

@@ -48,8 +48,10 @@ public class Simulation {
         this.autoRun = true;
 
         map = new SimulationMap();
-        map.getObjects().add(new StaticLineObject(-10, -10, 3, 3));
-        map.getObjects().add(new StaticLineObject(-412, 18, 40, 2));
+        map.getObjects().add(new StaticLineObject(-50, -50, 100, -50));
+        map.getObjects().add(new StaticLineObject(100, -50, 100, 200));
+        map.getObjects().add(new StaticLineObject(100, 200, -50, 200));
+        map.getObjects().add(new StaticLineObject(-50, 200, -50, -50));
         map.bakeArea();
 
     }

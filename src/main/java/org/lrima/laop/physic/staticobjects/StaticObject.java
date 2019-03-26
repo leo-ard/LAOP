@@ -1,9 +1,11 @@
 package org.lrima.laop.physic.staticobjects;
 
-import javafx.scene.canvas.GraphicsContext;
+import java.awt.geom.Area;
+
 import org.lrima.laop.physic.Physicable;
 
-import java.awt.geom.Area;
+import javafx.scene.canvas.GraphicsContext;
+
 
 public interface StaticObject {
     boolean collide(Physicable physicable);

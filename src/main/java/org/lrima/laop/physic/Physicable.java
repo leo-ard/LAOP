@@ -24,7 +24,6 @@ public abstract class Physicable {
     protected long stopCheckingCollisionAt;
     private final int MINIMUM_TIME_BEFORE_COLLISION_AGAIN = 100;
 
-
     /**
      * Create a new java.physic object with the default variables
      */
