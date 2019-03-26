@@ -1,5 +1,6 @@
 package org.lrima.laop.physic.concreteObjects;
 
+import org.lrima.laop.physic.staticobjects.StaticObject;
 import org.lrima.laop.physic.staticobjects.StaticObjectType;
 import org.lrima.laop.utils.MathUtils;
 import org.lrima.laop.utils.math.Vector2d;
@@ -60,10 +61,12 @@ public class SimpleCar extends Box {
     }
 
     @Override
-    public void collideWith(StaticObjectType type) {
-        if(type == StaticObjectType.STATIC_LINE){
-            this.dead = true;
-        }
+    public void collideWith(StaticObject object) {
+    	switch(object.getType()) {
+	    	case STATIC_LINE:
+	    		this.dead = true;
+	    		break;
+    	}
 
     }
 

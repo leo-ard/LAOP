@@ -24,7 +24,6 @@ public abstract class Physicable {
     protected long stopCheckingCollisionAt;
     private final int MINIMUM_TIME_BEFORE_COLLISION_AGAIN = 100;
 
-
     /**
      * Create a new java.physic object with the default variables
      */
@@ -119,7 +118,7 @@ public abstract class Physicable {
      * Defines what happens when a collision occurs
      * @param type the object type colliding with that object
      */
-    public abstract void collideWith(StaticObjectType type);
+    public abstract void collideWith(StaticObject object);
 
     /**
      * @return The velocity of the object
