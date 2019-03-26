@@ -15,6 +15,7 @@ import org.lrima.laop.physic.staticobjects.StaticLineObject;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.data.GenerationData;
 import org.lrima.laop.simulation.map.SimulationMap;
+import org.lrima.laop.utils.Console;
 import org.lrima.laop.utils.Actions.Action;
 import org.lrima.laop.utils.math.Vector2d;
 
@@ -54,9 +55,8 @@ public class Simulation {
 
         this.currentScope = this.settings.getLocalScopes().get(0);
         this.autoRun = true;
-
+        
         map = new SimulationMap(new Rectangle2D.Double(-600, -600, 600, 600));
-        map.randomize(5);
         map.bakeArea();
 
     }
