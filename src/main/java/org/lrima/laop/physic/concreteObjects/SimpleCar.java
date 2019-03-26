@@ -1,5 +1,6 @@
 package org.lrima.laop.physic.concreteObjects;
 
+import org.lrima.laop.physic.staticobjects.StaticObjectType;
 import org.lrima.laop.utils.MathUtils;
 import org.lrima.laop.utils.math.Vector2d;
 import org.lrima.laop.network.CarController;
@@ -10,17 +11,21 @@ import java.util.ArrayList;
 
 public class SimpleCar extends Box {
     CarController carController;
-    double wheelDirection = 0;
+    double wheelDirection;
     final double range = Math.PI/4;
+    private boolean dead;
 
     public SimpleCar(Vector2d position, CarController controller) {
         super(position, 2000, 10, 30);
 
         carController = controller;
+        wheelDirection = 0;
+        dead = false;
     }
 
     @Override
     protected void nextStep() {
+        if(dead) return;
         this.forces = new ArrayList<>();
 
         /*
@@ -39,7 +44,6 @@ public class SimpleCar extends Box {
         this.acceleration = PhysicUtils.accelFromForces(forces, this.mass);
 
         this.wheelDirection = carControls[2] * range;
-        System.out.println(this.wheelDirection);
 
         this.angularVelocity = MathUtils.angularVelocity(this.angularVelocity, this.wheelDirection, this.velocity);
         this.angularVelocity += -angularVelocity*0.01;
@@ -48,5 +52,13 @@ public class SimpleCar extends Box {
 
         this.velocity = this.velocity.add(acceleration);
         this.position = this.position.add(this.velocity);
+    }
+
+    @Override
+    public void collideWith(StaticObjectType type) {
+        if(type == StaticObjectType.STATIC_LINE){
+            this.dead = true;
+        }
+
     }
 }

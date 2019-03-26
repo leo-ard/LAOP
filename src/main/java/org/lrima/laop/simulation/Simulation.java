@@ -5,8 +5,10 @@ import java.util.HashMap;
 
 import javafx.stage.Stage;
 import org.lrima.laop.core.LAOP;
+import org.lrima.laop.physic.staticobjects.StaticLineObject;
+import org.lrima.laop.simulation.map.SimulationMap;
 import org.lrima.laop.utils.math.Vector2d;
-import org.lrima.laop.network.ManualCarContoller;
+import org.lrima.laop.network.ManualCarController;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.data.GenerationData;
@@ -31,6 +33,7 @@ public class Simulation {
 
     private boolean autoRun;
     private Stage mainScene;
+    private SimulationMap map;
 
     public Simulation(SimulationBuffer simulationBuffer, HashMap<String, Class<?>> algorithms, Settings settings) {
         this.simulationBuffer = simulationBuffer;
@@ -43,6 +46,12 @@ public class Simulation {
 
         this.currentScope = this.settings.getLocalScopes().get(0);
         this.autoRun = true;
+
+        map = new SimulationMap();
+        map.getObjects().add(new StaticLineObject(-10, -10, 3, 3));
+        map.getObjects().add(new StaticLineObject(-412, 18, 40, 2));
+        map.bakeArea();
+
     }
 
     private ArrayList configureCar(){
@@ -54,7 +63,7 @@ public class Simulation {
 
         if(this.simulationBuffer != null) {
 	        for(int i = 0 ; i < 1 ; i++) {
-	        	SimpleCar car = new SimpleCar(Vector2d.origin, new ManualCarContoller(mainScene));
+	        	SimpleCar car = new SimpleCar(Vector2d.origin, new ManualCarController(mainScene));
 
 	        	//car.addThrust(Math.random() * 100000);
 
@@ -110,7 +119,7 @@ public class Simulation {
 
     private void simulateGeneration(){
         simulationBuffer.clear();
-        PhysicEngine physicEngine = new PhysicEngine(simulationBuffer);
+        PhysicEngine physicEngine = new PhysicEngine(simulationBuffer, map);
 
         physicEngine.getObjects().addAll(configureCar());
 
@@ -185,5 +194,9 @@ public class Simulation {
      */
     public void setMainScene(Stage mainScene) {
         this.mainScene = mainScene;
+    }
+
+    public SimulationMap getMap() {
+        return map;
     }
 }

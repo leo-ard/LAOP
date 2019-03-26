@@ -13,10 +13,10 @@ import static javafx.scene.input.KeyCode.*;
  * 2 -> rotation (-1 to 1)
  *
  */
-public class ManualCarContoller implements CarController {
+public class ManualCarController implements CarController {
     double[] values;
 
-    public ManualCarContoller(Stage mainScene){
+    public ManualCarController(Stage mainScene){
         values = new double[4];
         mainScene.getScene().setOnKeyPressed(this::handleKeyPress);
         mainScene.getScene().setOnKeyReleased(this::handleKeyReleased);

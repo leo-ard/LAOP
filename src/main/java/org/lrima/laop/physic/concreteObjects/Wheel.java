@@ -1,5 +1,6 @@
 package org.lrima.laop.physic.concreteObjects;
 
+import org.lrima.laop.physic.staticobjects.StaticObjectType;
 import org.lrima.laop.utils.math.Vector2d;
 import org.lrima.laop.physic.objects.Box;
 
@@ -127,6 +128,11 @@ public class Wheel extends Box {
     @Override
     public Vector2d getCenter() {
         return new Vector2d(this.getPosition().getX() + this.width / 2, this.getPosition().getY() + this.height / 2);
+    }
+
+    @Override
+    public void collideWith(StaticObjectType type) {
+
     }
 
 

@@ -4,6 +4,7 @@ package org.lrima.laop.physic.test;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.Physicable;
 import org.lrima.laop.physic.concreteObjects.Car;
+import org.lrima.laop.simulation.map.SimulationMap;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +25,7 @@ public class TestPhysicMain extends JPanel implements ActionListener {
     private Timer timer=new Timer(10, this);
 
 
-    private static PhysicEngine engine = new PhysicEngine(null);
+    private static PhysicEngine engine;
 
     //private static Car car1 = new Car();
 
@@ -39,6 +40,7 @@ public class TestPhysicMain extends JPanel implements ActionListener {
 
         window.getContentPane().add(drawPanel);
         window.setVisible(true);
+        engine = new PhysicEngine(null, new SimulationMap());
         
         engine.addObject(new Car());
 

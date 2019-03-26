@@ -1,5 +1,7 @@
 package org.lrima.laop.physic;
 
+import org.lrima.laop.physic.staticobjects.StaticObject;
+import org.lrima.laop.physic.staticobjects.StaticObjectType;
 import org.lrima.laop.utils.math.Vector2d;
 
 import java.awt.geom.Area;
@@ -115,9 +117,9 @@ public abstract class Physicable {
 
     /**
      * Defines what happens when a collision occurs
-     * @param object the object colliding with this object
+     * @param type the object type colliding with that object
      */
-    public abstract void collideWith(Physicable object);
+    public abstract void collideWith(StaticObjectType type);
 
     /**
      * @return The velocity of the object

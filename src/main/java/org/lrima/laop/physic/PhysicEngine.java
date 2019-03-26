@@ -4,9 +4,11 @@ import java.awt.geom.Area;
 import java.util.ArrayList;
 
 import org.lrima.laop.physic.objects.Box;
+import org.lrima.laop.physic.staticobjects.StaticObjectType;
 import org.lrima.laop.simulation.data.CarInfo;
 import org.lrima.laop.simulation.SimulationBuffer;
 import org.lrima.laop.simulation.SimulationSnapshot;
+import org.lrima.laop.simulation.map.SimulationMap;
 import org.lrima.laop.utils.Actions.Action;
 
 /**
@@ -24,6 +26,7 @@ public class PhysicEngine extends Thread {
     private double worldWidth;
 
     private ArrayList<Action<PhysicEngine>> onPhysicEngineFinish;
+    private SimulationMap map;
     
     //////Temporary
     private final int MAX_ITERATION = 30000;
@@ -32,10 +35,11 @@ public class PhysicEngine extends Thread {
     
     private SimulationBuffer simulationBuffer;
 
-    public PhysicEngine(SimulationBuffer buffer){
+    public PhysicEngine(SimulationBuffer buffer, SimulationMap map){
     	this.simulationBuffer = buffer;
         this.objects = new ArrayList<>();
         onPhysicEngineFinish = new ArrayList<>();
+        this.map = map;
     }
 
     public ArrayList<Physicable> getObjects() {
@@ -52,7 +56,7 @@ public class PhysicEngine extends Thread {
             if(!this.pause) {
                 try {
                     this.nextStep();
-//                    this.checkCollision();
+                    this.checkCollision();
 
                     //save the car's state in the buffer
                     this.saveCarsState();
@@ -100,20 +104,14 @@ public class PhysicEngine extends Thread {
      */
     private void checkCollision(){
         //TODO: Pas la meilleur facon de faire
-        for(Physicable object : objects) {
-            for(Physicable object2 : objects){
-                //Don't intersect with itself
-                if(object != object2){
-                    Area area1 = object.getArea();
-                    Area area2 = object2.getArea();
 
-                    area1.intersect(area2);
-                    if(!area1.isEmpty()){
-                        //There has been a collision
-                        object.collideWith(object2);
-                        object2.collideWith(object);
-                    }
-                }
+        for(Physicable object :objects){
+            Area intersection = object.getArea();
+            System.out.println(map.getArea().isEmpty());
+            intersection.intersect(map.getArea());
+            if(!intersection.isEmpty()){
+                System.out.println("HSHSHSHSH");
+                object.collideWith(StaticObjectType.STATIC_LINE);
             }
         }
     }

@@ -174,9 +174,9 @@ public class SimulationDrawer{
 	        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 	
 	        gc.setTransform(this.affineTransform);
-	
-	        //drawGrid(gc);
-	
+
+	        simulation.getMap().getObjects().forEach(staticObject -> staticObject.draw(gc));
+
 	        for(CarInfo car : currentCars) {
 	            if(inspector.getSelectedObject() == car)
 	                gc.setFill(Color.RED);
