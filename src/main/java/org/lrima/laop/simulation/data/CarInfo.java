@@ -3,6 +3,7 @@ package org.lrima.laop.simulation.data;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +33,8 @@ public class CarInfo implements Inspectable {
     private Vector2d velociy;
     private Vector2d acceleration;
 
+    private ArrayList<Vector2d> forces;
+
     /**
      * Retrieve information from a car
      * @param car the car
@@ -42,6 +45,7 @@ public class CarInfo implements Inspectable {
         this.width = car.getWidth();
         this.height = car.getHeight();
         this.tilt = Math.toDegrees(car.getRotation());
+        this.forces = car.getForces();
         this.velociy = car.getVelocity();
         this.acceleration = car.getAcceleration();
     }
@@ -57,8 +61,12 @@ public class CarInfo implements Inspectable {
         information.put("Longeur", String.format("%.2f", width));
         information.put("Largeur", String.format("%.2f", height));
         information.put("Angle", String.format("%.2f", tilt));
-        information.put("Velocity", velociy.toString());
-        information.put("Acceleration", acceleration.toString());
+        information.put("Velocity", String.format("%.2f", velociy.modulus()));
+        information.put("Acceleration", String.format("%.2f", acceleration.modulus()));
+
+        for(Vector2d force : this.forces){
+            information.put(force.getTag(), force.toString());
+        }
 
         return information;
 

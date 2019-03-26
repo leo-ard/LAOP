@@ -17,7 +17,7 @@ import org.lrima.laop.utils.Actions.Action;
  * @author Clement Bisaillon
  */
 public class PhysicEngine extends Thread {
-    static public final double DELTA_T = 0.1;
+    static public final double DELTA_T = 0.05;
     static final double GRAVITY = 9.8;
 
     private volatile boolean pause = false;
@@ -36,12 +36,14 @@ public class PhysicEngine extends Thread {
     //////Temporary
 
     private SimulationBuffer simulationBuffer;
+    private boolean waitDeltaT;
 
     public PhysicEngine(SimulationBuffer buffer, SimulationMap map){
     	this.simulationBuffer = buffer;
         this.objects = new ArrayList<>();
-        onPhysicEngineFinish = new ArrayList<>();
+        this.onPhysicEngineFinish = new ArrayList<>();
         this.map = map;
+        this.waitDeltaT = false;
     }
 
     public ArrayList<Physicable> getObjects() {
@@ -64,7 +66,11 @@ public class PhysicEngine extends Thread {
                     this.saveCarsState();
                     
                     this.CURRENT_ITERATION++;
-                    Thread.sleep(1);
+                    if(waitDeltaT){
+                        Thread.sleep((int)(PhysicEngine.DELTA_T*1000.0));
+                    }
+                    else
+                        Thread.sleep(1);
                 } catch (InterruptedException e) {
                     System.err.println("Thread Stopped");
                 }
@@ -150,5 +156,9 @@ public class PhysicEngine extends Thread {
 
     public void setOnStep(Action<PhysicEngine> onStep){
         this.onStep.add(onStep);
+    }
+
+    public void setWaitDeltaT(boolean waitDeltaT) {
+        this.waitDeltaT = waitDeltaT;
     }
 }

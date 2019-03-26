@@ -17,6 +17,7 @@ public abstract class Physicable {
     protected Vector2d acceleration;
     protected double rotation;
     protected double angularVelocity;
+    protected double angularAccel;
     protected double mass;
     protected ArrayList<Vector2d> forces;
 

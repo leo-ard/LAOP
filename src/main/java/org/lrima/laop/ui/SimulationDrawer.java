@@ -133,8 +133,6 @@ public class SimulationDrawer{
                     handleClick(clicked);
                     clicked = null;
                 }
-                //inspector.update();
-
                 drawStep();
             }
         };
@@ -170,6 +168,7 @@ public class SimulationDrawer{
      **/
     private void drawStep(){
         if(this.simulation.getBuffer().getSize() > 0) {
+            this.inspector.update();
 	        GraphicsContext gc = canvas.getGraphicsContext2D();
 	
 	        gc.setFill(Color.rgb(180,200, 250 ));

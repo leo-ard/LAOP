@@ -53,10 +53,10 @@ public class Simulation {
         this.autoRun = true;
 
         map = new SimulationMap();
-        map.getObjects().add(new StaticLineObject(-50, -50, 100, -50));
-        map.getObjects().add(new StaticLineObject(100, -50, 100, 200));
-        map.getObjects().add(new StaticLineObject(100, 200, -50, 200));
-        map.getObjects().add(new StaticLineObject(-50, 200, -50, -50));
+        map.getObjects().add(new StaticLineObject(-500, -500, 1000, -500));
+        map.getObjects().add(new StaticLineObject(1000, -500, 1000, 2000));
+        map.getObjects().add(new StaticLineObject(1000, 2000, -500, 2000));
+        map.getObjects().add(new StaticLineObject(-500, 2000, -500, -500));
         map.bakeArea();
 
     }
@@ -152,6 +152,7 @@ public class Simulation {
         simulationBuffer.clear();
         engine = new PhysicEngine(simulationBuffer, map);
 
+        engine.setWaitDeltaT(true);
         engine.getObjects().addAll(configureCar());
 
         engine.setOnPhysicEngineFinish(engine -> {

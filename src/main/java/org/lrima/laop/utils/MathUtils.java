@@ -42,7 +42,4 @@ public class MathUtils {
         }
     }
 
-    public static double angularVelocity(double currentAngularVelocity, double wheelDirection, Vector2d velocity) {
-        return currentAngularVelocity + velocity.modulus()* wheelDirection * 0.0005;
-    }
 }

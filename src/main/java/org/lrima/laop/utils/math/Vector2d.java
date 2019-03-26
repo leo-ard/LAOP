@@ -9,6 +9,9 @@ public class Vector2d implements Cloneable {
     private double x;
     private double y;
 
+    //TODO : maybe tem
+    String tag;
+
     /**
      * Creates a new two dimensions vector from two values
      * @param x the first value
@@ -97,6 +100,10 @@ public class Vector2d implements Cloneable {
         return String.format("[%.2f, %.2f]", this.x, this.y);
     }
 
+    public String getTag() {
+        return tag;
+    }
+
     /**
      * Power a vector by a factor i
      *
@@ -157,5 +164,9 @@ public class Vector2d implements Cloneable {
         double x = this.x * dot;
         double y = this.y * dot;
         return new Vector2d(x, y);
+    }
+
+    public void setTag(String tag){
+        this.tag = tag;
     }
 }

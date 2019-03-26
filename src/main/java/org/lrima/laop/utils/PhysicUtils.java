@@ -26,14 +26,23 @@ public class PhysicUtils {
     }
 
     public static Vector2d breakForce(Vector2d velocity, double carControl) {
-        double c = 50;
+        double c = 5_000;
         return velocity.multiply(carControl * c).multiply(-1);
     }
 
     public static Vector2d directionResistance(Vector2d direction, Vector2d velocity) {
-        double c = 15;
+        double c = 15_000;
 
         Vector2d resistance = velocity.subtract(direction.project(velocity));
         return resistance.multiply(-c);
+    }
+
+    public static Vector2d accelFromBackWeels(double accelAmount, double rotation, double wheelDirection, double range) {
+        int initForce = 20_000;
+        return new Vector2d(0, initForce * accelAmount).rotate(rotation + wheelDirection*range, Vector2d.origin);
+    }
+
+    public static double angularAccel(double wheelDirection, Vector2d velocity) {
+        return velocity.modulus() * wheelDirection;
     }
 }
