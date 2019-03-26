@@ -1,4 +1,4 @@
-package org.lrima.laop.network;
+package org.lrima.laop.network.carcontrollers;
 
 /**
  *

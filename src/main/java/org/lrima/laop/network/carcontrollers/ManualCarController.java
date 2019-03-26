@@ -1,11 +1,8 @@
-package org.lrima.laop.network;
+package org.lrima.laop.network.carcontrollers;
 
-import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-
-import static javafx.scene.input.KeyCode.*;
 
 /**
  * 0 -> Acc (0 to 1)

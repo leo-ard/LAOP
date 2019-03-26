@@ -2,6 +2,8 @@ package org.lrima.laop.core;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import org.lrima.laop.network.concreteLearning.GeneticLearning;
+import org.lrima.laop.network.concreteNetworks.NEAT;
 
 import java.util.HashMap;
 
@@ -23,7 +25,7 @@ public class LaopGraphical extends Application {
 //        configurationStage.show();
 
         LAOP laop = new LAOP();
-        laop.addAlgorithm("test1212", LaopGraphical.class, new HashMap<>());
+        laop.addAlgorithm("test1212", NEAT.class, GeneticLearning.class, new HashMap<>());
         laop.startSimulation(LAOP.SimulationDisplayMode.WITH_INTERFACE);
 
 

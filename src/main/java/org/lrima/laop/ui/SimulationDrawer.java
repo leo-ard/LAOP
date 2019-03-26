@@ -202,7 +202,7 @@ public class SimulationDrawer{
     }
 
     /**
-     * Commence a faire défiler automatiquement le curseur (lancer l'animation)
+     * Commence a faire défsiler automatiquement le curseur (lancer l'animation)
      *
      * @param frameWait le nombre de frame entre chaque changement de valeur
      */

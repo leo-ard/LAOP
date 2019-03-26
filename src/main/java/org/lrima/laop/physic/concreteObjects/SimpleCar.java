@@ -4,16 +4,21 @@ import org.lrima.laop.physic.staticobjects.StaticObject;
 import org.lrima.laop.physic.staticobjects.StaticObjectType;
 import org.lrima.laop.utils.MathUtils;
 import org.lrima.laop.utils.math.Vector2d;
-import org.lrima.laop.network.CarController;
+import org.lrima.laop.network.carcontrollers.CarController;
 import org.lrima.laop.physic.objects.Box;
 import org.lrima.laop.utils.PhysicUtils;
 
 import java.util.ArrayList;
 
+/**
+ *
+ *
+ * @author Léonard
+ */
 public class SimpleCar extends Box {
-    CarController carController;
+    private CarController carController;
     double wheelDirection;
-    final double range = Math.PI/4;
+    final double range = -Math.PI/4;
     private boolean dead;
 
     public SimpleCar(Vector2d position, CarController controller) {
@@ -63,5 +68,9 @@ public class SimpleCar extends Box {
 	    		break;
     	}
 
+    }
+
+    public CarController getController() {
+        return carController;
     }
 }

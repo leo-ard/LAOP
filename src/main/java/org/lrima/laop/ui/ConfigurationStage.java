@@ -43,11 +43,6 @@ public class ConfigurationStage extends Stage {
 
         laop = new LAOP();
 
-        //TODO : TEMP
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("SETTING 1", "HAHAHA");
-        laop.addAlgorithm("test1212", ConfigurationController.class, hashMap);
-
         loadAllScenes();
 
         //Initialisation of the next and back button

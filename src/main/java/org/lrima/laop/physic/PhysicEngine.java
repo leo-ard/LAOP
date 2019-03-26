@@ -27,13 +27,14 @@ public class PhysicEngine extends Thread {
     private double worldWidth;
 
     private ArrayList<Action<PhysicEngine>> onPhysicEngineFinish;
+    private ArrayList<Action<PhysicEngine>> onStep;
     private SimulationMap map;
-    
+
     //////Temporary
     private final int MAX_ITERATION = 30000;
     private int CURRENT_ITERATION = 0;
     //////Temporary
-    
+
     private SimulationBuffer simulationBuffer;
 
     public PhysicEngine(SimulationBuffer buffer, SimulationMap map){
@@ -145,5 +146,9 @@ public class PhysicEngine extends Thread {
 
     public void setOnPhysicEngineFinish(Action<PhysicEngine> onPhysicEngineFinish) {
         this.onPhysicEngineFinish.add(onPhysicEngineFinish);
+    }
+
+    public void setOnStep(Action<PhysicEngine> onStep){
+        this.onStep.add(onStep);
     }
 }
