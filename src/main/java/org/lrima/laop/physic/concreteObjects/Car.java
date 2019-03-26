@@ -1,5 +1,6 @@
 package org.lrima.laop.physic.concreteObjects;
 
+import org.lrima.laop.physic.staticobjects.StaticObject;
 import org.lrima.laop.physic.staticobjects.StaticObjectType;
 import org.lrima.laop.utils.MathUtils;
 import org.lrima.laop.utils.math.Vector2d;
@@ -124,7 +125,7 @@ public class Car extends Box {
     }
 
     @Override
-    public void collideWith(StaticObjectType type) {
+    public void collideWith(StaticObject object) {
 
     }
 
