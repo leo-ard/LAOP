@@ -4,6 +4,7 @@ import java.awt.geom.Area;
 import java.util.ArrayList;
 
 import org.lrima.laop.physic.objects.Box;
+import org.lrima.laop.physic.staticobjects.StaticObject;
 import org.lrima.laop.physic.staticobjects.StaticObjectType;
 import org.lrima.laop.simulation.data.CarInfo;
 import org.lrima.laop.simulation.SimulationBuffer;
@@ -105,14 +106,15 @@ public class PhysicEngine extends Thread {
     private void checkCollision(){
         //TODO: Pas la meilleur facon de faire
 
-        for(Physicable object :objects){
-            Area intersection = object.getArea();
-            System.out.println(map.getArea().isEmpty());
-            intersection.intersect(map.getArea());
-            if(!intersection.isEmpty()){
-                System.out.println("HSHSHSHSH");
-                object.collideWith(StaticObjectType.STATIC_LINE);
-            }
+        for(Physicable physicable :objects){
+        	for(StaticObject obstacle : this.map.getObjects()) {
+        		Area intersection = obstacle.getArea();
+        		intersection.intersect(physicable.getArea());
+        		if(!intersection.isEmpty()){
+                    obstacle.collideWith(physicable);
+                    physicable.collideWith(obstacle);
+                }
+        	}
         }
     }
 

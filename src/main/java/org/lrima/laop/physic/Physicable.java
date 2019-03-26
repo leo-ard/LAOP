@@ -118,7 +118,7 @@ public abstract class Physicable {
      * Defines what happens when a collision occurs
      * @param type the object type colliding with that object
      */
-    public abstract void collideWith(StaticObjectType type);
+    public abstract void collideWith(StaticObject object);
 
     /**
      * @return The velocity of the object

@@ -8,7 +8,8 @@ import javafx.scene.canvas.GraphicsContext;
 
 
 public interface StaticObject {
-    boolean collide(Physicable physicable);
+    void collideWith(Physicable physicable);
     Area getArea();
     void draw(GraphicsContext gc);
+    StaticObjectType getType();
 }
