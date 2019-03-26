@@ -71,7 +71,7 @@ public class CarInfo implements Inspectable {
      */
     public void draw(GraphicsContext gc) {
         Affine affine = new Affine(gc.getTransform());
-        affine.appendRotation(tilt, new Point2D(x + width/2, y + height/2));
+        affine.appendRotation(tilt, new Point2D(x + this.width/2, y+this.height/2));
 
         Affine temp = gc.getTransform();
         gc.setTransform(affine);
