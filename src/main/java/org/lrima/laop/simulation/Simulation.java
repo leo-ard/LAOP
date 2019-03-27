@@ -12,18 +12,13 @@ import org.lrima.laop.network.carcontrollers.ManualCarController;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.concreteObjects.Car;
 import org.lrima.laop.physic.concreteObjects.SimpleCar;
-import org.lrima.laop.physic.staticobjects.StaticLineObject;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.data.GenerationData;
 import org.lrima.laop.simulation.map.AbstractMap;
 import org.lrima.laop.simulation.map.MazeMap;
-import org.lrima.laop.utils.Console;
+import org.lrima.laop.simulation.sensors.ProximityLineSensor;
 import org.lrima.laop.utils.Actions.Action;
 import org.lrima.laop.utils.math.Vector2d;
-
-import java.util.ArrayList;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 public class Simulation {
     private SimulationBuffer simulationBuffer;
@@ -38,6 +33,10 @@ public class Simulation {
     ArrayList<Action<Simulation>> onGenerationFinish;
     ArrayList<Action<Simulation>> onBatchFinished;
     ArrayList<Action<Simulation>> onEnd;
+    
+    //temporary
+    private final int NUMBER_OF_SENSORS = 5;
+    //endtemporary
 
     private boolean autoRun;
     private Stage mainScene;
@@ -75,6 +74,12 @@ public class Simulation {
 	        for(int i = 0 ; i < 1 ; i++) {
 	        	Point2D start = map.getStartPoint();
 	        	SimpleCar car = new SimpleCar(new Vector2d(start.getX(), start.getY()), generateCurrentNetwork());
+	        	
+	        	double orientationIncrement = Math.PI / NUMBER_OF_SENSORS;
+	        	//Create the sensors and assign them to the car
+	        	for(int x = 0 ; x < this.NUMBER_OF_SENSORS ; x++) {
+	        		ProximityLineSensor sensor = new ProximityLineSensor(car, (Math.PI / 2) - (i * orientationIncrement));
+	        	}
 
 	        	cars.add(car);
 	        }

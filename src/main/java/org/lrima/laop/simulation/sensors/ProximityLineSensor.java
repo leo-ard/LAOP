@@ -5,6 +5,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import org.lrima.laop.physic.concreteObjects.SimpleCar;
@@ -23,8 +24,9 @@ public class ProximityLineSensor implements Sensor {
 	private final double SENSOR_LENGHT = 75;
 	private MazeMap map;
 	
-	public ProximityLineSensor(SimpleCar car) {
+	public ProximityLineSensor(SimpleCar car, double orientation) {
 		this.car = car;
+		this.orientation = orientation;
 	}
 	
 	@Override
@@ -42,21 +44,18 @@ public class ProximityLineSensor implements Sensor {
 			intersectionArea.intersect(object.getArea());
 			if(!intersectionArea.isEmpty()) {
 				intersectingObjects.put(object, intersectionArea);
+				
+				Rectangle2D intersectionBounds = intersectionArea.getBounds2D();
+				
+				//Calculates the percentage of the intersection bounds on the complete sensor line bounds
+				double changeInX = intersectionBounds.getWidth() / sensorBounds.getWidth();
+				double changeInY = intersectionBounds.getHeight() / sensorBounds.getHeight();
+				double intersectionLineLenght = Math.sqrt(Math.pow(changeInX, 2) + Math.pow(changeInY, 2));
+				
+				return intersectionLineLenght / SENSOR_LENGHT;
 			}
 		}
-		//Keep only the closest object to the sensor
-		
-		
-		
-//		//If there is a collision
-//		Rectangle2D intersectionBounds = intersectionArea.getBounds2D();
-//		
-//		//Calculates the percentage of the intersection bounds on the complete sensor line bounds
-//		double changeInX = intersectionBounds.getWidth() / sensorBounds.getWidth();
-//		double changeInY = intersectionBounds.getHeight() / sensorBounds.getHeight();
-//		double intersectionLineLenght = Math.sqrt(Math.pow(changeInX, 2) + Math.pow(changeInY, 2));
-//		
-//		return SENSOR_LENGHT / intersectionLineLenght;
+		//todo: Keep only the closest object to the sensor
 		
 		return 0.0;
 	}
