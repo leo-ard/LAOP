@@ -1,9 +1,9 @@
 package org.lrima.laop.simulation;
 
-import org.lrima.laop.simulation.data.CarInfo;
-import org.lrima.laop.physic.concreteObjects.Car;
-
 import java.util.ArrayList;
+
+import org.lrima.laop.physic.concreteObjects.SimpleCar;
+import org.lrima.laop.simulation.data.CarInfo;
 
 /**
  *  A snapshot of the simulation
@@ -22,7 +22,7 @@ public class SimulationSnapshot {
      *
      * @param car the car to be added
      */
-    public void addCar(Car car){
+    public void addCar(SimpleCar car){
         cars.add(new CarInfo(car));
     }
 

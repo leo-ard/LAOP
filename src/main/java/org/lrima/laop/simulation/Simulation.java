@@ -35,7 +35,7 @@ public class Simulation {
     ArrayList<Action<Simulation>> onEnd;
     
     //temporary
-    private final int NUMBER_OF_SENSORS = 5;
+    private final int NUMBER_OF_SENSORS = 1;
     //endtemporary
 
     private boolean autoRun;
@@ -78,7 +78,7 @@ public class Simulation {
 	        	double orientationIncrement = Math.PI / NUMBER_OF_SENSORS;
 	        	//Create the sensors and assign them to the car
 	        	for(int x = 0 ; x < this.NUMBER_OF_SENSORS ; x++) {
-	        		ProximityLineSensor sensor = new ProximityLineSensor(this.map, car, (Math.PI / 2) - (i * orientationIncrement));
+	        		ProximityLineSensor sensor = new ProximityLineSensor(this.map, car, (x * orientationIncrement) + orientationIncrement/2);
 	        		car.getSensors().add(sensor);
 	        	}
 
@@ -162,7 +162,7 @@ public class Simulation {
         engine = new PhysicEngine(simulationBuffer, map);
 
         engine.setWaitDeltaT(true);
-        engine.getObjects().addAll(configureCar());
+        engine.getCars().addAll(configureCar());
 
         engine.setOnPhysicEngineFinish(engine -> {
             if(this.autoRun)

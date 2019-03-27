@@ -150,7 +150,7 @@ public class SimulationStage extends Stage {
     	CheckMenuItem showCarInfo = new CheckMenuItem("Car info");
     	showConsole.setSelected(true);
     	showCharts.setSelected(true);
-    	showCarInfo.setSelected(true);
+    	showCarInfo.setSelected(false);
 
     	//Les actions quand nous cliquons sur les boutons
     	showConsole.selectedProperty().addListener((obs, oldVal, newVal) -> {
