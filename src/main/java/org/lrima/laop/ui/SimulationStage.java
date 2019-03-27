@@ -50,16 +50,15 @@ public class SimulationStage extends Stage {
         this.canvas = new Canvas(WINDOW_WIDTH, WINDOW_HEIGHT);
         this.inspector = new InspectorPanel();
         this.consolePanel = new ConsolePanel();
-        this.simulationDrawer = new SimulationDrawer(canvas, simulation, inspector);
-        this.simulationDrawer.start();
         this.chartPanel = new ChartPanel(simulation);
+        this.simulationDrawer = new SimulationDrawer(canvas, simulation, inspector);
         this.configureMenu();
 
         this.setOnCloseRequest(e->{
             Platform.exit();
             System.exit(0);
         });
-        
+
         this.loadAllScenes();
 
         this.simulation.setAutoRun(false);
@@ -67,6 +66,8 @@ public class SimulationStage extends Stage {
         this.simulation.setMainScene(this);
 
         this.checkBoxRealTime.selectedProperty().setValue(true);
+
+        this.simulationDrawer.start();
     }
 
     /**

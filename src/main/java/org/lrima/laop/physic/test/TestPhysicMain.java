@@ -40,7 +40,7 @@ public class TestPhysicMain extends JPanel implements ActionListener {
 
         window.getContentPane().add(drawPanel);
         window.setVisible(true);
-        engine = new PhysicEngine(null, new SimulationMap());
+//        engine = new PhysicEngine(null, new SimulationMap());
         
         engine.addObject(new Car());
 

@@ -47,18 +47,16 @@ public class SimulationDrawer{
 
 
     /**
-     * Draws the simulation into the canvas according to the buffer
+     * Draws the simulation into the canvas according to the Simulation
      *  @param canvas The canvas to draw on
-     * @param buffer The buffer to take the information from
+     * @param simulation The Simulation to take the information from
      * @param inspector
      */
-    public SimulationDrawer(Canvas canvas, Simulation buffer, InspectorPanel inspector) {
+    public SimulationDrawer(Canvas canvas, Simulation simulation, InspectorPanel inspector) {
         this.canvas = canvas;
-        this.simulation = buffer;
+        this.simulation = simulation;
         this.affineTransform = new Affine();
         this.inspector = inspector;
-
-        this.resetView();
 
         this.canvas.setOnMousePressed(e -> {
             mouseXPressed = (int) e.getX();
@@ -97,6 +95,7 @@ public class SimulationDrawer{
      *
      */
     public void start(){
+        resetView();
         AnimationTimer animationTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -249,6 +248,19 @@ public class SimulationDrawer{
 
     public void resetView(){
         this.affineTransform.setToIdentity();
-        this.affineTransform.appendTranslation(canvas.getWidth()/2, canvas.getHeight()/2);
+
+        double sumX = 0, sumY = 0;
+
+        System.out.println(simulation.getBuffer().getCars(currentStep));
+
+        for (CarInfo car : simulation.getBuffer().getCars(currentStep)) {
+            sumX += car.getX();
+            sumY += car.getY();
+        }
+
+        double moyX = sumX/simulation.getBuffer().getCars(currentStep).size();
+        double moyY = sumY/simulation.getBuffer().getCars(currentStep).size();
+
+        this.affineTransform.appendTranslation(this.canvas.getWidth()/2, this.canvas.getHeight()/2);
     }
 }

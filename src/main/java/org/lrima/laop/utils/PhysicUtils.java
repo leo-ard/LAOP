@@ -38,11 +38,11 @@ public class PhysicUtils {
     }
 
     public static Vector2d accelFromBackWeels(double accelAmount, double rotation, double wheelDirection, double range) {
-        int initForce = 20_000;
+        int initForce = 200_000;
         return new Vector2d(0, initForce * accelAmount).rotate(rotation + wheelDirection*range, Vector2d.origin);
     }
 
     public static double angularAccel(double wheelDirection, Vector2d velocity) {
-        return velocity.modulus() * wheelDirection;
+        return velocity.modulus() * wheelDirection * 100;
     }
 }

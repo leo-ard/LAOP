@@ -1,16 +1,15 @@
 package org.lrima.laop.physic;
 
-import java.awt.geom.Area;
-import java.util.ArrayList;
-
 import org.lrima.laop.physic.objects.Box;
 import org.lrima.laop.physic.staticobjects.StaticObject;
-import org.lrima.laop.physic.staticobjects.StaticObjectType;
-import org.lrima.laop.simulation.data.CarInfo;
 import org.lrima.laop.simulation.SimulationBuffer;
 import org.lrima.laop.simulation.SimulationSnapshot;
+import org.lrima.laop.simulation.data.CarInfo;
 import org.lrima.laop.simulation.map.SimulationMap;
 import org.lrima.laop.utils.Actions.Action;
+
+import java.awt.geom.Area;
+import java.util.ArrayList;
 
 /**
  *

@@ -114,4 +114,12 @@ public class CarInfo implements Inspectable {
             inspectorPanel.add(new Label(key + " : "+ this.getInformationHashmap().get(key)));
         }
     }
+
+    public double getX() {
+        return this.x;
+    }
+
+    public double getY() {
+        return this.y;
+    }
 }
