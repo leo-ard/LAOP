@@ -7,6 +7,8 @@ import java.awt.geom.Point2D;
 import org.lrima.laop.physic.Physicable;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 /**
  * Static object of a simulation representing a single line
@@ -15,6 +17,7 @@ import javafx.scene.canvas.GraphicsContext;
 public class StaticLineObject implements StaticObject{
     double x1, y1, x2, y2;
     private final int LINE_WIDTH = 1;
+    private final Color COLOR = new Color(32.0/255.0, 78.0/255.0, 95.0/255.0, 1);
 
     public StaticLineObject(double x1, double y1, double x2, double y2) {
         this.x1 = x1;
@@ -48,7 +51,12 @@ public class StaticLineObject implements StaticObject{
 
     @Override
     public void draw(GraphicsContext gc) {
+    	Paint bakColor = gc.getFill();
+    	
+    	gc.setFill(this.COLOR);
         gc.strokeLine(x1, y1, x2, y2);
+        
+        gc.setFill(bakColor);
     }
     
     /**

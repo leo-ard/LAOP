@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 import org.lrima.laop.physic.concreteObjects.SimpleCar;
 import org.lrima.laop.physic.staticobjects.StaticObject;
+import org.lrima.laop.simulation.map.AbstractMap;
 import org.lrima.laop.simulation.map.MazeMap;
 import org.lrima.laop.utils.math.Vector2d;
 
@@ -21,16 +22,17 @@ public class ProximityLineSensor implements Sensor {
 	//The car that this sensor is attached to
 	private SimpleCar car;
 	private double orientation;
-	private final double SENSOR_LENGHT = 75;
-	private MazeMap map;
+	private final double SENSOR_LENGHT = 200;
+	private AbstractMap map;
 	
-	public ProximityLineSensor(SimpleCar car, double orientation) {
+	public ProximityLineSensor(AbstractMap map, SimpleCar car, double orientation) {
 		this.car = car;
+		this.map = map;
 		this.orientation = orientation;
 	}
 	
 	@Override
-	public double getValue() {
+	public double getValue() {		
 		ArrayList<StaticObject> mapObjects = map.getObjects();
 		
 		Line2D sensorLine = this.getSensorAsLine();

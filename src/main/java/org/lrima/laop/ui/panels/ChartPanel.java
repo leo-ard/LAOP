@@ -33,10 +33,11 @@ public class ChartPanel extends HBox {
 		this.minY = 0;
 		
 		this.setPadding(new Insets(10, 10, 10, 10));
-		setStyle("-fx-background-color: rgb(255, 255, 255, 0.5)");
 		
 		this.setPrefHeight(200);
 		HBox.setHgrow(this, Priority.ALWAYS);
+		
+		this.getStyleClass().add("panel");
 		
 		simulation.setOnGenerationFinish( (sim) -> {
 			this.generationEnd(sim.getGenerationData());

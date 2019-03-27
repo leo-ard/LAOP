@@ -1,20 +1,34 @@
 package org.lrima.laop.ui;
 
+import org.lrima.laop.simulation.Simulation;
+import org.lrima.laop.ui.components.PlayButton;
+import org.lrima.laop.ui.panels.ChartPanel;
+import org.lrima.laop.ui.panels.ConsolePanel;
+import org.lrima.laop.ui.panels.inspector.InspectorPanel;
+
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXSlider;
+
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.lrima.laop.ui.components.PlayButton;
-import org.lrima.laop.ui.panels.ChartPanel;
-import org.lrima.laop.ui.panels.ConsolePanel;
-import org.lrima.laop.ui.panels.inspector.InspectorPanel;
-import org.lrima.laop.simulation.Simulation;
 
 
 /**
@@ -179,6 +193,7 @@ public class SimulationStage extends Stage {
     private HBox timeline() {
         //TODO : Probablement que c'est bien de l'encapsuler, mais il faut penser à comment le faire si on veut qu'il soit réutilisable
         HBox root = new HBox();
+        root.getStyleClass().add("panel");
 
         PlayButton button = new PlayButton(
                 (b)-> {
@@ -188,7 +203,7 @@ public class SimulationStage extends Stage {
                         this.simulationDrawer.stopAutoDraw();
                 });
 
-        checkBoxRealTime = new CheckBox("");
+        checkBoxRealTime = new JFXCheckBox("");
         checkBoxRealTime.selectedProperty().setValue(false);
         checkBoxRealTime.selectedProperty().addListener((obs, oldVal, newVal) -> {
             this.sliderTimeLine.setDisable(newVal);
@@ -216,7 +231,8 @@ public class SimulationStage extends Stage {
 
         HBox.setMargin(sliderTimeLine, new Insets(7,0,7,0));
 
-        btnGenFinish = new Button("Next gen");
+        btnGenFinish = new JFXButton("Next generation");
+        btnGenFinish.getStyleClass().add("btn-light");
         btnGenFinish.setOnAction( e-> {
             btnGenFinish.setDisable(true);
             this.simulation.nextGen();
@@ -227,8 +243,6 @@ public class SimulationStage extends Stage {
         root.setPadding(new Insets(5));
 
         HBox.setHgrow(sliderTimeLine, Priority.ALWAYS);
-
-        root.setStyle("-fx-background-color: rgb(255, 255, 255, 0.5)");
 
         return root;
     }

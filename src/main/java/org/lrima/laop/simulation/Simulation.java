@@ -78,7 +78,8 @@ public class Simulation {
 	        	double orientationIncrement = Math.PI / NUMBER_OF_SENSORS;
 	        	//Create the sensors and assign them to the car
 	        	for(int x = 0 ; x < this.NUMBER_OF_SENSORS ; x++) {
-	        		ProximityLineSensor sensor = new ProximityLineSensor(car, (Math.PI / 2) - (i * orientationIncrement));
+	        		ProximityLineSensor sensor = new ProximityLineSensor(this.map, car, (Math.PI / 2) - (i * orientationIncrement));
+	        		car.getSensors().add(sensor);
 	        	}
 
 	        	cars.add(car);

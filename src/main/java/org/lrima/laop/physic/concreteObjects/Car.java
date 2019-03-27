@@ -7,8 +7,10 @@ import org.lrima.laop.utils.math.Vector2d;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.objects.Box;
 import org.lrima.laop.simulation.data.CarInfo;
+import org.lrima.laop.simulation.sensors.Sensor;
 
 import java.awt.geom.Area;
+import java.util.ArrayList;
 
 /**
  * Physic object representing a car
@@ -21,6 +23,7 @@ public class Car extends Box {
     private Wheel rightBackWheel;
     
     private static double  MAX_VELOCITY = 300;
+    private ArrayList<Sensor> sensors;
 
     /**
      * Create a new car with mass 2000
@@ -188,5 +191,12 @@ public class Car extends Box {
      */
     public void setRotation(double theta) {
     	this.addRotationToWheels(theta);
+    }
+    
+    /**
+     * @return the list of sensors attached to this car
+     */
+    public ArrayList<Sensor> getSensors(){
+    	return this.sensors;
     }
 }

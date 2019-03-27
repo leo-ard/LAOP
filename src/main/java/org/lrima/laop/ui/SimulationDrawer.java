@@ -44,6 +44,8 @@ public class SimulationDrawer{
 
     private Point2D clicked;
     private ArrayList<CarInfo> currentCars;
+    
+    private final Color BACKGROUND_COLOR = new Color(237.0/255.0, 247.0/255.0, 245.0/255.0, 1);
 
 
     /**
@@ -170,20 +172,22 @@ public class SimulationDrawer{
             this.inspector.update();
 	        GraphicsContext gc = canvas.getGraphicsContext2D();
 	
-	        gc.setFill(Color.rgb(180,200, 250 ));
+	        gc.setFill(this.BACKGROUND_COLOR);
 	        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 	
 	        gc.setTransform(this.affineTransform);
 
 	        //Draw the map
-	        simulation.getMap().getObjects().forEach(staticObject -> staticObject.draw(gc));
+	        simulation.getMap().getObjects().forEach(staticObject -> {
+	        	staticObject.draw(gc);
+	        });
 	        
 	        for(CarInfo car : currentCars) {
+	        	boolean selected = false;
 	            if(inspector.getSelectedObject() == car)
-	                gc.setFill(Color.RED);
-	            else
-	                gc.setFill(Color.BLUE);
-	            car.draw(gc);
+	                selected = true;
+	            
+	            car.draw(gc, selected);
 	        }
 	
 	        gc.setTransform(new Affine());
