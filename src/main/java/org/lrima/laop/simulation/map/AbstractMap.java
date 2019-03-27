@@ -16,6 +16,9 @@ public abstract class AbstractMap {
 		this.objects = new ArrayList<>();
 	}
 	
+	/**
+	 * Converts the objects of the map to multiple areas containing the same type of objects
+	 */
 	abstract public void bakeArea();
 	
 	/**
