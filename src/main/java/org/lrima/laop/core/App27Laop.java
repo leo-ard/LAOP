@@ -1,7 +1,6 @@
 package org.lrima.laop.core;
 
 import javafx.application.Application;
-import org.lrima.laop.physic.test.TestPhysicMain;
 
 import javax.swing.*;
 
@@ -14,8 +13,7 @@ public class App27Laop {
         JFrame frame = new JFrame();
         JPanel panel = new JPanel();
         
-        JButton testConfig = new JButton("Test configuration");
-        JButton testPhysic = new JButton("Test Physique");
+        JButton testConfig = new JButton("Test Simulation");
 
         testConfig.addActionListener(e -> {
             frame.dispose();
@@ -24,16 +22,8 @@ public class App27Laop {
             ).start();
         });
 
-        testPhysic.addActionListener(e -> {
-            frame.dispose();
-            new Thread(() ->
-                    TestPhysicMain.main(new String[]{})
-            ).start();
-        });
-
 
         panel.add(testConfig);
-        panel.add(testPhysic);
         frame.getContentPane().add(panel);
         frame.pack();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

@@ -1,5 +1,6 @@
 package org.lrima.laop.simulation;
 
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +15,9 @@ import org.lrima.laop.physic.concreteObjects.SimpleCar;
 import org.lrima.laop.physic.staticobjects.StaticLineObject;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.data.GenerationData;
-import org.lrima.laop.simulation.map.SimulationMap;
+import org.lrima.laop.simulation.map.AbstractMap;
+import org.lrima.laop.simulation.map.MazeMap;
+import org.lrima.laop.utils.Console;
 import org.lrima.laop.utils.Actions.Action;
 import org.lrima.laop.utils.math.Vector2d;
 
@@ -38,7 +41,7 @@ public class Simulation {
 
     private boolean autoRun;
     private Stage mainScene;
-    private SimulationMap map;
+    private AbstractMap map;
 
     private LearningAlgorithm<? extends CarController> currentLearningAlgorithm;
     private PhysicEngine engine;
@@ -54,9 +57,8 @@ public class Simulation {
 
         this.currentScope = this.settings.getLocalScopes().get(0);
         this.autoRun = true;
-
-        map = new SimulationMap(new Rectangle2D.Double(-600, -600, 600, 600));
-        map.randomize(5);
+        
+        map = new MazeMap(10);
         map.bakeArea();
 
     }
@@ -71,7 +73,8 @@ public class Simulation {
 
         if(this.simulationBuffer != null) {
 	        for(int i = 0 ; i < 1 ; i++) {
-	        	SimpleCar car = new SimpleCar(Vector2d.origin, generateCurrentNetwork());
+	        	Point2D start = map.getStartPoint();
+	        	SimpleCar car = new SimpleCar(new Vector2d(start.getX(), start.getY()), generateCurrentNetwork());
 
 	        	cars.add(car);
 	        }
@@ -231,7 +234,7 @@ public class Simulation {
         this.mainScene = mainScene;
     }
 
-    public SimulationMap getMap() {
+    public AbstractMap getMap() {
         return map;
     }
 }
