@@ -186,7 +186,7 @@ public class SimulationMap {
     	int randomX = RandomUtils.getInteger(0, numberSquareX - 1);
     	int randomY = RandomUtils.getInteger(0, numberSquareX - 1);
     	
-    	this.start = new Point2D.Double((randomX * MAP_SQUARE_WIDTH) + MAP_SQUARE_WIDTH / 2, (randomY * MAP_SQUARE_WIDTH) + MAP_SQUARE_WIDTH / 2);
+    	this.start = new Point2D.Double((randomX * MAP_SQUARE_WIDTH) + MAP_SQUARE_WIDTH / 2, (randomY * MAP_SQUARE_WIDTH) + 10);
     }
     
     
