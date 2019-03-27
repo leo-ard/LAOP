@@ -15,7 +15,8 @@ import org.lrima.laop.physic.concreteObjects.SimpleCar;
 import org.lrima.laop.physic.staticobjects.StaticLineObject;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.data.GenerationData;
-import org.lrima.laop.simulation.map.SimulationMap;
+import org.lrima.laop.simulation.map.AbstractMap;
+import org.lrima.laop.simulation.map.MazeMap;
 import org.lrima.laop.utils.Console;
 import org.lrima.laop.utils.Actions.Action;
 import org.lrima.laop.utils.math.Vector2d;
@@ -40,7 +41,7 @@ public class Simulation {
 
     private boolean autoRun;
     private Stage mainScene;
-    private SimulationMap map;
+    private AbstractMap map;
 
     private LearningAlgorithm<? extends CarController> currentLearningAlgorithm;
     private PhysicEngine engine;
@@ -57,7 +58,7 @@ public class Simulation {
         this.currentScope = this.settings.getLocalScopes().get(0);
         this.autoRun = true;
         
-        map = new SimulationMap(10);
+        map = new MazeMap(10);
         map.bakeArea();
 
     }
@@ -232,7 +233,7 @@ public class Simulation {
         this.mainScene = mainScene;
     }
 
-    public SimulationMap getMap() {
+    public AbstractMap getMap() {
         return map;
     }
 }

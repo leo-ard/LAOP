@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import org.lrima.laop.physic.concreteObjects.SimpleCar;
 import org.lrima.laop.physic.staticobjects.StaticObject;
-import org.lrima.laop.simulation.map.SimulationMap;
+import org.lrima.laop.simulation.map.MazeMap;
 import org.lrima.laop.utils.math.Vector2d;
 
 /**
@@ -17,7 +17,7 @@ public class ProximitySensor implements Sensor {
 	private SimpleCar car;
 	private double orientation;
 	private final double SENSOR_LENGHT = 75;
-	private SimulationMap map;
+	private MazeMap map;
 	
 	public ProximitySensor(SimpleCar car) {
 		this.car = car;

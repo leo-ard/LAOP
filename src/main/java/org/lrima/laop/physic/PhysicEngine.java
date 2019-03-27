@@ -9,7 +9,8 @@ import org.lrima.laop.physic.staticobjects.StaticObjectType;
 import org.lrima.laop.simulation.data.CarInfo;
 import org.lrima.laop.simulation.SimulationBuffer;
 import org.lrima.laop.simulation.SimulationSnapshot;
-import org.lrima.laop.simulation.map.SimulationMap;
+import org.lrima.laop.simulation.map.AbstractMap;
+import org.lrima.laop.simulation.map.MazeMap;
 import org.lrima.laop.utils.Actions.Action;
 
 /**
@@ -28,7 +29,7 @@ public class PhysicEngine extends Thread {
 
     private ArrayList<Action<PhysicEngine>> onPhysicEngineFinish;
     private ArrayList<Action<PhysicEngine>> onStep;
-    private SimulationMap map;
+    private AbstractMap map;
 
     //////Temporary
     private final int MAX_ITERATION = 30000;
@@ -37,7 +38,7 @@ public class PhysicEngine extends Thread {
 
     private SimulationBuffer simulationBuffer;
 
-    public PhysicEngine(SimulationBuffer buffer, SimulationMap map){
+    public PhysicEngine(SimulationBuffer buffer, AbstractMap map){
     	this.simulationBuffer = buffer;
         this.objects = new ArrayList<>();
         onPhysicEngineFinish = new ArrayList<>();

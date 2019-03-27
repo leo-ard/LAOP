@@ -12,11 +12,10 @@ import org.lrima.laop.physic.staticobjects.StaticObject;
 import org.lrima.laop.utils.math.RandomUtils;
 
 /**
- * Represents the map the cars evolve in during a simulation
+ * Map made like a randomly generated maze
  * @author Clement Bisaillon
  */
-public class SimulationMap {
-    ArrayList<StaticObject> objects = new ArrayList<>();
+public class MazeMap extends AbstractMap {
     Area area;
     private final int MAP_SQUARE_WIDTH = 100;
     private int numberSquareX;
@@ -28,7 +27,8 @@ public class SimulationMap {
     private Point2D start;
    
     
-    public SimulationMap(int numberOfSquareX) {
+    public MazeMap(int numberOfSquareX) {
+    	super();
     	this.numberSquareX = numberOfSquareX;
 
     	this.initMaze();
@@ -196,7 +196,8 @@ public class SimulationMap {
     public void randomize() {
     	//Start by making maze with all squares closed
     }
-
+    
+    @Override
     public void bakeArea() {
         area = new Area();
         objects.forEach(staticObject1 -> area.add(staticObject1.getArea()));
@@ -210,9 +211,7 @@ public class SimulationMap {
         return objects;
     }
     
-    /**
-     * @return the starting point of the cars
-     */
+    @Override
     public Point2D getStartPoint() {
     	return this.start;
     }
