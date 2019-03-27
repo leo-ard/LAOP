@@ -5,7 +5,6 @@ import org.lrima.laop.physic.staticobjects.StaticObject;
 import org.lrima.laop.simulation.SimulationBuffer;
 import org.lrima.laop.simulation.SimulationSnapshot;
 import org.lrima.laop.simulation.data.CarInfo;
-import org.lrima.laop.simulation.map.SimulationMap;
 import org.lrima.laop.simulation.map.AbstractMap;
 import org.lrima.laop.simulation.map.MazeMap;
 import org.lrima.laop.utils.Actions.Action;
