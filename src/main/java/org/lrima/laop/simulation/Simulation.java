@@ -1,5 +1,8 @@
 package org.lrima.laop.simulation;
 
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.HashMap;
 import javafx.stage.Stage;
 import org.lrima.laop.core.LAOP;
 import org.lrima.laop.network.LearningAlgorithm;
@@ -52,11 +55,8 @@ public class Simulation {
         this.currentScope = this.settings.getLocalScopes().get(0);
         this.autoRun = true;
 
-        map = new SimulationMap();
-        map.getObjects().add(new StaticLineObject(-500, -500, 1000, -500));
-        map.getObjects().add(new StaticLineObject(1000, -500, 1000, 2000));
-        map.getObjects().add(new StaticLineObject(1000, 2000, -500, 2000));
-        map.getObjects().add(new StaticLineObject(-500, 2000, -500, -500));
+        map = new SimulationMap(new Rectangle2D.Double(-600, -600, 600, 600));
+        map.randomize(5);
         map.bakeArea();
 
     }
