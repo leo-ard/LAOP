@@ -1,7 +1,9 @@
-package org.lrima.laop.physic;
+package org.lrima.laop.physic.abstractObjects;
 
+import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.staticobjects.StaticObject;
 import org.lrima.laop.physic.staticobjects.StaticObjectType;
+import org.lrima.laop.simulation.sensors.Sensor;
 import org.lrima.laop.utils.math.Vector2d;
 
 import java.awt.geom.Area;
@@ -11,7 +13,7 @@ import java.util.ArrayList;
  * Class that can be simulated physicaly
  * @author Clement Bisaillon
  */
-public abstract class Physicable {
+public abstract class AbstractCar {
     protected Vector2d position;
     protected Vector2d velocity;
     protected Vector2d acceleration;
@@ -19,6 +21,8 @@ public abstract class Physicable {
     protected double angularVelocity;
     protected double angularAccel;
     protected double mass;
+    protected double width;
+    protected double height;
     protected ArrayList<Vector2d> forces;
 
     //Used to disable collision detection right after the collision happened
@@ -28,7 +32,7 @@ public abstract class Physicable {
     /**
      * Create a new java.physic object with the default variables
      */
-    private Physicable(){
+    private AbstractCar(){
         this.position = Vector2d.origin;
         this.velocity = Vector2d.origin;
         this.acceleration = Vector2d.origin;
@@ -42,13 +46,13 @@ public abstract class Physicable {
      * @param position the position of the object
      * @param mass the mass of the object
      */
-    public Physicable(Vector2d position, double mass){
+    public AbstractCar(Vector2d position, double mass){
         this();
         this.position = position;
         this.mass = mass;
     }
 
-    public Physicable(double mass){
+    public AbstractCar(double mass){
         this(Vector2d.origin, mass);
     }
 
@@ -83,17 +87,6 @@ public abstract class Physicable {
     }
 
     /**
-     * Calculates and set the position of the object and all its children depending on
-     * the sum of the forces applied to them
-     */
-    protected abstract void nextStep();
-
-    /**
-     * @return the center of the object
-     */
-    public abstract Vector2d getCenter();
-
-    /**
      * Check if the object can collide. It is necessary to stop reacting to collisions for a small
      * amount of time after a collision occurred or else it would collide indefinitely.
      * @return true if the object can react to collisions, false otherwise
@@ -108,18 +101,6 @@ public abstract class Physicable {
     protected void resetVelocity() {
         this.velocity = Vector2d.origin;
     }
-
-    /**
-     * Get the area of the object to check for collisions
-     * @return the area of the object
-     */
-    public abstract Area getArea();
-
-    /**
-     * Defines what happens when a collision occurs
-     * @param type the object type colliding with that object
-     */
-    public abstract void collideWith(StaticObject object);
 
     /**
      * @return The velocity of the object
@@ -142,17 +123,6 @@ public abstract class Physicable {
      */
     public void rotate(double rotation) {
         this.rotation += rotation;
-        //Rotate this object and each of its children
-        /*for(Physicable object : this.getAllObjects()){
-            for(Vector3d vector : object.getForces()){
-                //Rotate the vector
-                double newX = vector.getX() * Math.cos(rotation) - vector.getY() * Math.sin(rotation);
-                double newY = vector.getX() * Math.sin(rotation) + vector.getY() * Math.cos(rotation);
-
-                vector.setX(newX);
-                vector.setY(newY);
-            }
-        }*/
     }
 
     /**
@@ -207,6 +177,50 @@ public abstract class Physicable {
     public Vector2d getAcceleration() {
     	return this.acceleration;
     }
+    
+    /**
+     * @return The width of the car
+     */
+    public double getWidth() {
+    	return this.width;
+    }
+    
+    /**
+     * @return The height of the car
+     */
+    public double getHeight() {
+    	return this.height;
+    }
+    
+    //ABSTRACT METHODS
+    
+    /**
+     * @return the list of sensors attached to this car
+     */
+    public abstract ArrayList<Sensor> getSensors();
+    
+    /**
+     * Get the area of the object to check for collisions
+     * @return the area of the object
+     */
+    public abstract Area getArea();
+
+    /**
+     * Defines what happens when a collision occurs
+     * @param type the object type colliding with that object
+     */
+    public abstract void collideWith(StaticObject object);
+    
+    /**
+     * Calculates and set the position of the object and all its children depending on
+     * the sum of the forces applied to them
+     */
+    public abstract void nextStep();
+
+    /**
+     * @return the center of the object
+     */
+    public abstract Vector2d getCenter();
 
     
 }

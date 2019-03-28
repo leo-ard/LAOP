@@ -5,7 +5,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 
-import org.lrima.laop.physic.Physicable;
+import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.utils.GraphicsUtils;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -28,7 +28,7 @@ public class StaticLineObject implements StaticObject{
     }
 
     @Override
-    public void collideWith(Physicable physicable) {
+    public void collideWith(AbstractCar physicable) {
         
     }
 

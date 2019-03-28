@@ -1,7 +1,6 @@
-package org.lrima.laop.physic.objects;
+package org.lrima.laop.physic.abstractObjects;
 
 import org.lrima.laop.utils.math.Vector2d;
-import org.lrima.laop.physic.Physicable;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -11,7 +10,7 @@ import java.awt.geom.Rectangle2D;
 /**
  * @author Clement Bisaillon
  */
-public abstract class Box extends Physicable {
+public abstract class Box extends AbstractCar {
     protected double width;
     protected double height;
 
@@ -41,7 +40,7 @@ public abstract class Box extends Physicable {
     }
 
     //TODO
-    public void collideWith(Physicable object) {
+    public void collideWith(AbstractCar object) {
         //FOR THE DEMO
         if(this.canCollide()) {
             this.stopCheckingCollisionAt = System.currentTimeMillis();

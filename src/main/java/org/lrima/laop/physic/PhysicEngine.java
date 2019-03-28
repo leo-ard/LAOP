@@ -3,8 +3,9 @@ package org.lrima.laop.physic;
 import java.awt.geom.Area;
 import java.util.ArrayList;
 
+import org.lrima.laop.physic.abstractObjects.AbstractCar;
+import org.lrima.laop.physic.abstractObjects.Box;
 import org.lrima.laop.physic.concreteObjects.SimpleCar;
-import org.lrima.laop.physic.objects.Box;
 import org.lrima.laop.physic.staticobjects.StaticObject;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.simulation.buffer.SimulationSnapshot;
@@ -22,12 +23,11 @@ import java.util.function.Function;
  */
 public class PhysicEngine extends Thread {
     static public final double DELTA_T = 0.05;
-    static final double GRAVITY = 9.8;
+    public static final double GRAVITY = 9.8;
 
     private volatile boolean pause = false;
 
-    private ArrayList<Physicable> objects;
-    private ArrayList<SimpleCar> cars;
+    private ArrayList<AbstractCar> cars;
     private boolean running = true;
     private double worldWidth;
 
@@ -42,20 +42,16 @@ public class PhysicEngine extends Thread {
 
     private SimulationBuffer simulationBuffer;
     private boolean waitDeltaT;
-    private Function<ArrayList<Physicable>, Boolean> finishingCondition;
+    private Function<ArrayList<AbstractCar>, Boolean> finishingCondition;
 
     public PhysicEngine(SimulationBuffer buffer, AbstractMap map){
     	this.simulationBuffer = buffer;
-        this.objects = new ArrayList<>();
         this.cars = new ArrayList<>();
         this.onPhysicEngineFinishOnce = new ArrayList<>();
         this.map = map;
         this.waitDeltaT = false;
     }
 
-    public ArrayList<Physicable> getObjects() {
-        return objects;
-    }
 
     /**
      * Optionnal
@@ -72,7 +68,7 @@ public class PhysicEngine extends Thread {
                     //save the car's state in the buffer
                     this.saveCarsState();
 
-                    if(finishingCondition != null && finishingCondition.apply(this.objects))
+                    if(finishingCondition != null && finishingCondition.apply(this.cars))
                         running = false;
 
                     this.CURRENT_ITERATION++;
@@ -99,7 +95,7 @@ public class PhysicEngine extends Thread {
     	if(this.simulationBuffer != null) {
 	    	SimulationSnapshot snapshot = new SimulationSnapshot();
 
-	    	for(SimpleCar car : this.cars) {
+	    	for(AbstractCar car : this.cars) {
 	    		snapshot.addCar(new CarData(car));
 	    	}
 	    	
@@ -111,11 +107,9 @@ public class PhysicEngine extends Thread {
      * Move the concreteObjects in the simulation
      */
     private void nextStep(){
-    	ArrayList<Physicable> allObjects = new ArrayList(this.objects);
-    	allObjects.addAll(this.cars);
 
-        for (Physicable object : allObjects) {
-            object.nextStep();
+        for (AbstractCar car : cars) {
+            car.nextStep();
         }
     }
 
@@ -125,25 +119,25 @@ public class PhysicEngine extends Thread {
     private void checkCollision(){
         //TODO: Pas la meilleur facon de faire
 
-//        for(SimpleCar physicable :this.cars){
-//        	for(StaticObject obstacle : this.map.getObjects()) {
-//        		Area intersection = obstacle.getArea();
-//        		intersection.intersect(physicable.getArea());
-//        		if(!intersection.isEmpty()){
-//                    obstacle.collideWith(physicable);
-//                    physicable.collideWith(obstacle);
-//                }
-//        	}
-//        }
+        for(AbstractCar physicable : this.cars){
+        	for(StaticObject obstacle : this.map.getObjects()) {
+        		Area intersection = obstacle.getArea();
+        		intersection.intersect(physicable.getArea());
+        		if(!intersection.isEmpty()){
+                    obstacle.collideWith(physicable);
+                    physicable.collideWith(obstacle);
+                }
+        	}
+        }
     }
 
     /**
-     * Add an object to the java.physic engine
-     * @param object the object to add
+     * Add a car to the java.physic engine
+     * @param car the car to add
      */
-    public void addObject(Physicable object){
+    public void addCar(SimpleCar car){
         //Add the gravity force to the object
-        this.objects.add(object);
+        this.cars.add(car);
     }
 
     public double getWorldWidth() {
@@ -171,7 +165,7 @@ public class PhysicEngine extends Thread {
         this.onPhysicEngineFinishOnce.add(onPhysicEngineFinish);
     }
 
-    public void setFinishingConditions(Function<ArrayList<Physicable>, Boolean> finishingCondition){
+    public void setFinishingConditions(Function<ArrayList<AbstractCar>, Boolean> finishingCondition){
         this.finishingCondition = finishingCondition;
     }
 
@@ -186,7 +180,7 @@ public class PhysicEngine extends Thread {
     /**
      * @return The list of cars in the physic engine
      */
-    public ArrayList<SimpleCar> getCars(){
+    public ArrayList<AbstractCar> getCars(){
     	return this.cars;
     }
 }

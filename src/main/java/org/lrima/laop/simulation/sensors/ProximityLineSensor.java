@@ -29,7 +29,7 @@ public class ProximityLineSensor implements Sensor {
 	//The car that this sensor is attached to
 	private SimpleCar car;
 	private double orientation;
-	private final double SENSOR_LENGHT = 75;
+	private final double SENSOR_LENGHT = 100;
 	private AbstractMap map;
 	private Point2D start;
 	

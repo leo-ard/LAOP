@@ -1,6 +1,7 @@
 package org.lrima.laop.physic.concreteObjects;
 
 import org.lrima.laop.physic.PhysicEngine;
+import org.lrima.laop.physic.abstractObjects.Box;
 import org.lrima.laop.physic.staticobjects.StaticObject;
 import org.lrima.laop.simulation.sensors.Sensor;
 import org.lrima.laop.ui.Drawable;
@@ -9,7 +10,6 @@ import org.lrima.laop.utils.math.Vector2d;
 import javafx.scene.canvas.GraphicsContext;
 
 import org.lrima.laop.network.carcontrollers.CarController;
-import org.lrima.laop.physic.objects.Box;
 import org.lrima.laop.utils.PhysicUtils;
 
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class SimpleCar extends Box {
     }
 
     @Override
-    protected void nextStep() {
+    public void nextStep() {
         if(dead) return;
         this.forces = new ArrayList<>();
         
@@ -85,9 +85,7 @@ public class SimpleCar extends Box {
         return carController;
     }
     
-    /**
-     * @return the list of sensors attached to this car
-     */
+    @Override
     public ArrayList<Sensor> getSensors(){
     	return this.sensors;
     }

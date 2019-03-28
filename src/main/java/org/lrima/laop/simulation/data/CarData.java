@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.physic.concreteObjects.SimpleCar;
 import org.lrima.laop.simulation.sensors.Sensor;
 import org.lrima.laop.ui.Drawable;
@@ -35,7 +36,7 @@ public class CarData implements Inspectable, Drawable {
     private double tilt;
     private Vector2d velociy;
     private Vector2d acceleration;
-    private SimpleCar car;
+    private AbstractCar car;
 
     private ArrayList<Vector2d> forces;
     private final Color CAR_COLOR = new Color(32.0/255.0, 78.0/255.0, 95.0/255.0, 1);
@@ -44,7 +45,7 @@ public class CarData implements Inspectable, Drawable {
      * Retrieve information from a car
      * @param car the car
      */
-    public CarData(SimpleCar car) {
+    public CarData(AbstractCar car) {
     	this.car = car;
         this.x = car.getPosition().getX();
         this.y = car.getPosition().getY();
