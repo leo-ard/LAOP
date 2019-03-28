@@ -5,6 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -126,8 +128,22 @@ public class ConfigurationStage extends Stage {
      * Launches the simulation
      */
     private void simulate() {
-        this.close();
-        laop.startSimulation(LAOP.SimulationDisplayMode.WITH_INTERFACE);
+    	//Check if there are errors before running the simulation
+    	String error = laop.canStartSimulations();
+    	
+    	
+    	//Run the simulation if there are no errors
+    	if(error.length() == 0) {
+    		this.close();
+    		laop.startSimulation(LAOP.SimulationDisplayMode.WITH_INTERFACE);
+    	}
+    	else {
+    		//Show an error dialog with the error
+    		Alert alert = new Alert(AlertType.ERROR);
+    		alert.setHeaderText("Error in the configuration");
+    		alert.setContentText(error);
+    		alert.show();
+    	}
     }
 
     /**

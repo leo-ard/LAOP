@@ -13,9 +13,17 @@ public class App27Laop {
         JFrame frame = new JFrame();
         JPanel panel = new JPanel();
         
-        JButton testConfig = new JButton("Test SimulationEngine");
+        JButton testConfig = new JButton("Test Configuration");
+        JButton testSimulation = new JButton("Test SimulationEngine");
 
         testConfig.addActionListener(e -> {
+        	frame.dispose();
+        	new Thread(() -> 
+        			Application.launch(LaopMain.class)
+        	).start();
+        });
+       
+        testSimulation.addActionListener(e -> {
             frame.dispose();
             new Thread(() ->
                     Application.launch(LaopGraphical.class)
@@ -24,6 +32,7 @@ public class App27Laop {
 
 
         panel.add(testConfig);
+        panel.add(testSimulation);
         frame.getContentPane().add(panel);
         frame.pack();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

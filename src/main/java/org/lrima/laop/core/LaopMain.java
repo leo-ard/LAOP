@@ -1,13 +1,16 @@
 package org.lrima.laop.core;
 
+import org.lrima.laop.ui.ConfigurationStage;
+
 import javafx.application.Application;
+import javafx.stage.Stage;
 
 /**
  * Exécute LAOP avec une interface visuelle
  *
  * @author Léonard
  */
-public class LaopMain {
+public class LaopMain extends Application {
 
     public static void main(String[] args){
         runGraphical();
@@ -24,4 +27,11 @@ public class LaopMain {
 
         return true;
     }
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		primaryStage = new ConfigurationStage();
+		primaryStage.show();
+		
+	}
 }

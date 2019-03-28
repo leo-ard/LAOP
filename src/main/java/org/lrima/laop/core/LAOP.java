@@ -77,6 +77,19 @@ public class LAOP {
         settings.showPanel();
     }
 
+    /**
+     * Checks if the settings are good to start the simulation
+     * @return String - The error message
+     */
+    public String canStartSimulations() {
+    	//Check if there are algorithms to run
+    	if(this.settings.getLocalScopes().size() <= 0) {
+    		return "No algorithms to run.";
+    	}
+    	
+    	return "";
+    }
+    
     public void startSimulation(SimulationDisplayMode simulationDisplayMode){
         SimulationBuffer simulationBuffer = new SimulationBuffer();
         SimulationEngine simulationEngine = new SimulationEngine(simulationBuffer, settings);
