@@ -59,17 +59,12 @@ public class SimulationEngine {
         currentSimulation = generateSimulation();
         currentSimulation.start();
         currentSimulation.setEnd((simulation) -> nextBatch());
-        System.out.println("jjfj");
         batchCount++;
-
-
 
     }
 
     private Simulation generateSimulation() {
         Class<? extends LearningAlgorithm> learningAlgo = (Class<? extends LearningAlgorithm>) settings.get(currentScope, LAOP.KEY_LEARNING_CLASS);
-        System.out.println(learningAlgo);
-        System.out.println(learningAlgo.isAnnotationPresent(LearningAnotation.class));
 
         Class<? extends Simulation> simulationClass = learningAlgo.getDeclaredAnnotation(LearningAnotation.class).simulation();
         try {

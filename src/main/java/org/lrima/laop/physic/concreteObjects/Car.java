@@ -181,7 +181,7 @@ public class Car extends Box {
      * @return the state of the state
      */
     public CarData getSnapShotInfo() {
-    	return new CarData(this);
+    	return null;
     }
     
     /**

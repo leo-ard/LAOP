@@ -54,7 +54,8 @@ public class GenerationBasedSimulation extends Simulation{
                 double orientationIncrement = Math.PI / NUMBER_OF_SENSORS;
                 //Create the sensors and assign them to the car
                 for(int x = 0 ; x < this.NUMBER_OF_SENSORS ; x++) {
-                    ProximityLineSensor sensor = new ProximityLineSensor(car, (Math.PI / 2) - (i * orientationIncrement));
+                    ProximityLineSensor sensor = new ProximityLineSensor(this.simulationEngine.getMap(), car, (x * orientationIncrement) + orientationIncrement/2);
+                    car.getSensors().add(sensor);
                 }
 
                 cars.add(car);
@@ -95,7 +96,7 @@ public class GenerationBasedSimulation extends Simulation{
         this.physicEngine = new PhysicEngine(this.simulationEngine.getBuffer(), this.simulationEngine.getMap());
 
         this.physicEngine.setWaitDeltaT(true);
-        this.physicEngine.getObjects().addAll(configureCar());
+        this.physicEngine.getCars().addAll(configureCar());
 
         this.physicEngine.setOnPhysicEngineFinishOnce(engine -> {
             if(this.autoRun)

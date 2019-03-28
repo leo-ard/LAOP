@@ -180,12 +180,7 @@ public class SimulationDrawer{
 	        //Draw the map
 	        simulationEngine.getMap().getObjects().forEach(staticObject -> staticObject.draw(gc));
 
-	        for(CarData car : currentCars) {
-	        simulationEngine.getMap().getObjects().forEach(staticObject -> {
-	        	staticObject.draw(gc);
-	        });
-
-	        for(CarData car : currentCars) {
+            for(CarData car : currentCars) {
 	            car.draw(gc, inspector.getSelectedObject() == car);
 	        }
 

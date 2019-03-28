@@ -85,7 +85,7 @@ public class CarData implements Inspectable, Drawable {
      */
     public void draw(GraphicsContext gc, boolean selected) {
     	Affine temp = gc.getTransform();
-    	Paint bakColor = gc.getFill();
+    	Paint bakColor = Color.rgb(255, 0, 0);
         Affine affine = new Affine(gc.getTransform());
         affine.appendRotation(tilt, new Point2D(x + this.width/2, y+this.height/2));
         gc.setTransform(affine);
