@@ -4,11 +4,13 @@ import javafx.scene.control.Button;
 
 import java.util.function.Consumer;
 
+import com.jfoenix.controls.JFXButton;
+
 /**
  * The play button of the simulation drawer timeline
  * @author Léonard
  */
-public class PlayButton extends Button {
+public class PlayButton extends JFXButton {
     private boolean isPlaying;
 
     private Consumer<Boolean> whenToggled;
@@ -20,6 +22,7 @@ public class PlayButton extends Button {
     public PlayButton(Consumer<Boolean> whenToggled){
         this.isPlaying = false;
         this.whenToggled = whenToggled;
+        this.getStyleClass().add("btn-light");
 
         this.setStatus();
         this.setOnAction(e ->

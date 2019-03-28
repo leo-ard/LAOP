@@ -18,7 +18,7 @@ public class InspectorPanel extends VBox {
         this.setSpacing(20);
         this.setPadding(new Insets(10));
         generateUnselectPane();
-        this.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5)");
+        this.getStyleClass().add("panel");
     }
 
     /**

@@ -7,24 +7,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.text.Font;
-
+import org.lrima.laop.physic.concreteObjects.SimpleCar;
+import org.lrima.laop.simulation.sensors.Sensor;
+import org.lrima.laop.ui.Drawable;
 import org.lrima.laop.ui.panels.inspector.Inspectable;
 import org.lrima.laop.ui.panels.inspector.InspectorPanel;
 import org.lrima.laop.utils.math.Vector2d;
-import org.lrima.laop.physic.objects.Box;
 
 import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 import javafx.scene.transform.Affine;
 
 /**
  *  Class that keeps all the information about one car for the buffer
  * @author Leonard Oest OLeary
  */
-public class CarData implements Inspectable {
+public class CarData implements Inspectable, Drawable {
     private double x;
     private double y;
     private double width;
@@ -32,14 +35,17 @@ public class CarData implements Inspectable {
     private double tilt;
     private Vector2d velociy;
     private Vector2d acceleration;
+    private SimpleCar car;
 
     private ArrayList<Vector2d> forces;
+    private final Color CAR_COLOR = new Color(32.0/255.0, 78.0/255.0, 95.0/255.0, 1);
 
     /**
      * Retrieve information from a car
      * @param car the car
      */
-    public CarData(Box car) {
+    public CarData(SimpleCar car) {
+    	this.car = car;
         this.x = car.getPosition().getX();
         this.y = car.getPosition().getY();
         this.width = car.getWidth();
@@ -77,16 +83,26 @@ public class CarData implements Inspectable {
      *
      * @param gc the graphical context to draw the car with
      */
-    public void draw(GraphicsContext gc) {
+    public void draw(GraphicsContext gc, boolean selected) {
+    	Affine temp = gc.getTransform();
+    	Paint bakColor = gc.getFill();
         Affine affine = new Affine(gc.getTransform());
         affine.appendRotation(tilt, new Point2D(x + this.width/2, y+this.height/2));
-
-        Affine temp = gc.getTransform();
         gc.setTransform(affine);
 
+        //Draw the rectangle of the car
+        gc.setFill(CAR_COLOR);
         gc.fillRect(x, y, width, height);
 
+        //Draw the sensors
+        if(selected) {
+	        for(Sensor sensor : this.car.getSensors()) {
+	        	sensor.draw(gc);
+	        }
+        }
+
         gc.setTransform(temp);
+        gc.setFill(bakColor);
     }
 
     /**
@@ -122,4 +138,9 @@ public class CarData implements Inspectable {
     public double getY() {
         return this.y;
     }
+
+	@Override
+	public void draw(GraphicsContext gc) {
+		this.draw(gc, false);
+	}
 }

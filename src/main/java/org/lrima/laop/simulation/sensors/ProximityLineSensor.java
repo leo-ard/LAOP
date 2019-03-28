@@ -2,16 +2,20 @@ package org.lrima.laop.simulation.sensors;
 
 import java.awt.geom.Area;
 import java.awt.geom.Line2D;
+import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 
 import org.lrima.laop.physic.concreteObjects.SimpleCar;
 import org.lrima.laop.physic.staticobjects.StaticObject;
-import org.lrima.laop.simulation.map.MazeMap;
-import org.lrima.laop.utils.math.Vector2d;
+import org.lrima.laop.simulation.map.AbstractMap;
+import org.lrima.laop.utils.GraphicsUtils;
+
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 /**
  * Sensor giving the distance from the car to the wall in a straight line
@@ -22,18 +26,22 @@ public class ProximityLineSensor implements Sensor {
 	private SimpleCar car;
 	private double orientation;
 	private final double SENSOR_LENGHT = 75;
-	private MazeMap map;
+	private AbstractMap map;
+	private Point2D start;
 	
-	public ProximityLineSensor(SimpleCar car, double orientation) {
+	public ProximityLineSensor(AbstractMap map, SimpleCar car, double orientation) {
 		this.car = car;
+		this.map = map;
 		this.orientation = orientation;
 	}
 	
 	@Override
-	public double getValue() {
+	public double getValue() {		
+		//Move the sensor at the right position
+		
 		ArrayList<StaticObject> mapObjects = map.getObjects();
 		
-		Line2D sensorLine = this.getSensorAsLine();
+		Path2D sensorLine = GraphicsUtils.addThicknessToLine(this.getSensorAsLine());
 		Rectangle2D sensorBounds = sensorLine.getBounds2D();
 		Point2D intersectionPoint;
 		HashMap<StaticObject, Area> intersectingObjects = new HashMap<>();
@@ -65,12 +73,29 @@ public class ProximityLineSensor implements Sensor {
 	 * @return the line representing the sensor
 	 */
 	private Line2D getSensorAsLine() {
-		Vector2d startLocation = car.getPosition();
+		//todo: Doesnt rotate
+		this.start = new Point2D.Double(car.getPosition().getX() + car.getWidth() / 2, car.getPosition().getY() + car.getHeight());
+		Point2D startLocation = start;
 		double x1 = startLocation.getX();
 		double y1 = startLocation.getY();
 		double x2 = startLocation.getX() + Math.cos(this.orientation) *  SENSOR_LENGHT;
 		double y2 = startLocation.getY() + Math.sin(this.orientation) * SENSOR_LENGHT;
 		return new Line2D.Double(x1, y1, x2, y2);
+	}
+
+	@Override
+	public void draw(GraphicsContext gc) {
+		double lineWidthBak = gc.getLineWidth();
+		Paint colorBak = gc.getStroke();
+		
+		Line2D line = this.getSensorAsLine();
+		
+		gc.setLineWidth(1);
+		gc.setStroke(Color.RED);
+		gc.strokeLine(line.getX1(), line.getY1(), line.getX2(), line.getY2());
+	
+		gc.setLineWidth(lineWidthBak);
+		gc.setStroke(colorBak);
 	}
 
 }

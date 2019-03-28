@@ -1,9 +1,15 @@
 .root{
-    -fx-background-color: #ffffff;
+    -fx-background-color: #000000;
     -fx-mid-text-color: #303030;}
 
 .btn{
     -fx-background-color : #3944ff;
+    -fx-text-fill : #FFFFFF;
+    -jfx-button-type: RAISED;
+}
+
+.btn-light{
+    -fx-background-color : #FF8984;
     -fx-text-fill : #FFFFFF;
     -jfx-button-type: RAISED;
 }
@@ -28,10 +34,42 @@
     -fx-background-color: transparent;
 }
 
-.scroll-pane > .viewport {
-    -fx-background-color: rgba(255, 255, 255, 0.5);
+.scroll-pane > .viewport, .panel {
+    -fx-background-color: rgba(183, 215, 216, 0.7);
 }
 
-.btn{
-	
+/* Styling the slider track */
+.jfx-slider > .track {
+     -fx-background-color: #FFC6AB;
+}
+
+/* Styling the slider thumb */
+.jfx-slider > .thumb {
+     -fx-background-color: #FF8984;
+}
+
+/* Styling the filled track */
+.jfx-slider > .colored-track {
+     -fx-background-color: #FF8984;
+}
+
+/* Styling the animated thumb */
+.jfx-slider > .animated-thumb {
+     -fx-background-color: #FF8984;
+}
+
+/* Styling the slider value text inside animated thumb */
+.jfx-slider .slider-value {
+     -fx-fill: white;
+     -fx-stroke: white;
+}
+
+.jfx-check-box {
+     -jfx-checked-color: #FF8984;
+     -jfx-unchecked-color: #B7D7D8;
+}
+
+/* Styling checkmark */
+.jfx-check-box .mark{
+     -fx-border-color: white;
 }
