@@ -1,9 +1,11 @@
 package org.lrima.laop.network.carcontrollers;
 
+import org.lrima.laop.physic.CarControls;
+
 /**
  *
  *
  */
 public interface CarController {
-    double[] control(double ... captorValues);
+    CarControls control(double ... captorValues);
 }

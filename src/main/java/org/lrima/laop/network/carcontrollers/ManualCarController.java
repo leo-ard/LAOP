@@ -1,5 +1,7 @@
 package org.lrima.laop.network.carcontrollers;
 
+import org.lrima.laop.physic.CarControls;
+
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -44,7 +46,13 @@ public class ManualCarController implements CarController {
     }
 
     @Override
-    public double[] control(double[] captorValues) {
-        return values;
+    public CarControls control(double[] captorValues) {
+    	CarControls controls = new CarControls();
+    	
+    	controls.setAcceleration(this.values[0]);
+    	controls.setBreak(this.values[1]);
+    	controls.setRotation(this.values[2]);
+    	
+        return controls;
     }
 }

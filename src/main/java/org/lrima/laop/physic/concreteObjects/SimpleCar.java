@@ -1,18 +1,15 @@
 package org.lrima.laop.physic.concreteObjects;
 
+import java.util.ArrayList;
+
+import org.lrima.laop.network.carcontrollers.CarController;
+import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.abstractObjects.Box;
 import org.lrima.laop.physic.staticobjects.StaticObject;
 import org.lrima.laop.simulation.sensors.Sensor;
-import org.lrima.laop.ui.Drawable;
-import org.lrima.laop.utils.math.Vector2d;
-
-import javafx.scene.canvas.GraphicsContext;
-
-import org.lrima.laop.network.carcontrollers.CarController;
 import org.lrima.laop.utils.PhysicUtils;
-
-import java.util.ArrayList;
+import org.lrima.laop.utils.math.Vector2d;
 
 /**
  *
@@ -39,18 +36,12 @@ public class SimpleCar extends Box {
     public void nextStep() {
         if(dead) return;
         this.forces = new ArrayList<>();
-        
-        /*
-         * 0 -> accel
-         * 1 -> break
-         * 2 -> rotation
-         */
+       
+        CarControls carControls = carController.control(new double[0]);
 
-        double[] carControls = carController.control(new double[0]);
-
-        this.forces.add(PhysicUtils.accelFromBackWeels(carControls[0], rotation, wheelDirection, RANGE));
+        this.forces.add(PhysicUtils.accelFromBackWeels(carControls.getAcceleration(), rotation, wheelDirection, RANGE));
         this.forces.get(0).setTag("Accel from back");
-        this.forces.add(PhysicUtils.breakForce(this.velocity, carControls[1]));
+        this.forces.add(PhysicUtils.breakForce(this.velocity, carControls.getBreak()));
         this.forces.get(1).setTag("Break force");
         this.forces.add(PhysicUtils.airResistance(this.velocity));
         this.forces.get(2).setTag("Air resistance");
@@ -59,7 +50,7 @@ public class SimpleCar extends Box {
 
         this.acceleration = PhysicUtils.accelFromForces(forces, this.mass);
 
-        this.wheelDirection = carControls[2] * RANGE;
+        this.wheelDirection = carControls.getRotation() * RANGE;
 
         this.angularAccel = PhysicUtils.angularAccel(this.wheelDirection, this.velocity);
         this.angularAccel = Math.min(Math.max(RANGE, angularAccel), -RANGE);
