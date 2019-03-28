@@ -103,6 +103,13 @@ public class LAOP {
 
         simulationEngine.start();
     }
+    
+    /**
+     * @return The settings of the laop instance
+     */
+    public Settings getSettings() {
+    	return this.settings;
+    }
 
     public enum SimulationDisplayMode{
         WITH_INTERFACE,

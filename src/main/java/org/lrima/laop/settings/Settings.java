@@ -95,7 +95,7 @@ public class Settings {
      * @param scope - the name of the scope. This field is not case-sensitive
      * @return true if successful, false otherwise
      */
-    private void addScope(String scope){
+    public void addScope(String scope){
         Scope newScope = new Scope();
         newScope.setGlobalScope(this.scopes.get(GLOBAL_SCOPE));
         this.scopes.put(scope, newScope);
@@ -104,7 +104,7 @@ public class Settings {
     /**
      * Add a scope when the user clicks the add algorithm button
      */
-    private void addScope() {
+    public void addScope() {
     	//Ask for the name of the scope
     	TextInputDialog scopeNameDialog = new TextInputDialog();
     	scopeNameDialog.setTitle("Scope name");

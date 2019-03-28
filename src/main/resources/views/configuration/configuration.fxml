@@ -1,18 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import java.lang.String?>
-<AnchorPane prefHeight="600.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.lrima.laop.ui.controllers.ConfigurationController">
+
+
+<AnchorPane prefHeight="600.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.lrima.laop.ui.controllers.ConfigurationController">
    <children>
-      <Label layoutX="196.0" layoutY="26.0" text="Configuration" />
-      <JFXButton layoutX="137.0" layoutY="174.0" onAction="#onConfigurerClick" prefHeight="61.0" prefWidth="190.0" text="Configurer">
-         <styleClass>
-            <String fx:value="raised" />
-            <String fx:value="btn" />
-         </styleClass></JFXButton>
-      <JFXTreeTableView fx:id="table" layoutX="26.0" layoutY="422.0" prefHeight="140.0" prefWidth="400.0" />
+      <VBox layoutY="63.0" pickOnBounds="false" prefHeight="492.0" prefWidth="178.0">
+         <children>
+            <JFXButton alignment="CENTER" layoutX="178.0" onAction="#addAlgorithmClicked" prefHeight="45.0" prefWidth="186.0" styleClass="btn" text="Add algorithm" />
+            <JFXListView fx:id="scopeList" prefHeight="600.0" prefWidth="178.0" VBox.vgrow="ALWAYS" />
+         </children>
+      </VBox>
+      <Label alignment="CENTER" layoutY="14.0" prefHeight="40.0" prefWidth="451.0" text="Configuration" underline="true">
+         <font>
+            <Font name="System Bold" size="28.0" />
+         </font>
+      </Label>
+      <ScrollPane hbarPolicy="NEVER" layoutX="178.0" layoutY="64.0" prefHeight="492.0" prefWidth="272.0">
+         <content>
+            <HBox fx:id="settingsBox" minWidth="-Infinity" prefHeight="386.0" prefWidth="272.0" />
+         </content>
+      </ScrollPane>
    </children>
 </AnchorPane>

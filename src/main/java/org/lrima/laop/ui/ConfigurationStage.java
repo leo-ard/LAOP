@@ -93,10 +93,10 @@ public class ConfigurationStage extends Stage {
      */
     private Parent load(String name){
         FXMLLoader loader = FXUtils.load(name);
-
+        
         if(loader.getController() instanceof ConfigurationController){
             ConfigurationController configurationController = loader.getController();
-            configurationController.setLAOP(laop);
+            configurationController.setSettings(laop.getSettings());
         }
 
         return loader.getRoot();
