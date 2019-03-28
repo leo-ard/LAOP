@@ -6,7 +6,7 @@ import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.network.LearningAnotation;
 import org.lrima.laop.network.carcontrollers.CarController;
 import org.lrima.laop.network.carcontrollers.ManualCarController;
-import org.lrima.laop.physic.concreteObjects.Car;
+import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.settings.LockedSetting;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
@@ -109,7 +109,7 @@ public class SimulationEngine {
         return null;
     }
 
-    private ArrayList<Car> alterCars() {
+    private ArrayList<AbstractCar> alterCars() {
         return new ArrayList<>();
     }
 

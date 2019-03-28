@@ -33,6 +33,8 @@ public class ProximityLineSensor implements Sensor {
 	private AbstractMap map;
 	private Point2D start;
 	
+	private final Color SENSOR_COLOR = new Color(255.0/255, 137.0/255, 132.0/255, 1);
+	
 	public ProximityLineSensor(AbstractMap map, SimpleCar car, double orientation) {
 		this.car = car;
 		this.map = map;
@@ -112,7 +114,7 @@ public class ProximityLineSensor implements Sensor {
 		line.setLine(line.getP1(), new Point2D.Double(x2, y2));
 		
 		gc.setLineWidth(1);
-		gc.setStroke(Color.RED);
+		gc.setStroke(this.SENSOR_COLOR);
 		gc.strokeLine(line.getX1(), line.getY1(), line.getX2(), line.getY2());	
 
 	
