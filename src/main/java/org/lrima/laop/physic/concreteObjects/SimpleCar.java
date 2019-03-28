@@ -41,6 +41,11 @@ public class SimpleCar extends Box {
         this.forces = new ArrayList<>();
         
 
+        for(Sensor s : this.sensors) {
+        	System.out.print(s.getValue() + " ");
+        }
+        System.out.println();
+        
         /*
          * 0 -> accel
          * 1 -> break
@@ -64,8 +69,7 @@ public class SimpleCar extends Box {
 
         this.angularAccel = PhysicUtils.angularAccel(this.wheelDirection, this.velocity);
         this.angularAccel = Math.min(Math.max(RANGE, angularAccel), -RANGE);
-
-        this.angularVelocity = this.velocity.modulus()*this.wheelDirection*PhysicEngine.DELTA_T * 0.1;
+        this.angularVelocity = this.velocity.modulus()*this.wheelDirection*PhysicEngine.DELTA_T * 0.08;
         this.rotation += angularVelocity;
 
 

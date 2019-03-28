@@ -125,16 +125,16 @@ public class PhysicEngine extends Thread {
     private void checkCollision(){
         //TODO: Pas la meilleur facon de faire
 
-        for(SimpleCar physicable :this.cars){
-        	for(StaticObject obstacle : this.map.getObjects()) {
-        		Area intersection = obstacle.getArea();
-        		intersection.intersect(physicable.getArea());
-        		if(!intersection.isEmpty()){
-                    obstacle.collideWith(physicable);
-                    physicable.collideWith(obstacle);
-                }
-        	}
-        }
+//        for(SimpleCar physicable :this.cars){
+//        	for(StaticObject obstacle : this.map.getObjects()) {
+//        		Area intersection = obstacle.getArea();
+//        		intersection.intersect(physicable.getArea());
+//        		if(!intersection.isEmpty()){
+//                    obstacle.collideWith(physicable);
+//                    physicable.collideWith(obstacle);
+//                }
+//        	}
+//        }
     }
 
     /**
