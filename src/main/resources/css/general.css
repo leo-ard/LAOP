@@ -74,3 +74,8 @@
 .jfx-check-box .mark{
      -fx-border-color: white;
 }
+
+/* label */
+.label {
+  -fx-text-fill: #204E5F;
+}
