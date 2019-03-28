@@ -40,12 +40,6 @@ public class SimpleCar extends Box {
         if(dead) return;
         this.forces = new ArrayList<>();
         
-
-        for(Sensor s : this.sensors) {
-        	System.out.print(s.getValue() + " ");
-        }
-        System.out.println();
-        
         /*
          * 0 -> accel
          * 1 -> break
