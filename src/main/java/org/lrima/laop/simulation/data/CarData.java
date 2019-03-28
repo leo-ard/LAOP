@@ -24,7 +24,7 @@ import javafx.scene.transform.Affine;
  *  Class that keeps all the information about one car for the buffer
  * @author Leonard Oest OLeary
  */
-public class CarInfo implements Inspectable {
+public class CarData implements Inspectable {
     private double x;
     private double y;
     private double width;
@@ -39,7 +39,7 @@ public class CarInfo implements Inspectable {
      * Retrieve information from a car
      * @param car the car
      */
-    public CarInfo(Box car) {
+    public CarData(Box car) {
         this.x = car.getPosition().getX();
         this.y = car.getPosition().getY();
         this.width = car.getWidth();

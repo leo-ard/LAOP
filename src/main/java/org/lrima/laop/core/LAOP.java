@@ -2,12 +2,11 @@ package org.lrima.laop.core;
 
 import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.network.carcontrollers.CarController;
-import org.lrima.laop.network.concreteNetworks.NEAT;
 import org.lrima.laop.ui.SimulationStage;
 import org.lrima.laop.settings.Scope;
 import org.lrima.laop.settings.Settings;
-import org.lrima.laop.simulation.Simulation;
-import org.lrima.laop.simulation.SimulationBuffer;
+import org.lrima.laop.simulation.SimulationEngine;
+import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.utils.Console;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
@@ -80,18 +79,16 @@ public class LAOP {
 
     public void startSimulation(SimulationDisplayMode simulationDisplayMode){
         SimulationBuffer simulationBuffer = new SimulationBuffer();
-        Simulation simulation = new Simulation(simulationBuffer, settings);
+        SimulationEngine simulationEngine = new SimulationEngine(simulationBuffer, settings);
 
         if(simulationDisplayMode == simulationDisplayMode.WITH_INTERFACE){
-            SimulationStage simulationStage = new SimulationStage(simulation);
+            SimulationStage simulationStage = new SimulationStage(simulationEngine);
             simulationStage.show();
         }
 
-        simulation.setOnGenerationFinish(sim->Console.info("Generation %s fini", sim.getGenerationCount()));
-        simulation.setOnSimulationFinish(sim->Console.info("Simulation %s fini", sim.getSimulationCount()));
-        simulation.setOnBatchFinished(sim->Console.info("Batch %s fini", sim.getBatchCount()));
+        simulationEngine.setOnBatchFinished(sim->Console.info("Batch %s fini", sim.getBatchCount()));
 
-        simulation.start();
+        simulationEngine.start();
     }
 
     public enum SimulationDisplayMode{

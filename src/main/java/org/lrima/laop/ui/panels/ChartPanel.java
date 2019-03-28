@@ -1,6 +1,6 @@
 package org.lrima.laop.ui.panels;
 
-import org.lrima.laop.simulation.Simulation;
+import org.lrima.laop.simulation.SimulationEngine;
 import org.lrima.laop.simulation.data.GenerationData;
 
 import javafx.geometry.Insets;
@@ -27,7 +27,7 @@ public class ChartPanel extends HBox {
 	
 	private XYChart.Series<Number, Number> averageFitnessSerie;
 	
-	public ChartPanel(Simulation simulation) {
+	public ChartPanel(SimulationEngine simulationEngine) {
 		this.generationNumber = 0;
 		this.maxY = 0;
 		this.minY = 0;
@@ -38,12 +38,12 @@ public class ChartPanel extends HBox {
 		this.setPrefHeight(200);
 		HBox.setHgrow(this, Priority.ALWAYS);
 		
-		simulation.setOnGenerationFinish( (sim) -> {
-			this.generationEnd(sim.getGenerationData());
-		});
-		simulation.setOnSimulationFinish((sim) -> {
-			this.allGenerationEnd();
-		});
+//		simulationEngine.setOnGenerationFinish( (sim) -> {
+//			this.generationEnd(sim.getGenerationData());
+//		});
+//		simulationEngine.setOnSimulationFinish((sim) -> {
+//			this.allGenerationEnd();
+//		});
 
 		this.setupChart();
 	}

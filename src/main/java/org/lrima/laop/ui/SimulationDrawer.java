@@ -2,13 +2,12 @@ package org.lrima.laop.ui;
 
 import java.util.ArrayList;
 
-import org.lrima.laop.simulation.Simulation;
-import org.lrima.laop.simulation.SimulationBuffer;
-import org.lrima.laop.simulation.data.CarInfo;
+import org.lrima.laop.simulation.SimulationEngine;
+import org.lrima.laop.simulation.buffer.SimulationBuffer;
+import org.lrima.laop.simulation.data.CarData;
 import org.lrima.laop.ui.panels.inspector.InspectorPanel;
 
 import com.jfoenix.controls.JFXSlider;
-import com.sun.javafx.geom.Area;
 
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Point2D;
@@ -21,14 +20,14 @@ import javafx.scene.transform.NonInvertibleTransformException;
 
 
 /**
- * Class that draws the simulation into the canvas according to the buffer
+ * Class that draws the simulationEngine into the canvas according to the buffer
  * @author Léonard
  */
 public class SimulationDrawer{
     private Canvas canvas;
     private InspectorPanel inspector;
 
-    private Simulation simulation;
+    private SimulationEngine simulationEngine;
 
     private Affine affineTransform;
     private double mouseXPressed, mouseYPressed;
@@ -43,18 +42,18 @@ public class SimulationDrawer{
     private boolean realTime;
 
     private Point2D clicked;
-    private ArrayList<CarInfo> currentCars;
+    private ArrayList<CarData> currentCars;
 
 
     /**
-     * Draws the simulation into the canvas according to the Simulation
+     * Draws the simulationEngine into the canvas according to the SimulationEngine
      *  @param canvas The canvas to draw on
-     * @param simulation The Simulation to take the information from
+     * @param simulationEngine The SimulationEngine to take the information from
      * @param inspector
      */
-    public SimulationDrawer(Canvas canvas, Simulation simulation, InspectorPanel inspector) {
+    public SimulationDrawer(Canvas canvas, SimulationEngine simulationEngine, InspectorPanel inspector) {
         this.canvas = canvas;
-        this.simulation = simulation;
+        this.simulationEngine = simulationEngine;
         this.affineTransform = new Affine();
         this.inspector = inspector;
 
@@ -99,7 +98,7 @@ public class SimulationDrawer{
         AnimationTimer animationTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                SimulationBuffer simulationBuffer = simulation.getBuffer();
+                SimulationBuffer simulationBuffer = simulationEngine.getBuffer();
                 int size = simulationBuffer.getSize();
                 slider.setMax(size-1);
 
@@ -132,6 +131,7 @@ public class SimulationDrawer{
                     handleClick(clicked);
                     clicked = null;
                 }
+
                 drawStep();
             }
         };
@@ -166,26 +166,26 @@ public class SimulationDrawer{
      * Draws the state of the cars at the specified time
      **/
     private void drawStep(){
-        if(this.simulation.getBuffer().getSize() > 0) {
+        if(this.simulationEngine.getBuffer().getSize() > 0) {
             this.inspector.update();
 	        GraphicsContext gc = canvas.getGraphicsContext2D();
 	
 	        gc.setFill(Color.rgb(180,200, 250 ));
 	        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-	
+
 	        gc.setTransform(this.affineTransform);
 
 	        //Draw the map
-	        simulation.getMap().getObjects().forEach(staticObject -> staticObject.draw(gc));
-	        
-	        for(CarInfo car : currentCars) {
+	        simulationEngine.getMap().getObjects().forEach(staticObject -> staticObject.draw(gc));
+
+	        for(CarData car : currentCars) {
 	            if(inspector.getSelectedObject() == car)
 	                gc.setFill(Color.RED);
 	            else
 	                gc.setFill(Color.BLUE);
 	            car.draw(gc);
 	        }
-	
+
 	        gc.setTransform(new Affine());
         }
     }
@@ -242,7 +242,7 @@ public class SimulationDrawer{
         inspector.setObject(null);
     }
 
-    private ArrayList<CarInfo> getCurrent() {
+    private ArrayList<CarData> getCurrent() {
         return currentCars;
     }
 
@@ -251,16 +251,14 @@ public class SimulationDrawer{
 
         double sumX = 0, sumY = 0;
 
-        System.out.println(simulation.getBuffer().getCars(currentStep));
-
-        for (CarInfo car : simulation.getBuffer().getCars(currentStep)) {
+        for (CarData car : simulationEngine.getBuffer().getCars(currentStep)) {
             sumX += car.getX();
             sumY += car.getY();
         }
 
-        double moyX = sumX/simulation.getBuffer().getCars(currentStep).size();
-        double moyY = sumY/simulation.getBuffer().getCars(currentStep).size();
+        double moyX = sumX/ simulationEngine.getBuffer().getCars(currentStep).size();
+        double moyY = sumY/ simulationEngine.getBuffer().getCars(currentStep).size();
 
-        this.affineTransform.appendTranslation(this.canvas.getWidth()/2, this.canvas.getHeight()/2);
+        this.affineTransform.appendTranslation(0, 0);
     }
 }

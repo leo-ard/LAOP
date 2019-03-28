@@ -1,8 +1,8 @@
-package org.lrima.laop.simulation;
+package org.lrima.laop.simulation.buffer;
 
 import java.util.ArrayList;
 
-import org.lrima.laop.simulation.data.CarInfo;
+import org.lrima.laop.simulation.data.CarData;
 import org.lrima.laop.utils.Actions.Action;
 
 /**
@@ -49,7 +49,7 @@ public class SimulationBuffer  {
      * @param time
      * @return the array of cars at that simulation step
      */
-    public ArrayList<CarInfo> getCars(int time) {
+    public ArrayList<CarData> getCars(int time) {
     	if(this.snapshots.size() > 0 && time >= 0) {
     		return this.snapshots.get(time).getCars();
     	}

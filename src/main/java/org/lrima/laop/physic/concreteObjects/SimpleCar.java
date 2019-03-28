@@ -56,6 +56,7 @@ public class SimpleCar extends Box {
 
         this.angularAccel = PhysicUtils.angularAccel(this.wheelDirection, this.velocity);
         this.angularAccel = Math.min(Math.max(RANGE, angularAccel), -RANGE);
+
         this.angularVelocity = this.velocity.modulus()*this.wheelDirection*PhysicEngine.DELTA_T * 0.1;
         this.rotation += angularVelocity;
 

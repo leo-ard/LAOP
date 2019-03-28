@@ -1,10 +1,14 @@
 package org.lrima.laop.network.concreteLearning;
 
 import org.lrima.laop.network.LearningAlgorithm;
+import org.lrima.laop.network.LearningAnotation;
 import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
+import org.lrima.laop.simulation.GenerationBasedSimulation;
+import org.lrima.laop.simulation.Simulation;
 
 import java.util.ArrayList;
 
+@LearningAnotation
 public class GeneticLearning implements LearningAlgorithm<GeneticNeuralNetwork> {
     @Override
     public ArrayList<GeneticNeuralNetwork> learn(ArrayList<GeneticNeuralNetwork> allCars) {

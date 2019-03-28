@@ -2,15 +2,15 @@ package org.lrima.laop.physic;
 
 import org.lrima.laop.physic.objects.Box;
 import org.lrima.laop.physic.staticobjects.StaticObject;
-import org.lrima.laop.simulation.SimulationBuffer;
-import org.lrima.laop.simulation.SimulationSnapshot;
-import org.lrima.laop.simulation.data.CarInfo;
+import org.lrima.laop.simulation.buffer.SimulationBuffer;
+import org.lrima.laop.simulation.buffer.SimulationSnapshot;
+import org.lrima.laop.simulation.data.CarData;
 import org.lrima.laop.simulation.map.AbstractMap;
-import org.lrima.laop.simulation.map.MazeMap;
 import org.lrima.laop.utils.Actions.Action;
 
 import java.awt.geom.Area;
 import java.util.ArrayList;
+import java.util.function.Function;
 
 /**
  *
@@ -26,7 +26,7 @@ public class PhysicEngine extends Thread {
     private boolean running = true;
     private double worldWidth;
 
-    private ArrayList<Action<PhysicEngine>> onPhysicEngineFinish;
+    private ArrayList<Action<PhysicEngine>> onPhysicEngineFinishOnce;
     private ArrayList<Action<PhysicEngine>> onStep;
     private AbstractMap map;
 
@@ -37,11 +37,12 @@ public class PhysicEngine extends Thread {
 
     private SimulationBuffer simulationBuffer;
     private boolean waitDeltaT;
+    private Function<ArrayList<Physicable>, Boolean> finishingCondition;
 
     public PhysicEngine(SimulationBuffer buffer, AbstractMap map){
     	this.simulationBuffer = buffer;
         this.objects = new ArrayList<>();
-        this.onPhysicEngineFinish = new ArrayList<>();
+        this.onPhysicEngineFinishOnce = new ArrayList<>();
         this.map = map;
         this.waitDeltaT = false;
     }
@@ -64,6 +65,9 @@ public class PhysicEngine extends Thread {
 
                     //save the car's state in the buffer
                     this.saveCarsState();
+
+                    if(finishingCondition != null && finishingCondition.apply(this.objects))
+                        running = false;
                     
                     this.CURRENT_ITERATION++;
                     if(waitDeltaT){
@@ -77,7 +81,8 @@ public class PhysicEngine extends Thread {
             }
         }
 
-        this.onPhysicEngineFinish.forEach(action -> action.handle(this));
+        this.onPhysicEngineFinishOnce.forEach(action -> action.handle(this));
+        this.onPhysicEngineFinishOnce = new ArrayList<>();
     }
     
     /**
@@ -90,7 +95,7 @@ public class PhysicEngine extends Thread {
 	    	
 	    	for(Physicable object : this.objects) {
 	    		if(object instanceof Box) {
-	    			snapshot.addCar(new CarInfo((Box)object));
+	    			snapshot.addCar(new CarData((Box)object));
 	    		}
 	    	}
 	    	
@@ -150,8 +155,17 @@ public class PhysicEngine extends Thread {
         this.pause = !pause;
     }
 
-    public void setOnPhysicEngineFinish(Action<PhysicEngine> onPhysicEngineFinish) {
-        this.onPhysicEngineFinish.add(onPhysicEngineFinish);
+    /**
+     * Sets an action to do after the end of the simulation. Then this action is destroyed and never used again.
+     *
+     * @param onPhysicEngineFinish
+     */
+    public void setOnPhysicEngineFinishOnce(Action<PhysicEngine> onPhysicEngineFinish) {
+        this.onPhysicEngineFinishOnce.add(onPhysicEngineFinish);
+    }
+
+    public void setFinishingConditions(Function<ArrayList<Physicable>, Boolean> finishingCondition){
+        this.finishingCondition = finishingCondition;
     }
 
     public void setOnStep(Action<PhysicEngine> onStep){

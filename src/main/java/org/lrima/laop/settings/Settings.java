@@ -18,6 +18,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.lrima.laop.utils.Console;
 
 /**
  * Stores the settings in different scopes and allows the user to get and set the values of the
@@ -224,5 +225,15 @@ public class Settings {
     	this.scopeListTable.getItems().clear();
     	this.scopeListTable.getItems().addAll(this.scopes.keySet());
         this.scopeListTable.getSelectionModel().select(0);
+    }
+
+    /**
+     * Creates a lockdowned version of this settings. The returned setting will only be limited to this scope.
+     *
+     * @param scope the scope to limit the setting to
+     * @return the limited version of the settings.
+     */
+    public LockedSetting lock(String scope){
+        return new LockedSetting(this, scope);
     }
 }

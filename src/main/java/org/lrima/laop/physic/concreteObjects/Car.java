@@ -1,12 +1,11 @@
 package org.lrima.laop.physic.concreteObjects;
 
 import org.lrima.laop.physic.staticobjects.StaticObject;
-import org.lrima.laop.physic.staticobjects.StaticObjectType;
 import org.lrima.laop.utils.MathUtils;
 import org.lrima.laop.utils.math.Vector2d;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.objects.Box;
-import org.lrima.laop.simulation.data.CarInfo;
+import org.lrima.laop.simulation.data.CarData;
 
 import java.awt.geom.Area;
 
@@ -178,8 +177,8 @@ public class Car extends Box {
      * Used to save the state of the car in the simulation buffer
      * @return the state of the state
      */
-    public CarInfo getSnapShotInfo() {
-    	return new CarInfo(this);
+    public CarData getSnapShotInfo() {
+    	return new CarData(this);
     }
     
     /**

@@ -14,16 +14,16 @@ import org.lrima.laop.ui.components.PlayButton;
 import org.lrima.laop.ui.panels.ChartPanel;
 import org.lrima.laop.ui.panels.ConsolePanel;
 import org.lrima.laop.ui.panels.inspector.InspectorPanel;
-import org.lrima.laop.simulation.Simulation;
+import org.lrima.laop.simulation.SimulationEngine;
 
 
 /**
- * Class that displays the simulation with the side panels
+ * Class that displays the simulationEngine with the side panels
  *
  * @author Léonard
  */
 public class SimulationStage extends Stage {
-    private final Simulation simulation;
+    private final SimulationEngine simulationEngine;
     private Canvas canvas;
 
     private SimulationDrawer simulationDrawer;
@@ -40,18 +40,18 @@ public class SimulationStage extends Stage {
     private Button btnGenFinish;
 
     /**
-     * Initialize a new simulation stage with a specific simulation buffer
-     * @param simulation the simulation to initialize the simulation stage with
+     * Initialize a new simulationEngine stage with a specific simulationEngine buffer
+     * @param simulationEngine the simulationEngine to initialize the simulationEngine stage with
      */
-    public SimulationStage(Simulation simulation){
-        this.setTitle("LAOP : Simulation");
-        this.simulation = simulation;
+    public SimulationStage(SimulationEngine simulationEngine){
+        this.setTitle("LAOP : SimulationEngine");
+        this.simulationEngine = simulationEngine;
 
         this.canvas = new Canvas(WINDOW_WIDTH, WINDOW_HEIGHT);
         this.inspector = new InspectorPanel();
         this.consolePanel = new ConsolePanel();
-        this.chartPanel = new ChartPanel(simulation);
-        this.simulationDrawer = new SimulationDrawer(canvas, simulation, inspector);
+        this.chartPanel = new ChartPanel(simulationEngine);
+        this.simulationDrawer = new SimulationDrawer(canvas, simulationEngine, inspector);
         this.configureMenu();
 
         this.setOnCloseRequest(e->{
@@ -61,9 +61,9 @@ public class SimulationStage extends Stage {
 
         this.loadAllScenes();
 
-        this.simulation.setAutoRun(false);
-        this.simulation.setOnGenerationFinish(this::handleGenerationFinish);
-        this.simulation.setMainScene(this);
+//        this.simulationEngine.setAutoRun(false);
+//        this.simulationEngine.setOnGenerationFinish(this::handleGenerationFinish);
+        this.simulationEngine.setMainScene(this);
 
         this.checkBoxRealTime.selectedProperty().setValue(true);
 
@@ -73,9 +73,9 @@ public class SimulationStage extends Stage {
     /**
      * Called when the generations finished
      *
-     * @param simulation the simulation
+     * @param simulationEngine the simulationEngine
      */
-    private void handleGenerationFinish(Simulation simulation) {
+    private void handleGenerationFinish(SimulationEngine simulationEngine) {
         btnGenFinish.setDisable(false);
     }
 
@@ -95,8 +95,9 @@ public class SimulationStage extends Stage {
 
         //Add the timeLine and the chart panel to the bottom
         VBox bottomPanelBox = new VBox();
-        bottomPanelBox.getChildren().addAll(timeLine, this.chartPanel);
-        
+        bottomPanelBox.getChildren().add(timeLine);
+        bottomPanelBox.getChildren().add(this.chartPanel);
+
         rootPane.setBottom(bottomPanelBox);
         rootPane.setRight(inspector);
 
@@ -199,7 +200,7 @@ public class SimulationStage extends Stage {
 
         sliderTimeLine = new JFXSlider();
 
-        sliderTimeLine.setMax(simulation.getBuffer().getSize());
+        sliderTimeLine.setMax(simulationEngine.getBuffer().getSize());
         sliderTimeLine.setValue(0);
         sliderTimeLine.setMinorTickCount(1);
         sliderTimeLine.setMaxWidth(Integer.MAX_VALUE);
@@ -219,7 +220,7 @@ public class SimulationStage extends Stage {
         btnGenFinish = new Button("Next gen");
         btnGenFinish.setOnAction( e-> {
             btnGenFinish.setDisable(true);
-            this.simulation.nextGen();
+//            this.simulationEngine.nextGen();
         });
 
         root.getChildren().addAll(button, sliderTimeLine, checkBoxRealTime, btnGenFinish);

@@ -1,6 +1,6 @@
-package org.lrima.laop.simulation;
+package org.lrima.laop.simulation.buffer;
 
-import org.lrima.laop.simulation.data.CarInfo;
+import org.lrima.laop.simulation.data.CarData;
 import org.lrima.laop.physic.concreteObjects.Car;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @author Léonard
  */
 public class SimulationSnapshot {
-    ArrayList<CarInfo> cars;
+    ArrayList<CarData> cars;
 
 
     public SimulationSnapshot(){
@@ -23,7 +23,7 @@ public class SimulationSnapshot {
      * @param car the car to be added
      */
     public void addCar(Car car){
-        cars.add(new CarInfo(car));
+        cars.add(new CarData(car));
     }
 
     /**
@@ -31,11 +31,11 @@ public class SimulationSnapshot {
      *
      * @return
      */
-    public ArrayList<CarInfo> getCars() {
+    public ArrayList<CarData> getCars() {
         return cars;
     }
 
-    public void addCar(CarInfo carInfo) {
-        cars.add(carInfo);
+    public void addCar(CarData carData) {
+        cars.add(carData);
     }
 }
