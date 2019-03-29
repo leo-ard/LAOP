@@ -152,6 +152,7 @@ public class ConfigurationStage extends Stage {
     private void back() {
         panelIndex--;
         root.setCenter(scenes.get(panelIndex));
+        this.sizeToScene();
         setButtonLabels(panelIndex);
     }
 
@@ -161,6 +162,7 @@ public class ConfigurationStage extends Stage {
     private void next() {
         panelIndex++;
         root.setCenter(scenes.get(panelIndex));
+        this.sizeToScene();
         setButtonLabels(panelIndex);
 
     }

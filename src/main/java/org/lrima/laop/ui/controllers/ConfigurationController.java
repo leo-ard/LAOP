@@ -50,7 +50,6 @@ public class ConfigurationController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {    	
-    	
     	scopeList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if(newVal == null) {
                 scopeList.getSelectionModel().select(0);
@@ -85,6 +84,8 @@ public class ConfigurationController implements Initializable {
     		Scope scope = this.settings.getScopes().get(scopeKey);
     		this.panels.put(scopeKey, scope.generatePanel());
     	});
+    	
+    	scopeList.getSelectionModel().selectLast();
     }
 
 
