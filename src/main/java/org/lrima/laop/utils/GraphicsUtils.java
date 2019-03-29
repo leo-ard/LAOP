@@ -1,8 +1,16 @@
 package org.lrima.laop.utils;
 
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
+import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.transform.MatrixType;
 
 /**
  * Utils about graphics
@@ -30,5 +38,44 @@ public class GraphicsUtils {
     	lineWithWidth.closePath();
     	
     	return lineWithWidth;
+	}
+
+	/**
+	 * Converts an AWT area to points and draw it
+	 * @param gc the graphical context
+	 * @param area the area to convert
+	 */
+	public static void drawAWTArea(GraphicsContext gc, Area area) {
+		double[] m = gc.getTransform().toArray(MatrixType.MT_2D_2x3);
+		AffineTransform transform = new AffineTransform(m[0], m[1], m[2], m[3], m[4], m[5]);
+		
+		ArrayList<double[]> areaPoints = new ArrayList<>();
+		ArrayList<Line2D.Double> areaSegments = new ArrayList<Line2D.Double>();
+		float[] coords = new float[6];
+		
+		for(PathIterator it = area.getPathIterator(null) ; !it.isDone() ; it.next()) {			
+			int type= it.currentSegment(coords);
+			areaPoints.add(new double[] {type, coords[0], coords[1]});
+		}
+		
+		Point2D start;
+		Point2D end;
+		
+		for(int i = 0 ; i < areaPoints.size() ; i++) {
+			double[] currentElement = areaPoints.get(i);
+			double[] nextElement = {-1, -1, -1};
+		    if (i < areaPoints.size() - 1) {
+		        nextElement = areaPoints.get(i + 1);
+		    }
+		    
+		    start = new Point2D.Double(currentElement[1], currentElement[2]);
+		    end = new Point2D.Double(nextElement[1], nextElement[2]);
+		    
+		    if(nextElement[0] == PathIterator.SEG_LINETO) {
+		    	gc.strokeLine(start.getX(), start.getY(), end.getX(), end.getY());
+		    }
+
+		    start = end;
+		}
 	}
 }

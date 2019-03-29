@@ -3,6 +3,7 @@ package org.lrima.laop.simulation.data;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.lrima.laop.simulation.sensors.Sensor;
 import org.lrima.laop.ui.Drawable;
 import org.lrima.laop.ui.components.inspector.Inspectable;
 import org.lrima.laop.ui.components.inspector.InspectorPanel;
+import org.lrima.laop.utils.GraphicsUtils;
 import org.lrima.laop.utils.math.Vector2d;
 
 import javafx.geometry.Point2D;
@@ -38,6 +40,8 @@ public class CarData implements Inspectable, Drawable {
 
     private ArrayList<Vector2d> forces;
     private final Color CAR_COLOR = new Color(32.0/255.0, 78.0/255.0, 95.0/255.0, 1);
+    
+    private ArrayList<Area> sensorAreas;
 
     /**
      * Retrieve information from a car
@@ -52,6 +56,11 @@ public class CarData implements Inspectable, Drawable {
         this.forces = car.getForces();
         this.velociy = car.getVelocity();
         this.acceleration = car.getAcceleration();
+        
+        this.sensorAreas = new ArrayList<>();
+        for(Sensor sensor : car.getSensors()) {
+        	this.sensorAreas.add(sensor.getArea());
+        }
     }
 
     /**
@@ -94,12 +103,11 @@ public class CarData implements Inspectable, Drawable {
         gc.fillRect(x, y, width, height);
 
         //Draw the sensors
-        //TODO : NE PAS UTILISER DE REFERENCE À UN OBJET. SINON CA BUG
-//        if(selected) {
-//            for(Sensor sensor : this.car.getSensors()) {
-//                sensor.draw(gc);
-//            }
-//        }
+        if(selected) {
+        	for(Area area : this.sensorAreas) {
+        		GraphicsUtils.drawAWTArea(gc, area);
+        	}
+        }
 
         gc.setTransform(temp);
         gc.setFill(bakColor);

@@ -48,7 +48,7 @@ public class ProximityLineSensor implements Sensor {
 		ArrayList<StaticObject> mapObjects = map.getObjects();
 		
 		Line2D sensorLine = this.getSensorAsLine();
-		Path2D sensorLineWithThickness = GraphicsUtils.addThicknessToLine(sensorLine);
+		Area sensorLineWithThickness = this.getArea();
 		Point2D sensorStart = sensorLine.getP1();
 		ArrayList<Double> intersectionDistances = new ArrayList<>();
 		
@@ -102,24 +102,14 @@ public class ProximityLineSensor implements Sensor {
 	}
 
 	@Override
-	public void draw(GraphicsContext gc) {
-		double lineWidthBak = gc.getLineWidth();
-		Paint colorBak = gc.getStroke();
-		
-		Line2D line = this.getSensorAsLine();
-		
-		//Rotate back the line
+	public Area getArea() {
+		Line2D line = getSensorAsLine();
+		//Rotate the line back because the graphical context will rotate it
 		double x2 = this.start.getX() + Math.cos(this.orientation) *  SENSOR_LENGHT;
-		double y2 = this.start.getY() + Math.sin(this.orientation) * SENSOR_LENGHT;
+		double y2 = this.start.getY() + Math.sin(this.orientation) * SENSOR_LENGHT; 
 		line.setLine(line.getP1(), new Point2D.Double(x2, y2));
 		
-		gc.setLineWidth(1);
-		gc.setStroke(this.SENSOR_COLOR);
-		gc.strokeLine(line.getX1(), line.getY1(), line.getX2(), line.getY2());	
-
-	
-		gc.setLineWidth(lineWidthBak);
-		gc.setStroke(colorBak);
+		return new Area(GraphicsUtils.addThicknessToLine(line));
 	}
 
 }
