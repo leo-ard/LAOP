@@ -83,7 +83,7 @@ public class LAOP {
      */
     public String canStartSimulations() {
     	//Check if there are algorithms to run
-    	if(this.settings.getLocalScopes().size() <= 0) {
+    	if(this.settings.getLocalScopeKeys().size() <= 0) {
     		return "No algorithms to run.";
     	}
     	

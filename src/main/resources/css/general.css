@@ -35,7 +35,7 @@
     -fx-background-color: transparent;
 }
 
-.scroll-pane > .viewport, .panel {
+.panel.scroll-pane > .viewport, .panel {
     -fx-background-color: rgba(183, 215, 216, 0.7);
 }
 

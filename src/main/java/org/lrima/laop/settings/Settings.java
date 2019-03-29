@@ -92,13 +92,13 @@ public class Settings {
 
     /**
      * Add a new scope to the settings.
-     * @param scope - the name of the scope. This field is not case-sensitive
+     * @param name - the name of the scope. This field is not case-sensitive
      * @return true if successful, false otherwise
      */
-    public void addScope(String scope){
+    public void addScope(String name){
         Scope newScope = new Scope();
         newScope.setGlobalScope(this.scopes.get(GLOBAL_SCOPE));
-        this.scopes.put(scope, newScope);
+        this.scopes.put(name, newScope);
     }
     
     /**
@@ -142,7 +142,25 @@ public class Settings {
         return this.scopes.get(scope) == null;
     }
 
-    public ArrayList<String> getLocalScopes(){
+    /**
+     * @return all the scopes
+     */
+    public LinkedHashMap<String, Scope> getScopes(){
+    	return this.scopes;
+    }
+    
+    /**
+     * @return all the scope keys of the settings
+     */
+    public ArrayList<String> getScopeKeys(){
+    	return new ArrayList<>(this.scopes.keySet());
+    }
+    
+    /**
+     * Get all the scopes except for the global
+     * @return the scopes without global
+     */
+    public ArrayList<String> getLocalScopeKeys(){
         ArrayList<String> scopeArray = new ArrayList<>(scopes.keySet());
         scopeArray.remove(GLOBAL_SCOPE);
         return scopeArray;

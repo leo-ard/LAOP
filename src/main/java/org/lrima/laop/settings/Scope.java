@@ -16,7 +16,6 @@ public class Scope extends LinkedHashMap<String, Option> {
      */
     Scope globalScope;
 
-
     /**
      * Retrieve the option associated with a certain key. If this key doesnt exist, returns the one in the globalScope specified
      *

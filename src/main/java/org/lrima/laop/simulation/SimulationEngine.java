@@ -44,7 +44,7 @@ public class SimulationEngine {
         this.onBatchFinished = new ArrayList<>();
         this.onEnd = new ArrayList<>();
 
-        this.currentScope = this.settings.getLocalScopes().get(0);
+        this.currentScope = this.settings.getLocalScopeKeys().get(0);
         this.autoRun = true;
         
         map = new MazeMap(10);

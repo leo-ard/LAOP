@@ -33,6 +33,7 @@ public class ConsolePanel extends ScrollPane {
         setVbarPolicy(ScrollBarPolicy.NEVER);
 
         vBox.setPrefWidth(MAX_WIDTH);
+        this.getStyleClass().add("panel");
 
         this.setOut();
 	}
