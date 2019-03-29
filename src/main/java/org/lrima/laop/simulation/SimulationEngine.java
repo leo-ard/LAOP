@@ -6,6 +6,7 @@ import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.network.LearningAnotation;
 import org.lrima.laop.network.carcontrollers.CarController;
 import org.lrima.laop.network.carcontrollers.ManualCarController;
+import org.lrima.laop.network.concreteNetworks.NEAT;
 import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.settings.LockedSetting;
 import org.lrima.laop.settings.Settings;
@@ -29,13 +30,10 @@ public class SimulationEngine {
     ArrayList<Action<SimulationEngine>> onBatchFinished;
     ArrayList<Action<SimulationEngine>> onEnd;
 
-    private boolean autoRun;
     private Stage mainScene;
     private AbstractMap map;
 
     private Simulation currentSimulation;
-
-    private LearningAlgorithm<? extends CarController> currentLearningAlgorithm;
 
     public SimulationEngine(SimulationBuffer simulationBuffer, Settings settings) {
         this.simulationBuffer = simulationBuffer;
@@ -45,8 +43,7 @@ public class SimulationEngine {
         this.onEnd = new ArrayList<>();
 
         this.currentScope = this.settings.getLocalScopeKeys().get(0);
-        this.autoRun = true;
-        
+
         map = new MazeMap(10);
         map.bakeArea();
     }
@@ -87,7 +84,7 @@ public class SimulationEngine {
     CarController generateCurrentNetwork() {
         Class<? extends CarController> carClass = (Class<? extends CarController>) settings.get(currentScope, LAOP.KEY_NETWORK_CLASS);
 
-        return new ManualCarController(mainScene);
+        return new NEAT();
 //        try {
 //            return carClass.newInstance();
 //        } catch (InstantiationException | IllegalAccessException e) {
@@ -119,10 +116,6 @@ public class SimulationEngine {
 
     public void setOnEnd(Action<SimulationEngine> onEnd) {
         this.onEnd.add(onEnd);
-    }
-
-    public void setAutoRun(boolean autoRun) {
-        this.autoRun = autoRun;
     }
 
     public int getBatchCount() {

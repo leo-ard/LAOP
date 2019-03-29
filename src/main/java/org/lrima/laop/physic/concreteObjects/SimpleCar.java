@@ -37,7 +37,7 @@ public class SimpleCar extends Box {
         if(dead) return;
         this.forces = new ArrayList<>();
        
-        CarControls carControls = carController.control(new double[0]);
+        CarControls carControls = carController.control(getSensorsValues());
 
         this.forces.add(PhysicUtils.accelFromBackWeels(carControls.getAcceleration(), rotation, wheelDirection, RANGE));
         this.forces.get(0).setTag("Accel from back");
@@ -52,14 +52,23 @@ public class SimpleCar extends Box {
 
         this.wheelDirection = carControls.getRotation() * RANGE;
 
-        this.angularAccel = PhysicUtils.angularAccel(this.wheelDirection, this.velocity);
-        this.angularAccel = Math.min(Math.max(RANGE, angularAccel), -RANGE);
+//        this.angularAccel = PhysicUtils.angularAccel(this.wheelDirection, this.velocity);
+//        this.angularAccel = Math.min(Math.max(RANGE, angularAccel), -RANGE);
         this.angularVelocity = this.velocity.modulus()*this.wheelDirection*PhysicEngine.DELTA_T * 0.08;
         this.rotation += angularVelocity;
 
 
         this.velocity = this.velocity.add(acceleration.multiply(PhysicEngine.DELTA_T));
         this.position = this.position.add(this.velocity.multiply(PhysicEngine.DELTA_T));
+    }
+
+    private double[] getSensorsValues() {
+        double[] values = new double[this.sensors.size()];
+        for(int i = 0; i < this.sensors.size(); i++){
+            values[i] = this.sensors.get(i).getValue();
+        }
+
+        return values;
     }
 
     @Override

@@ -22,7 +22,7 @@ import java.util.function.Function;
  * @author Clement Bisaillon
  */
 public class PhysicEngine extends Thread {
-    static public final double DELTA_T = 0.05;
+    static public final double DELTA_T = 0.01;
     public static final double GRAVITY = 9.8;
 
     private volatile boolean pause = false;
@@ -107,7 +107,6 @@ public class PhysicEngine extends Thread {
      * Move the concreteObjects in the simulation
      */
     private void nextStep(){
-
         for (AbstractCar car : cars) {
             car.nextStep();
         }
