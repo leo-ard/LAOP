@@ -1,4 +1,4 @@
-package org.lrima.laop.ui.panels;
+package org.lrima.laop.ui.components;
 
 import org.lrima.laop.simulation.SimulationEngine;
 import org.lrima.laop.simulation.data.GenerationData;

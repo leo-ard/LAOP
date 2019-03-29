@@ -1,4 +1,4 @@
-package org.lrima.laop.ui.panels;
+package org.lrima.laop.ui.components;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

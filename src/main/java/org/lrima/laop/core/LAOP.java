@@ -2,7 +2,7 @@ package org.lrima.laop.core;
 
 import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.network.carcontrollers.CarController;
-import org.lrima.laop.ui.SimulationStage;
+import org.lrima.laop.ui.MainSimulationStage;
 import org.lrima.laop.settings.Scope;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.SimulationEngine;
@@ -95,8 +95,8 @@ public class LAOP {
         SimulationEngine simulationEngine = new SimulationEngine(simulationBuffer, settings);
 
         if(simulationDisplayMode == simulationDisplayMode.WITH_INTERFACE){
-            SimulationStage simulationStage = new SimulationStage(simulationEngine);
-            simulationStage.show();
+            MainSimulationStage mainSimulationStage = new MainSimulationStage(simulationEngine);
+            mainSimulationStage.show();
         }
 
         simulationEngine.setOnBatchFinished(sim->Console.info("Batch %s fini", sim.getBatchCount()));

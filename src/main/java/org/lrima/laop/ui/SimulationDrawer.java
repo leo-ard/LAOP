@@ -2,10 +2,12 @@ package org.lrima.laop.ui;
 
 import java.util.ArrayList;
 
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import org.lrima.laop.simulation.SimulationEngine;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.simulation.data.CarData;
-import org.lrima.laop.ui.panels.inspector.InspectorPanel;
+import org.lrima.laop.ui.components.inspector.InspectorPanel;
 
 import com.jfoenix.controls.JFXSlider;
 
@@ -59,36 +61,10 @@ public class SimulationDrawer{
         this.affineTransform = new Affine();
         this.inspector = inspector;
 
-        this.canvas.setOnMousePressed(e -> {
-            mouseXPressed = (int) e.getX();
-            mouseYPressed = (int) e.getY();
-        });
-
-
-        this.canvas.setOnMouseDragged((e) ->{
-            double deltaX = (e.getX() - mouseXPressed) * Math.exp(currentZoom);
-            double deltaY = (e.getY() - mouseYPressed) * Math.exp(currentZoom);
-            mouseYPressed = e.getY();
-            mouseXPressed = e.getX();
-
-            this.affineTransform.appendTranslation(deltaX, deltaY);
-        });
-
-        this.canvas.setOnScroll(e -> {
-            double oldZoom = currentZoom;
-            currentZoom -= e.getDeltaY()/1000;
-
-            double zoom = Math.exp(oldZoom - currentZoom);
-
-            Point2D point = this.inverseTransform(e.getX(), e.getY());
-
-            this.affineTransform.appendScale(zoom, zoom, point);
-        });
-
-        this.canvas.setOnMouseClicked(e -> {
-            clicked = new Point2D(e.getX(), e.getY());
-        });
-
+        this.canvas.setOnMousePressed(this::handleMousePressed);
+        this.canvas.setOnMouseDragged(this::handleDrag);
+        this.canvas.setOnScroll(this::handleScroll);
+        this.canvas.setOnMouseClicked(e -> clicked = new Point2D(e.getX(), e.getY()));
     }
 
     /**
@@ -102,6 +78,7 @@ public class SimulationDrawer{
             public void handle(long now) {
                 SimulationBuffer simulationBuffer = simulationEngine.getBuffer();
                 int size = simulationBuffer.getSize();
+                //update slider
                 slider.setMax(size-1);
 
                 if(realTime){
@@ -113,13 +90,13 @@ public class SimulationDrawer{
                         currentStep++;
                         frameCount = 0;
                     }
-
                     frameCount++;
                 }
                 else{
                     slider.setValue(currentStep);
                 }
 
+                //Makes it loop when it comes to the end
                 if(currentStep >= size){
                     currentStep = 0;
                 }
@@ -152,16 +129,6 @@ public class SimulationDrawer{
             return this.affineTransform.inverseTransform(x, y);
         } catch (NonInvertibleTransformException e1) {}
         return new Point2D(0, 0);
-    }
-
-    /**
-     * Retourne la transformation inverse du point, ou le point (0, 0) si la transformation inverse ne peut pas être faite
-     *
-     * @param p la position
-     * @return La transformation inverse du point
-     */
-    private Point2D inverseTransform(Point2D p){
-        return this.inverseTransform(p.getX(), p.getY());
     }
 
     /**
@@ -227,6 +194,8 @@ public class SimulationDrawer{
         this.realTime = newVal;
     }
 
+    //ALL HANDLERS
+
     private void handleClick(Point2D e){
         Point2D transformedPoints = this.inverseTransform(e.getX(), e.getY());
 
@@ -246,17 +215,30 @@ public class SimulationDrawer{
 
     public void resetView(){
         this.affineTransform.setToIdentity();
+    }
 
-        double sumX = 0, sumY = 0;
+    private void handleScroll(ScrollEvent e) {
+        double oldZoom = currentZoom;
+        currentZoom -= e.getDeltaY()/1000;
 
-        for (CarData car : simulationEngine.getBuffer().getCars(currentStep)) {
-            sumX += car.getX();
-            sumY += car.getY();
-        }
+        double zoom = Math.exp(oldZoom - currentZoom);
 
-        double moyX = sumX/ simulationEngine.getBuffer().getCars(currentStep).size();
-        double moyY = sumY/ simulationEngine.getBuffer().getCars(currentStep).size();
+        Point2D point = this.inverseTransform(e.getX(), e.getY());
 
-        this.affineTransform.appendTranslation(0, 0);
+        this.affineTransform.appendScale(zoom, zoom, point);
+    }
+
+    private void handleDrag(MouseEvent e) {
+        double deltaX = (e.getX() - mouseXPressed) * Math.exp(currentZoom);
+        double deltaY = (e.getY() - mouseYPressed) * Math.exp(currentZoom);
+        mouseYPressed = e.getY();
+        mouseXPressed = e.getX();
+
+        this.affineTransform.appendTranslation(deltaX, deltaY);
+    }
+
+    private void handleMousePressed(MouseEvent e) {
+        mouseXPressed = (int) e.getX();
+        mouseYPressed = (int) e.getY();
     }
 }

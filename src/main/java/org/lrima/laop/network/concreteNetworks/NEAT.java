@@ -19,7 +19,7 @@ public class NEAT implements GeneticNeuralNetwork {
     	controls.setAcceleration(1-sensorValues[2]);
     	controls.setBreak(sensorValues[2]);
     	controls.setRotation(sensorValues[4] - sensorValues[0]);
-    	
+
         return controls;
     }
 }

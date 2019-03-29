@@ -1,4 +1,4 @@
-package org.lrima.laop.ui.panels.inspector;
+package org.lrima.laop.ui.components.inspector;
 
 /**
  * Pour afficher les valeurs des voitures avec leurs unites

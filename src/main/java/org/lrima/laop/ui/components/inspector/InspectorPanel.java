@@ -1,4 +1,4 @@
-package org.lrima.laop.ui.panels.inspector;
+package org.lrima.laop.ui.components.inspector;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;

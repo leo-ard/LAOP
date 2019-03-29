@@ -8,11 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.lrima.laop.physic.abstractObjects.AbstractCar;
-import org.lrima.laop.physic.concreteObjects.SimpleCar;
 import org.lrima.laop.simulation.sensors.Sensor;
 import org.lrima.laop.ui.Drawable;
-import org.lrima.laop.ui.panels.inspector.Inspectable;
-import org.lrima.laop.ui.panels.inspector.InspectorPanel;
+import org.lrima.laop.ui.components.inspector.Inspectable;
+import org.lrima.laop.ui.components.inspector.InspectorPanel;
 import org.lrima.laop.utils.math.Vector2d;
 
 import javafx.geometry.Point2D;
@@ -36,7 +35,6 @@ public class CarData implements Inspectable, Drawable {
     private double tilt;
     private Vector2d velociy;
     private Vector2d acceleration;
-    private AbstractCar car;
 
     private ArrayList<Vector2d> forces;
     private final Color CAR_COLOR = new Color(32.0/255.0, 78.0/255.0, 95.0/255.0, 1);
@@ -46,7 +44,6 @@ public class CarData implements Inspectable, Drawable {
      * @param car the car
      */
     public CarData(AbstractCar car) {
-    	this.car = car;
         this.x = car.getPosition().getX();
         this.y = car.getPosition().getY();
         this.width = car.getWidth();
@@ -87,8 +84,9 @@ public class CarData implements Inspectable, Drawable {
     public void draw(GraphicsContext gc, boolean selected) {
     	Affine temp = gc.getTransform();
     	Paint bakColor = Color.rgb(255, 0, 0);
+
         Affine affine = new Affine(gc.getTransform());
-        affine.appendRotation(tilt,new Point2D(car.getCenter().getX(), car.getCenter().getY()));
+        affine.appendRotation(tilt,new Point2D(x+width/2, y+height/2));
         gc.setTransform(affine);
 
         //Draw the rectangle of the car
@@ -96,11 +94,12 @@ public class CarData implements Inspectable, Drawable {
         gc.fillRect(x, y, width, height);
 
         //Draw the sensors
-        if(selected) {
-	        for(Sensor sensor : this.car.getSensors()) {
-	        	sensor.draw(gc);
-	        }
-        }
+        //TODO : NE PAS UTILISER DE REFERENCE À UN OBJET. SINON CA BUG
+//        if(selected) {
+//            for(Sensor sensor : this.car.getSensors()) {
+//                sensor.draw(gc);
+//            }
+//        }
 
         gc.setTransform(temp);
         gc.setFill(bakColor);

@@ -8,7 +8,7 @@ import org.lrima.laop.simulation.Simulation;
 
 import java.util.ArrayList;
 
-@LearningAnotation
+@LearningAnotation(simulation = GenerationBasedSimulation.class)
 public class GeneticLearning implements LearningAlgorithm<GeneticNeuralNetwork> {
     @Override
     public ArrayList<GeneticNeuralNetwork> learn(ArrayList<GeneticNeuralNetwork> allCars) {

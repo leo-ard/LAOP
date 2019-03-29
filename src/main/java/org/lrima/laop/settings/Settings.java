@@ -24,7 +24,7 @@ import org.lrima.laop.utils.Console;
  * Stores the settings in different scopes and allows the user to get and set the values of the
  * different settings. The scope is used to differentiate for example the settings for one
  * algorithm and the others
- * @author Clement Bisaillon
+ * @author Clement Bisaillon et Léonard Oest O'Leary
  */
 public class Settings {
     public final static String GLOBAL_SCOPE = "GLOBAL";
