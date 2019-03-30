@@ -3,11 +3,14 @@ package org.lrima.laop.utils;
 
 import org.lrima.laop.utils.math.Vector2d;
 
+import java.util.function.Function;
+
 /**
  * Class for java.math utilities that are not present in the java Math class
  * @author Clement Bisaillon
  */
 public class MathUtils {
+    public static final Function<Double, Double> LOGISTIC = (x) -> 1.0/(1.0 + Math.exp(-x));
     private static final double FLOAT_DELTA = 0.0001;
 
 

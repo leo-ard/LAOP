@@ -35,4 +35,8 @@ public class RandomUtils {
 	public static boolean getBoolean() {
 		return ThreadLocalRandom.current().nextBoolean();
 	}
+
+	public static double getDouble(int min, int max) {
+		return ThreadLocalRandom.current().nextDouble(min, max);
+	}
 }

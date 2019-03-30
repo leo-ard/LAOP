@@ -2,6 +2,7 @@ package org.lrima.laop.simulation;
 
 import org.lrima.laop.core.LAOP;
 import org.lrima.laop.physic.PhysicEngine;
+import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.physic.concreteObjects.SimpleCar;
 import org.lrima.laop.simulation.data.GenerationData;
 import org.lrima.laop.simulation.sensors.ProximityLineSensor;
@@ -47,7 +48,7 @@ public class GenerationBasedSimulation extends Simulation{
         ArrayList<SimpleCar> cars = new ArrayList<>();
 
         if(this.simulationEngine.getBuffer() != null) {
-            for(int i = 0 ; i < 1 ; i++) {
+            for(int i = 0 ; i < 100 ; i++) {
                 Point2D start = this.simulationEngine.getMap().getStartPoint();
                 SimpleCar car = new SimpleCar(new Vector2d(start.getX(), start.getY()), this.simulationEngine.generateCurrentNetwork());
 
@@ -96,6 +97,14 @@ public class GenerationBasedSimulation extends Simulation{
         this.physicEngine = new PhysicEngine(this.simulationEngine.getBuffer(), this.simulationEngine.getMap());
 
         this.physicEngine.setWaitDeltaT(true);
+        this.physicEngine.setFinishingConditions((list) -> {
+            for (AbstractCar abstractCar : list) {
+                if(!abstractCar.isDead()){
+                    return false;
+                }
+            }
+            return true;
+        });
         this.physicEngine.getCars().addAll(configureCar());
 
         this.physicEngine.setOnPhysicEngineFinishOnce(engine -> {

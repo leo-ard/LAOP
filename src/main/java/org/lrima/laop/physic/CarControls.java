@@ -9,7 +9,21 @@ public class CarControls {
 	private double accelerationField;
 	private double breakField;
 	private double rotationField;
-	
+
+	public CarControls(){}
+
+	public CarControls(double ... values){
+		this.accelerationField = values[0];
+		this.breakField = values[1];
+		this.rotationField = values[2];
+	}
+
+	public CarControls(double accelerationField, double breakField, double rotationField) {
+		this.accelerationField = accelerationField;
+		this.breakField = breakField;
+		this.rotationField = rotationField;
+	}
+
 	/**
 	 * @return The acceleration from the array received from an algorithm
 	 */

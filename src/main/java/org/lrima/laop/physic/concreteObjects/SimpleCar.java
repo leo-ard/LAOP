@@ -62,6 +62,11 @@ public class SimpleCar extends Box {
         this.position = this.position.add(this.velocity.multiply(PhysicEngine.DELTA_T));
     }
 
+    @Override
+    public boolean isDead() {
+        return dead;
+    }
+
     private double[] getSensorsValues() {
         double[] values = new double[this.sensors.size()];
         for(int i = 0; i < this.sensors.size(); i++){

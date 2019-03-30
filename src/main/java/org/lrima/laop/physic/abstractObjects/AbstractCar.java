@@ -222,5 +222,6 @@ public abstract class AbstractCar {
      */
     public abstract Vector2d getCenter();
 
-    
+
+    public abstract boolean isDead();
 }

@@ -119,6 +119,8 @@ public class PhysicEngine extends Thread {
         //TODO: Pas la meilleur facon de faire
 
         for(AbstractCar physicable : this.cars){
+
+
         	for(StaticObject obstacle : this.map.getObjects()) {
         		Area intersection = obstacle.getArea();
         		intersection.intersect(physicable.getArea());

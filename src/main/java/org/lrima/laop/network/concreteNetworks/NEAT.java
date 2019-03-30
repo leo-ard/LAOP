@@ -2,6 +2,7 @@ package org.lrima.laop.network.concreteNetworks;
 
 import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
 import org.lrima.laop.physic.CarControls;
+import org.lrima.laop.settings.LockedSetting;
 
 public class NEAT implements GeneticNeuralNetwork {
     double direction = 0.5;
@@ -11,6 +12,11 @@ public class NEAT implements GeneticNeuralNetwork {
         direction = -direction;
 
         return this;
+    }
+
+    @Override
+    public void init(LockedSetting settings) {
+
     }
 
     @Override

@@ -5,12 +5,14 @@ import org.lrima.laop.core.LAOP;
 import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.network.LearningAnotation;
 import org.lrima.laop.network.carcontrollers.CarController;
+import org.lrima.laop.network.carcontrollers.ManualCarController;
 import org.lrima.laop.network.concreteNetworks.NEAT;
 import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.settings.LockedSetting;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.simulation.map.AbstractMap;
+import org.lrima.laop.simulation.map.BlankMap;
 import org.lrima.laop.simulation.map.MazeMap;
 import org.lrima.laop.utils.Actions.Action;
 
@@ -44,6 +46,7 @@ public class SimulationEngine {
         this.currentScope = this.settings.getLocalScopeKeys().get(0);
 
         map = new MazeMap(10);
+//        map = new BlankMap();
         map.bakeArea();
     }
 
@@ -84,14 +87,13 @@ public class SimulationEngine {
     CarController generateCurrentNetwork() {
         Class<? extends CarController> carClass = (Class<? extends CarController>) settings.get(currentScope, LAOP.KEY_NETWORK_CLASS);
 
-        return new NEAT();
-//        try {
-//            return carClass.newInstance();
-//        } catch (InstantiationException | IllegalAccessException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return null;
+        try {
+            return carClass.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return new ManualCarController(mainScene);
     }
 
     LearningAlgorithm<? extends CarController> generateLearningAlgorithm() {
