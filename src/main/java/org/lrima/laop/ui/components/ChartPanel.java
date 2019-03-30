@@ -27,7 +27,7 @@ public class ChartPanel extends HBox {
 	
 	private XYChart.Series<Number, Number> averageFitnessSerie;
 	
-	public ChartPanel(SimulationEngine simulationEngine) {
+	public ChartPanel() {
 		this.generationNumber = 0;
 		this.maxY = 0;
 		this.minY = 0;
@@ -40,10 +40,10 @@ public class ChartPanel extends HBox {
 		this.getStyleClass().add("panel");
 
 //		simulation.setOnGenerationFinish( (sim) -> {
-//			this.generationEnd(sim.getGenerationData());
+//			this.updateChartData(sim.getGenerationData());
 //		});
 //		simulation.setOnSimulationFinish((sim) -> {
-//			this.allGenerationEnd();
+//			this.resetChart();
 //		});
 
 		this.setupChart();
@@ -71,7 +71,7 @@ public class ChartPanel extends HBox {
 		
 	}
 
-	public void allGenerationEnd() {
+	public void resetChart() {
 		//Reset the series and the generation count
 		this.generationNumber = 0;
 		this.averageFitnessSerie.getData().clear();
@@ -83,7 +83,7 @@ public class ChartPanel extends HBox {
 		this.xAxis.setUpperBound(this.generationNumber);
 	}
 
-	public void generationEnd(GenerationData pastGeneration) {
+	public void updateChartData(GenerationData pastGeneration) {
 		//Add new data to the series from the past generation
 		double averageFitnessScore = pastGeneration.getAverageFitness();
 		XYChart.Data<Number, Number> data = new XYChart.Data(this.generationNumber, averageFitnessScore);

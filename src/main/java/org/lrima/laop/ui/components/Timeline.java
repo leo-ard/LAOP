@@ -21,6 +21,7 @@ public class Timeline extends HBox{
     private JFXCheckBox checkBoxRealTime;
     private JFXSlider sliderTimeLine;
     private JFXButton btnGenFinish;
+    private PlayButton playButton;
 
     public Timeline(SimulationDrawer simulationDrawer){
         this.simulationDrawer = simulationDrawer;
@@ -30,7 +31,7 @@ public class Timeline extends HBox{
     private void init() {
         this.getStyleClass().add("panel");
 
-        PlayButton playButton = new PlayButton(
+        playButton = new PlayButton(
                 (b)-> {
                     if(b)
                         this.simulationDrawer.startAutodraw(2);
@@ -65,18 +66,16 @@ public class Timeline extends HBox{
 
         HBox.setMargin(sliderTimeLine, new Insets(7,0,7,0));
 
-        btnGenFinish = new JFXButton("Next generation");
-        btnGenFinish.getStyleClass().add("btn-light");
-        btnGenFinish.setOnAction( e-> {
-            btnGenFinish.setDisable(true);
-//            this.simulationEngine.nextGen();
-        });
-
-        this.getChildren().addAll(playButton, sliderTimeLine, checkBoxRealTime, btnGenFinish);
+        this.getChildren().addAll(playButton, sliderTimeLine, checkBoxRealTime);
         this.setSpacing(10);
         this.setPadding(new Insets(5));
 
         HBox.setHgrow(sliderTimeLine, Priority.ALWAYS);
+    }
+
+    public void reset(){
+        this.getChildren().clear();
+        this.getChildren().addAll(playButton, sliderTimeLine, checkBoxRealTime);
     }
 
     public JFXSlider getSliderTimeLine() {

@@ -99,7 +99,7 @@ public class LAOP {
             mainSimulationStage.show();
         }
 
-        simulationEngine.setOnBatchFinished(sim->Console.info("Batch %s fini", sim.getBatchCount()));
+        simulationEngine.setOnBatchStarted(sim->Console.info("Batch %s fini", sim.getBatchCount()));
 
         simulationEngine.start();
     }

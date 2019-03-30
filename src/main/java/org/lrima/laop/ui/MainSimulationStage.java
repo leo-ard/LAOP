@@ -4,20 +4,19 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.lrima.laop.simulation.GenerationBasedSimulation;
+import org.lrima.laop.simulation.Simulation;
 import org.lrima.laop.simulation.SimulationEngine;
-import org.lrima.laop.ui.components.Timeline;
-import org.lrima.laop.ui.components.ChartPanel;
 import org.lrima.laop.ui.components.ConsolePanel;
+import org.lrima.laop.ui.components.LaopMenuBar;
+import org.lrima.laop.ui.components.Timeline;
 import org.lrima.laop.ui.components.inspector.InspectorPanel;
+import org.lrima.laop.ui.stage.GeneticStage;
 
 
 /**
@@ -34,12 +33,11 @@ public class MainSimulationStage extends Stage {
     private InspectorPanel inspector;
     private ConsolePanel consolePanel;
 
-    private ChartPanel chartPanel;
-
     private final double WINDOW_WIDTH = 1280;
     private final double WINDOW_HEIGHT = 720;
 
-    private MenuBar menuBar;
+    private LaopMenuBar menuBar;
+    private VBox bottomBar;
 
     /**
      * Initialize a new simulationEngine stage with a specific simulationEngine buffer
@@ -52,12 +50,12 @@ public class MainSimulationStage extends Stage {
         this.canvas = new Canvas(WINDOW_WIDTH, WINDOW_HEIGHT);
         this.inspector = new InspectorPanel();
         this.consolePanel = new ConsolePanel();
-        this.chartPanel = new ChartPanel(simulationEngine);
         this.simulationDrawer = new SimulationDrawer(canvas, simulationEngine, inspector);
         this.timeline = new Timeline(simulationDrawer);
         this.simulationDrawer.setSlider(this.timeline.getSliderTimeLine());
 
-        this.configureMenu();
+        this.menuBar = new LaopMenuBar();
+        this.menuBar.init(consolePanel, inspector, simulationDrawer);
 
         this.setOnCloseRequest(e->{
             Platform.exit();
@@ -67,96 +65,82 @@ public class MainSimulationStage extends Stage {
         this.loadAllScenes();
 
         this.simulationEngine.setMainScene(this);
+        this.simulationEngine.setOnBatchStarted(this::changeSimulation);
 
         this.simulationDrawer.start();
+    }
+
+    private void changeSimulation(SimulationEngine simulationEngine) {
+        Simulation simulation = simulationEngine.getSimulation();
+        reset();
+
+        SimulationView simulationView = null;
+        if(simulation instanceof GenerationBasedSimulation) simulationView = new GeneticStage((GenerationBasedSimulation) simulation);
+
+        System.out.println("CONFIGURING HAHAHA");
+
+        if(simulationView != null)
+            simulationView.setup(this);
+    }
+
+    private void reset() {
+        this.menuBar.reset();
+        this.timeline.reset();
+
+        this.bottomBar.getChildren().clear();
+        this.bottomBar.getChildren().add(this.timeline);
     }
 
     /**
      * Adds all the layouts with their components to root Pane
      */
     private void loadAllScenes() {
-        BorderPane rootPane = new BorderPane();
+        BorderPane uiElements = new BorderPane();
 
         Pane blankPane = new Pane();
         blankPane.setVisible(false);
 
-        rootPane.setTop(this.menuBar);
-        //rootPane.setCenter(blankPane);
+        uiElements.setTop(this.menuBar);
+        //uiElements.setCenter(blankPane);
 
         //Add the timeLine and the chart panel to the bottom
-        VBox bottomPanelBox = new VBox();
-        bottomPanelBox.getChildren().add(this.timeline);
-        bottomPanelBox.getChildren().add(this.chartPanel);
+        bottomBar = new VBox();
+        bottomBar.getChildren().add(this.timeline);
+//        bottomBar.getChildren().add(this.chartPanel);
 
-        rootPane.setBottom(bottomPanelBox);
-        rootPane.setRight(inspector);
+        uiElements.setBottom(bottomBar);
+        uiElements.setRight(inspector);
 
-        rootPane.setLeft(this.consolePanel);
+        uiElements.setLeft(this.consolePanel);
         canvas.setPickOnBounds(false);
-        rootPane.setPickOnBounds(false);
+        uiElements.setPickOnBounds(false);
 
-        StackPane rootrootPane = new StackPane(canvas, rootPane);
+        StackPane mainPane = new StackPane(canvas, uiElements);
 
         //CANVAS
         ChangeListener<Number> updateWidthHeight = (observable, oldValue, newValue) -> {
-            canvas.setHeight(rootrootPane.getHeight());
-            canvas.setWidth(rootrootPane.getWidth());
+            canvas.setHeight(mainPane.getHeight());
+            canvas.setWidth(mainPane.getWidth());
         };
 
-        rootrootPane.widthProperty().addListener(updateWidthHeight);
-        rootrootPane.heightProperty().addListener(updateWidthHeight);
+        mainPane.widthProperty().addListener(updateWidthHeight);
+        mainPane.heightProperty().addListener(updateWidthHeight);
 
-        Scene scene = new Scene(rootrootPane);
+        Scene scene = new Scene(mainPane);
         scene.getStylesheets().add("/css/general.css");
 
         this.setScene(scene);
     }
 
-    /**
-     * Cree le menu au dessus de la fenetre avec des boutons
-     * @author Clement Bisaillon
-     */
-    private void configureMenu() {
-    	this.menuBar = new MenuBar();
+    public Timeline getTimeline() {
+        return this.timeline;
+    }
 
-    	Menu windowMenu = new Menu("Window");
-    	CheckMenuItem showConsole = new CheckMenuItem("Console");
-    	CheckMenuItem showCharts = new CheckMenuItem("Charts");
-    	CheckMenuItem showCarInfo = new CheckMenuItem("Car info");
-    	showConsole.setSelected(true);
-    	showCharts.setSelected(true);
-    	showCarInfo.setSelected(false);
+    public VBox getBotomBar() {
+        return bottomBar;
+    }
 
-    	//Les actions quand nous cliquons sur les boutons
-    	showConsole.selectedProperty().addListener((obs, oldVal, newVal) -> {
-    		this.consolePanel.setVisible(newVal);
-    		this.consolePanel.setManaged(newVal);
-    	});
-
-    	showCharts.selectedProperty().addListener((obs, oldVal, newVal) -> {
-    		this.chartPanel.setVisible(newVal);
-    		this.chartPanel.setManaged(newVal);
-    	});
-
-    	showCarInfo.selectedProperty().addListener((obs, oldVal, newVal) -> {
-    		this.inspector.setVisible(newVal);
-    		this.inspector.setManaged(newVal);
-    	});
-
-    	//Two way bind with the inspector panel (When you click a car)
-    	this.inspector.visibleProperty().addListener((obs, oldVal, newVal) -> {
-    		showCarInfo.setSelected(newVal);
-    	});
-
-    	windowMenu.getItems().addAll(showConsole, showCharts, showCarInfo);
-
-    	Menu view = new Menu("View");
-
-    	MenuItem resetView = new MenuItem("Reset View");
-    	resetView.setOnAction(e -> simulationDrawer.resetView());
-
-    	view.getItems().add(resetView);
-
-    	this.menuBar.getMenus().addAll(windowMenu, view);
+    public LaopMenuBar getMenuBar() {
+        return menuBar;
     }
 }

@@ -5,7 +5,6 @@ import org.lrima.laop.core.LAOP;
 import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.network.LearningAnotation;
 import org.lrima.laop.network.carcontrollers.CarController;
-import org.lrima.laop.network.carcontrollers.ManualCarController;
 import org.lrima.laop.network.concreteNetworks.NEAT;
 import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.settings.LockedSetting;
@@ -27,7 +26,7 @@ public class SimulationEngine {
 
     private int batchCount;
 
-    ArrayList<Action<SimulationEngine>> onBatchFinished;
+    ArrayList<Action<SimulationEngine>> onBatchStarted;
     ArrayList<Action<SimulationEngine>> onEnd;
 
     private Stage mainScene;
@@ -39,7 +38,7 @@ public class SimulationEngine {
         this.simulationBuffer = simulationBuffer;
         this.settings = settings;
 
-        this.onBatchFinished = new ArrayList<>();
+        this.onBatchStarted = new ArrayList<>();
         this.onEnd = new ArrayList<>();
 
         this.currentScope = this.settings.getLocalScopeKeys().get(0);
@@ -54,10 +53,11 @@ public class SimulationEngine {
 
     private void nextBatch() {
         currentSimulation = generateSimulation();
+
+        this.onBatchStarted.forEach(b -> b.handle(this));
         currentSimulation.start();
         currentSimulation.setEnd((simulation) -> nextBatch());
         batchCount++;
-
     }
 
     private Simulation generateSimulation() {
@@ -110,8 +110,8 @@ public class SimulationEngine {
         return new ArrayList<>();
     }
 
-    public void setOnBatchFinished(Action<SimulationEngine> onBatchFinished) {
-        this.onBatchFinished.add(onBatchFinished);
+    public void setOnBatchStarted(Action<SimulationEngine> onBatchFinished) {
+        this.onBatchStarted.add(onBatchFinished);
     }
 
     public void setOnEnd(Action<SimulationEngine> onEnd) {
@@ -136,5 +136,9 @@ public class SimulationEngine {
 
     public LockedSetting getSettings() {
         return this.settings.lock(currentScope);
+    }
+
+    public Simulation getSimulation() {
+        return currentSimulation;
     }
 }
