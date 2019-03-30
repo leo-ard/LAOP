@@ -5,6 +5,7 @@ import org.lrima.laop.core.LAOP;
 import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.network.LearningAnotation;
 import org.lrima.laop.network.carcontrollers.CarController;
+import org.lrima.laop.network.carcontrollers.ManualCarController;
 import org.lrima.laop.network.concreteNetworks.NEAT;
 import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.settings.LockedSetting;
@@ -84,7 +85,7 @@ public class SimulationEngine {
     CarController generateCurrentNetwork() {
         Class<? extends CarController> carClass = (Class<? extends CarController>) settings.get(currentScope, LAOP.KEY_NETWORK_CLASS);
 
-        return new NEAT();
+        return new ManualCarController(mainScene);
 //        try {
 //            return carClass.newInstance();
 //        } catch (InstantiationException | IllegalAccessException e) {

@@ -1,5 +1,8 @@
 package org.lrima.laop.ui.components.inspector;
 
+import java.util.Map;
+
 public interface Inspectable {
-    void generatePanel(InspectorPanel inspectorPanel);
+	Map<String, String> getInformationHashmap();
+	String[] getCategories();
 }

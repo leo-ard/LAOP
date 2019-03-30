@@ -12,6 +12,8 @@ import java.util.HashMap;
 import org.lrima.laop.physic.concreteObjects.SimpleCar;
 import org.lrima.laop.physic.staticobjects.StaticObject;
 import org.lrima.laop.simulation.map.AbstractMap;
+import org.lrima.laop.simulation.sensors.data.ProximityLineSensorData;
+import org.lrima.laop.simulation.sensors.data.SensorData;
 import org.lrima.laop.utils.GraphicsUtils;
 import org.lrima.laop.utils.math.Vector2d;
 
@@ -110,6 +112,13 @@ public class ProximityLineSensor implements Sensor {
 		line.setLine(line.getP1(), new Point2D.Double(x2, y2));
 		
 		return new Area(GraphicsUtils.addThicknessToLine(line));
+	}
+
+	@Override
+	public SensorData getData() {
+		Vector2d center = car.getCenter();
+		this.start = new Point2D.Double(center.getX(), center.getY());
+		return new ProximityLineSensorData(this.start, this.orientation, this.SENSOR_LENGHT );
 	}
 
 }
