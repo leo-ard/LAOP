@@ -2,6 +2,7 @@ package org.lrima.laop.simulation.sensors;
 
 import java.awt.geom.Area;
 
+import org.lrima.laop.simulation.sensors.data.SensorData;
 import org.lrima.laop.ui.Drawable;
 
 /**
@@ -10,5 +11,6 @@ import org.lrima.laop.ui.Drawable;
  */
 public interface Sensor {
 	double getValue();
+	SensorData getData();
 	Area getArea();
 }

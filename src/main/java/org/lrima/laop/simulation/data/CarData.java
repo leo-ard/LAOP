@@ -3,26 +3,22 @@ package org.lrima.laop.simulation.data;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Area;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.simulation.sensors.Sensor;
+import org.lrima.laop.simulation.sensors.data.SensorData;
 import org.lrima.laop.ui.Drawable;
 import org.lrima.laop.ui.components.inspector.Inspectable;
-import org.lrima.laop.ui.components.inspector.InspectorPanel;
-import org.lrima.laop.utils.GraphicsUtils;
 import org.lrima.laop.utils.math.Vector2d;
 
 import javafx.geometry.Point2D;
-import javafx.geometry.Pos;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.text.Font;
 import javafx.scene.transform.Affine;
 
 /**
@@ -41,7 +37,7 @@ public class CarData implements Inspectable, Drawable {
     private ArrayList<Vector2d> forces;
     private final Color CAR_COLOR = new Color(32.0/255.0, 78.0/255.0, 95.0/255.0, 1);
     
-    private ArrayList<Area> sensorAreas;
+    private ArrayList<SensorData> sensors;
 
     /**
      * Retrieve information from a car
@@ -57,16 +53,16 @@ public class CarData implements Inspectable, Drawable {
         this.velociy = car.getVelocity();
         this.acceleration = car.getAcceleration();
         
-        this.sensorAreas = new ArrayList<>();
+        this.sensors = new ArrayList<>();
         for(Sensor sensor : car.getSensors()) {
-        	this.sensorAreas.add(sensor.getArea());
+        	this.sensors.add(sensor.getData());
         }
     }
 
     /**
      * @return Toute l'information qui doit etre affichée dans l'inspecteur sous forme de hashmap
      */
-    private Map<String, String> getInformationHashmap() {
+    @Override public Map<String, String> getInformationHashmap() {
         Map<String, String> information = new HashMap<>();
 
         information.put("x", String.format("%.2f", x));
@@ -83,6 +79,10 @@ public class CarData implements Inspectable, Drawable {
 
         return information;
 
+    }
+    
+    @Override public String[] getCategories(){
+    	return new String[] {"Car", "Algorithm", "Sensors"};
     }
 
     /**
@@ -104,9 +104,7 @@ public class CarData implements Inspectable, Drawable {
 
         //Draw the sensors
         if(selected) {
-        	for(Area area : this.sensorAreas) {
-        		GraphicsUtils.drawAWTArea(gc, area);
-        	}
+        	this.sensors.forEach((sensor) -> {sensor.draw(gc);});
         }
 
         gc.setTransform(temp);
@@ -124,19 +122,6 @@ public class CarData implements Inspectable, Drawable {
         affineTransform.translate(-x - width/2, -y - height/2);
 
         return affineTransform.createTransformedShape(rectangle2D);
-    }
-
-    @Override
-    public void generatePanel(InspectorPanel inspectorPanel) {
-        Label titleLabel = new Label("CAR INFORMATION");
-        titleLabel.setFont(new Font(18));
-        inspectorPanel.add(titleLabel);
-
-        inspectorPanel.setAlignment(Pos.TOP_LEFT);
-
-        for(String key : this.getInformationHashmap().keySet()){
-            inspectorPanel.add(new Label(key + " : "+ this.getInformationHashmap().get(key)));
-        }
     }
 
     public double getX() {

@@ -1,16 +1,29 @@
 package org.lrima.laop.ui.components.inspector;
 
-import javafx.geometry.Insets;
-import javafx.scene.Node;
-import javafx.scene.layout.VBox;
 import org.lrima.laop.utils.Actions.ObjectGetter;
 
+import com.jfoenix.controls.JFXDecorator;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+
 /**
- * Inspect an élément
+ * Inspect an element
  * @author Léonard
  */
 public class InspectorPanel extends VBox {
     ObjectGetter<? extends Inspectable> objectGetter;
+    private HBox header;
+    private Label headerLabel;
+    private ComboBox<String> categoryBox;
 
     public InspectorPanel(){
         super();
@@ -19,6 +32,13 @@ public class InspectorPanel extends VBox {
         this.setPadding(new Insets(10));
         generateUnselectPane();
         this.getStyleClass().add("panel");
+        
+        this.headerLabel = new Label("Information");
+        this.headerLabel.setFont(new Font(18));
+        this.categoryBox = new ComboBox<>();
+        this.header = new HBox(headerLabel, categoryBox);
+        
+       
     }
 
     /**
@@ -36,17 +56,31 @@ public class InspectorPanel extends VBox {
     public void generatePane(Inspectable object){
         this.setVisible(true);
         this.getChildren().clear();
-        object.generatePanel(this);
+        
+        
+        this.add(header);
+
+        this.setAlignment(Pos.TOP_LEFT);
+
+        for(String key : this.objectGetter.getObject().getInformationHashmap().keySet()){
+            this.add(new Label(key + " : "+ this.objectGetter.getObject().getInformationHashmap().get(key)));
+        }
     }
 
     /**
      * Met à jour ce panneau
      */
     public void update(){
-        if(this.objectGetter != null)
+        if(this.objectGetter != null) {
+        	ObservableList<String> categories = FXCollections.observableArrayList(this.objectGetter.getObject().getCategories());
+        	this.categoryBox.setItems(categories);
+        	this.categoryBox.getSelectionModel().select(0);
+        
             generatePane(this.objectGetter.getObject());
-        else
+        }
+        else {
             generateUnselectPane();
+        }
     }
 
     /**

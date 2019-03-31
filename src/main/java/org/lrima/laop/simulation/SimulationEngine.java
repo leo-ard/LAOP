@@ -6,7 +6,6 @@ import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.network.LearningAnotation;
 import org.lrima.laop.network.carcontrollers.CarController;
 import org.lrima.laop.network.carcontrollers.ManualCarController;
-import org.lrima.laop.network.concreteNetworks.NEAT;
 import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.settings.LockedSetting;
 import org.lrima.laop.settings.Settings;
