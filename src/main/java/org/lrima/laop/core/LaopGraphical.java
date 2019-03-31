@@ -27,7 +27,7 @@ public class LaopGraphical extends Application {
 //        configurationStage.show();
 
         LAOP laop = new LAOP();
-        laop.addAlgorithm("test1212", NEAT.class, GeneticLearning.class, new HashMap<>());
+        laop.addAlgorithm("test1212", FUCONN.class, GeneticLearning.class, new HashMap<>());
         laop.startSimulation(LAOP.SimulationDisplayMode.WITH_INTERFACE);
 
 

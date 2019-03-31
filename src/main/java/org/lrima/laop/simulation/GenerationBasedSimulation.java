@@ -48,7 +48,7 @@ public class GenerationBasedSimulation extends Simulation{
         ArrayList<SimpleCar> cars = new ArrayList<>();
 
         if(this.simulationEngine.getBuffer() != null) {
-            for(int i = 0 ; i < 1 ; i++) {
+            for(int i = 0 ; i < 1000 ; i++) {
                 Point2D start = this.simulationEngine.getMap().getStartPoint();
                 SimpleCar car = new SimpleCar(new Vector2d(start.getX(), start.getY()), this.simulationEngine.generateCurrentNetwork());
 
@@ -96,7 +96,7 @@ public class GenerationBasedSimulation extends Simulation{
         this.simulationEngine.getBuffer().clear();
         this.physicEngine = new PhysicEngine(this.simulationEngine.getBuffer(), this.simulationEngine.getMap());
 
-        this.physicEngine.setWaitDeltaT(true);
+        this.physicEngine.setWaitDeltaT(false);
         this.physicEngine.setFinishingConditions((list) -> {
             for (AbstractCar abstractCar : list) {
                 if(!abstractCar.isDead()){

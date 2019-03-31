@@ -31,8 +31,6 @@ public class MazeMap extends AbstractMap {
     	this.generate(1, 1);
     	this.createMazeObjects();
     	this.generateStartLocation();
-
-        System.out.println("MAZE SIZE : " + this.lines.size());
     }
     
     /**

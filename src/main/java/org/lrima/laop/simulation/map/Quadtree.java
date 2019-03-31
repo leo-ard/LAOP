@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Quadtree {
     private final int MIN_OBJECTS = 20;
-    private final int MAX_LEVELS = 5;
+    private final int MAX_LEVELS = 7;
 
     private int level;
     private ArrayList<StaticLineObject> lines;
@@ -38,9 +38,7 @@ public class Quadtree {
     public void insert(StaticLineObject line){
         if(!splitted){
             lines.add(line);
-            System.out.println(lines.size());
             if(lines.size() > MIN_OBJECTS && level < MAX_LEVELS){
-                System.out.println("YESSS");
                 split();
             }
         }

@@ -123,9 +123,9 @@ public class PhysicEngine extends Thread {
 
         for(AbstractCar car : this.cars){
             this.map.collide(car);
-            for (LineCollidable line : car.getCollidableSensors()) {
-                this.map.collide(line);
-            }
+//            for (LineCollidable line : car.getCollidableSensors()) {
+//                this.map.collide(line);
+//            }
         }
 
     }

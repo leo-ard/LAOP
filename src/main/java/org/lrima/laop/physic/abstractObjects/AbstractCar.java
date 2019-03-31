@@ -234,7 +234,6 @@ public abstract class AbstractCar implements LineCollidable {
     public abstract boolean isCollidingWith(StaticLineObject staticLineObject);
 
     public void kill(){
-        System.out.println("kill");
         dead = true;
     }
 
