@@ -11,7 +11,6 @@ import org.lrima.laop.settings.LockedSetting;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.simulation.map.AbstractMap;
-import org.lrima.laop.simulation.map.BlankMap;
 import org.lrima.laop.simulation.map.MazeMap;
 import org.lrima.laop.utils.Actions.Action;
 
@@ -46,7 +45,8 @@ public class SimulationEngine {
 
         map = new MazeMap(10);
 //        map = new BlankMap();
-        map.bakeArea();
+        map.bake();
+        ((MazeMap)map).bakeArea();
     }
 
     public void start(){

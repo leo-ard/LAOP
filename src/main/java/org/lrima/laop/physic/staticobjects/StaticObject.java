@@ -9,7 +9,6 @@ import javafx.scene.canvas.GraphicsContext;
 
 
 public interface StaticObject extends Drawable {
-    void collideWith(AbstractCar physicable);
     Area getArea();
     StaticObjectType getType();
 }

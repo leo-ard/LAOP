@@ -84,11 +84,13 @@ public class MainSimulationStage extends Stage {
     }
 
     private void reset() {
-        this.menuBar.reset();
-        this.timeline.reset();
+        Platform.runLater(() -> {
+            this.menuBar.reset();
+            this.timeline.reset();
 
-        this.bottomBar.getChildren().clear();
-        this.bottomBar.getChildren().add(this.timeline);
+            this.bottomBar.getChildren().clear();
+            this.bottomBar.getChildren().add(this.timeline);
+        });
     }
 
     /**

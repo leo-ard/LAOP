@@ -1,8 +1,11 @@
 package org.lrima.laop.simulation.map;
 
+import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+import org.lrima.laop.physic.abstractObjects.AbstractCar;
+import org.lrima.laop.physic.staticobjects.StaticLineObject;
 import org.lrima.laop.physic.staticobjects.StaticObject;
 
 /**
@@ -10,16 +13,61 @@ import org.lrima.laop.physic.staticobjects.StaticObject;
  * @author Clement Bisaillon
  */
 public abstract class AbstractMap {
-	protected ArrayList<StaticObject> objects;
+	protected ArrayList<StaticLineObject> lines;
+	protected Quadtree quadtree;
 	
 	public AbstractMap() {
-		this.objects = new ArrayList<>();
+		this.lines = new ArrayList<>();
 	}
 	
 	/**
-	 * Converts the objects of the map to multiple areas containing the same type of objects
+	 * Converts the lines of the map to multiple areas containing the same type of lines
+	 *
+	 * @author Léonard
 	 */
-	abstract public void bakeArea();
+	public void bake(){
+		float minx = lines.get(0).getX1();
+		float miny = lines.get(0).getY1();
+		float maxx = lines.get(0).getX1();
+		float maxy = lines.get(0).getY1();
+
+		for (StaticLineObject line : lines) {
+			maxx = Math.max(maxx, line.getX1());
+			maxx = Math.max(maxx, line.getX2());
+			maxy = Math.max(maxy, line.getY1());
+			maxy = Math.max(maxy, line.getY2());
+
+			minx = Math.min(minx, line.getX1());
+			minx = Math.min(minx, line.getX2());
+			miny = Math.min(miny, line.getY1());
+			miny = Math.min(miny, line.getY2());
+		}
+
+		quadtree = new Quadtree(0, minx, miny, maxx, maxy);
+		for (StaticLineObject line : lines) {
+			quadtree.insert(line);
+		}
+	}
+
+	/**
+	 *
+	 * @param lineCollidable
+	 * @author Léonard
+	 */
+	public void collide(LineCollidable lineCollidable){
+		quadtree.collide(lineCollidable);
+	}
+
+	/**
+	 *
+	 * @param lineCollidable
+	 * @author Léonard
+	 */
+	public void collide(AbstractCar car){
+		quadtree.collide(car);
+
+		car.getCollidableSensors();
+	}
 	
 	/**
      * @return the starting point of the cars
@@ -27,9 +75,11 @@ public abstract class AbstractMap {
 	abstract public Point2D getStartPoint();
 	
 	/**
-	 * @return All the objects in the map
+	 * @return All the lines in the map
 	 */
-	public ArrayList<StaticObject> getObjects(){
-		return this.objects;
+	public ArrayList<StaticLineObject> getLines(){
+		return this.lines;
 	}
+
+	public abstract Area getArea();
 }

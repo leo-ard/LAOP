@@ -4,17 +4,15 @@ import java.awt.geom.Area;
 import java.util.ArrayList;
 
 import org.lrima.laop.physic.abstractObjects.AbstractCar;
-import org.lrima.laop.physic.abstractObjects.Box;
 import org.lrima.laop.physic.concreteObjects.SimpleCar;
-import org.lrima.laop.physic.staticobjects.StaticObject;
+import org.lrima.laop.physic.staticobjects.StaticLineObject;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.simulation.buffer.SimulationSnapshot;
 import org.lrima.laop.simulation.data.CarData;
 import org.lrima.laop.simulation.map.AbstractMap;
+import org.lrima.laop.simulation.map.LineCollidable;
 import org.lrima.laop.utils.Actions.Action;
 
-import java.awt.geom.Area;
-import java.util.ArrayList;
 import java.util.function.Function;
 
 /**
@@ -43,6 +41,11 @@ public class PhysicEngine extends Thread {
     private SimulationBuffer simulationBuffer;
     private boolean waitDeltaT;
     private Function<ArrayList<AbstractCar>, Boolean> finishingCondition;
+
+    public static double sumArea = 0;
+    public static double sumLine = 0;
+    public static double sumLineBetter = 0;
+
 
     public PhysicEngine(SimulationBuffer buffer, AbstractMap map){
     	this.simulationBuffer = buffer;
@@ -118,18 +121,13 @@ public class PhysicEngine extends Thread {
     private void checkCollision(){
         //TODO: Pas la meilleur facon de faire
 
-        for(AbstractCar physicable : this.cars){
-
-
-        	for(StaticObject obstacle : this.map.getObjects()) {
-        		Area intersection = obstacle.getArea();
-        		intersection.intersect(physicable.getArea());
-        		if(!intersection.isEmpty()){
-                    obstacle.collideWith(physicable);
-                    physicable.collideWith(obstacle);
-                }
-        	}
+        for(AbstractCar car : this.cars){
+            this.map.collide(car);
+            for (LineCollidable line : car.getCollidableSensors()) {
+                this.map.collide(line);
+            }
         }
+
     }
 
     /**

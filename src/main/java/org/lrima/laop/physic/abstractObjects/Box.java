@@ -1,5 +1,7 @@
 package org.lrima.laop.physic.abstractObjects;
 
+import org.lrima.laop.physic.staticobjects.StaticLineObject;
+import org.lrima.laop.utils.MathUtils;
 import org.lrima.laop.utils.math.Vector2d;
 
 import java.awt.*;
@@ -23,8 +25,8 @@ public abstract class Box extends AbstractCar {
      */
     public Box(Vector2d position, double mass, double width, double height){
         super(position, mass);
-        this.width = width;
-        this.height = height;
+        this.width = Math.min(width, height);
+        this.height = Math.max(width, height);
     }
 
     /**
@@ -35,22 +37,18 @@ public abstract class Box extends AbstractCar {
      */
     public Box(double mass, double width, double height){
         super(mass);
-        this.width = width;
-        this.height = height;
+        this.width = Math.max(width, height);
+        this.height = Math.min(width, height);
     }
 
-    //TODO
-    public void collideWith(AbstractCar object) {
-        //FOR THE DEMO
-        if(this.canCollide()) {
-            this.stopCheckingCollisionAt = System.currentTimeMillis();
-
-            this.resetVelocity();
-
-            for (int i = 0; i < this.forces.size(); i++) {
-                this.forces.set(i, this.forces.get(i).multiply(-1));
-            }
-        }
+    public boolean isCollidingWith(StaticLineObject staticLineObject){
+        return MathUtils.rectSegmentIntersection(
+                staticLineObject.getX1(), staticLineObject.getY1(),
+                staticLineObject.getX2(), staticLineObject.getY2(),
+                (float) getTopLeftPosition().getX(), (float) getTopLeftPosition().getY(),
+                (float) getTopRightPosition().getX(), (float) getTopRightPosition().getY(),
+                (float) getBottomRightPosition().getX(), (float) getBottomRightPosition().getY(),
+                (float) getBottomLeftPosition().getX(), (float) getBottomLeftPosition().getY());
     }
 
 
@@ -114,5 +112,39 @@ public abstract class Box extends AbstractCar {
         at.rotate(this.rotation, this.position.getX() + width/2, this.position.getY()+height/2);
 
         return new Area(at.createTransformedShape(rect));
+    }
+
+    @Override
+    public float getX1() {
+        return (float) (this.getCenter().getX() - this.height);
+    }
+
+    @Override
+    public float getX2() {
+        return (float) (this.getCenter().getX() + this.height);
+    }
+
+    @Override
+    public float getY2() {
+        return (float) (this.getCenter().getY() - this.height);
+    }
+
+    @Override
+    public float getY1() {
+        return (float) (this.getCenter().getY() + this.height);
+    }
+
+    @Override
+    public void collide(StaticLineObject line) {
+        if(this.isDead()) return;
+
+        if(MathUtils.rectSegmentIntersection(
+                line.getX1(), line.getY1(),
+                line.getX2(), line.getY2(),
+                (float) getTopLeftPosition().getX(), (float) getTopLeftPosition().getY(),
+                (float) getTopRightPosition().getX(), (float) getTopRightPosition().getY(),
+                (float) getBottomRightPosition().getX(), (float) getBottomRightPosition().getY(),
+                (float) getBottomLeftPosition().getX(), (float) getBottomLeftPosition().getY()))
+            this.kill();
     }
 }

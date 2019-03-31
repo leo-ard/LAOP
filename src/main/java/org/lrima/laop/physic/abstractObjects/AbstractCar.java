@@ -1,9 +1,12 @@
 package org.lrima.laop.physic.abstractObjects;
 
 import org.lrima.laop.physic.PhysicEngine;
+import org.lrima.laop.physic.staticobjects.StaticLineObject;
 import org.lrima.laop.physic.staticobjects.StaticObject;
 import org.lrima.laop.physic.staticobjects.StaticObjectType;
+import org.lrima.laop.simulation.map.LineCollidable;
 import org.lrima.laop.simulation.sensors.Sensor;
+import org.lrima.laop.simulation.sensors.data.SensorData;
 import org.lrima.laop.utils.math.Vector2d;
 
 import java.awt.geom.Area;
@@ -13,7 +16,7 @@ import java.util.ArrayList;
  * Class that can be simulated physicaly
  * @author Clement Bisaillon
  */
-public abstract class AbstractCar {
+public abstract class AbstractCar implements LineCollidable {
     protected Vector2d position;
     protected Vector2d velocity;
     protected Vector2d acceleration;
@@ -28,6 +31,8 @@ public abstract class AbstractCar {
     //Used to disable collision detection right after the collision happened
     protected long stopCheckingCollisionAt;
     private final int MINIMUM_TIME_BEFORE_COLLISION_AGAIN = 100;
+
+    protected boolean dead;
 
     /**
      * Create a new java.physic object with the default variables
@@ -197,7 +202,7 @@ public abstract class AbstractCar {
     /**
      * @return the list of sensors attached to this car
      */
-    public abstract ArrayList<Sensor> getSensors();
+    public abstract void addSensor(Sensor sensor);
     
     /**
      * Get the area of the object to check for collisions
@@ -223,5 +228,17 @@ public abstract class AbstractCar {
     public abstract Vector2d getCenter();
 
 
-    public abstract boolean isDead();
+    public boolean isDead(){
+        return dead;
+    }
+    public abstract boolean isCollidingWith(StaticLineObject staticLineObject);
+
+    public void kill(){
+        System.out.println("kill");
+        dead = true;
+    }
+
+    public abstract ArrayList<LineCollidable> getCollidableSensors();
+
+    public abstract ArrayList<SensorData> getSensorsData();
 }

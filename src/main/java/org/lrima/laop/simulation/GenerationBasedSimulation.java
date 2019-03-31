@@ -48,15 +48,15 @@ public class GenerationBasedSimulation extends Simulation{
         ArrayList<SimpleCar> cars = new ArrayList<>();
 
         if(this.simulationEngine.getBuffer() != null) {
-            for(int i = 0 ; i < 100 ; i++) {
+            for(int i = 0 ; i < 1 ; i++) {
                 Point2D start = this.simulationEngine.getMap().getStartPoint();
                 SimpleCar car = new SimpleCar(new Vector2d(start.getX(), start.getY()), this.simulationEngine.generateCurrentNetwork());
 
                 double orientationIncrement = Math.PI / NUMBER_OF_SENSORS;
                 //Create the sensors and assign them to the car
                 for(int x = 0 ; x < this.NUMBER_OF_SENSORS ; x++) {
-                    ProximityLineSensor sensor = new ProximityLineSensor(this.simulationEngine.getMap(), car, (x * orientationIncrement) + orientationIncrement/2);
-                    car.getSensors().add(sensor);
+                    ProximityLineSensor sensor = new ProximityLineSensor(car, (x * orientationIncrement) + orientationIncrement/2);
+                    car.addSensor(sensor);
                 }
 
                 cars.add(car);

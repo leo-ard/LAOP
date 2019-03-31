@@ -22,8 +22,8 @@ public class NEAT implements GeneticNeuralNetwork {
     @Override
     public CarControls control(double... sensorValues) {
     	CarControls controls = new CarControls();
-    	controls.setAcceleration(1-sensorValues[2]);
-    	controls.setBreak(sensorValues[2]);
+    	controls.setAcceleration(sensorValues[2]);
+    	controls.setBreak(1-sensorValues[2]);
     	controls.setRotation(sensorValues[4] - sensorValues[0]);
 
         return controls;

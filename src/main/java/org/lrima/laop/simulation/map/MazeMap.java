@@ -1,11 +1,7 @@
 package org.lrima.laop.simulation.map;
 
 import java.awt.geom.Area;
-import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.lrima.laop.physic.staticobjects.StaticLineObject;
 import org.lrima.laop.physic.staticobjects.StaticObject;
@@ -16,7 +12,6 @@ import org.lrima.laop.utils.math.RandomUtils;
  * @author Clement Bisaillon
  */
 public class MazeMap extends AbstractMap {
-    Area area;
     private final int MAP_SQUARE_WIDTH = 100;
     private int numberSquareX;
     private boolean[][] north;
@@ -25,8 +20,9 @@ public class MazeMap extends AbstractMap {
     private boolean[][] west;
     private boolean[][] visited;
     private Point2D start;
-   
-    
+    private Area area;
+
+
     public MazeMap(int numberOfSquareX) {
     	super();
     	this.numberSquareX = numberOfSquareX;
@@ -35,6 +31,8 @@ public class MazeMap extends AbstractMap {
     	this.generate(1, 1);
     	this.createMazeObjects();
     	this.generateStartLocation();
+
+        System.out.println("MAZE SIZE : " + this.lines.size());
     }
     
     /**
@@ -149,7 +147,7 @@ public class MazeMap extends AbstractMap {
     	for(int x = 1 ; x < north.length - 1 ; x++) {
     		for(int y = 1 ; y < north[0].length - 1 ; y++) {
     			if(north[x][y]) {
-    				this.objects.add(new StaticLineObject((x - 1) * MAP_SQUARE_WIDTH, (y - 1) * MAP_SQUARE_WIDTH, x * MAP_SQUARE_WIDTH, (y - 1) * MAP_SQUARE_WIDTH));
+    				this.lines.add(new StaticLineObject((x - 1) * MAP_SQUARE_WIDTH, (y - 1) * MAP_SQUARE_WIDTH, x * MAP_SQUARE_WIDTH, (y - 1) * MAP_SQUARE_WIDTH));
     			}
     		}
     	}
@@ -157,7 +155,7 @@ public class MazeMap extends AbstractMap {
     	for(int x = 1 ; x < south.length - 1 ; x++) {
     		for(int y = 1 ; y < south[0].length - 1 ; y++) {
     			if(south[x][y]) {
-    				this.objects.add(new StaticLineObject((x - 1) * MAP_SQUARE_WIDTH, y * MAP_SQUARE_WIDTH, x * MAP_SQUARE_WIDTH, y * MAP_SQUARE_WIDTH));
+    				this.lines.add(new StaticLineObject((x - 1) * MAP_SQUARE_WIDTH, y * MAP_SQUARE_WIDTH, x * MAP_SQUARE_WIDTH, y * MAP_SQUARE_WIDTH));
     			}
     		}
     	}
@@ -165,7 +163,7 @@ public class MazeMap extends AbstractMap {
     	for(int x = 1 ; x < east.length - 1 ; x++) {
     		for(int y = 1 ; y < east[0].length - 1 ; y++) {
     			if(east[x][y]) {
-    				this.objects.add(new StaticLineObject(x * MAP_SQUARE_WIDTH, (y - 1) * MAP_SQUARE_WIDTH, x * MAP_SQUARE_WIDTH, y * MAP_SQUARE_WIDTH));
+    				this.lines.add(new StaticLineObject(x * MAP_SQUARE_WIDTH, (y - 1) * MAP_SQUARE_WIDTH, x * MAP_SQUARE_WIDTH, y * MAP_SQUARE_WIDTH));
     			}
     		}
     	}
@@ -173,7 +171,7 @@ public class MazeMap extends AbstractMap {
     	for(int x = 1 ; x < west.length - 1 ; x++) {
     		for(int y = 1 ; y < west[0].length - 1 ; y++) {
     			if(west[x][y]) {
-    				this.objects.add(new StaticLineObject((x - 1) * MAP_SQUARE_WIDTH, (y - 1) * MAP_SQUARE_WIDTH, (x - 1) * MAP_SQUARE_WIDTH, y * MAP_SQUARE_WIDTH));
+    				this.lines.add(new StaticLineObject((x - 1) * MAP_SQUARE_WIDTH, (y - 1) * MAP_SQUARE_WIDTH, (x - 1) * MAP_SQUARE_WIDTH, y * MAP_SQUARE_WIDTH));
     			}
     		}
     	}
@@ -197,18 +195,15 @@ public class MazeMap extends AbstractMap {
     	//Start by making maze with all squares closed
     }
     
-    @Override
     public void bakeArea() {
         area = new Area();
-        objects.forEach(staticObject1 -> area.add(staticObject1.getArea()));
+        for (StaticObject staticObject1 : lines) {
+            area.add(staticObject1.getArea());
+        }
     }
 
     public Area getArea() {
         return area;
-    }
-
-    public ArrayList<StaticObject> getObjects() {
-        return objects;
     }
     
     @Override

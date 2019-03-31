@@ -1,5 +1,6 @@
 package org.lrima.laop.ui.components;
 
+import javafx.application.Platform;
 import org.lrima.laop.simulation.SimulationEngine;
 import org.lrima.laop.simulation.data.GenerationData;
 
@@ -99,9 +100,15 @@ public class ChartPanel extends HBox {
 		this.yAxis.setLowerBound(this.minY);
 		this.yAxis.setUpperBound(this.maxY);
 		this.xAxis.setUpperBound(this.generationNumber);
-		
+
+		/*
+         * TODO : fait une erreur des fois (doit etre mis sur un thread Javafx)
+         * Exception in thread "Thread-15" java.lang.IllegalStateException: Not on FX application thread; currentThread = Thread-15
+         */
 		//Add the data to the chart
-		this.averageFitnessSerie.getData().add(data);
+        Platform.runLater(
+                ()-> this.averageFitnessSerie.getData().add(data)
+        );
 		
 		this.generationNumber++;
 	}
