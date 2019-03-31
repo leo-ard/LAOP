@@ -17,7 +17,6 @@ import org.lrima.laop.ui.controllers.ConfigurationController;
 import org.lrima.laop.utils.FXUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Class that controls the transitions between the configuration panels (with next and back button)
@@ -96,7 +95,7 @@ public class ConfigurationStage extends Stage {
         
         if(loader.getController() instanceof ConfigurationController){
             ConfigurationController configurationController = loader.getController();
-            configurationController.setSettings(laop.getSettings());
+            configurationController.setLaop(laop);
         }
 
         return loader.getRoot();

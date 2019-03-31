@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import org.lrima.laop.core.LAOP;
+import org.lrima.laop.network.concreteLearning.GeneticLearning;
+import org.lrima.laop.network.concreteNetworks.NEAT;
 import org.lrima.laop.settings.Scope;
 import org.lrima.laop.settings.Settings;
 
@@ -28,7 +31,7 @@ public class ConfigurationController implements Initializable {
     
     @FXML private JFXListView<String> scopeList;
     @FXML private BorderPane settingsContainer;
-    private Settings settings;
+    private LAOP laop;
     private HashMap<String, Node> panels;
 
 
@@ -43,7 +46,7 @@ public class ConfigurationController implements Initializable {
     	Optional<String> scopeName = scopeNameDialog.showAndWait();
     	
     	scopeName.ifPresent(name -> {
-    		this.settings.addScope(name);
+    		this.laop.addAlgorithm(name, NEAT.class, GeneticLearning.class, new HashMap<>());
     		this.reloadScopeTableFromSettings();
     	});
     }
@@ -61,27 +64,27 @@ public class ConfigurationController implements Initializable {
         });
     }
     
-    public void setSettings(Settings settings) {
-    	this.settings = settings;
+    public void setLaop(LAOP laop) {
+    	this.laop = laop;
     	this.reloadScopeTableFromSettings();
     }
     
     /**
-     * Check the settings and add a table cell for each scopes
+     * Check the laop and add a table cell for each scopes
      */
     private void reloadScopeTableFromSettings() {
     	ObservableList itemList = FXCollections.observableArrayList();
     	this.panels = new HashMap<>();
     	
-    	for(String scopeName : this.settings.getScopeKeys()) {
+    	for(String scopeName : this.laop.getSettings().getScopeKeys()) {
     		itemList.add(scopeName);
     	}
     	
     	scopeList.setItems(itemList);
     	
     	//Get the content node of the scopes
-    	this.settings.getScopes().keySet().forEach((scopeKey) -> {
-    		Scope scope = this.settings.getScopes().get(scopeKey);
+    	this.laop.getSettings().getScopes().keySet().forEach((scopeKey) -> {
+    		Scope scope = this.laop.getSettings().getScopes().get(scopeKey);
     		this.panels.put(scopeKey, scope.generatePanel());
     	});
     	
