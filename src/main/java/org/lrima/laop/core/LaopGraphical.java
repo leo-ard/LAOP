@@ -24,11 +24,11 @@ public class LaopGraphical extends Application {
 
     @Override
     public void start(Stage stage) {
-//        ConfigurationStage configurationStage = new ConfigurationStage();
-//        configurationStage.show();
+        ConfigurationStage configurationStage = new ConfigurationStage();
+        configurationStage.show();
 
-        LAOP laop = new LAOP();
-        laop.addAlgorithm("test1212", ManualCarController.class, GeneticLearning.class, new HashMap<>());
-        laop.startSimulation(LAOP.SimulationDisplayMode.WITH_INTERFACE);
+//        LAOP laop = new LAOP();
+//        laop.addAlgorithm("test1212", ManualCarController.class, GeneticLearning.class, new HashMap<>());
+//        laop.startSimulation(LAOP.SimulationDisplayMode.WITH_INTERFACE);
     }
 }

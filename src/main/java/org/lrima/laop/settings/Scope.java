@@ -1,6 +1,7 @@
 package org.lrima.laop.settings;
 
 import javafx.scene.Node;
+import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.settings.option.*;
 
 import java.util.LinkedHashMap;
@@ -78,7 +79,7 @@ public class Scope extends LinkedHashMap<String, Option> {
         if (value instanceof String) return new OptionString((String) value);
         if (value instanceof Integer) return new OptionInt((Integer) value);
         if (value instanceof Double) return new OptionDouble((Double) value);
-        if (value instanceof Class<?>) return new OptionClass((Class<?>) value);
+        if (value instanceof Class<?>) System.err.println("YOU CANNOT PUT A CLASS AS VALUE. YOU MUST PUT AN OptionClass TO DO SO.");
 
         throw new UnsupportedOperationException("The type : " + value.getClass() + " is not supported by the Option");
     }

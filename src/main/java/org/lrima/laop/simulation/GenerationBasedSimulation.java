@@ -29,7 +29,7 @@ public class GenerationBasedSimulation extends Simulation{
     private boolean autoRun;
 
     //temporary
-    private final int NUMBER_OF_SENSORS = 2;
+    private final int NUMBER_OF_SENSORS = 5;
     //endtemporary
 
     /**

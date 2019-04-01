@@ -2,6 +2,10 @@ package org.lrima.laop.core;
 
 import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.network.carcontrollers.CarController;
+import org.lrima.laop.network.concreteLearning.GeneticLearning;
+import org.lrima.laop.network.concreteNetworks.FUCONN;
+import org.lrima.laop.network.concreteNetworks.NEAT;
+import org.lrima.laop.settings.option.OptionClass;
 import org.lrima.laop.ui.MainSimulationStage;
 import org.lrima.laop.settings.Scope;
 import org.lrima.laop.settings.Settings;
@@ -10,6 +14,7 @@ import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.utils.Console;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -19,7 +24,17 @@ import java.util.HashMap;
  */
 public class LAOP {
     //TODO : this is just for testing purpurses
-    static final Class<? extends Object> FULLY_CONNECTED = Scope.class;
+    public static ArrayList<Class<? extends LearningAlgorithm>> LEARNING_ALGORITHMS_CLASSES;
+    public static ArrayList<Class<? extends CarController>> NEURAL_NETWORKS_CLASSES;
+
+    static{
+        LEARNING_ALGORITHMS_CLASSES = new ArrayList<>();
+        LEARNING_ALGORITHMS_CLASSES.add(GeneticLearning.class);
+
+        NEURAL_NETWORKS_CLASSES = new ArrayList<>();
+        NEURAL_NETWORKS_CLASSES.add(NEAT.class);
+        NEURAL_NETWORKS_CLASSES.add(FUCONN.class);
+    }
 
     Settings settings;
 
@@ -37,6 +52,7 @@ public class LAOP {
         settings.set(Settings.GLOBAL_SCOPE, KEY_TIME_LIMIT, DEFAULT_TIME_LIMIT);
         settings.set(Settings.GLOBAL_SCOPE, KEY_NUMBER_OF_SIMULATION, DEFAULT_NUMBER_OF_SIMULATION);
         settings.set(Settings.GLOBAL_SCOPE, KEY_NUMBER_OF_GENERATIONS, DEFAULT_NUMBER_OF_GENERATIONS);
+        settings.set(Settings.GLOBAL_SCOPE, KEY_NUMBER_OF_SENSORS, DEFAULT_NUMBER_OF_SENSORS);
     }
 
     /**
@@ -50,8 +66,8 @@ public class LAOP {
         if(settings.get(label) != null)
             throw new KeyAlreadyExistsException("The label "+label+" has already been assigned");
 
-        this.settings.set(label, LAOP.KEY_NETWORK_CLASS, algorithmClass);
-        this.settings.set(label, LAOP.KEY_LEARNING_CLASS, learningClass);
+        this.settings.set(label, LAOP.KEY_NETWORK_CLASS, new OptionClass(algorithmClass, NEURAL_NETWORKS_CLASSES));
+        this.settings.set(label, LAOP.KEY_LEARNING_CLASS, new OptionClass(learningClass, LEARNING_ALGORITHMS_CLASSES));
         settings.forEach((k, v) -> this.settings.set(label, k, v));
     }
 
@@ -128,6 +144,10 @@ public class LAOP {
     public static final int DEFAULT_NUMBER_OF_GENERATIONS = 10;
     public static final String KEY_NUMBER_OF_GENERATIONS = "NUMBER OF GENERATIONS";
 
-    public static final String KEY_NETWORK_CLASS = "NEURAL_NETWORK_CLASS";
-    public static final String KEY_LEARNING_CLASS = "LEARNING_ALGORITHM_CLASS";
+    public static final String KEY_NETWORK_CLASS = "NEURAL NETWORK CLASS";
+    public static final String KEY_LEARNING_CLASS = "LEARNING ALGORITHM CLASS";
+
+    private static final String KEY_NUMBER_OF_SENSORS = "NUMBER OF SENSORS";
+    private static final Object DEFAULT_NUMBER_OF_SENSORS = 5;
+
 }

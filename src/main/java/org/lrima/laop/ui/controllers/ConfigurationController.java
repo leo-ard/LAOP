@@ -75,10 +75,8 @@ public class ConfigurationController implements Initializable {
     private void reloadScopeTableFromSettings() {
     	ObservableList itemList = FXCollections.observableArrayList();
     	this.panels = new HashMap<>();
-    	
-    	for(String scopeName : this.laop.getSettings().getScopeKeys()) {
-    		itemList.add(scopeName);
-    	}
+
+		itemList.addAll(this.laop.getSettings().getScopeKeys());
     	
     	scopeList.setItems(itemList);
     	

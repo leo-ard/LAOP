@@ -45,7 +45,6 @@ public class ScopeModifierPanel extends GridPane {
             Option value = scope.get(key);
 
             Label keyLabel = new Label(key);
-            GridPane.setHgrow(keyLabel, Priority.ALWAYS);
 
             Node component = value.generateComponent();
             GridPane.setHgrow(component, Priority.ALWAYS);
@@ -65,6 +64,8 @@ public class ScopeModifierPanel extends GridPane {
             }
             i++;
         }
+
+        this.layout();
 
     }
 

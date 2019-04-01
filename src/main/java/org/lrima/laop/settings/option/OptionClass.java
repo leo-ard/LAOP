@@ -4,12 +4,24 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
+import org.lrima.laop.network.LearningAlgorithm;
+import org.lrima.laop.network.LearningAnotation;
 
-public class OptionClass implements Option<Class<?>> {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.stream.Collectors;
+
+public class OptionClass<T> implements Option<Class<?>> {
     Class<?> value;
+    HashMap<String, Class<? extends T>> allClasses;
 
-    public OptionClass(Class<?> value) {
+    public OptionClass(Class<?> value, ArrayList<Class<? extends T>> allAvailableClasses) {
     	this.value = value;
+
+    	allClasses = new HashMap<>();
+        for (Class<? extends T> allAvailableClass : allAvailableClasses) {
+            allClasses.put(allAvailableClass.getSimpleName(), allAvailableClass);
+        }
     }
 
     @Override
@@ -27,8 +39,13 @@ public class OptionClass implements Option<Class<?>> {
     public Node generateComponent() {
         // TODO : take the global liste instead
         ObservableList<String> observableList = FXCollections.observableArrayList();
-        observableList.add(value.getSimpleName());
+        observableList.addAll(allClasses.keySet());
 
-        return new ComboBox<String>(observableList);
+        ComboBox<String> stringComboBox = new ComboBox<>(observableList);
+        stringComboBox.getSelectionModel().select(value.getSimpleName());
+        stringComboBox.getSelectionModel().selectedItemProperty().addListener((s, newOb, oldOb) ->{
+            setValue(allClasses.get(newOb));
+        });
+        return stringComboBox;
     }
 }
