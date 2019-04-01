@@ -46,7 +46,6 @@ public class SimulationEngine {
         map = new MazeMap(10);
 //        map = new BlankMap();
         map.bake();
-        ((MazeMap)map).bakeArea();
     }
 
     public void start(){

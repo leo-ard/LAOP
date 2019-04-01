@@ -79,7 +79,7 @@ public class MathUtils {
         float t = (  s2x*( p0y - p2y ) - s2y * (p0x - p2x) )* determinant;
 
         if(s >= 0 && s <= 1 && t >= 0 && t <= 1){
-            return new float[]{p0x + (t * s1x), p0y + (t * s1y), s, t};
+            return new float[]{p0x + (t * s1x), p0y + (t * s1y)};
         }
 
         return null;

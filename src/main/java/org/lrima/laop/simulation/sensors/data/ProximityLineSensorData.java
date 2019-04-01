@@ -14,6 +14,7 @@ public class ProximityLineSensorData implements SensorData {
 	double startX, startY;
 	double angle;
 	double length;
+	double value;
 	
 	/**
 	 * Save the state of a proximity line sensor at a certain moment
@@ -21,11 +22,12 @@ public class ProximityLineSensorData implements SensorData {
 	 * @param angle the angle of the sensor
 	 * @param lenght the lenght of the sensor
 	 */
-	public ProximityLineSensorData(Point2D start, double angle, double lenght) {
+	public ProximityLineSensorData(Point2D start, double angle, double lenght, double value) {
 		this.startX = start.getX();
 		this.startY = start.getY();
 		this.angle = angle;
 		this.length = lenght;
+		this.value = value;
 	}
 
 	@Override
@@ -36,6 +38,8 @@ public class ProximityLineSensorData implements SensorData {
 		double y2 = this.startY + Math.sin(this.angle) * this.length;
 		
 		gc.strokeLine(startX, startY, x2, y2);
+
+		gc.fillText(String.format("%.2f", value), x2, y2);
 		
 		gc.getTransform().prependRotation(angle);
 	}

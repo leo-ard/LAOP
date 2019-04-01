@@ -47,6 +47,8 @@ public class SimulationDrawer{
     private ArrayList<CarData> currentCars;
 
     private final Color BACKGROUND_COLOR = new Color(237.0/255.0, 247.0/255.0, 245.0/255.0, 1);
+    private double mousePosX;
+    private double mousePosY;
 
 
     /**
@@ -65,6 +67,7 @@ public class SimulationDrawer{
         this.canvas.setOnMouseDragged(this::handleDrag);
         this.canvas.setOnScroll(this::handleScroll);
         this.canvas.setOnMouseClicked(e -> clicked = new Point2D(e.getX(), e.getY()));
+        this.canvas.setOnMouseMoved(this::handleMouseMove);
     }
 
     /**
@@ -141,6 +144,9 @@ public class SimulationDrawer{
 	
 	        gc.setFill(this.BACKGROUND_COLOR);
 	        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+	        gc.setFill(Color.BLACK);
+	        gc.fillText(String.format("%.2f, %.2f", mousePosX, mousePosY), 210, canvas.getHeight()-50);
 
 	        gc.setTransform(this.affineTransform);
 
@@ -240,5 +246,11 @@ public class SimulationDrawer{
     private void handleMousePressed(MouseEvent e) {
         mouseXPressed = (int) e.getX();
         mouseYPressed = (int) e.getY();
+    }
+
+    private void handleMouseMove(MouseEvent e){
+        Point2D transform = this.inverseTransform(e.getX(), e.getY());
+        mousePosX = transform.getX();
+        mousePosY = transform.getY();
     }
 }

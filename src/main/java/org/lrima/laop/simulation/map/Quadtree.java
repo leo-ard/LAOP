@@ -117,8 +117,6 @@ public class Quadtree {
     }
 
     public void collide(LineCollidable lineCollidable){
-        lineCollidable.bake();
-
         for (StaticLineObject line : lines) {
             lineCollidable.collide(line);
         }

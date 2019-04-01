@@ -12,5 +12,4 @@ import org.lrima.laop.ui.Drawable;
 public interface Sensor {
 	double getValue();
 	SensorData getData();
-	Area getArea();
 }

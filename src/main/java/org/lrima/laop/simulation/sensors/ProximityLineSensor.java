@@ -36,59 +36,25 @@ public class ProximityLineSensor implements Sensor, LineCollidable {
 	private double orientation;
 	public static final double SENSOR_LENGHT = 100;
 	private Point2D start;
-
-	private float dx;
-	private float dy;
 	
 	private final Color SENSOR_COLOR = new Color(255.0/255, 137.0/255, 132.0/255, 1);
     private double value;
 
     public ProximityLineSensor(SimpleCar car, double orientation) {
 		this.car = car;
-
-		this.dx = (float) (SENSOR_LENGHT * Math.cos(orientation));
-        this.dy = (float) (SENSOR_LENGHT * Math.sin(orientation));
+		this.orientation = orientation;
 	}
 
-
-	
 	@Override
 	public double getValue() {
 		return this.value;
-	}
-	
-	/**
-	 * Get the current sensor represented as a line
-	 * @return the line representing the sensor
-	 */
-	private Line2D getSensorAsLine() {
-		Vector2d center = car.getCenter();
-		this.start = new Point2D.Double(center.getX(), center.getY());
-		double x1 = this.start.getX();
-		double y1 = this.start.getY();
-		double x2 = this.start.getX() + Math.cos(this.orientation + this.car.getRotation()) *  SENSOR_LENGHT;
-		double y2 = this.start.getY() + Math.sin(this.orientation + this.car.getRotation()) * SENSOR_LENGHT;
-		
-		Line2D line = new Line2D.Double(x1, y1, x2, y2);
-		return line;
-	}
-
-	@Override
-	public Area getArea() {
-		Line2D line = getSensorAsLine();
-		//Rotate the line back because the graphical context will rotate it
-		double x2 = this.start.getX() + Math.cos(this.orientation) *  SENSOR_LENGHT;
-		double y2 = this.start.getY() + Math.sin(this.orientation) * SENSOR_LENGHT; 
-		line.setLine(line.getP1(), new Point2D.Double(x2, y2));
-		
-		return new Area(GraphicsUtils.addThicknessToLine(line));
 	}
 
 	@Override
 	public SensorData getData() {
 		Vector2d center = car.getCenter();
 		this.start = new Point2D.Double(center.getX(), center.getY());
-		return new ProximityLineSensorData(this.start, this.orientation, this.SENSOR_LENGHT );
+		return new ProximityLineSensorData(this.start, this.orientation, SENSOR_LENGHT, value);
 	}
 
     //OPTIMISATION
@@ -102,7 +68,8 @@ public class ProximityLineSensor implements Sensor, LineCollidable {
             float x = v[0] - x1;
             float y = v[1] - y1;
 
-            value = Math.sqrt(x*x + y*y);
+            value = Math.sqrt(x*x + y*y)*0.01;
+            System.out.println(value);
         }
     }
 
@@ -112,6 +79,9 @@ public class ProximityLineSensor implements Sensor, LineCollidable {
         this.value = 1;
         x1 = (float) this.car.getCenter().getX();
         y1 = (float) this.car.getCenter().getY();
+
+        float dx = (float) (SENSOR_LENGHT * Math.cos(orientation + car.getRotation()));
+        float dy = (float) (SENSOR_LENGHT * Math.sin(orientation + car.getRotation()));
 
         x2 = (float) (dx + this.car.getCenter().getX());
         y2 = (float) (dy + this.car.getCenter().getY());

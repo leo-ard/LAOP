@@ -14,9 +14,4 @@ public class BlankMap extends AbstractMap {
     public Point2D getStartPoint() {
         return new Point2D.Double(0, 0);
     }
-
-    @Override
-    public Area getArea() {
-        return new Area();
-    }
 }

@@ -26,7 +26,6 @@ public class LAOP {
     public LAOP(){
         settings = new Settings();
         defaultSettings();
-
     }
 
     /**
@@ -131,7 +130,4 @@ public class LAOP {
 
     public static final String KEY_NETWORK_CLASS = "NEURAL_NETWORK_CLASS";
     public static final String KEY_LEARNING_CLASS = "LEARNING_ALGORITHM_CLASS";
-
-
-
 }

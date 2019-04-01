@@ -54,9 +54,7 @@ public class CarData implements Inspectable, Drawable {
         this.acceleration = car.getAcceleration();
         
         this.sensors = new ArrayList<>();
-        for(SensorData sensor : car.getSensorsData()) {
-        	this.sensors.add(sensor);
-        }
+        this.sensors.addAll(car.getSensorsData());
     }
 
     /**

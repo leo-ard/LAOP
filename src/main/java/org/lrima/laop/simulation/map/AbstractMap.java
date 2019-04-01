@@ -55,18 +55,8 @@ public abstract class AbstractMap {
 	 * @author Léonard
 	 */
 	public void collide(LineCollidable lineCollidable){
+		lineCollidable.bake();
 		quadtree.collide(lineCollidable);
-	}
-
-	/**
-	 *
-	 * @param lineCollidable
-	 * @author Léonard
-	 */
-	public void collide(AbstractCar car){
-		quadtree.collide(car);
-
-		car.getCollidableSensors();
 	}
 	
 	/**
@@ -80,6 +70,4 @@ public abstract class AbstractMap {
 	public ArrayList<StaticLineObject> getLines(){
 		return this.lines;
 	}
-
-	public abstract Area getArea();
 }

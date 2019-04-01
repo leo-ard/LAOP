@@ -4,6 +4,7 @@ import org.lrima.laop.network.carcontrollers.CarController;
 import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.abstractObjects.Box;
+import org.lrima.laop.physic.staticobjects.StaticLineObject;
 import org.lrima.laop.physic.staticobjects.StaticObject;
 import org.lrima.laop.simulation.map.LineCollidable;
 import org.lrima.laop.simulation.sensors.ProximityLineSensor;
@@ -111,7 +112,7 @@ public class SimpleCar extends Box {
     public CarController getController() {
         return carController;
     }
-    
+
     public void addSensor(Sensor sensor){
         this.sensors.add(sensor);
         if(sensor instanceof LineCollidable){
@@ -119,15 +120,35 @@ public class SimpleCar extends Box {
         }
     }
 
-    // OPTIMISATION
 
+    // OPTIMISATION
     float x1, x2, y1, y2;
+
+    @Override
+    public void collide(StaticLineObject line) {
+        super.collide(line);
+        getCollidableSensors().forEach(s -> s.collide(line));
+    }
+
     @Override
     public void bake() {
+        getCollidableSensors().forEach(LineCollidable::bake);
+
         x1 = (float) (this.getCenter().getX() - this.height);
         y1 = (float) (this.getCenter().getY() - this.height);
         x2 = (float) (this.getCenter().getX() + this.height);
         y2 = (float) (this.getCenter().getY() + this.height);
+
+        for (LineCollidable collidableSensor : collidableSensors) {
+            x1 = Math.max(x1, collidableSensor.getX1());
+            x1 = Math.max(x1, collidableSensor.getX2());
+            x2 = Math.min(x2, collidableSensor.getX1());
+            x2 = Math.min(x2, collidableSensor.getX2());
+            y1 = Math.max(y1, collidableSensor.getY1());
+            y1 = Math.max(y1, collidableSensor.getY2());
+            y2 = Math.min(y2, collidableSensor.getY1());
+            y2 = Math.min(y2, collidableSensor.getY2());
+        }
 
     }
 

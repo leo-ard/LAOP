@@ -20,8 +20,6 @@ public class MazeMap extends AbstractMap {
     private boolean[][] west;
     private boolean[][] visited;
     private Point2D start;
-    private Area area;
-
 
     public MazeMap(int numberOfSquareX) {
     	super();
@@ -192,18 +190,7 @@ public class MazeMap extends AbstractMap {
     public void randomize() {
     	//Start by making maze with all squares closed
     }
-    
-    public void bakeArea() {
-        area = new Area();
-        for (StaticObject staticObject1 : lines) {
-            area.add(staticObject1.getArea());
-        }
-    }
 
-    public Area getArea() {
-        return area;
-    }
-    
     @Override
     public Point2D getStartPoint() {
     	return this.start;

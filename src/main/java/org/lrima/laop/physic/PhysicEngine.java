@@ -20,7 +20,7 @@ import java.util.function.Function;
  * @author Clement Bisaillon
  */
 public class PhysicEngine extends Thread {
-    static public final double DELTA_T = 0.01;
+    static public final double DELTA_T = 0.05;
     public static final double GRAVITY = 9.8;
 
     private volatile boolean pause = false;
@@ -120,6 +120,8 @@ public class PhysicEngine extends Thread {
      */
     private void checkCollision(){
         //TODO: Pas la meilleur facon de faire
+
+        System.out.println("===========");
 
         for(AbstractCar car : this.cars){
             this.map.collide(car);
