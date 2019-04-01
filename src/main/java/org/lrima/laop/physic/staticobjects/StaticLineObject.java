@@ -1,15 +1,13 @@
 package org.lrima.laop.physic.staticobjects;
 
-import java.awt.geom.Area;
-import java.awt.geom.Line2D;
-import java.awt.geom.Path2D;
-
-import org.lrima.laop.simulation.map.LineCollidable;
-import org.lrima.laop.utils.GraphicsUtils;
-
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import org.lrima.laop.utils.GraphicsUtils;
+
+import java.awt.geom.Area;
+import java.awt.geom.Line2D;
+import java.awt.geom.Path2D;
 
 /**
  * Static object of a simulation representing a single line
@@ -24,13 +22,6 @@ public class StaticLineObject implements StaticObject {
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
-    }
-
-    @Override
-    public Area getArea() {
-    	Path2D lineWithWidth = GraphicsUtils.addThicknessToLine(new Line2D.Double(x1, y1, x2, y2));
-    	
-        return new Area(lineWithWidth);
     }
 
     @Override

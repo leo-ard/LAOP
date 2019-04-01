@@ -7,11 +7,13 @@ import org.lrima.laop.settings.LockedSetting;
 import org.lrima.laop.utils.MathUtils;
 import org.lrima.laop.utils.math.RandomUtils;
 
-import java.util.Random;
-
+/**
+ * An implementation of a neural network. This on is of type GeneticNeuralNetwork. It can be trained by a Genetic Learning.
+ *
+ * @author Léonard
+ */
 public class FUCONN implements GeneticNeuralNetwork {
     public NeuralNetwork neuralNetwork;
-
 
     @Override
     public GeneticNeuralNetwork crossOver(GeneticNeuralNetwork otherGeneticNeuralNetwork) {

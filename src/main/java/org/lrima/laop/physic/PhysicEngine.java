@@ -17,7 +17,7 @@ import java.util.function.Function;
 
 /**
  *
- * @author Clement Bisaillon
+ * @author Clement Bisaillon et Léonard Oest OLeary
  */
 public class PhysicEngine extends Thread {
     static public final double DELTA_T = 0.05;
@@ -42,11 +42,13 @@ public class PhysicEngine extends Thread {
     private boolean waitDeltaT;
     private Function<ArrayList<AbstractCar>, Boolean> finishingCondition;
 
-    public static double sumArea = 0;
-    public static double sumLine = 0;
-    public static double sumLineBetter = 0;
 
-
+    /**
+     * Creates a physic engine.
+     *
+     * @param buffer the buffer to export the results of the simulation to
+     * @param map the map that the simulation run (collisions)
+     */
     public PhysicEngine(SimulationBuffer buffer, AbstractMap map){
     	this.simulationBuffer = buffer;
         this.cars = new ArrayList<>();
@@ -57,7 +59,7 @@ public class PhysicEngine extends Thread {
 
 
     /**
-     * Optionnal
+     * Run the physic engine
      */
     @Override
     public void run() {
@@ -117,17 +119,12 @@ public class PhysicEngine extends Thread {
 
     /**
      * Check if there are collisions.
+     *
+     * @author Léonard
      */
     private void checkCollision(){
-        //TODO: Pas la meilleur facon de faire
-
-        System.out.println("===========");
-
         for(AbstractCar car : this.cars){
             this.map.collide(car);
-//            for (LineCollidable line : car.getCollidableSensors()) {
-//                this.map.collide(line);
-//            }
         }
 
     }

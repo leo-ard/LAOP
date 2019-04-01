@@ -8,8 +8,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import org.lrima.laop.ui.SimulationDrawer;
 
-import java.sql.Time;
-
 /**
  * Creates a Timeline element (JavaFX)
  *

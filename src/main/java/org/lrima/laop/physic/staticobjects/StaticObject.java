@@ -8,7 +8,16 @@ import org.lrima.laop.ui.Drawable;
 import javafx.scene.canvas.GraphicsContext;
 
 
+/**
+ * An object to make collisions with in the Physic Engine. Do not move during the simulation
+ *
+ * @author Léonard
+ */
 public interface StaticObject extends Drawable {
-    Area getArea();
+    /**
+     * Gets its type
+     *
+     * @return the tyoe of the object
+     */
     StaticObjectType getType();
 }

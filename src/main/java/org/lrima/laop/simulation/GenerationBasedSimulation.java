@@ -12,6 +12,11 @@ import org.lrima.laop.utils.math.Vector2d;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+/**
+ * A simulation that can take the LearningAlgorithms that uses generation bases learning
+ *
+ * @author Léonard
+ */
 public class GenerationBasedSimulation extends Simulation{
     private int simulationCount;
     private int generationCount;
@@ -27,6 +32,11 @@ public class GenerationBasedSimulation extends Simulation{
     private final int NUMBER_OF_SENSORS = 2;
     //endtemporary
 
+    /**
+     * Creates a new Generation
+     *
+     * @param simulationEngine the simulation engine to refer to
+     */
     public GenerationBasedSimulation(SimulationEngine simulationEngine){
         super(simulationEngine);
 
@@ -35,11 +45,19 @@ public class GenerationBasedSimulation extends Simulation{
         autoRun = true;
     }
 
+    /**
+     * Starts the simulation
+     *
+     */
     @Override
     public void start() {
         this.nextGen();
     }
 
+    /**
+     * Confifure all the cars for the simulation
+     * @return
+     */
     private ArrayList<SimpleCar> configureCar(){
         //TODO ConfigureCars depending on settings and currentScope
 
@@ -66,11 +84,18 @@ public class GenerationBasedSimulation extends Simulation{
         return cars;
     }
 
+    /**
+     * Precedes to next generation
+     */
     public void nextGen(){
         simulateGeneration();
         incrementGeneration();
     }
 
+    /**
+     *
+     * Increment the generation count and batch count. Calls the listener accordingly.
+     */
     private void incrementGeneration(){
         //FIRE LISTENERS
         this.onGenerationFinish.forEach(simulationAction -> simulationAction.handle(this));
@@ -86,12 +111,14 @@ public class GenerationBasedSimulation extends Simulation{
             //CHECK IF SIMULATION IS OUT OF BOUND
             if(simulationCount > (int) this.simulationEngine.getSettings().get(LAOP.KEY_NUMBER_OF_SIMULATION)){
                 //FIRE END LISTENER
-                System.out.println("jsjs");
                 this.end.forEach(e -> e.accept(this));
             }
         }
     }
 
+    /**
+     * Simulate a generation
+     */
     private void simulateGeneration(){
         this.simulationEngine.getBuffer().clear();
         this.physicEngine = new PhysicEngine(this.simulationEngine.getBuffer(), this.simulationEngine.getMap());
@@ -142,6 +169,11 @@ public class GenerationBasedSimulation extends Simulation{
         return simulationCount;
     }
 
+    //TODO
+    /**
+     *
+     * @param autoRun false if the simulation should wait input before going to the next generation or going as soon as the generation is finished
+     */
     public void setAutoRun(boolean autoRun) {
         this.autoRun = autoRun;
     }

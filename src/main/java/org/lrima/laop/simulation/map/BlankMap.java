@@ -1,9 +1,11 @@
 package org.lrima.laop.simulation.map;
 
-import java.awt.*;
-import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 
+/**
+ * A blank map with no obstacles
+ *
+ */
 public class BlankMap extends AbstractMap {
     @Override
     public void bake() {

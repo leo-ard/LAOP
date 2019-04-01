@@ -203,18 +203,7 @@ public abstract class AbstractCar implements LineCollidable {
      * @return the list of sensors attached to this car
      */
     public abstract void addSensor(Sensor sensor);
-    
-    /**
-     * Get the area of the object to check for collisions
-     * @return the area of the object
-     */
-    public abstract Area getArea();
 
-    /**
-     * Defines what happens when a collision occurs
-     * @param type the object type colliding with that object
-     */
-    public abstract void collideWith(StaticObject object);
     
     /**
      * Calculates and set the position of the object and all its children depending on
@@ -227,17 +216,25 @@ public abstract class AbstractCar implements LineCollidable {
      */
     public abstract Vector2d getCenter();
 
-
     public boolean isDead(){
         return dead;
     }
-    public abstract boolean isCollidingWith(StaticLineObject staticLineObject);
 
     public void kill(){
         dead = true;
     }
 
+    /**
+     * Returns the list of all the sensors that can collide with the map
+     *
+     * @return arrayList of sensors
+     */
     public abstract ArrayList<LineCollidable> getCollidableSensors();
 
+    /**
+     * Returns a list of all the sensor data
+     *
+     * @return ArrayList of sensor data
+     */
     public abstract ArrayList<SensorData> getSensorsData();
 }

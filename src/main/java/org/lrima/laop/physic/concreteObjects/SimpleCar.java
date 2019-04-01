@@ -5,9 +5,7 @@ import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.abstractObjects.Box;
 import org.lrima.laop.physic.staticobjects.StaticLineObject;
-import org.lrima.laop.physic.staticobjects.StaticObject;
 import org.lrima.laop.simulation.map.LineCollidable;
-import org.lrima.laop.simulation.sensors.ProximityLineSensor;
 import org.lrima.laop.simulation.sensors.Sensor;
 import org.lrima.laop.simulation.sensors.data.SensorData;
 import org.lrima.laop.utils.PhysicUtils;
@@ -16,7 +14,7 @@ import org.lrima.laop.utils.math.Vector2d;
 import java.util.ArrayList;
 
 /**
- *
+ * The car that tries to mimic a real car.
  *
  * @author Léonard
  */
@@ -29,6 +27,12 @@ public class SimpleCar extends Box {
     //OPTIMISATION
     private ArrayList<LineCollidable> collidableSensors;
 
+    /**
+     * Creates a new car with position <code>position</code> and controller <code>controller</code>
+     *
+     * @param position the position of the car
+     * @param controller the consoller that the car must use
+     */
     public SimpleCar(Vector2d position, CarController controller) {
         super(position, 2000, 30, 10);
 
@@ -42,8 +46,10 @@ public class SimpleCar extends Box {
     public void nextStep() {
         if(this.dead) return;
         this.forces = new ArrayList<>();
-       
-        CarControls carControls = carController.control(getSensorsValues());
+
+        //convert sensor into sensor values
+        double[] sensorValues = this.sensors.stream().mapToDouble(sensor -> sensor.getValue()).toArray();
+        CarControls carControls = carController.control(sensorValues);
 
         this.forces.add(PhysicUtils.accelFromBackWeels(carControls.getAcceleration(), rotation, wheelDirection, RANGE));
         this.forces.get(0).setTag("Accel from back");
@@ -89,37 +95,20 @@ public class SimpleCar extends Box {
         return list;
     }
 
-    private double[] getSensorsValues() {
-        double[] values = new double[this.sensors.size()];
-        for(int i = 0; i < this.sensors.size(); i++){
-            values[i] = 1;//this.sensors.get(i).getValue();
-        }
-
-        return values;
-    }
-
-    @Override
-    public void collideWith(StaticObject object) {
-        this.dead = true;
-//    	switch(object.getType()) {
-//	    	case STATIC_LINE:
-//	    		this.dead = true;
-//	    		break;
-//    	}
-
-    }
-
     public CarController getController() {
         return carController;
     }
 
+    /**
+     * Adds a sensor to the car. If this sensor is of instance LineCollidable (can collide with the map), puts it also in another list for optimisation purposes.
+     * @param sensor the sensor to add
+     */
     public void addSensor(Sensor sensor){
         this.sensors.add(sensor);
         if(sensor instanceof LineCollidable){
             this.collidableSensors.add((LineCollidable) sensor);
         }
     }
-
 
     // OPTIMISATION
     float x1, x2, y1, y2;

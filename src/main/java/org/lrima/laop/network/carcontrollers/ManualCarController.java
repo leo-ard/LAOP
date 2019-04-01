@@ -7,14 +7,18 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 /**
- * 0 -> Acc (0 to 1)
- * 1 -> break (0 to 1)
- * 2 -> rotation (-1 to 1)
+ * An concrete class of a CarController. Can control a car with the keys W-A-S-D.
  *
+ * @author Léonard
  */
 public class ManualCarController implements CarController {
     double[] values;
 
+    /**
+     * Creates a new CarController that controls the car with W-A-S-D
+     *
+     * @param mainScene the node were this class will add the key listener to.
+     */
     public ManualCarController(Stage mainScene){
         values = new double[4];
         mainScene.getScene().setOnKeyPressed(this::handleKeyPress);

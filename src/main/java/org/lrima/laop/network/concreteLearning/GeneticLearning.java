@@ -8,6 +8,11 @@ import org.lrima.laop.simulation.Simulation;
 
 import java.util.ArrayList;
 
+/**
+ * An implementation of a learning algorithm
+ *
+ * @author Léonard
+ */
 @LearningAnotation(simulation = GenerationBasedSimulation.class)
 public class GeneticLearning implements LearningAlgorithm<GeneticNeuralNetwork> {
     @Override
