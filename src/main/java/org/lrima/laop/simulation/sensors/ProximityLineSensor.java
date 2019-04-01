@@ -1,30 +1,15 @@
 package org.lrima.laop.simulation.sensors;
 
-import java.awt.geom.Area;
-import java.awt.geom.Line2D;
-import java.awt.geom.Path2D;
-import java.awt.geom.PathIterator;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-import java.util.HashMap;
-
+import javafx.scene.paint.Color;
 import org.lrima.laop.physic.concreteObjects.SimpleCar;
 import org.lrima.laop.physic.staticobjects.StaticLineObject;
-import org.lrima.laop.physic.staticobjects.StaticObject;
-import org.lrima.laop.simulation.map.AbstractMap;
 import org.lrima.laop.simulation.map.LineCollidable;
 import org.lrima.laop.simulation.sensors.data.ProximityLineSensorData;
 import org.lrima.laop.simulation.sensors.data.SensorData;
-import org.lrima.laop.utils.GraphicsUtils;
 import org.lrima.laop.utils.MathUtils;
 import org.lrima.laop.utils.math.Vector2d;
 
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.transform.Affine;
-import javafx.scene.transform.Transform;
+import java.awt.geom.Point2D;
 
 /**
  * Sensor giving the distance from the car to the wall in a straight line
@@ -36,7 +21,7 @@ public class ProximityLineSensor implements Sensor, LineCollidable {
 	private double orientation;
 	public static final double SENSOR_LENGHT = 100;
 	private Point2D start;
-	
+
 	private final Color SENSOR_COLOR = new Color(255.0/255, 137.0/255, 132.0/255, 1);
     private double value;
 
@@ -68,8 +53,7 @@ public class ProximityLineSensor implements Sensor, LineCollidable {
             float x = v[0] - x1;
             float y = v[1] - y1;
 
-            value = Math.sqrt(x*x + y*y)*0.01;
-            System.out.println(value);
+            value = Math.min(Math.sqrt(x*x + y*y)*0.01, value);
         }
     }
 
