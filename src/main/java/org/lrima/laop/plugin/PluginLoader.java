@@ -3,8 +3,6 @@ package org.lrima.laop.plugin;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 
