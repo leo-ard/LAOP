@@ -96,6 +96,7 @@ public class ConfigurationStage extends Stage {
         if(loader.getController() instanceof ConfigurationController){
             ConfigurationController configurationController = loader.getController();
             configurationController.setLaop(laop);
+            configurationController.setParent(this);
         }
 
         return loader.getRoot();

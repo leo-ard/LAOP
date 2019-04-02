@@ -9,8 +9,9 @@ import org.lrima.laop.core.LAOP;
 import org.lrima.laop.network.concreteLearning.GeneticLearning;
 import org.lrima.laop.network.concreteNetworks.NEAT;
 import org.lrima.laop.settings.Scope;
-import org.lrima.laop.settings.Settings;
+import org.lrima.laop.ui.stage.DownloadAlgorithmDialog;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 
 import javafx.collections.FXCollections;
@@ -21,6 +22,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 /**
  * Class that controls the configuration panel (configuration.fxml)
@@ -31,8 +33,10 @@ public class ConfigurationController implements Initializable {
     
     @FXML private JFXListView<String> scopeList;
     @FXML private BorderPane settingsContainer;
+    @FXML private JFXButton downloadBtn;
     private LAOP laop;
     private HashMap<String, Node> panels;
+    private Stage parent;
 
 
     /**
@@ -62,11 +66,24 @@ public class ConfigurationController implements Initializable {
             	settingsContainer.setCenter(panels.get(newVal));
             }
         });
+    	
+    	downloadBtn.setOnMouseClicked((event) -> {
+    		//Open the download dialog
+    		DownloadAlgorithmDialog dialog = new DownloadAlgorithmDialog(parent);
+    	});
     }
     
     public void setLaop(LAOP laop) {
     	this.laop = laop;
     	this.reloadScopeTableFromSettings();
+    }
+    
+    /**
+     * Sets the parent of the stage
+     * @param parent the parent
+     */
+    public void setParent(Stage parent) {
+    	this.parent = parent;
     }
     
     /**
