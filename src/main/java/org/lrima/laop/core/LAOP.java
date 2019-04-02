@@ -2,6 +2,7 @@ package org.lrima.laop.core;
 
 import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.network.carcontrollers.CarController;
+import org.lrima.laop.network.carcontrollers.ManualCarController;
 import org.lrima.laop.network.concreteLearning.GeneticLearning;
 import org.lrima.laop.network.concreteNetworks.FUCONN;
 import org.lrima.laop.network.concreteNetworks.NEAT;
@@ -34,6 +35,7 @@ public class LAOP {
         NEURAL_NETWORKS_CLASSES = new ArrayList<>();
         NEURAL_NETWORKS_CLASSES.add(NEAT.class);
         NEURAL_NETWORKS_CLASSES.add(FUCONN.class);
+        NEURAL_NETWORKS_CLASSES.add(ManualCarController.class);
     }
 
     Settings settings;
