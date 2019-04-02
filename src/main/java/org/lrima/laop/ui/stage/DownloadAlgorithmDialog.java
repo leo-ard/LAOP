@@ -2,6 +2,8 @@ package org.lrima.laop.ui.stage;
 
 import org.lrima.laop.ui.controllers.DownloadAlgorithmController;
 
+import com.google.gson.Gson;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
