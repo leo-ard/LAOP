@@ -2,6 +2,10 @@ package org.lrima.laop.utils.lasp.beans.algorithms;
 
 import java.util.Collection;
 
+/**
+ * Bean that represents a response from the API end point about algorithms
+ * @author Clement Bisaillon
+ */
 public class AlgorithmResponseBean {
 	private int current_page;
 	private Collection<AlgorithmBean> data;

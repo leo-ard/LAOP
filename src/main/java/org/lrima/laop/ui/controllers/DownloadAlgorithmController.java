@@ -45,6 +45,11 @@ public class DownloadAlgorithmController implements Initializable {
 		this.showAlgorithmList(algorithms);
 	}
 
+	/**
+	 * Get the algorithm list from LASP for a certain page
+	 * @param page the page to get the algorithm from
+	 * @return a collection of the algorithm on the specified page
+	 */
 	private Collection<AlgorithmBean> getData(int page) {
 		AlgorithmResponseBean algorithmResponse = AlgorithmsApiGateway.getAllAlgorithms(page);
 		
@@ -56,6 +61,10 @@ public class DownloadAlgorithmController implements Initializable {
 		return algorithms;
 	}
 
+	/**
+	 * Resets and display the list of algorithms each in a separate square
+	 * @param algorithms the list of algorithms
+	 */
 	private void showAlgorithmList(Collection<AlgorithmBean> algorithms) {
 		this.algorithmTiles.getChildren().clear();
 		try {
@@ -76,6 +85,10 @@ public class DownloadAlgorithmController implements Initializable {
 		this.currentPageLbl.setText("" + this.currentPage);
 	}
 
+	/**
+	 * When the next page button is clicked, it retrieves the data for the next page and 
+	 * shows it
+	 */
 	private void nextPageClicked() {
 		if(currentPage <= maxPages) {
 			Collection<AlgorithmBean> algorithms = this.getData(++currentPage);
@@ -83,6 +96,10 @@ public class DownloadAlgorithmController implements Initializable {
 		}
 	}
 
+	/**
+	 * When the prev page button is clicked, it retrieves the data for the next page and 
+	 * shows it
+	 */
 	private void prevPageClicked() {
 		if (currentPage > 1) {
 			Collection<AlgorithmBean> algorithms = this.getData(--currentPage);
