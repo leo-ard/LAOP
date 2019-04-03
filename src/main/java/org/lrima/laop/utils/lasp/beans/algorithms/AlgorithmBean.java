@@ -1,4 +1,6 @@
-package org.lrima.laop.utils.lasp.beans;
+package org.lrima.laop.utils.lasp.beans.algorithms;
+
+import org.lrima.laop.utils.lasp.beans.UserBean;
 
 /**
  * Bean that represents an algorithm from LISP

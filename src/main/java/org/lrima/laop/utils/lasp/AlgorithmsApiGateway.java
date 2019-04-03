@@ -6,8 +6,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
-import org.lrima.laop.utils.lasp.beans.AlgorithmBean;
+import org.lrima.laop.utils.lasp.beans.algorithms.AlgorithmBean;
+import org.lrima.laop.utils.lasp.beans.algorithms.AlgorithmResponseBean;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -25,18 +27,21 @@ public class AlgorithmsApiGateway extends ApiCaller {
 	 * Retrieve all the algorithms from the LASP database
 	 * @return a collection of AlgorithmBean for each algorithm
 	 */
-	public static Collection<AlgorithmBean> getAllAlgorithms(){
+	public static AlgorithmResponseBean getAllAlgorithms(int page){
 		try {
 			//Get the data from the url
-			String jsonResponse = getContentFromURL(ALGORITHM_LIST_ENDPOINT, "GET");
+			HashMap<String, String> parameters = new HashMap<>();
+			parameters.put("page", "" + page);
+			String jsonResponse = getContentFromURL(ALGORITHM_LIST_ENDPOINT, "GET", parameters);
 			
 			//Process json
 			Gson gson = getJsonBuilder().create();
-		    return(gson.fromJson(jsonResponse, collectionType));
+			AlgorithmResponseBean response = gson.fromJson(jsonResponse, AlgorithmResponseBean.class);
+		    return(response);
 		    
 		}catch(Exception e) {
 			System.err.println("Error while getting data from LASP !");
-			return new ArrayList<>();
+			return null;
 		}
 	}
 	

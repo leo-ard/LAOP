@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Give some usefull methods to classes that need to call APIs
@@ -18,9 +20,9 @@ public class ApiCaller {
 	 * @param method - the method to request
 	 * @return the content of the response from the API endpoint
 	 */
-	protected static String getContentFromURL(String url, String method) throws IOException {
+	protected static String getContentFromURL(String url, String method, HashMap<String, String> parameters) throws IOException {
 		//setup url
-		URL endPoint = new URL(url);
+		URL endPoint = new URL(getUrlWithParameters(url, parameters));
 		HttpURLConnection con = (HttpURLConnection) endPoint.openConnection();
 		con.setRequestMethod(method);
 			
@@ -51,7 +53,17 @@ public class ApiCaller {
 			System.err.println("Error while getting the data from LASP !");
 			return "";
 		}
+	}
+	
+	private static String getUrlWithParameters(String url, HashMap<String, String> parameters) {
+		url = url + "?";
+		for(String key : parameters.keySet()) {
+			//add the key
+			url = url + key + "=";
+			//Add the value
+			url = url + parameters.get(key) + "&";
+		}
 		
-		
+		return url;
 	}
 }
