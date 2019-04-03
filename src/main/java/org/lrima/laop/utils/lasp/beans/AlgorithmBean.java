@@ -1,4 +1,4 @@
-package org.lrima.laop.ui.stage.installAlgorithm;
+package org.lrima.laop.utils.lasp.beans;
 
 /**
  * Bean that represents an algorithm from LISP
