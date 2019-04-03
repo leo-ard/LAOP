@@ -1,4 +1,4 @@
-package org.lrima.laop.utils.lasp.beans.algorithms;
+package org.lrima.laop.utils.lasp.beans.algorithm;
 
 import java.util.Collection;
 

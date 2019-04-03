@@ -8,7 +8,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:controller="org.lrima.laop.ui.controllers.AlgorithmSummaryController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="120.0" styleClass="algorithmSummaryBox" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="120.0" styleClass="algorithmSummaryBox" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.lrima.laop.ui.controllers.AlgorithmSummaryController">
    <children>
       <Label fx:id="title" layoutY="-1.0" prefHeight="22.0" prefWidth="120.0" text="Label">
          <font>
@@ -17,6 +17,11 @@
          <padding>
             <Insets left="5.0" right="5.0" />
          </padding>
+      </Label>
+      <Label fx:id="nbLikes" layoutX="82.0" layoutY="30.0" prefHeight="22.0" prefWidth="24.0" text="0">
+         <font>
+            <Font size="25.0" />
+         </font>
       </Label>
    </children>
    <cursor>

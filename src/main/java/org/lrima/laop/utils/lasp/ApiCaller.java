@@ -20,7 +20,7 @@ public class ApiCaller {
 	 * @param method - the method to request
 	 * @return the content of the response from the API endpoint
 	 */
-	protected static String getContentFromURL(String url, String method, HashMap<String, String> parameters) throws IOException {
+	protected String getContentFromURL(String url, String method, HashMap<String, String> parameters) throws IOException {
 		//setup url
 		URL endPoint = new URL(getUrlWithParameters(url, parameters));
 		HttpURLConnection con = (HttpURLConnection) endPoint.openConnection();
@@ -38,7 +38,7 @@ public class ApiCaller {
 	 * @param connection the connection object
 	 * @return a String containing the response data of the connection
 	 */
-	private static String getData(HttpURLConnection connection) {
+	private String getData(HttpURLConnection connection) {
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			String inputLine;
@@ -55,7 +55,7 @@ public class ApiCaller {
 		}
 	}
 	
-	private static String getUrlWithParameters(String url, HashMap<String, String> parameters) {
+	private String getUrlWithParameters(String url, HashMap<String, String> parameters) {
 		url = url + "?";
 		for(String key : parameters.keySet()) {
 			//add the key

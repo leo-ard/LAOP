@@ -1,4 +1,4 @@
-package org.lrima.laop.utils.lasp.beans.algorithms;
+package org.lrima.laop.utils.lasp.beans.algorithm;
 
 import org.lrima.laop.utils.lasp.beans.UserBean;
 
@@ -12,7 +12,14 @@ public class AlgorithmBean {
 	private String description;
 	private UserBean user;
 	private String created_at;
+	private int nb_likes;
 	
+	public int getNb_likes() {
+		return nb_likes;
+	}
+	public void setNb_likes(int nb_likes) {
+		this.nb_likes = nb_likes;
+	}
 	public int getId() {
 		return id;
 	}

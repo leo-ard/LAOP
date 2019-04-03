@@ -1,13 +1,12 @@
 package org.lrima.laop.ui.controllers;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ResourceBundle;
 
 import org.lrima.laop.utils.lasp.AlgorithmsApiGateway;
-import org.lrima.laop.utils.lasp.beans.algorithms.AlgorithmBean;
-import org.lrima.laop.utils.lasp.beans.algorithms.AlgorithmResponseBean;
+import org.lrima.laop.utils.lasp.beans.algorithm.AlgorithmBean;
+import org.lrima.laop.utils.lasp.beans.algorithm.AlgorithmResponseBean;
 
 import com.jfoenix.controls.JFXButton;
 
@@ -35,9 +34,11 @@ public class DownloadAlgorithmController implements Initializable {
 
 	private int currentPage = 1;
 	private int maxPages = 0;
+	private AlgorithmsApiGateway algorithmApi;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		this.algorithmApi = new AlgorithmsApiGateway();
 		this.nextPageBtn.setOnMouseClicked((event) -> this.nextPageClicked());
 		this.prevPageBtn.setOnMouseClicked((event) -> this.prevPageClicked());
 
@@ -51,7 +52,7 @@ public class DownloadAlgorithmController implements Initializable {
 	 * @return a collection of the algorithm on the specified page
 	 */
 	private Collection<AlgorithmBean> getData(int page) {
-		AlgorithmResponseBean algorithmResponse = AlgorithmsApiGateway.getAllAlgorithms(page);
+		AlgorithmResponseBean algorithmResponse = this.algorithmApi.getAllAlgorithms(page);
 		
 		this.currentPage = algorithmResponse.getCurrent_page();
 		this.maxPages = (int) Math.ceil(algorithmResponse.getTotal() / algorithmResponse.getPer_page());
@@ -74,7 +75,7 @@ public class DownloadAlgorithmController implements Initializable {
 				Node node = loader.load();
 
 				AlgorithmSummaryController controller = loader.getController();
-				controller.initData(algorithm.getTitle());
+				controller.initData(algorithm);
 
 				this.algorithmTiles.getChildren().add(node);
 			}
