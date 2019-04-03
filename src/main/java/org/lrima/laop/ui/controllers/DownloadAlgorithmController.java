@@ -15,6 +15,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
 
 /**
@@ -31,6 +33,8 @@ public class DownloadAlgorithmController implements Initializable {
 	JFXButton prevPageBtn;
 	@FXML
 	Label currentPageLbl;
+	
+	@FXML StackPane root;
 
 	private int currentPage = 1;
 	private int maxPages = 0;
@@ -73,7 +77,9 @@ public class DownloadAlgorithmController implements Initializable {
 				FXMLLoader loader = new FXMLLoader(
 						getClass().getResource("/views/panels/downloadAlgo/algorithmSummary.fxml"));
 				Node node = loader.load();
-
+				
+				node.setOnMouseClicked((event) -> {this.algorithmClicked(algorithm);});
+				
 				AlgorithmSummaryController controller = loader.getController();
 				controller.initData(algorithm);
 
@@ -105,6 +111,27 @@ public class DownloadAlgorithmController implements Initializable {
 		if (currentPage > 1) {
 			Collection<AlgorithmBean> algorithms = this.getData(--currentPage);
 			this.showAlgorithmList(algorithms);
+		}
+	}
+	
+	/**
+	 * When a algorithm summary box has been clicked.
+	 * Show a more detailed view of the algorithm
+	 * @param algorithm the algorithm clicked on
+	 */
+	private void algorithmClicked(AlgorithmBean algorithm) {
+		try {
+			FXMLLoader loader = new FXMLLoader(
+					getClass().getResource("/views/panels/downloadAlgo/viewAlgorithm.fxml"));
+			BorderPane node = loader.load();
+			
+			ViewAlgorithmController controller = loader.getController();
+			controller.initData(this.root, algorithm);
+			
+			this.root.getChildren().add(node);
+		}catch(Exception e) {
+			System.err.println("Can't view algorithm");
+			e.printStackTrace();
 		}
 	}
 

@@ -12,10 +12,12 @@ import javafx.scene.control.Label;
 public class AlgorithmSummaryController implements Initializable {
 	@FXML Label title;
 	@FXML Label nbLikes;
+	@FXML Label authorLbl;
 	
 	public void initData(AlgorithmBean algorithm) {
 		this.title.setText(algorithm.getTitle());
 		this.nbLikes.setText("" + algorithm.getNb_likes());
+		this.authorLbl.setText(algorithm.getUser().getName());
 	}
 
 	@Override

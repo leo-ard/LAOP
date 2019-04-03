@@ -1,6 +1,14 @@
 .algorithmSummaryBox{
 	-fx-background-color:  #F4F4F4;
+	-fx-border-color: #e0e0e0;
+	-fx-border-width: 1px 1px 1px 1px
 }
+.algorithmSummaryBox:hover{
+	-fx-background-color:  #F0F0F0;
+	-fx-border-color: #e0e0e0;
+	-fx-border-width: 2px 2px 2px 2px
+}
+
 .panel-header{
 	-fx-background-color:  #F4F4F4;
 }

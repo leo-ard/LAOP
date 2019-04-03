@@ -55,6 +55,12 @@ public class ApiCaller {
 		}
 	}
 	
+	/**
+	 * Add parameters as key-value pair from a hashmap to the end of the url string
+	 * @param url the url string withouth parameters
+	 * @param parameters the parameters to add to the url
+	 * @return an url string with parameters
+	 */
 	private String getUrlWithParameters(String url, HashMap<String, String> parameters) {
 		url = url + "?";
 		for(String key : parameters.keySet()) {

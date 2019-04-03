@@ -8,9 +8,22 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="120.0" styleClass="algorithmSummaryBox" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.lrima.laop.ui.controllers.AlgorithmSummaryController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="99.0" prefWidth="200.0" styleClass="algorithmSummaryBox" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.lrima.laop.ui.controllers.AlgorithmSummaryController">
    <children>
-      <Label fx:id="title" layoutY="-1.0" prefHeight="22.0" prefWidth="120.0" text="Label">
+      <Label fx:id="title" layoutY="-1.0" prefHeight="22.0" prefWidth="200.0" text="Algorithm name">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+         <padding>
+            <Insets left="5.0" right="5.0" />
+         </padding>
+      </Label>
+      <Label fx:id="nbLikes" layoutX="95.0" layoutY="49.0" prefHeight="36.0" prefWidth="16.0" text="0" AnchorPane.rightAnchor="89.0">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <Label fx:id="authorLbl" layoutX="21.0" layoutY="14.0" prefHeight="31.0" prefWidth="179.0" text="Author">
          <font>
             <Font size="13.0" />
          </font>
@@ -18,7 +31,15 @@
             <Insets left="5.0" right="5.0" />
          </padding>
       </Label>
-      <Label fx:id="nbLikes" layoutX="82.0" layoutY="30.0" prefHeight="22.0" prefWidth="24.0" text="0">
+      <Label layoutX="1.0" layoutY="14.0" prefHeight="31.0" prefWidth="24.0" text="By">
+         <font>
+            <Font size="13.0" />
+         </font>
+         <padding>
+            <Insets left="5.0" right="5.0" />
+         </padding>
+      </Label>
+      <Label layoutX="112.0" layoutY="49.0" prefHeight="36.0" prefWidth="66.0" text="likes" AnchorPane.rightAnchor="15.0">
          <font>
             <Font size="25.0" />
          </font>
@@ -27,4 +48,7 @@
    <cursor>
       <Cursor fx:constant="HAND" />
    </cursor>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
 </AnchorPane>

@@ -1,13 +1,8 @@
 package org.lrima.laop.ui.stage;
 
-import org.lrima.laop.ui.controllers.DownloadAlgorithmController;
-
-import com.google.gson.Gson;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -37,14 +32,14 @@ public class DownloadAlgorithmDialog extends Stage {
 	
 	private void configureDialogComponents() {
 		try {
-			BorderPane pane = FXMLLoader.load(getClass().getResource("/views/panels/downloadAlgo/downloadAlgorithm.fxml"));
+			StackPane pane = FXMLLoader.load(getClass().getResource("/views/panels/downloadAlgo/downloadAlgorithm.fxml"));
 			this.scene = new Scene(pane);
 			this.scene.getStylesheets().add(getClass().getResource("/css/downloadAlgorithm.css").toExternalForm());
 			this.scene.getStylesheets().add(getClass().getResource("/css/general.css").toExternalForm());
 			
 			this.setScene(this.scene);
 		}catch(Exception e) {
-			System.out.println("err");
+			e.printStackTrace();
 		}
 	}
 }
