@@ -1,16 +1,10 @@
 package org.lrima.laop.plugin;
 
-import org.lrima.laop.network.CarControllerAnotation;
-import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.network.carcontrollers.CarController;
-import org.lrima.laop.network.concreteNetworks.DrunkNetwork;
-import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.AnnotatedType;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
@@ -18,11 +12,14 @@ import java.util.zip.ZipEntry;
 public class PluginCreator {
 
     public static void createJar(String path, Class classLoad, ArrayList<Class> allClassesToLoad) throws IOException {
+        if(!path.endsWith(".jar"))
+            path+=".jar";
+
         FileOutputStream fileOutputStream = new FileOutputStream(path);
         JarOutputStream jarFile = new JarOutputStream(fileOutputStream);
 
         jarFile.putNextEntry(new ZipEntry("META-INF/MANIFEST.MF"));
-//        jarFile.write(getManifest(classLoad));
+        jarFile.write(getManifest(classLoad).getBytes());
 
         entryObjectClass(classLoad, jarFile);
         if(allClassesToLoad != null) loadClasses(allClassesToLoad, jarFile);
@@ -32,9 +29,6 @@ public class PluginCreator {
 
     }
 
-    private static void createJar(String path, Object object, ArrayList<Class> allClassesToLoad, byte[] manifest) throws IOException {
-
-    }
 
     private static void loadClasses(ArrayList<Class> allClassesToLoad, JarOutputStream jarFile) {
         for (Class aClass : allClassesToLoad) {
@@ -46,24 +40,23 @@ public class PluginCreator {
         return c.getName().replace(".", "/") + ".class";
     }
 
-    private static String getManifest(PluginActivator pluginActivator) {
-        return "Manifest-Version: 1.0\n"+
-                PluginLoader.Activator_CLASS_TAG + ": " +pluginActivator.getClass().getName()+"\n";
-    }
-
-    private static String getManifest(CarController carContoller) {
-        return "Manifest-Version: 1.0\n"+
-                PluginLoader.ALGORITHM_CLASS_TAG+ ": " +carContoller.getClass().getName()+"\n";
-    }
-
     private static String getManifest(Class learningAlgo) {
-        for (AnnotatedType annotatedInterface : learningAlgo.getAnnotatedInterfaces()) {
-            System.out.println(annotatedInterface.getType());
+        if(checkIfInterface(learningAlgo, PluginActivator.class)){
+            return "Manifest-Version: 1.0\n"+
+                    PluginLoader.ACTIVATOR_CLASS_TAG + ": " + learningAlgo.getName()+"\n";
+        }
+        if (checkIfInterface(learningAlgo, CarController.class)) {
+            return "Manifest-Version: 1.0\n"+
+                    PluginLoader.ALGORITHM_CLASS_TAG + ": " +learningAlgo.getName()+"\n";
+        }
+        if(checkIfInterface(learningAlgo, PluginActivator.class)){
+            return "Manifest-Version: 1.0\n"+
+                    PluginLoader.LEARNING_CLASS_TAG + ": " + learningAlgo.getName()+"\n";
         }
 
+        System.err.println("Cannot export this kind of field");
+        return null;
 
-        return "Manifest-Version: 1.0\n"+
-                PluginLoader.LEARNING_CLASS_TAG + ": " +learningAlgo.getClass().getName()+"\n";
     }
 
     private static void entryObjectClass(Class<?> aClass, JarOutputStream outputStream) {
@@ -85,6 +78,14 @@ public class PluginCreator {
     }
 
     public static void main(String[] args){
-        System.out.println(DrunkNetwork.class.isAssignableFrom(GeneticNeuralNetwork.class));
+    }
+
+    private static boolean checkIfInterface(Class c, Class i){
+        for (Class anInterface : c.getInterfaces()) {
+            if(anInterface == i || checkIfInterface(anInterface, i)){
+                return true;
+            }
+        }
+        return false;
     }
 }

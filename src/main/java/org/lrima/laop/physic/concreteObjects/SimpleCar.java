@@ -49,6 +49,7 @@ public class SimpleCar extends Box {
 
         //convert sensor into sensor values
         double[] sensorValues = this.sensors.stream().mapToDouble(sensor -> sensor.getValue()).toArray();
+        System.out.println(carController.getClass().getName());
         CarControls carControls = carController.control(sensorValues);
 
         this.forces.add(PhysicUtils.accelFromBackWeels(carControls.getAcceleration(), rotation, wheelDirection, RANGE));
