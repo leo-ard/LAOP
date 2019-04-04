@@ -30,8 +30,11 @@ public class ViewAlgorithmController implements Initializable {
 	//Author
 	@FXML Label authorName;
 	
+	AlgorithmBean algorithm;
+	
 	
 	public void initData( StackPane parent, AlgorithmBean algorithm) {
+		this.algorithm = algorithm;
 		
 		this.algorithmName.setText(algorithm.getTitle());
 		this.descriptionTextArea.setText(algorithm.getDescription());
@@ -58,6 +61,6 @@ public class ViewAlgorithmController implements Initializable {
 	 * This starts the download and shows a dialog with the progress
 	 */
 	private void downloadAlgorithm() {
-		DownloadProgressDialog progressDialog = new DownloadProgressDialog();
+		DownloadProgressDialog progressDialog = new DownloadProgressDialog(this.algorithm);
 	}
 }

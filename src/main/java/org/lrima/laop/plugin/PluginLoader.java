@@ -28,7 +28,6 @@ public class PluginLoader {
         classLoader = URLClassLoader.newInstance(urls);
 
         for(URL path : jars) {
-            System.out.println(path);
             JarURLConnection con = (JarURLConnection) path.openConnection();
             try {
                 loadManifest(con.getManifest(), laop);

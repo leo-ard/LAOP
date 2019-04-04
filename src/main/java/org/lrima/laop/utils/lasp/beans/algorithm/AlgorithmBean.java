@@ -14,7 +14,14 @@ public class AlgorithmBean {
 	private String created_at;
 	private int nb_likes;
 	private int nb_comments;
+	private String jar_file_location;
 	
+	public String getJar_file_location() {
+		return jar_file_location;
+	}
+	public void setJar_file_location(String jar_file_location) {
+		this.jar_file_location = jar_file_location;
+	}
 	public int getNb_likes() {
 		return nb_likes;
 	}
