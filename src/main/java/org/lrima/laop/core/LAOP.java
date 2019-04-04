@@ -8,7 +8,6 @@ import org.lrima.laop.network.concreteNetworks.FUCONN;
 import org.lrima.laop.network.concreteNetworks.NEAT;
 import org.lrima.laop.settings.option.OptionClass;
 import org.lrima.laop.ui.MainSimulationStage;
-import org.lrima.laop.settings.Scope;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.SimulationEngine;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
@@ -25,22 +24,20 @@ import java.util.HashMap;
  */
 public class LAOP {
     //TODO : this is just for testing purpurses
-    public static ArrayList<Class<? extends LearningAlgorithm>> LEARNING_ALGORITHMS_CLASSES;
-    public static ArrayList<Class<? extends CarController>> NEURAL_NETWORKS_CLASSES;
-
-    static{
-        LEARNING_ALGORITHMS_CLASSES = new ArrayList<>();
-        LEARNING_ALGORITHMS_CLASSES.add(GeneticLearning.class);
-
-        NEURAL_NETWORKS_CLASSES = new ArrayList<>();
-        NEURAL_NETWORKS_CLASSES.add(NEAT.class);
-        NEURAL_NETWORKS_CLASSES.add(FUCONN.class);
-        NEURAL_NETWORKS_CLASSES.add(ManualCarController.class);
-    }
+    private ArrayList<Class<? extends LearningAlgorithm>> learningAlgorithmsClasses;
+    private ArrayList<Class<? extends CarController>> neuralNetworksClasses;
 
     Settings settings;
 
     public LAOP(){
+        learningAlgorithmsClasses = new ArrayList<>();
+        learningAlgorithmsClasses.add(GeneticLearning.class);
+
+        neuralNetworksClasses = new ArrayList<>();
+        neuralNetworksClasses.add(NEAT.class);
+        neuralNetworksClasses.add(FUCONN.class);
+        neuralNetworksClasses.add(ManualCarController.class);
+
         settings = new Settings();
         defaultSettings();
     }
@@ -68,8 +65,8 @@ public class LAOP {
         if(settings.get(label) != null)
             throw new KeyAlreadyExistsException("The label "+label+" has already been assigned");
 
-        this.settings.set(label, LAOP.KEY_NETWORK_CLASS, new OptionClass(algorithmClass, NEURAL_NETWORKS_CLASSES));
-        this.settings.set(label, LAOP.KEY_LEARNING_CLASS, new OptionClass(learningClass, LEARNING_ALGORITHMS_CLASSES));
+        this.settings.set(label, LAOP.KEY_NETWORK_CLASS, new OptionClass(algorithmClass, neuralNetworksClasses));
+        this.settings.set(label, LAOP.KEY_LEARNING_CLASS, new OptionClass(learningClass, learningAlgorithmsClasses));
         settings.forEach((k, v) -> this.settings.set(label, k, v));
     }
 

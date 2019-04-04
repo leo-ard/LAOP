@@ -1,47 +1,79 @@
 package org.lrima.laop.plugin;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+
+import org.lrima.laop.core.LAOP;
+
+import java.io.File;
 import java.io.IOException;
-import java.util.jar.JarOutputStream;
-import java.util.zip.ZipEntry;
+import java.net.JarURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.Manifest;
 
 public class PluginLoader {
+    private static URLClassLoader classLoader;
+    private static ArrayList<URL> jars = new ArrayList<>();
 
-    public static Class<?> loadPlugin(String path){
+    public static void load(LAOP laop) throws IOException {
+        URL[] urls = new URL[jars.size()];
+        for (int i = 0; i < jars.size(); i++) {
+            urls[i] = jars.get(i);
+        }
+        classLoader = URLClassLoader.newInstance(urls);
 
-
-
-
-        return null;
+        ArrayList<Enumeration<JarEntry>> allEntries = new ArrayList<>();
+        for(URL path : jars) {
+            System.out.println(path);
+            JarURLConnection con = (JarURLConnection) path.openConnection();
+            loadActivator(con.getManifest(), laop);
+        }
     }
 
-    public static void createJar(String path){
+    private static void loadActivator(Manifest manifest, LAOP laop) throws IOException {
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream(path);
-            JarOutputStream jarFile = new JarOutputStream(fileOutputStream);
-
-            jarFile.putNextEntry(new ZipEntry("com/help"));
-            jarFile.putNextEntry(new ZipEntry("com/help/model.txt"));
-
-
-            jarFile.closeEntry();
-            jarFile.close();
-            fileOutputStream.close();
-            fileOutputStream.close();
-
-
-//            jarFile.putNextEntry(new ZipEntry());
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+            Class activatorClass = classLoader.loadClass(manifest.getMainAttributes().getValue("Activator"));
+            PluginActivator activator = (PluginActivator) activatorClass.newInstance();
+            activator.initiate(laop);
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
 
     }
 
-    public static void main(String[] args){
-        createJar("helpme.jar");
+
+
+
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+//        ArrayList<Class> classes = new ArrayList<>();
+//        classes.add(Test.class);
+//        PluginCreator.createJar("helpme.jar", new AlgorithmActivator(), classes);
+
+        addDir("algos/");
+        LAOP laop = new LAOP();
+        load(laop);
+
+    }
+
+    public static void addJar(String path){
+        try {
+            jars.add(new URL("jar:file:"+path+"!/"));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void addDir(String path){
+        File folder = new File(path);
+        File[] listOfFiles = folder.listFiles();
+
+        for (File file : listOfFiles) {
+            if(file.isFile() && file.getName().endsWith(".jar")){
+                addJar(file.getPath());
+            }
+        }
     }
 }

@@ -34,18 +34,12 @@ public class Settings {
      * The key of this HashMap represents the name of the scope.
      */
     private LinkedHashMap<String, Scope> scopes;
-    
-    /**
-     * The table of scopes in the settings panel
-     */
-    private JFXListView<String> scopeListTable;
+
 
 
     public Settings(){
         scopes = new LinkedHashMap<>();
         scopes.put(GLOBAL_SCOPE, new Scope());
-        
-        this.scopeListTable = new JFXListView<>();
     }
 
     /**
@@ -104,7 +98,7 @@ public class Settings {
     /**
      * Add a scope when the user clicks the add algorithm button
      */
-    public void addScope() {
+    public void addScope(JFXListView scopeListTable) {
     	//Ask for the name of the scope
     	TextInputDialog scopeNameDialog = new TextInputDialog();
     	scopeNameDialog.setTitle("Scope name");
@@ -113,7 +107,7 @@ public class Settings {
     	
     	scopeName.ifPresent(name -> {
     		this.addScope(name);
-    		this.reloadScopeTable();
+    		this.reloadScopeTable(scopeListTable);
     	});
     }
 
@@ -178,6 +172,7 @@ public class Settings {
         HashMap<String, Node> panels = new HashMap<>();
         BorderPane rootNode = new BorderPane();
         Scope globalScope = this.scopes.get(GLOBAL_SCOPE);
+        JFXListView<String> scopeListTable = new JFXListView<>();
 
         //Adding all the panels
         for(String scopeString : this.scopes.keySet()){
@@ -204,13 +199,13 @@ public class Settings {
         //Le bouton pour ajouter un algorithme
         JFXButton addAlgorithmButton = new JFXButton("Add algorithm");
         addAlgorithmButton.setOnAction((event) -> {
-        	this.addScope();
+        	this.addScope(scopeListTable);
         });
         addAlgorithmButton.setMaxWidth(Double.MAX_VALUE);
         addAlgorithmButton.getStyleClass().add("btn");
         scopeList.getChildren().addAll(scopeListTable, addAlgorithmButton);
         
-        this.reloadScopeTable();
+        this.reloadScopeTable(scopeListTable);
         scopeListTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         scopeListTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
@@ -239,10 +234,10 @@ public class Settings {
         return true;
     }
     
-    private void reloadScopeTable() {
-    	this.scopeListTable.getItems().clear();
-    	this.scopeListTable.getItems().addAll(this.scopes.keySet());
-        this.scopeListTable.getSelectionModel().select(0);
+    private void reloadScopeTable(JFXListView<String> scopeListTable) {
+    	scopeListTable.getItems().clear();
+    	scopeListTable.getItems().addAll(this.scopes.keySet());
+        scopeListTable.getSelectionModel().select(0);
     }
 
     /**
