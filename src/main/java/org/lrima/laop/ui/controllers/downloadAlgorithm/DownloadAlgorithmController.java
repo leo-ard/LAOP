@@ -1,4 +1,4 @@
-package org.lrima.laop.ui.controllers;
+package org.lrima.laop.ui.controllers.downloadAlgorithm;
 
 import java.net.URL;
 import java.util.Collection;
@@ -18,6 +18,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
+import javafx.stage.Stage;
 
 /**
  * Controller for the algorithm downloader stage

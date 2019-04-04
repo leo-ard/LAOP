@@ -7,7 +7,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.lrima.laop.ui.controllers.ViewAlgorithmController">
+<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.lrima.laop.ui.controllers.downloadAlgorithm.ViewAlgorithmController">
    <top>
       <HBox prefHeight="60.0" prefWidth="600.0" styleClass="panel-header" BorderPane.alignment="CENTER">
          <children>
@@ -27,7 +27,7 @@
                   <Font size="29.0" />
                </font>
             </Label>
-            <JFXButton styleClass="btn" text="Download">
+            <JFXButton fx:id="downloadBtn" styleClass="btn" text="Download">
                <font>
                   <Font size="20.0" />
                </font>

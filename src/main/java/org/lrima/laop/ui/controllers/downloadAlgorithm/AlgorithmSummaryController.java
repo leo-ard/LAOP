@@ -1,4 +1,4 @@
-package org.lrima.laop.ui.controllers;
+package org.lrima.laop.ui.controllers.downloadAlgorithm;
 
 import java.net.URL;
 import java.util.ResourceBundle;
