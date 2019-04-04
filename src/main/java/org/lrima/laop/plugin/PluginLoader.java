@@ -10,13 +10,15 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.jar.JarEntry;
 import java.util.jar.Manifest;
 
 public class PluginLoader {
     private static URLClassLoader classLoader;
     private static ArrayList<URL> jars = new ArrayList<>();
+
+    public static String ALGORITHM_CLASS_TAG = "Algorithm-Class";
+    public static String LEARNING_CLASS_TAG = "Learning-Class";
+    public static String Activator_CLASS_TAG = "Activator";
 
     public static void load(LAOP laop) throws IOException {
         URL[] urls = new URL[jars.size()];
@@ -25,23 +27,33 @@ public class PluginLoader {
         }
         classLoader = URLClassLoader.newInstance(urls);
 
-        ArrayList<Enumeration<JarEntry>> allEntries = new ArrayList<>();
         for(URL path : jars) {
             System.out.println(path);
             JarURLConnection con = (JarURLConnection) path.openConnection();
-            loadActivator(con.getManifest(), laop);
+            try {
+                loadManifest(con.getManifest(), laop);
+            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+                e.printStackTrace();
+            }
         }
+
+        jars = new ArrayList<>();
     }
 
-    private static void loadActivator(Manifest manifest, LAOP laop) throws IOException {
-        try {
-            Class activatorClass = classLoader.loadClass(manifest.getMainAttributes().getValue("Activator"));
+    private static void loadManifest(Manifest manifest, LAOP laop) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+        if(manifest.getMainAttributes().getValue(Activator_CLASS_TAG) != null){
+            Class activatorClass = classLoader.loadClass(manifest.getMainAttributes().getValue(Activator_CLASS_TAG));
             PluginActivator activator = (PluginActivator) activatorClass.newInstance();
             activator.initiate(laop);
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            e.printStackTrace();
         }
-
+        if(manifest.getMainAttributes().getValue(ALGORITHM_CLASS_TAG) != null){
+            Class allgorithmClass = classLoader.loadClass(manifest.getMainAttributes().getValue(ALGORITHM_CLASS_TAG));
+            laop.getNeuralNetworksClasses().add(allgorithmClass);
+        }
+        if(manifest.getMainAttributes().getValue(LEARNING_CLASS_TAG) != null){
+            Class allgorithmClass = classLoader.loadClass(manifest.getMainAttributes().getValue(LEARNING_CLASS_TAG));
+            laop.getNeuralNetworksClasses().add(allgorithmClass);
+        }
     }
 
 

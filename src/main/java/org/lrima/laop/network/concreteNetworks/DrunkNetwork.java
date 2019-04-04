@@ -4,19 +4,10 @@ import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
 import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.settings.LockedSetting;
 
-/**
- * An implementation of the NEAT algorithm. See paper here : http://nn.cs.utexas.edu/downloads/papers/stanley.ec02.pdf
- *
- * @author Léonard
- */
-public class NEAT implements GeneticNeuralNetwork {
-    double direction = 0.5;
-
+public class DrunkNetwork implements GeneticNeuralNetwork {
     @Override
     public GeneticNeuralNetwork crossOver(GeneticNeuralNetwork otherGeneticNeuralNetwork) {
-        direction = -direction;
-
-        return this;
+        return null;
     }
 
     @Override
@@ -26,10 +17,10 @@ public class NEAT implements GeneticNeuralNetwork {
 
     @Override
     public CarControls control(double... sensorValues) {
-
-
-
-
-        return new CarControls();
+        CarControls controls = new CarControls();
+        controls.setAcceleration(sensorValues[2]);
+        controls.setBreak(1-sensorValues[2]);
+        controls.setRotation(sensorValues[0]-sensorValues[4]);
+        return controls;
     }
 }

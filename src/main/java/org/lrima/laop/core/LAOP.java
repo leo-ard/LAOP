@@ -130,6 +130,14 @@ public class LAOP {
         WITHOUT_INTERFACE
     }
 
+    public ArrayList<Class<? extends CarController>> getNeuralNetworksClasses() {
+        return neuralNetworksClasses;
+    }
+
+    public ArrayList<Class<? extends LearningAlgorithm>> getLearningAlgorithmsClasses() {
+        return learningAlgorithmsClasses;
+    }
+
     //ALL DEFAULT KEYS
     public static int DEFAULT_NUMBER_OF_SIMULATION = 10;
     public static String KEY_NUMBER_OF_SIMULATION = "NUMBER OF SIMULATIONS";

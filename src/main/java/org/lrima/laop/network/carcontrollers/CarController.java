@@ -1,5 +1,6 @@
 package org.lrima.laop.network.carcontrollers;
 
+import org.lrima.laop.network.CarControllerAnotation;
 import org.lrima.laop.physic.CarControls;
 
 /**
@@ -7,6 +8,7 @@ import org.lrima.laop.physic.CarControls;
  *
  * @author Léonard
  */
+@CarControllerAnotation
 public interface CarController {
 
     /**
