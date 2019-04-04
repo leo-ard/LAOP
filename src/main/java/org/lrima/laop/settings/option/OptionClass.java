@@ -45,7 +45,7 @@ public class OptionClass<T> implements Option<Class<?>> {
 
         ComboBox<String> stringComboBox = new ComboBox<>(observableList);
         stringComboBox.getSelectionModel().select(value.getSimpleName());
-        stringComboBox.getSelectionModel().selectedItemProperty().addListener((s, newOb, oldOb) ->{
+        stringComboBox.getSelectionModel().selectedItemProperty().addListener((s, oldOb, newOb) ->{
             setValue(allClasses.get(newOb));
         });
         

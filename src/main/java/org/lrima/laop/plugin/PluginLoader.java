@@ -18,7 +18,7 @@ public class PluginLoader {
 
     public static String ALGORITHM_CLASS_TAG = "Algorithm-Class";
     public static String LEARNING_CLASS_TAG = "Learning-Class";
-    public static String Activator_CLASS_TAG = "Activator";
+    public static String ACTIVATOR_CLASS_TAG = "Activator";
 
     public static void load(LAOP laop) throws IOException {
         URL[] urls = new URL[jars.size()];
@@ -41,8 +41,8 @@ public class PluginLoader {
     }
 
     private static void loadManifest(Manifest manifest, LAOP laop) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        if(manifest.getMainAttributes().getValue(Activator_CLASS_TAG) != null){
-            Class activatorClass = classLoader.loadClass(manifest.getMainAttributes().getValue(Activator_CLASS_TAG));
+        if(manifest.getMainAttributes().getValue(ACTIVATOR_CLASS_TAG) != null){
+            Class activatorClass = classLoader.loadClass(manifest.getMainAttributes().getValue(ACTIVATOR_CLASS_TAG));
             PluginActivator activator = (PluginActivator) activatorClass.newInstance();
             activator.initiate(laop);
         }

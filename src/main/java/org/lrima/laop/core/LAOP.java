@@ -6,6 +6,7 @@ import org.lrima.laop.network.carcontrollers.ManualCarController;
 import org.lrima.laop.network.concreteLearning.GeneticLearning;
 import org.lrima.laop.network.concreteNetworks.FUCONN;
 import org.lrima.laop.network.concreteNetworks.NEAT;
+import org.lrima.laop.plugin.PluginLoader;
 import org.lrima.laop.settings.option.OptionClass;
 import org.lrima.laop.ui.MainSimulationStage;
 import org.lrima.laop.settings.Settings;
@@ -14,6 +15,7 @@ import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.utils.Console;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -37,6 +39,13 @@ public class LAOP {
         neuralNetworksClasses.add(NEAT.class);
         neuralNetworksClasses.add(FUCONN.class);
         neuralNetworksClasses.add(ManualCarController.class);
+
+        PluginLoader.addDir("algos/");
+        try {
+            PluginLoader.load(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         settings = new Settings();
         defaultSettings();
