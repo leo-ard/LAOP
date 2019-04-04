@@ -13,6 +13,7 @@ public class AlgorithmBean {
 	private UserBean user;
 	private String created_at;
 	private int nb_likes;
+	private int nb_comments;
 	
 	public int getNb_likes() {
 		return nb_likes;
@@ -49,6 +50,12 @@ public class AlgorithmBean {
 	}
 	public void setCreated_at(String created_at) {
 		this.created_at = created_at;
+	}
+	public int getNb_comments() {
+		return nb_comments;
+	}
+	public void setNb_comments(int nb_comments) {
+		this.nb_comments = nb_comments;
 	}
 	
 	
