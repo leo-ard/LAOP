@@ -3,6 +3,9 @@ package org.lrima.laop.physic;
 import java.awt.geom.Area;
 import java.util.ArrayList;
 
+import org.lrima.laop.network.carcontrollers.CarController;
+import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
+import org.lrima.laop.network.nn.NeuralNetwork;
 import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.physic.concreteObjects.SimpleCar;
 import org.lrima.laop.physic.staticobjects.StaticLineObject;
@@ -14,10 +17,11 @@ import org.lrima.laop.simulation.map.LineCollidable;
 import org.lrima.laop.utils.Actions.Action;
 
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  *
- * @author Clement Bisaillon et Léonard Oest OLeary
+ * @author Clement Bisaillon and Léonard Oest OLeary
  */
 public class PhysicEngine extends Thread {
     static public final double DELTA_T = 0.05;
@@ -180,5 +184,9 @@ public class PhysicEngine extends Thread {
      */
     public ArrayList<AbstractCar> getCars(){
     	return this.cars;
+    }
+
+    public ArrayList extractNetworks() {
+        return (ArrayList) this.cars.stream().map(AbstractCar::getController).collect(Collectors.toList());
     }
 }

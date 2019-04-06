@@ -1,6 +1,9 @@
 package org.lrima.laop.simulation;
 
 import org.lrima.laop.core.LAOP;
+import org.lrima.laop.network.LearningAlgorithm;
+import org.lrima.laop.network.carcontrollers.CarController;
+import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.physic.concreteObjects.SimpleCar;
@@ -11,6 +14,7 @@ import org.lrima.laop.utils.math.Vector2d;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.function.Function;
 
 /**
  * A simulation that can take the LearningAlgorithms that uses generation bases learning
@@ -27,10 +31,9 @@ public class GenerationBasedSimulation extends Simulation{
     private PhysicEngine physicEngine;
 
     private boolean autoRun;
+    private LearningAlgorithm learningAlgorithm;
 
-    //temporary
-    private final int NUMBER_OF_SENSORS = 5;
-    //endtemporary
+    private ArrayList<GeneticNeuralNetwork> cars;
 
     /**
      * Creates a new Generation
@@ -42,6 +45,7 @@ public class GenerationBasedSimulation extends Simulation{
 
         this.onSimulationFinish = new ArrayList<>();
         this.onGenerationFinish = new ArrayList<>();
+        this.learningAlgorithm = simulationEngine.generateLearningAlgorithm();
         autoRun = true;
     }
 
@@ -61,27 +65,34 @@ public class GenerationBasedSimulation extends Simulation{
     private ArrayList<SimpleCar> configureCar(){
         //TODO ConfigureCars depending on settings and currentScope
 
-        //Create the cars
-        //Temporary
-        ArrayList<SimpleCar> cars = new ArrayList<>();
-
-        if(this.simulationEngine.getBuffer() != null) {
-            for(int i = 0 ; i < 1 ; i++) {
-                Point2D start = this.simulationEngine.getMap().getStartPoint();
-                SimpleCar car = new SimpleCar(new Vector2d(start.getX(), start.getY()), this.simulationEngine.generateCurrentNetwork());
-
-                double orientationIncrement = Math.PI / NUMBER_OF_SENSORS;
-                //Create the sensors and assign them to the car
-                for(int x = 0 ; x < this.NUMBER_OF_SENSORS ; x++) {
-                    ProximityLineSensor sensor = new ProximityLineSensor(car, (x * orientationIncrement) + orientationIncrement/2);
-                    car.addSensor(sensor);
-                }
-
-                cars.add(car);
-            }
+        if(cars == null){
+            return generateCarObjects(100, (i) -> simulationEngine.generateCurrentNetwork());
         }
+        else{
 
-        return cars;
+            cars = learningAlgorithm.learn(cars);
+            return generateCarObjects(cars.size(), (i)-> cars.get(i));
+        }
+    }
+
+    private ArrayList<SimpleCar> generateCarObjects(int numberOfCars, Function<Integer, CarController> controllerFunction){
+        int numberOfSensors = (int) simulationEngine.getSettings().get(LAOP.KEY_NUMBER_OF_SENSORS);
+
+        ArrayList<SimpleCar> carObjects = new ArrayList<>();
+        for(int i = 0 ; i < numberOfCars ; i++) {
+            Point2D start = this.simulationEngine.getMap().getStartPoint();
+            SimpleCar car = new SimpleCar(new Vector2d(start.getX(), start.getY()), controllerFunction.apply(i));
+
+            double orientationIncrement = Math.PI / numberOfSensors;
+            //Create the sensors and assign them to the car
+            for(int x = 0 ; x < numberOfSensors; x++) {
+                ProximityLineSensor sensor = new ProximityLineSensor(car, (x * orientationIncrement) + orientationIncrement/2);
+                car.addSensor(sensor);
+            }
+
+            carObjects.add(car);
+        }
+        return carObjects;
     }
 
     /**
@@ -135,8 +146,10 @@ public class GenerationBasedSimulation extends Simulation{
         this.physicEngine.getCars().addAll(configureCar());
 
         this.physicEngine.setOnPhysicEngineFinishOnce(engine -> {
-            if(this.autoRun)
+            if(this.autoRun){
+                cars = (ArrayList<GeneticNeuralNetwork>) engine.extractNetworks();
                 this.nextGen();
+            }
         });
         this.physicEngine.start();
     }

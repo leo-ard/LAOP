@@ -15,8 +15,18 @@ import java.util.ArrayList;
  */
 @LearningAnotation(simulation = GenerationBasedSimulation.class)
 public class GeneticLearning implements LearningAlgorithm<GeneticNeuralNetwork> {
+
+
+
     @Override
     public ArrayList<GeneticNeuralNetwork> learn(ArrayList<GeneticNeuralNetwork> allCars) {
+
+
+
+
+
+
+
 
         allCars.forEach(car -> car.crossOver(car));
 

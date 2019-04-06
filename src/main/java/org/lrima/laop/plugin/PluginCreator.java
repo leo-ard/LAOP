@@ -1,6 +1,7 @@
 package org.lrima.laop.plugin;
 
 import org.lrima.laop.network.carcontrollers.CarController;
+import org.lrima.laop.utils.ClassUtils;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -41,15 +42,15 @@ public class PluginCreator {
     }
 
     private static String getManifest(Class learningAlgo) {
-        if(checkIfInterface(learningAlgo, PluginActivator.class)){
+        if(ClassUtils.checkIfInterface(learningAlgo, PluginActivator.class)){
             return "Manifest-Version: 1.0\n"+
                     PluginLoader.ACTIVATOR_CLASS_TAG + ": " + learningAlgo.getName()+"\n";
         }
-        if (checkIfInterface(learningAlgo, CarController.class)) {
+        if (ClassUtils.checkIfInterface(learningAlgo, CarController.class)) {
             return "Manifest-Version: 1.0\n"+
                     PluginLoader.ALGORITHM_CLASS_TAG + ": " +learningAlgo.getName()+"\n";
         }
-        if(checkIfInterface(learningAlgo, PluginActivator.class)){
+        if(ClassUtils.checkIfInterface(learningAlgo, PluginActivator.class)){
             return "Manifest-Version: 1.0\n"+
                     PluginLoader.LEARNING_CLASS_TAG + ": " + learningAlgo.getName()+"\n";
         }
@@ -78,14 +79,6 @@ public class PluginCreator {
     }
 
     public static void main(String[] args){
-    }
 
-    private static boolean checkIfInterface(Class c, Class i){
-        for (Class anInterface : c.getInterfaces()) {
-            if(anInterface == i || checkIfInterface(anInterface, i)){
-                return true;
-            }
-        }
-        return false;
     }
 }

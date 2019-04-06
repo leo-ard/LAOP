@@ -1,5 +1,6 @@
 package org.lrima.laop.physic.abstractObjects;
 
+import org.lrima.laop.network.carcontrollers.CarController;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.staticobjects.StaticLineObject;
 import org.lrima.laop.physic.staticobjects.StaticObject;
@@ -237,4 +238,6 @@ public abstract class AbstractCar implements LineCollidable {
      * @return ArrayList of sensor data
      */
     public abstract ArrayList<SensorData> getSensorsData();
+
+    public abstract CarController getController();
 }

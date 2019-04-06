@@ -3,7 +3,11 @@ package org.lrima.laop.utils;
 
 import org.lrima.laop.utils.math.Vector2d;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * Class for java.math utilities that are not present in the java Math class
@@ -114,6 +118,19 @@ public class MathUtils {
     }
 
     public static void main(String args[]){
-        System.out.println(MathUtils.segmentIntersection(0, 0, 1, 1, 1, 0, 0, 1));
+        double[][][] array = new double[][][]{
+                {
+                        {2, 3, 4},
+                        {4, 3, 2, 3, 5}
+                },
+                {
+                        {3, 5, 6, 4, 2},
+                        {3, 4, 53, 2, 3}
+                }
+        };
+
+        System.out.println(Arrays.toString(array));
+
     }
+
 }

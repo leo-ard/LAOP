@@ -1,8 +1,10 @@
 package org.lrima.laop.network.nn;
 
 import org.lrima.laop.utils.MathUtils;
+import org.lrima.laop.utils.NetworkUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.function.Function;
 
 /**
@@ -20,6 +22,13 @@ public class NeuralNetwork {
     public NeuralNetwork(int inputSize){
         this.inputSize = inputSize;
         layers = new ArrayList<>();
+    }
+
+    public NeuralNetwork(int[] topology, double[] weights){
+        this.inputSize = topology[0];
+
+        double[][][] allweghts = NetworkUtils.remap(topology, weights);
+
     }
 
     /**
@@ -60,6 +69,38 @@ public class NeuralNetwork {
         else{
             layers.add(new DenseLayer(size, getLastLayer().size(), activationFunction));
         }
+    }
+
+    /**
+     * Returns all the weights of the network
+     *
+     */
+    public double[] getAllWeights(){
+        double[][][] weights = new double[this.layers.size()][][];
+
+        for (int i = 0; i < layers.size(); i++) {
+            if(! (layers.get(i) instanceof DenseLayer)){
+                System.err.println("TO USE THE GETALLWEIGHTS FUNCTION OF THE NEURAL NETWORK, ALL THE LAYERS MUST ME DENSE LAYERS");
+                return null;
+            }
+            DenseLayer denseLayer = (DenseLayer) layers.get(i);
+
+            weights[i] = denseLayer.getWeights();
+        }
+
+        return NetworkUtils.flatArray(weights);
+    }
+
+    public int[] getTopology() {
+        int[] topology = new int[this.layers.size()+1];
+
+        topology[0] = this.inputSize;
+
+        for (int i = 0; i < layers.size(); i++) {
+            topology[i+1] = layers.get(i).size();
+        }
+
+        return topology;
     }
 
     /**
@@ -107,13 +148,41 @@ public class NeuralNetwork {
             prediction[i] = MathUtils.LOGISTIC.apply(sum);
         }
 
+        double[][][] expected = new double[1][][];
+        for (int i = 0; i < neuralNetwork.layers.size(); i++) {
+            expected[i] = ((DenseLayer)neuralNetwork.getLayers().get(i)).getWeights();
+        }
+
+        double[] weights1 = neuralNetwork.getAllWeights();
+        int[] topo = neuralNetwork.getTopology();
+
+
+        System.out.println(Arrays.toString(topo));
+        double[][][] test = NetworkUtils.remap(topo, weights1);
+
+
+        for (double[][] doubles : test) {
+            for (double[] aDouble : doubles) {
+                System.out.println(Arrays.toString(aDouble));
+            }
+        }
+
+        for (double[][] doubles : expected) {
+            for (double[] aDouble : doubles) {
+                System.out.println(Arrays.toString(aDouble));
+            }
+        }
+
+
+
+        /*
         for (double v : prediction) {
             System.out.print(v + "\t");
         }
         System.out.println();
         for (double v : predictionNN) {
             System.out.print(v + "\t");
-        }
+        }*/
 
 
     }

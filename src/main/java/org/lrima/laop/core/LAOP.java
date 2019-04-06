@@ -12,6 +12,7 @@ import org.lrima.laop.ui.MainSimulationStage;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.SimulationEngine;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
+import org.lrima.laop.utils.ClassUtils;
 import org.lrima.laop.utils.Console;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
@@ -74,8 +75,8 @@ public class LAOP {
         if(settings.get(label) != null)
             throw new KeyAlreadyExistsException("The label "+label+" has already been assigned");
 
-        this.settings.set(label, LAOP.KEY_NETWORK_CLASS, new OptionClass(algorithmClass, neuralNetworksClasses));
-        this.settings.set(label, LAOP.KEY_LEARNING_CLASS, new OptionClass(learningClass, learningAlgorithmsClasses));
+        this.settings.set(label, LAOP.KEY_NETWORK_CLASS, new OptionClass(algorithmClass, neuralNetworksClasses, (clazz) -> ClassUtils.checkIfGenericOfInterface((Class)this.settings.get(label, LAOP.KEY_LEARNING_CLASS), (Class)clazz)));
+        this.settings.set(label, LAOP.KEY_LEARNING_CLASS, new OptionClass(learningClass, learningAlgorithmsClasses, (clazz) -> ClassUtils.checkIfGenericOfInterface((Class)this.settings.get(label, LAOP.KEY_LEARNING_CLASS), (Class)clazz)));
         settings.forEach((k, v) -> this.settings.set(label, k, v));
     }
 
@@ -163,7 +164,7 @@ public class LAOP {
     public static final String KEY_NETWORK_CLASS = "NEURAL NETWORK CLASS";
     public static final String KEY_LEARNING_CLASS = "LEARNING ALGORITHM CLASS";
 
-    private static final String KEY_NUMBER_OF_SENSORS = "NUMBER OF SENSORS";
-    private static final Object DEFAULT_NUMBER_OF_SENSORS = 5;
+    public static final String KEY_NUMBER_OF_SENSORS = "NUMBER OF SENSORS";
+    public static final Object DEFAULT_NUMBER_OF_SENSORS = 5;
 
 }

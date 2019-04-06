@@ -106,10 +106,6 @@ public class SimulationEngine {
         return null;
     }
 
-    private ArrayList<AbstractCar> alterCars() {
-        return new ArrayList<>();
-    }
-
     public void setOnBatchStarted(Action<SimulationEngine> onBatchFinished) {
         this.onBatchStarted.add(onBatchFinished);
     }

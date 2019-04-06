@@ -2,7 +2,11 @@ package org.lrima.laop.settings.option;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
+import com.jfoenix.controls.JFXComboBox;
+import javafx.scene.paint.Color;
 import org.lrima.laop.ui.stage.DownloadAlgorithmDialog;
 
 import com.jfoenix.controls.JFXButton;
@@ -16,9 +20,11 @@ import javafx.scene.layout.HBox;
 public class OptionClass<T> implements Option<Class<?>> {
     Class<?> value;
     HashMap<String, Class<? extends T>> allClasses;
+    Function<Class, Boolean> isValid;
 
-    public OptionClass(Class<?> value, ArrayList<Class<? extends T>> allAvailableClasses) {
+    public OptionClass(Class<?> value, ArrayList<Class<? extends T>> allAvailableClasses, Function<Class, Boolean> isValid) {
     	this.value = value;
+    	this.isValid = isValid;
 
     	allClasses = new HashMap<>();
         for (Class<? extends T> allAvailableClass : allAvailableClasses) {
@@ -43,10 +49,17 @@ public class OptionClass<T> implements Option<Class<?>> {
         ObservableList<String> observableList = FXCollections.observableArrayList();
         observableList.addAll(allClasses.keySet());
 
-        ComboBox<String> stringComboBox = new ComboBox<>(observableList);
+        JFXComboBox<String> stringComboBox = new JFXComboBox<>(observableList);
         stringComboBox.getSelectionModel().select(value.getSimpleName());
         stringComboBox.getSelectionModel().selectedItemProperty().addListener((s, oldOb, newOb) ->{
             setValue(allClasses.get(newOb));
+            if(isValid.apply(this.value)){
+                stringComboBox.focusColorProperty().set(Color.BLUE);
+            }
+            else{
+                stringComboBox.focusColorProperty().set(Color.RED);
+
+            }
         });
         
         return stringComboBox;

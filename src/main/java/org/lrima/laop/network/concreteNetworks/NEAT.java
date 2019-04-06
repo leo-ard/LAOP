@@ -30,6 +30,6 @@ public class NEAT implements GeneticNeuralNetwork {
 
 
 
-        return new CarControls();
+        return new CarControls(1, 0, 0);
     }
 }

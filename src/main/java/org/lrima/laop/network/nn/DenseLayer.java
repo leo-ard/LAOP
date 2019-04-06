@@ -110,4 +110,21 @@ public class DenseLayer implements Layer {
     public int size() {
         return size;
     }
+
+    public double[][] getWeights() {
+        return weights;
+    }
+
+    public double[][] getWeightsAndBias() {
+        double[][] weightsAndBias = new double[this.size][weights[0].length+1];
+
+        for (int i = 0; i < weights.length; i++) {
+            for (int j = 0; j < weights[i].length; j++) {
+                weightsAndBias[i][j] = this.weights[i][j];
+            }
+            weightsAndBias[i][this.weights[i].length] = bias[i];
+        }
+
+        return weightsAndBias;
+    }
 }
