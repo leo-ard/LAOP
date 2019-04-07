@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -17,6 +18,8 @@ import org.lrima.laop.ui.components.LaopMenuBar;
 import org.lrima.laop.ui.components.Timeline;
 import org.lrima.laop.ui.components.inspector.InspectorPanel;
 import org.lrima.laop.ui.stage.GeneticStage;
+
+import java.awt.*;
 
 
 /**
@@ -81,6 +84,8 @@ public class MainSimulationStage extends Stage {
 
         if(simulationView != null)
             simulationView.setup(this);
+
+
     }
 
     private void reset() {
@@ -130,6 +135,12 @@ public class MainSimulationStage extends Stage {
 
         Scene scene = new Scene(mainPane);
         scene.getStylesheets().add("/css/general.css");
+
+        scene.setOnKeyPressed(key->{
+            if(key.getCharacter().equals("p")){
+                this.simulationEngine.pause();
+            }
+        });
 
         this.setScene(scene);
     }

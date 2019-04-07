@@ -127,4 +127,8 @@ public class DenseLayer implements Layer {
 
         return weightsAndBias;
     }
+
+    public double[] getBias() {
+        return bias;
+    }
 }

@@ -16,5 +16,7 @@ public interface GeneticNeuralNetwork extends CarController {
      * @return A version that resemble the two networks.
      */
     GeneticNeuralNetwork crossOver(GeneticNeuralNetwork otherGeneticNeuralNetwork);
-    void init(LockedSetting settings);
+
+    void setFitness(double fitness);
+    double getFitness();
 }

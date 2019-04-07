@@ -12,6 +12,7 @@ import org.lrima.laop.utils.math.Vector2d;
 
 import java.awt.geom.Area;
 import java.util.ArrayList;
+import java.util.function.Function;
 
 /**
  * Class that can be simulated physicaly
@@ -34,6 +35,8 @@ public abstract class AbstractCar implements LineCollidable {
     private final int MINIMUM_TIME_BEFORE_COLLISION_AGAIN = 100;
 
     protected boolean dead;
+    protected Function<AbstractCar, Double> fitnessFunction;
+    protected double fitness;
 
     /**
      * Create a new java.physic object with the default variables
@@ -240,4 +243,12 @@ public abstract class AbstractCar implements LineCollidable {
     public abstract ArrayList<SensorData> getSensorsData();
 
     public abstract CarController getController();
+
+    public double getFitness(){
+        return this.fitness;
+    }
+
+    public void setFitnessFunction(Function<AbstractCar, Double> function){
+        this.fitnessFunction = function;
+    }
 }

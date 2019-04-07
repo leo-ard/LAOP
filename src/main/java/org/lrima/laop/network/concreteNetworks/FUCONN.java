@@ -2,14 +2,12 @@ package org.lrima.laop.network.concreteNetworks;
 
 import org.lrima.laop.core.LAOP;
 import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
+import org.lrima.laop.network.nn.DenseLayer;
 import org.lrima.laop.network.nn.NeuralNetwork;
 import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.settings.LockedSetting;
 import org.lrima.laop.utils.MathUtils;
 import org.lrima.laop.utils.math.RandomUtils;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * An implementation of a neural network. This on is of type GeneticNeuralNetwork. It can be trained by a Genetic Learning.
@@ -18,6 +16,7 @@ import java.util.Arrays;
  */
 public class FUCONN implements GeneticNeuralNetwork {
     NeuralNetwork neuralNetwork;
+    double fitness;
 
     @Override
     public GeneticNeuralNetwork crossOver(GeneticNeuralNetwork otherGeneticNeuralNetwork) {
@@ -32,7 +31,7 @@ public class FUCONN implements GeneticNeuralNetwork {
         }
 
         FUCONN newNetwork = new FUCONN();
-        newNetwork.neuralNetwork = new NeuralNetwork(this.neuralNetwork.getTopology(), newWeights);
+        newNetwork.neuralNetwork = new NeuralNetwork(this.neuralNetwork.getTopology(), newWeights, new double[]{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0});
 
         return newNetwork;
     }
@@ -47,10 +46,10 @@ public class FUCONN implements GeneticNeuralNetwork {
 
     @Override
     public CarControls control(double... captorValues) {
-        double[] data = new double[]{RandomUtils.getDouble(0, 1), 0, RandomUtils.getDouble(-1, 1)};
+        //double[] data = new double[]{RandomUtils.getDouble(0, 1), 0, RandomUtils.getDouble(-1, 1)};
 //        double[] data = neuralNetwork.predict(captorValues);
 
-        return new CarControls(data);
+        return new CarControls(neuralNetwork.predict(captorValues));
     }
 
     public static void main(String[] args){
@@ -59,5 +58,15 @@ public class FUCONN implements GeneticNeuralNetwork {
         neuralNetwork.addDenseLayer(3, MathUtils.LOGISTIC);
 
         System.out.println(neuralNetwork.getAllWeights().length);
+    }
+
+    @Override
+    public void setFitness(double fitness) {
+        this.fitness = fitness;
+    }
+
+    @Override
+    public double getFitness() {
+        return fitness;
     }
 }

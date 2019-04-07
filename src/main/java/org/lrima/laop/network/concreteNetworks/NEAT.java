@@ -25,6 +25,16 @@ public class NEAT implements GeneticNeuralNetwork {
     }
 
     @Override
+    public void setFitness(double fitness) {
+
+    }
+
+    @Override
+    public double getFitness() {
+        return 0;
+    }
+
+    @Override
     public CarControls control(double... sensorValues) {
 
 

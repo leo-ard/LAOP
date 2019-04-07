@@ -24,10 +24,15 @@ public class NeuralNetwork {
         layers = new ArrayList<>();
     }
 
-    public NeuralNetwork(int[] topology, double[] weights){
+    public NeuralNetwork(int[] topology, double[] weights, double[] bias){
         this.inputSize = topology[0];
 
+        this.layers = new ArrayList<>();
         double[][][] allweghts = NetworkUtils.remap(topology, weights);
+
+        for (double[][] allweght : allweghts) {
+            this.layers.add(new DenseLayer(allweght, bias, MathUtils.LOGISTIC));
+        }
 
     }
 

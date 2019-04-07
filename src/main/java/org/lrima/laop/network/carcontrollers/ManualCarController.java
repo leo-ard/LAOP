@@ -5,6 +5,7 @@ import org.lrima.laop.physic.CarControls;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import org.lrima.laop.settings.LockedSetting;
 
 /**
  * An concrete class of a CarController. Can control a car with the keys W-A-S-D.
@@ -58,5 +59,10 @@ public class ManualCarController implements CarController {
     	controls.setRotation(this.values[2]);
     	
         return controls;
+    }
+
+    @Override
+    public void init(LockedSetting settings) {
+
     }
 }

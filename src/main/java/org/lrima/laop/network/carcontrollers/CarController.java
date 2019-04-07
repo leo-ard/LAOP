@@ -1,6 +1,7 @@
 package org.lrima.laop.network.carcontrollers;
 
 import org.lrima.laop.physic.CarControls;
+import org.lrima.laop.settings.LockedSetting;
 
 /**
  * Interface used by the car to know what to do in each point in time. Also used by the NN to tell how the car should be controlled.
@@ -18,4 +19,5 @@ public interface CarController {
      * @return how the car should be controlled
      */
     CarControls control(double ... captorValues);
+    void init(LockedSetting settings);
 }

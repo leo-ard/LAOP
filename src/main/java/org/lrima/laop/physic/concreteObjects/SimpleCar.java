@@ -1,6 +1,7 @@
 package org.lrima.laop.physic.concreteObjects;
 
 import org.lrima.laop.network.carcontrollers.CarController;
+import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
 import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.abstractObjects.Box;
@@ -62,7 +63,7 @@ public class SimpleCar extends Box {
 
         this.acceleration = PhysicUtils.accelFromForces(forces, this.mass);
 
-        this.wheelDirection = carControls.getRotation() * RANGE;
+        this.wheelDirection = (carControls.getRotation()-0.5) * 2 * RANGE;
 
 //        this.angularAccel = PhysicUtils.angularAccel(this.wheelDirection, this.velocity);
 //        this.angularAccel = Math.min(Math.max(RANGE, angularAccel), -RANGE);
@@ -72,6 +73,11 @@ public class SimpleCar extends Box {
 
         this.velocity = this.velocity.add(acceleration.multiply(PhysicEngine.DELTA_T));
         this.position = this.position.add(this.velocity.multiply(PhysicEngine.DELTA_T));
+
+        if(this.carController instanceof GeneticNeuralNetwork){
+            this.fitness = this.fitnessFunction.apply(this);
+            ((GeneticNeuralNetwork) this.carController).setFitness(this.fitness);
+        }
     }
 
     @Override

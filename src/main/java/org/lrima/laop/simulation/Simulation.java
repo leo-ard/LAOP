@@ -34,4 +34,6 @@ public abstract class Simulation {
     public void setEnd(Consumer<Simulation> end) {
         this.end.add(end);
     }
+
+    public abstract void pause();
 }

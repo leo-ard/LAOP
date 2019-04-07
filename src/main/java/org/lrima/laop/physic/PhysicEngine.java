@@ -38,7 +38,7 @@ public class PhysicEngine extends Thread {
     private AbstractMap map;
 
     //////Temporary
-    private final int MAX_ITERATION = 30000;
+    private final int MAX_ITERATION = 300;
     private int CURRENT_ITERATION = 0;
     //////Temporary
 
@@ -188,5 +188,9 @@ public class PhysicEngine extends Thread {
 
     public ArrayList extractNetworks() {
         return (ArrayList) this.cars.stream().map(AbstractCar::getController).collect(Collectors.toList());
+    }
+
+    public boolean getPause() {
+        return pause;
     }
 }

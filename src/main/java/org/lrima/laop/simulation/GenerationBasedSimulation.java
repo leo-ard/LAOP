@@ -58,6 +58,12 @@ public class GenerationBasedSimulation extends Simulation{
         this.nextGen();
     }
 
+    //temp
+    @Override
+    public void pause() {
+        this.physicEngine.setPause(!this.physicEngine.getPause());
+    }
+
     /**
      * Confifure all the cars for the simulation
      * @return
@@ -66,12 +72,17 @@ public class GenerationBasedSimulation extends Simulation{
         //TODO ConfigureCars depending on settings and currentScope
 
         if(cars == null){
-            return generateCarObjects(100, (i) -> simulationEngine.generateCurrentNetwork());
+
+            ArrayList<SimpleCar> cars = generateCarObjects(100, (i) -> simulationEngine.generateCurrentNetwork());
+            learningAlgorithm.init(cars);
+            return cars;
         }
         else{
 
             cars = learningAlgorithm.learn(cars);
-            return generateCarObjects(cars.size(), (i)-> cars.get(i));
+            ArrayList<SimpleCar> simpleCars = generateCarObjects(cars.size(), (i) -> cars.get(i));
+            learningAlgorithm.init(simpleCars);
+            return simpleCars;
         }
     }
 
@@ -134,7 +145,7 @@ public class GenerationBasedSimulation extends Simulation{
         this.simulationEngine.getBuffer().clear();
         this.physicEngine = new PhysicEngine(this.simulationEngine.getBuffer(), this.simulationEngine.getMap());
 
-        this.physicEngine.setWaitDeltaT(true);
+        this.physicEngine.setWaitDeltaT(false);
         this.physicEngine.setFinishingConditions((list) -> {
             for (AbstractCar abstractCar : list) {
                 if(!abstractCar.isDead()){

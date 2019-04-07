@@ -6,6 +6,7 @@ import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.network.LearningAnotation;
 import org.lrima.laop.network.carcontrollers.CarController;
 import org.lrima.laop.network.carcontrollers.ManualCarController;
+import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.settings.LockedSetting;
 import org.lrima.laop.settings.Settings;
@@ -86,7 +87,12 @@ public class SimulationEngine {
         Class<? extends CarController> carClass = (Class<? extends CarController>) settings.get(currentScope, LAOP.KEY_NETWORK_CLASS);
 
         try {
-            return carClass.newInstance();
+            CarController carController = carClass.newInstance();
+            try{
+                carController.init(this.getSettings());
+            }
+            catch (AbstractMethodError e){}
+            return carController;
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -136,5 +142,9 @@ public class SimulationEngine {
 
     public Simulation getSimulation() {
         return currentSimulation;
+    }
+
+    public void pause() {
+        this.currentSimulation.pause();
     }
 }

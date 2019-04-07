@@ -1,6 +1,7 @@
 package org.lrima.laop.network;
 
 import org.lrima.laop.network.carcontrollers.CarController;
+import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.simulation.GenerationBasedSimulation;
 
 import java.lang.annotation.Inherited;
@@ -19,6 +20,6 @@ public interface LearningAlgorithm <T extends CarController>{
      * @return a new set of car to test
      */
     ArrayList<T> learn(ArrayList<T> allCars);
-
+    void init(ArrayList<AbstractCar> cars);
 
 }
