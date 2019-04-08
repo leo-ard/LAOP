@@ -16,6 +16,7 @@ public class GeneticStage extends SimulationView<GenerationBasedSimulation> {
         this.chartPanel = new ChartPanel();
         this.getSimulation().setOnGenerationFinish(simulation -> this.chartPanel.updateChartData(simulation.getGenerationData()));
         this.getSimulation().setOnSimulationFinish(no -> this.chartPanel.resetChart());
+        System.out.println(chartPanel);
     }
 
 
@@ -33,6 +34,6 @@ public class GeneticStage extends SimulationView<GenerationBasedSimulation> {
 
         mainSimulationStage.getMenuBar().addShowCharts(this.chartPanel);
 
-
+        System.out.println("haha");
     }
 }

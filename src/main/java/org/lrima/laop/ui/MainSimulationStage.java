@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -18,8 +19,7 @@ import org.lrima.laop.ui.components.LaopMenuBar;
 import org.lrima.laop.ui.components.Timeline;
 import org.lrima.laop.ui.components.inspector.InspectorPanel;
 import org.lrima.laop.ui.stage.GeneticStage;
-
-import java.awt.*;
+import org.lrima.laop.utils.Actions.Procedure;
 
 
 /**
@@ -75,26 +75,26 @@ public class MainSimulationStage extends Stage {
 
     private void changeSimulation(SimulationEngine simulationEngine) {
         Simulation simulation = simulationEngine.getSimulation();
-        reset();
+        reset(()->{
+            SimulationView simulationView = null;
+            if(simulation instanceof GenerationBasedSimulation) simulationView = new GeneticStage((GenerationBasedSimulation) simulation);
 
-        SimulationView simulationView = null;
-        if(simulation instanceof GenerationBasedSimulation) simulationView = new GeneticStage((GenerationBasedSimulation) simulation);
+            System.out.println(simulationView);
 
-        System.out.println("CONFIGURING HAHAHA");
-
-        if(simulationView != null)
-            simulationView.setup(this);
-
-
+            if(simulationView != null)
+                simulationView.setup(this);
+        });
     }
 
-    private void reset() {
+    private void reset(Procedure procedure) {
         Platform.runLater(() -> {
             this.menuBar.reset();
             this.timeline.reset();
 
             this.bottomBar.getChildren().clear();
             this.bottomBar.getChildren().add(this.timeline);
+
+            procedure.invoke();
         });
     }
 
@@ -108,12 +108,10 @@ public class MainSimulationStage extends Stage {
         blankPane.setVisible(false);
 
         uiElements.setTop(this.menuBar);
-        //uiElements.setCenter(blankPane);
 
         //Add the timeLine and the chart panel to the bottom
         bottomBar = new VBox();
         bottomBar.getChildren().add(this.timeline);
-//        bottomBar.getChildren().add(this.chartPanel);
 
         uiElements.setBottom(bottomBar);
         uiElements.setRight(inspector);

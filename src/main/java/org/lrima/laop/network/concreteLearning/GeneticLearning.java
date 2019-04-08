@@ -19,11 +19,8 @@ import java.util.stream.Collectors;
 @LearningAnotation(simulation = GenerationBasedSimulation.class)
 public class GeneticLearning implements LearningAlgorithm<GeneticNeuralNetwork> {
 
-
-
     @Override
     public ArrayList<GeneticNeuralNetwork> learn(ArrayList<GeneticNeuralNetwork> cars) {
-
         //sort by best-fitness
         cars = (ArrayList<GeneticNeuralNetwork>) cars.stream()
                 .sorted((gn1, gn2)-> (int) (gn1.getFitness()-gn2.getFitness()))
