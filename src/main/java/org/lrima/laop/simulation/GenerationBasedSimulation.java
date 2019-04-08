@@ -10,6 +10,7 @@ import org.lrima.laop.physic.concreteObjects.SimpleCar;
 import org.lrima.laop.simulation.data.GenerationData;
 import org.lrima.laop.simulation.sensors.ProximityLineSensor;
 import org.lrima.laop.utils.Actions.Action;
+import org.lrima.laop.utils.Console;
 import org.lrima.laop.utils.math.Vector2d;
 
 import java.awt.geom.Point2D;
@@ -71,8 +72,8 @@ public class GenerationBasedSimulation extends Simulation{
     private ArrayList<SimpleCar> configureCar(){
         //TODO ConfigureCars depending on settings and currentScope
 
-        if(cars == null){
-
+        if(generationCount == 0){
+            System.out.println("jsjsjsjsjsjsjsjsj");
             ArrayList<SimpleCar> cars = generateCarObjects(100, (i) -> simulationEngine.generateCurrentNetwork());
             learningAlgorithm.init(cars);
             return cars;

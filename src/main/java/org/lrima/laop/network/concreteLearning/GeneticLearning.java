@@ -50,10 +50,6 @@ public class GeneticLearning implements LearningAlgorithm<GeneticNeuralNetwork> 
             cars.add(geneticNeuralNetwork);
         }
 
-        System.out.println(cars.size());
-
-
-
         //Kill 50
         //Other suff like crossOver and stuff
 
@@ -62,7 +58,6 @@ public class GeneticLearning implements LearningAlgorithm<GeneticNeuralNetwork> 
 
     @Override
     public void init(ArrayList<AbstractCar> cars) {
-
         Function<AbstractCar, Double> fitness = (car) -> car.getPosition().modulus();
         cars.forEach(car -> car.setFitnessFunction(fitness));
     }

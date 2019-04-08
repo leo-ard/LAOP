@@ -79,14 +79,12 @@ public class MainSimulationStage extends Stage {
             SimulationView simulationView = null;
             if(simulation instanceof GenerationBasedSimulation) simulationView = new GeneticStage((GenerationBasedSimulation) simulation);
 
-            System.out.println(simulationView);
-
             if(simulationView != null)
                 simulationView.setup(this);
         });
     }
 
-    private void reset(Procedure procedure) {
+    private void reset(Procedure runLater) {
         Platform.runLater(() -> {
             this.menuBar.reset();
             this.timeline.reset();
@@ -94,7 +92,7 @@ public class MainSimulationStage extends Stage {
             this.bottomBar.getChildren().clear();
             this.bottomBar.getChildren().add(this.timeline);
 
-            procedure.invoke();
+            runLater.invoke();
         });
     }
 
