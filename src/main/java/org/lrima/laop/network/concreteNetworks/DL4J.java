@@ -22,8 +22,6 @@ public class DL4J implements DL4JNN {
     private MultiLayerNetwork network;
 
     public CarControls control(double... captorValues) {
-//        System.out.println(network(Nd4j.create(captorValues)));
-
 
         return new CarControls();
     }

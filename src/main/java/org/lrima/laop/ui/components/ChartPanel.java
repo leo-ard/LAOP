@@ -71,7 +71,6 @@ public class ChartPanel extends HBox {
 	}
 
 	public void resetChart() {
-		System.out.println("RESETING CHART !");
 		//Reset the series and the generation count
 		this.averageFitnessSerie.getData().clear();
 		this.maxY = 0;
@@ -85,27 +84,22 @@ public class ChartPanel extends HBox {
 		//Add new data to the series from the past generation
 		double averageFitnessScore = pastGeneration.getAverageFitness();
 		int generationNumber = pastGeneration.getGenerationNumber();
-		XYChart.Data<Number, Number> data = new XYChart.Data(generationNumber, averageFitnessScore);
-		
-		//Change the bounds of the chart
-		if(averageFitnessScore > this.maxY) {
-			this.maxY = averageFitnessScore;
-		}
-		else if(averageFitnessScore < this.minY) {
-			this.minY = averageFitnessScore;
-		}
-		
-		this.yAxis.setLowerBound(this.minY);
-		this.yAxis.setUpperBound(this.maxY);
-		this.xAxis.setUpperBound(generationNumber);
+		Platform.runLater(() -> {
+			XYChart.Data<Number, Number> data = new XYChart.Data(generationNumber, averageFitnessScore);
+			
+			//Change the bounds of the chart
+			if(averageFitnessScore > this.maxY) {
+				this.maxY = averageFitnessScore;
+			}
+			else if(averageFitnessScore < this.minY) {
+				this.minY = averageFitnessScore;
+			}
+			
+			this.yAxis.setLowerBound(this.minY);
+			this.yAxis.setUpperBound(this.maxY);
+			this.xAxis.setUpperBound(generationNumber);
 
-		/*
-         * TODO : fait une erreur des fois (doit etre mis sur un thread Javafx)
-         * Exception in thread "Thread-15" java.lang.IllegalStateException: Not on FX application thread; currentThread = Thread-15
-         */
-		//Add the data to the chart
-        Platform.runLater(
-                () -> this.averageFitnessSerie.getData().add(data)
-        );
+			this.averageFitnessSerie.getData().add(data);
+		});
 	}
 }

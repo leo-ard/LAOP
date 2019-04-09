@@ -51,7 +51,7 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
      */
     @Override
     public void start() {
-        this.simulate();
+        this.simulateGeneration();
     }
 
     //temp
@@ -80,20 +80,13 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
         }
     }
 
-    /**
-     * Simulate the simulation
-     */
-    public void simulate(){
-        simulateGeneration();
-
-    }
     
     /**
      * Precedes to next generation
      */
     public void nextGen() {
     	incrementGeneration();
-    	this.simulate();
+    	this.simulateGeneration();
     }
 
     /**
@@ -108,7 +101,7 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
         
 
         //CHECK IF GENERATION IS OUT OF BOUNDS
-        if(generationCount > (int) this.simulationEngine.getSettings().get(LAOP.KEY_NUMBER_OF_GENERATIONS)){
+        if(generationCount > (int) this.simulationEngine.getSettings().get(LAOP.KEY_NUMBER_OF_GENERATIONS) + 1){
         	Console.info("Simulation " + this.simulationCount + " ended");
             //FIRE LISTENERS
         	this.onSimulationFinish.forEach(simulationAction -> simulationAction.handle(this));
@@ -151,7 +144,6 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
      * @return the generation data of the current generation
      */
     public GenerationData getGenerationData() {
-    	System.out.println(this.generationCount);
         GenerationData data = new GenerationData(this.generationCount);
         data.setAverageFitness(cars);
         

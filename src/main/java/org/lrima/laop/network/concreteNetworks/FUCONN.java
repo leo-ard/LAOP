@@ -56,8 +56,6 @@ public class FUCONN implements GeneticNeuralNetwork {
         NeuralNetwork neuralNetwork = new NeuralNetwork(5);
         neuralNetwork.addDenseLayer(2, MathUtils.LOGISTIC);
         neuralNetwork.addDenseLayer(3, MathUtils.LOGISTIC);
-
-        System.out.println(neuralNetwork.getAllWeights().length);
     }
 
     @Override
