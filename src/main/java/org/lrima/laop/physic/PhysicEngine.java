@@ -16,6 +16,9 @@ import org.lrima.laop.simulation.map.AbstractMap;
 import org.lrima.laop.simulation.map.LineCollidable;
 import org.lrima.laop.utils.Actions.Action;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -24,6 +27,7 @@ import java.util.stream.Collectors;
  * @author Clement Bisaillon and Léonard Oest OLeary
  */
 public class PhysicEngine extends Thread {
+	
     public static Function<ArrayList<AbstractCar>, Boolean> ALL_CARS_DEAD = (list) -> {
         for (AbstractCar abstractCar : list) {
             if(!abstractCar.isDead()){
@@ -52,7 +56,7 @@ public class PhysicEngine extends Thread {
     //////Temporary
 
     private SimulationBuffer simulationBuffer;
-    private boolean waitDeltaT;
+    private boolean realTime;
     private Function<ArrayList<AbstractCar>, Boolean> finishingCondition;
 
 
@@ -67,7 +71,8 @@ public class PhysicEngine extends Thread {
         this.cars = new ArrayList<>();
         this.onPhysicEngineFinishOnce = new ArrayList<>();
         this.map = map;
-        this.waitDeltaT = false;
+        
+        this.realTime = false;
     }
 
 
@@ -90,7 +95,7 @@ public class PhysicEngine extends Thread {
                         running = false;
 
                     this.CURRENT_ITERATION++;
-                    if(waitDeltaT){
+                    if(this.realTime){
                         Thread.sleep((int)(PhysicEngine.DELTA_T*1000.0));
                     }
                     else
@@ -183,10 +188,8 @@ public class PhysicEngine extends Thread {
     public void setOnStep(Action<PhysicEngine> onStep){
         this.onStep.add(onStep);
     }
-
-    public void setWaitDeltaT(boolean waitDeltaT) {
-        this.waitDeltaT = waitDeltaT;
-    }
+    
+    
 
     /**
      * @return The list of cars in the physic engine
@@ -201,5 +204,10 @@ public class PhysicEngine extends Thread {
 
     public boolean getPause() {
         return pause;
+    }
+    
+
+    public void setRealTime(boolean value) {
+        this.realTime = value;
     }
 }

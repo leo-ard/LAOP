@@ -13,6 +13,7 @@ import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.simulation.map.AbstractMap;
 import org.lrima.laop.simulation.map.MazeMap;
+import org.lrima.laop.utils.Console;
 import org.lrima.laop.utils.Actions.Action;
 
 import java.lang.reflect.Constructor;
@@ -55,6 +56,7 @@ public class SimulationEngine {
 
     private void nextBatch() {
         currentSimulation = generateSimulation();
+        Console.info("Running algorithm " + currentSimulation.getClass().getCanonicalName());
 
         this.onBatchStarted.forEach(b -> b.handle(this));
         currentSimulation.start();

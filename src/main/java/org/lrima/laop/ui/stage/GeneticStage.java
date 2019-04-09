@@ -35,5 +35,6 @@ public class GeneticStage extends SimulationView<GenerationBasedSimulation> {
         mainSimulationStage.getBotomBar().getChildren().add(chartPanel);
 
         mainSimulationStage.getMenuBar().addShowCharts(this.chartPanel);
+        mainSimulationStage.getMenuBar().addRealTime(this.getSimulation());
     }
 }

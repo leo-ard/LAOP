@@ -40,7 +40,7 @@ public class RealTimeSimulation extends Simulation<DL4JLearning> {
         this.simulationEngine.getBuffer().clear();
         this.physicEngine = new PhysicEngine(this.simulationEngine.getBuffer(), this.simulationEngine.getMap());
 
-        this.physicEngine.setWaitDeltaT(true);
+        this.physicEngine.setRealTime(true);
         this.physicEngine.setFinishingConditions(PhysicEngine.ALL_CARS_DEAD);
         this.physicEngine.getCars().addAll(this.generateCarObjects(1, (i) -> this.carControllerArrayList.get(i)));
 

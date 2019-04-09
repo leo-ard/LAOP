@@ -1,27 +1,36 @@
 package org.lrima.laop.ui.components;
 
+import java.util.ArrayList;
+
+import org.lrima.laop.simulation.GenerationBasedSimulation;
+import org.lrima.laop.ui.SimulationDrawer;
+import org.lrima.laop.ui.components.inspector.InspectorPanel;
+
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import org.lrima.laop.ui.SimulationDrawer;
-import org.lrima.laop.ui.components.inspector.InspectorPanel;
-
-import java.util.ArrayList;
 
 public class LaopMenuBar extends MenuBar {
     private ArrayList<MenuItem> menuItems;
     private Menu windowMenu;
     private Menu view;
+    private Menu simulationMenu;
 
+    //window
     private CheckMenuItem showConsole;
     private CheckMenuItem showCarInfo;
+    
+    //Simulation
+    private CheckMenuItem realTimeCheck;
+    
     private MenuItem resetView;
 
     public void init(ConsolePanel consolePanel, InspectorPanel inspector, SimulationDrawer simulationDrawer){
         windowMenu = new Menu("Window");
         showConsole = new CheckMenuItem("Console");
         showCarInfo = new CheckMenuItem("Car info");
+        
         showConsole.setSelected(true);
         showCarInfo.setSelected(false);
 
@@ -74,5 +83,18 @@ public class LaopMenuBar extends MenuBar {
             chartPanel.setManaged(newVal);
         });
         windowMenu.getItems().add(showCharts);
+    }
+    
+    public void addRealTime(GenerationBasedSimulation simulation) {
+    	this.realTimeCheck = new CheckMenuItem("Real time");
+    	this.realTimeCheck.setSelected(false);
+    	simulationMenu = new Menu("Simulation");
+    	
+    	this.realTimeCheck.selectedProperty().addListener((observer, oldVal, newVal) -> {
+    		simulation.setRealTime(newVal);
+    	});
+    	
+    	simulationMenu.getItems().add(this.realTimeCheck);
+    	this.getMenus().add(simulationMenu);
     }
 }
