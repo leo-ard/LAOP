@@ -2,26 +2,21 @@ package org.lrima.laop.simulation;
 
 import org.lrima.laop.core.LAOP;
 import org.lrima.laop.network.LearningAlgorithm;
-import org.lrima.laop.network.carcontrollers.CarController;
+import org.lrima.laop.network.concreteLearning.GeneticLearning;
 import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
 import org.lrima.laop.physic.PhysicEngine;
-import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.physic.concreteObjects.SimpleCar;
 import org.lrima.laop.simulation.data.GenerationData;
-import org.lrima.laop.simulation.sensors.ProximityLineSensor;
 import org.lrima.laop.utils.Actions.Action;
-import org.lrima.laop.utils.math.Vector2d;
 
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.function.Function;
 
 /**
  * A simulation that can take the LearningAlgorithms that uses generation bases learning
  *
  * @author Léonard
  */
-public class GenerationBasedSimulation extends Simulation{
+public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
     private int simulationCount;
     private int generationCount;
 
@@ -86,26 +81,6 @@ public class GenerationBasedSimulation extends Simulation{
         }
     }
 
-    private ArrayList<SimpleCar> generateCarObjects(int numberOfCars, Function<Integer, CarController> controllerFunction){
-        int numberOfSensors = (int) simulationEngine.getSettings().get(LAOP.KEY_NUMBER_OF_SENSORS);
-
-        ArrayList<SimpleCar> carObjects = new ArrayList<>();
-        for(int i = 0 ; i < numberOfCars ; i++) {
-            Point2D start = this.simulationEngine.getMap().getStartPoint();
-            SimpleCar car = new SimpleCar(new Vector2d(start.getX(), start.getY()), controllerFunction.apply(i));
-
-            double orientationIncrement = Math.PI / numberOfSensors;
-            //Create the sensors and assign them to the car
-            for(int x = 0 ; x < numberOfSensors; x++) {
-                ProximityLineSensor sensor = new ProximityLineSensor(car, (x * orientationIncrement) + orientationIncrement/2);
-                car.addSensor(sensor);
-            }
-
-            carObjects.add(car);
-        }
-        return carObjects;
-    }
-
     /**
      * Precedes to next generation
      */
@@ -146,14 +121,7 @@ public class GenerationBasedSimulation extends Simulation{
         this.physicEngine = new PhysicEngine(this.simulationEngine.getBuffer(), this.simulationEngine.getMap());
 
         this.physicEngine.setWaitDeltaT(false);
-        this.physicEngine.setFinishingConditions((list) -> {
-            for (AbstractCar abstractCar : list) {
-                if(!abstractCar.isDead()){
-                    return false;
-                }
-            }
-            return true;
-        });
+        this.physicEngine.setFinishingConditions(PhysicEngine.ALL_CARS_DEAD);
         this.physicEngine.getCars().addAll(configureCar());
 
         this.physicEngine.setOnPhysicEngineFinishOnce(engine -> {

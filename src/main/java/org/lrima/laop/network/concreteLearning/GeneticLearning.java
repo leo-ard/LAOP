@@ -2,6 +2,7 @@ package org.lrima.laop.network.concreteLearning;
 
 import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.network.LearningAnotation;
+import org.lrima.laop.network.carcontrollers.CarController;
 import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
 import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.simulation.GenerationBasedSimulation;

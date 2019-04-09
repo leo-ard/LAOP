@@ -3,7 +3,9 @@ package org.lrima.laop.core;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.lrima.laop.network.carcontrollers.ManualCarController;
+import org.lrima.laop.network.concreteLearning.DL4JLearning;
 import org.lrima.laop.network.concreteLearning.GeneticLearning;
+import org.lrima.laop.network.concreteNetworks.DL4J;
 import org.lrima.laop.network.concreteNetworks.FUCONN;
 import org.lrima.laop.network.concreteNetworks.NEAT;
 import org.lrima.laop.ui.ConfigurationStage;
@@ -28,7 +30,7 @@ public class LaopGraphical extends Application {
         configurationStage.show();
 
 //        LAOP laop = new LAOP();
-//        laop.addAlgorithm("test1212", ManualCarController.class, GeneticLearning.class, new HashMap<>());
+//        laop.addAlgorithm("kskssk", DL4J.class, DL4JLearning.class, null);
 //        laop.startSimulation(LAOP.SimulationDisplayMode.WITH_INTERFACE);
     }
 }

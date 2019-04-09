@@ -133,7 +133,7 @@ public class Settings {
      * @return true if the scope exist, false otherwise
      */
     public boolean scopeExist(String scope){
-        return this.scopes.get(scope) == null;
+        return this.scopes.get(scope) != null;
     }
 
     /**

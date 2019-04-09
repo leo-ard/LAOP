@@ -28,7 +28,7 @@ import org.lrima.laop.utils.Actions.Procedure;
  * @author Léonard
  */
 public class MainSimulationStage extends Stage {
-    private final SimulationEngine simulationEngine;
+    private SimulationEngine simulationEngine;
     private Timeline timeline;
     private Canvas canvas;
 

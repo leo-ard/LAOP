@@ -24,6 +24,15 @@ import java.util.stream.Collectors;
  * @author Clement Bisaillon and Léonard Oest OLeary
  */
 public class PhysicEngine extends Thread {
+    public static Function<ArrayList<AbstractCar>, Boolean> ALL_CARS_DEAD = (list) -> {
+        for (AbstractCar abstractCar : list) {
+            if(!abstractCar.isDead()){
+                return false;
+            }
+        }
+        return true;
+    };
+
     static public final double DELTA_T = 0.05;
     public static final double GRAVITY = 9.8;
 

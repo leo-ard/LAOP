@@ -3,7 +3,9 @@ package org.lrima.laop.core;
 import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.network.carcontrollers.CarController;
 import org.lrima.laop.network.carcontrollers.ManualCarController;
+import org.lrima.laop.network.concreteLearning.DL4JLearning;
 import org.lrima.laop.network.concreteLearning.GeneticLearning;
+import org.lrima.laop.network.concreteNetworks.DL4J;
 import org.lrima.laop.network.concreteNetworks.FUCONN;
 import org.lrima.laop.network.concreteNetworks.NEAT;
 import org.lrima.laop.plugin.PluginLoader;
@@ -35,11 +37,13 @@ public class LAOP {
     public LAOP(){
         learningAlgorithmsClasses = new ArrayList<>();
         learningAlgorithmsClasses.add(GeneticLearning.class);
+        learningAlgorithmsClasses.add(DL4JLearning.class);
 
         neuralNetworksClasses = new ArrayList<>();
         neuralNetworksClasses.add(NEAT.class);
         neuralNetworksClasses.add(FUCONN.class);
         neuralNetworksClasses.add(ManualCarController.class);
+        neuralNetworksClasses.add(DL4J.class);
 
         PluginLoader.addDir("algos/");
         try {
@@ -72,12 +76,12 @@ public class LAOP {
      * @param settings les configurations de l'algorithme
      */
     public void addAlgorithm(String label, Class<? extends CarController> algorithmClass, Class<? extends LearningAlgorithm> learningClass, HashMap<String, Object> settings){
-        if(settings.get(label) != null)
+        if(this.settings.scopeExist(label))
             throw new KeyAlreadyExistsException("The label "+label+" has already been assigned");
 
         this.settings.set(label, LAOP.KEY_NETWORK_CLASS, new OptionClass(algorithmClass, neuralNetworksClasses, (clazz) -> ClassUtils.checkIfGenericOfInterface((Class)this.settings.get(label, LAOP.KEY_LEARNING_CLASS), (Class)clazz)));
         this.settings.set(label, LAOP.KEY_LEARNING_CLASS, new OptionClass(learningClass, learningAlgorithmsClasses, (clazz) -> ClassUtils.checkIfGenericOfInterface((Class)this.settings.get(label, LAOP.KEY_LEARNING_CLASS), (Class)clazz)));
-        settings.forEach((k, v) -> this.settings.set(label, k, v));
+        if(settings != null) settings.forEach((k, v) -> this.settings.set(label, k, v));
     }
 
     /**
