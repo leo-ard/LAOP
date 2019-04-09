@@ -10,7 +10,6 @@ import org.lrima.laop.physic.concreteObjects.SimpleCar;
 import org.lrima.laop.simulation.data.GenerationData;
 import org.lrima.laop.simulation.sensors.ProximityLineSensor;
 import org.lrima.laop.utils.Actions.Action;
-import org.lrima.laop.utils.Console;
 import org.lrima.laop.utils.math.Vector2d;
 
 import java.awt.geom.Point2D;
