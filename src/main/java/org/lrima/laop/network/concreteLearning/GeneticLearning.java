@@ -6,8 +6,10 @@ import org.lrima.laop.network.carcontrollers.CarController;
 import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
 import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.simulation.GenerationBasedSimulation;
+import org.lrima.laop.utils.Console;
 import org.lrima.laop.utils.math.RandomUtils;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -28,7 +30,6 @@ public class GeneticLearning implements LearningAlgorithm<GeneticNeuralNetwork> 
                 .collect(Collectors.toList());
 
         double bestFitness = cars.get(0).getFitness();
-        System.out.println(bestFitness);
 
         int i = 0;
         while(cars.size() > 50){
@@ -59,7 +60,10 @@ public class GeneticLearning implements LearningAlgorithm<GeneticNeuralNetwork> 
 
     @Override
     public void init(ArrayList<AbstractCar> cars) {
-        Function<AbstractCar, Double> fitness = (car) -> car.getPosition().modulus();
+        Function<AbstractCar, Double> fitness = ((car) -> {
+        	Point2D carPos = new Point2D.Double(car.getPosition().getX(), car.getPosition().getY());
+        	return car.getMap().distanceFromStart(carPos);
+        });
         cars.forEach(car -> car.setFitnessFunction(fitness));
     }
 }

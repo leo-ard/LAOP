@@ -65,6 +65,15 @@ public abstract class AbstractMap {
 	abstract public Point2D getStartPoint();
 	
 	/**
+	 * Get the distance from a certain point and the start
+	 * @param point the point
+	 * @return the distance
+	 */
+	public double distanceFromStart(Point2D point) {
+		return point.distance(getStartPoint());
+	}
+	
+	/**
 	 * @return All the lines in the map
 	 */
 	public ArrayList<StaticLineObject> getLines(){

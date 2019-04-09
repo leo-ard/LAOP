@@ -1,6 +1,7 @@
 package org.lrima.laop.physic.abstractObjects;
 
 import org.lrima.laop.physic.staticobjects.StaticLineObject;
+import org.lrima.laop.simulation.map.AbstractMap;
 import org.lrima.laop.utils.MathUtils;
 import org.lrima.laop.utils.math.Vector2d;
 
@@ -23,8 +24,8 @@ public abstract class Box extends AbstractCar {
      * @param width the width of the object
      * @param height the height of the object
      */
-    public Box(Vector2d position, double mass, double width, double height){
-        super(position, mass);
+    public Box(AbstractMap map, Vector2d position, double mass, double width, double height){
+        super(map, position, mass);
         this.width = Math.min(width, height);
         this.height = Math.max(width, height);
     }
@@ -35,8 +36,8 @@ public abstract class Box extends AbstractCar {
      * @param width the width of the object
      * @param height the height of the object
      */
-    public Box(double mass, double width, double height){
-        super(mass);
+    public Box(AbstractMap map, double mass, double width, double height){
+        super(map, mass);
         this.width = Math.max(width, height);
         this.height = Math.min(width, height);
     }

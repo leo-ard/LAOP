@@ -54,7 +54,7 @@ public abstract class Simulation <T extends LearningAlgorithm>{
         ArrayList<SimpleCar> carObjects = new ArrayList<>();
         for(int i = 0 ; i < numberOfCars ; i++) {
             Point2D start = this.simulationEngine.getMap().getStartPoint();
-            SimpleCar car = new SimpleCar(new Vector2d(start.getX(), start.getY()), controllerFunction.apply(i));
+            SimpleCar car = new SimpleCar(this.simulationEngine.getMap(), new Vector2d(start.getX(), start.getY()), controllerFunction.apply(i));
 
             double orientationIncrement = Math.PI / numberOfSensors;
             //Create the sensors and assign them to the car

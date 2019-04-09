@@ -7,6 +7,7 @@ import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.concreteObjects.SimpleCar;
 import org.lrima.laop.simulation.data.GenerationData;
+import org.lrima.laop.utils.Console;
 import org.lrima.laop.utils.Actions.Action;
 
 import java.util.ArrayList;
@@ -67,7 +68,6 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
         //TODO ConfigureCars depending on settings and currentScope
 
         if(generationCount == 0){
-            System.out.println("jsjsjsjsjsjsjsjsj");
             ArrayList<SimpleCar> cars = generateCarObjects(100, (i) -> simulationEngine.generateCurrentNetwork());
             learningAlgorithm.init(cars);
             return cars;
@@ -94,16 +94,19 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
      * Increment the generation count and batch count. Calls the listener accordingly.
      */
     private void incrementGeneration(){
+    	Console.info("Generation " + generationCount + " ended");
         //FIRE LISTENERS
         this.onGenerationFinish.forEach(simulationAction -> simulationAction.handle(this));
-        generationCount ++;
+        generationCount++;
 
         //CHECK IF GENERATION IS OUT OF BOUNDS
         if(generationCount > (int) this.simulationEngine.getSettings().get(LAOP.KEY_NUMBER_OF_GENERATIONS)){
+        	Console.info("Simulation " + this.simulationCount + " ended");
             //FIRE LISTENERS
-            this.onSimulationFinish.forEach(simulationAction -> simulationAction.handle(this));
+            
             generationCount = 0;
             simulationCount++;
+            this.onSimulationFinish.forEach(simulationAction -> simulationAction.handle(this));
 
             //CHECK IF SIMULATION IS OUT OF BOUND
             if(simulationCount > (int) this.simulationEngine.getSettings().get(LAOP.KEY_NUMBER_OF_SIMULATION)){
@@ -141,7 +144,8 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
      */
     public GenerationData getGenerationData() {
         GenerationData data = new GenerationData(this.generationCount);
-
+        data.setAverageFitness(cars);
+        
         return data;
     }
 

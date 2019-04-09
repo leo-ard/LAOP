@@ -25,7 +25,6 @@ public class RealTimeSimulation extends Simulation<DL4JLearning> {
         this.carControllerArrayList = new ArrayList<>();
         DL4JNN e = (DL4JNN) simulationEngine.generateCurrentNetwork();
         e.init(this.simulationEngine.getSettings());
-        System.out.println(e);
         this.carControllerArrayList.add(e);
 
         this.next(false);

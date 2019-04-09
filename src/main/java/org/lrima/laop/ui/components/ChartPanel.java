@@ -22,14 +22,12 @@ public class ChartPanel extends HBox {
 	private NumberAxis xAxis;
 	private NumberAxis yAxis;
 	private LineChart<Number, Number> chart;
-	private int generationNumber;
 	private double maxY;
 	private double minY;
 	
 	private XYChart.Series<Number, Number> averageFitnessSerie;
 	
 	public ChartPanel() {
-		this.generationNumber = 0;
 		this.maxY = 0;
 		this.minY = 0;
 		
@@ -54,7 +52,7 @@ public class ChartPanel extends HBox {
 	 * Creates the axis and configure the chart
 	 */
 	private void setupChart() {
-		this.xAxis = new NumberAxis("Generation", 0, 0, 1);
+		this.xAxis = new NumberAxis("Generation", 1, 0, 1);
 		this.yAxis = new NumberAxis("Score", 0, 500, 100);
 		this.chart = new LineChart<>(xAxis, yAxis);
 		
@@ -73,21 +71,21 @@ public class ChartPanel extends HBox {
 	}
 
 	public void resetChart() {
+		System.out.println("RESETING CHART !");
 		//Reset the series and the generation count
-		this.generationNumber = 0;
 		this.averageFitnessSerie.getData().clear();
 		this.maxY = 0;
 		this.minY = 0;
 		
 		this.yAxis.setLowerBound(this.minY);
 		this.yAxis.setUpperBound(this.maxY);
-		this.xAxis.setUpperBound(this.generationNumber);
 	}
 
 	public void updateChartData(GenerationData pastGeneration) {
 		//Add new data to the series from the past generation
 		double averageFitnessScore = pastGeneration.getAverageFitness();
-		XYChart.Data<Number, Number> data = new XYChart.Data(this.generationNumber, averageFitnessScore);
+		int generationNumber = pastGeneration.getGenerationNumber();
+		XYChart.Data<Number, Number> data = new XYChart.Data(generationNumber, averageFitnessScore);
 		
 		//Change the bounds of the chart
 		if(averageFitnessScore > this.maxY) {
@@ -99,7 +97,7 @@ public class ChartPanel extends HBox {
 		
 		this.yAxis.setLowerBound(this.minY);
 		this.yAxis.setUpperBound(this.maxY);
-		this.xAxis.setUpperBound(this.generationNumber);
+		this.xAxis.setUpperBound(generationNumber);
 
 		/*
          * TODO : fait une erreur des fois (doit etre mis sur un thread Javafx)
@@ -109,7 +107,5 @@ public class ChartPanel extends HBox {
         Platform.runLater(
                 ()-> this.averageFitnessSerie.getData().add(data)
         );
-		
-		this.generationNumber++;
 	}
 }
