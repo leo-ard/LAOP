@@ -105,7 +105,7 @@ public class ChartPanel extends HBox {
          */
 		//Add the data to the chart
         Platform.runLater(
-                ()-> this.averageFitnessSerie.getData().add(data)
+                () -> this.averageFitnessSerie.getData().add(data)
         );
 	}
 }

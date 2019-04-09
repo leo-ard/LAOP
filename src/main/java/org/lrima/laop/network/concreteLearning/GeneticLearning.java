@@ -26,34 +26,29 @@ public class GeneticLearning implements LearningAlgorithm<GeneticNeuralNetwork> 
     public ArrayList<GeneticNeuralNetwork> learn(ArrayList<GeneticNeuralNetwork> cars) {
         //sort by best-fitness
         cars = (ArrayList<GeneticNeuralNetwork>) cars.stream()
-                .sorted((gn1, gn2)-> (int) (gn1.getFitness()-gn2.getFitness()))
+                .sorted((gn1, gn2)-> (int) (gn2.getFitness()-gn1.getFitness()))
                 .collect(Collectors.toList());
 
         double bestFitness = cars.get(0).getFitness();
 
-        int i = 0;
-        while(cars.size() > 50){
-            GeneticNeuralNetwork car = cars.get(i);
-
-            if(car.getFitness() > bestFitness){
-                cars.remove(i);
-            }
-            else
-                i++;
-
+        //Keep only 50% best cars
+        final int initialNumberOfCar = cars.size();
+        ArrayList<GeneticNeuralNetwork> bestPerformingCars = new ArrayList<>();
+        for(int i = 0 ; i < cars.size() / 2 ; i++) {
+        	bestPerformingCars.add(cars.get(i));
         }
-
-        while(cars.size() < 100){
-            GeneticNeuralNetwork random1 = cars.get(RandomUtils.getInteger(0, cars.size()-1));
-            GeneticNeuralNetwork random2 = cars.get(RandomUtils.getInteger(0, cars.size()-1));
+        cars = bestPerformingCars;
+        
+        
+        //Repopulate
+        while(cars.size() < initialNumberOfCar){
+            GeneticNeuralNetwork random1 = bestPerformingCars.get(RandomUtils.getInteger(0, bestPerformingCars.size()-1));
+            GeneticNeuralNetwork random2 = bestPerformingCars.get(RandomUtils.getInteger(0, bestPerformingCars.size()-1));
 
             GeneticNeuralNetwork geneticNeuralNetwork = random1.crossOver(random2);
 
             cars.add(geneticNeuralNetwork);
         }
-
-        //Kill 50
-        //Other suff like crossOver and stuff
 
         return cars;
     }
