@@ -154,4 +154,8 @@ public class Scope extends LinkedHashMap<String, Option> {
     public boolean existLocal(String key) {
         return super.get(key) == null;
     }
+    
+    public Scope getGlobal() {
+    	return this.globalScope;
+    }
 }

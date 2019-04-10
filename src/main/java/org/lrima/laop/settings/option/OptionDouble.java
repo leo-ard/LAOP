@@ -67,6 +67,14 @@ public class OptionDouble implements Option<Double> {
         spinner.valueProperty().addListener((obs, oldVal, newVal)->{
             value = newVal;
         });
+        
+        //DO NOT REMOVE or else the value is not updated when unfocusing the spinner
+        spinner.focusedProperty().addListener((obs, oldValue, newValue) -> {
+        	if (!newValue) {
+        	    spinner.increment(0);
+        	}
+        });
+        //END DO NOT REMOVE
 
         return spinner;
     }

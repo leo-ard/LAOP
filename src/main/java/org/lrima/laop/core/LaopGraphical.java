@@ -8,7 +8,7 @@ import org.lrima.laop.network.concreteLearning.GeneticLearning;
 import org.lrima.laop.network.concreteNetworks.DL4J;
 import org.lrima.laop.network.concreteNetworks.FUCONN;
 import org.lrima.laop.network.concreteNetworks.NEAT;
-import org.lrima.laop.ui.ConfigurationStage;
+import org.lrima.laop.ui.stage.ConfigurationStage;
 
 import java.util.HashMap;
 

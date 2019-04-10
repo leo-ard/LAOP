@@ -1,6 +1,6 @@
 package org.lrima.laop.core;
 
-import org.lrima.laop.ui.ConfigurationStage;
+import org.lrima.laop.ui.stage.ConfigurationStage;
 
 import javafx.application.Application;
 import javafx.stage.Stage;

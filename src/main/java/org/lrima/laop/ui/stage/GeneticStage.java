@@ -2,7 +2,6 @@ package org.lrima.laop.ui.stage;
 
 import com.jfoenix.controls.JFXButton;
 import org.lrima.laop.simulation.GenerationBasedSimulation;
-import org.lrima.laop.ui.MainSimulationStage;
 import org.lrima.laop.ui.SimulationView;
 import org.lrima.laop.ui.components.ChartPanel;
 

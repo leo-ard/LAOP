@@ -76,7 +76,7 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
     private ArrayList<SimpleCar> configureCar(){
         if(generationCount == 1){
         	//Reset the cars
-            ArrayList<SimpleCar> cars = generateCarObjects(100, (i) -> simulationEngine.generateCurrentNetwork());
+            ArrayList<SimpleCar> cars = generateCarObjects((int)getSetting(LAOP.KEY_NUMBER_OF_CARS), (i) -> simulationEngine.generateCurrentNetwork());
             learningAlgorithm.init(cars);
             return cars;
         }
@@ -103,10 +103,10 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
      * Increment the generation count and batch count. Calls the listener accordingly.
      */
     private void incrementGeneration(){
-    	int maxSimulations = (int) this.simulationEngine.getSettings().get(LAOP.KEY_NUMBER_OF_GENERATIONS);
+    	int maxGenerations = (int) this.getSetting(LAOP.KEY_NUMBER_OF_GENERATIONS);
 
         //CHECK IF GENERATION IS OUT OF BOUNDS
-        if(generationCount > maxSimulations){
+        if(generationCount > maxGenerations){
         	Console.info("Simulation " + this.simulationCount + " ended");
             //FIRE LISTENERS
         	this.onSimulationFinish.forEach(simulationAction -> simulationAction.handle(this));
@@ -115,12 +115,12 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
             
 
             //CHECK IF SIMULATION IS OUT OF BOUND
-            if(simulationCount > (int) this.simulationEngine.getSettings().get(LAOP.KEY_NUMBER_OF_SIMULATION)){
+            if(simulationCount > (int) this.getSetting(LAOP.KEY_NUMBER_OF_SIMULATION)){
                 //FIRE END LISTENER
                 this.end.forEach(e -> e.accept(this));
             }
         }else {
-        	Console.info("Generation " + generationCount + " / " + maxSimulations + " completed");
+        	Console.info("Generation " + generationCount + " / " + maxGenerations + " completed");
         	this.onGenerationFinish.forEach(simulationAction -> simulationAction.handle(this));
             generationCount++;
         }
@@ -138,6 +138,7 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
         });
         
         this.physicEngine.setFinishingConditions(PhysicEngine.ALL_CARS_DEAD);
+        
         this.physicEngine.getCars().addAll(configureCar());
 
         this.physicEngine.setOnPhysicEngineFinishOnce(engine -> {
@@ -176,6 +177,15 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
 
     public int getSimulationCount() {
         return simulationCount;
+    }
+    
+    /**
+     * Retrieve a setting from the settings
+     * @param key the key associated with the setting
+     * @return the value store in the setting
+     */
+    private Object getSetting(String key) {
+    	return this.simulationEngine.getSettings().get(key);
     }
 
     //TODO

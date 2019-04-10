@@ -13,7 +13,7 @@
          <top>
             <HBox prefHeight="65.0" prefWidth="600.0" styleClass="panel-header" BorderPane.alignment="CENTER">
                <children>
-                  <Label prefHeight="65.0" prefWidth="462.0" text="Algorithms shared on LISP">
+                  <Label prefHeight="65.0" prefWidth="462.0" text="Algorithms shared on LASP">
                      <padding>
                         <Insets left="20.0" />
                      </padding>

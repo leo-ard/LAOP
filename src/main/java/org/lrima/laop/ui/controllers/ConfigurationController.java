@@ -56,11 +56,11 @@ public class ConfigurationController implements Initializable {
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {    	
+    public void initialize(URL location, ResourceBundle resources) {    
+    	this.panels = new HashMap<>();
     	scopeList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if(newVal == null) {
                 scopeList.getSelectionModel().select(0);
-//                settingsContainer.setCenter(panels.get(GLOBAL_SCOPE));
             }
             else{
             	settingsContainer.setCenter(panels.get(newVal));
@@ -91,7 +91,6 @@ public class ConfigurationController implements Initializable {
      */
     private void reloadScopeTableFromSettings() {
     	ObservableList itemList = FXCollections.observableArrayList();
-    	this.panels = new HashMap<>();
 
 		itemList.addAll(this.laop.getSettings().getScopeKeys());
     	
@@ -100,7 +99,9 @@ public class ConfigurationController implements Initializable {
     	//Get the content node of the scopes
     	this.laop.getSettings().getScopes().keySet().forEach((scopeKey) -> {
     		Scope scope = this.laop.getSettings().getScopes().get(scopeKey);
-    		this.panels.put(scopeKey, scope.generatePanel());
+    		if(!this.panels.containsKey(scopeKey)) {
+    			this.panels.put(scopeKey, scope.generatePanel());
+    		}
     	});
     	
     	scopeList.getSelectionModel().selectLast();

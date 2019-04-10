@@ -1,4 +1,4 @@
-package org.lrima.laop.ui;
+package org.lrima.laop.ui.stage;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -14,11 +14,12 @@ import javafx.stage.Stage;
 import org.lrima.laop.simulation.GenerationBasedSimulation;
 import org.lrima.laop.simulation.Simulation;
 import org.lrima.laop.simulation.SimulationEngine;
+import org.lrima.laop.ui.SimulationDrawer;
+import org.lrima.laop.ui.SimulationView;
 import org.lrima.laop.ui.components.ConsolePanel;
 import org.lrima.laop.ui.components.LaopMenuBar;
 import org.lrima.laop.ui.components.Timeline;
 import org.lrima.laop.ui.components.inspector.InspectorPanel;
-import org.lrima.laop.ui.stage.GeneticStage;
 import org.lrima.laop.utils.Actions.Procedure;
 
 

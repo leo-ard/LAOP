@@ -18,6 +18,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import org.lrima.laop.core.LAOP;
 import org.lrima.laop.utils.Console;
 
 /**
@@ -61,6 +63,8 @@ public class Settings {
             value = this.scopes.get(GLOBAL_SCOPE).getValue(key);
         }
 
+        
+ 
 
         return value;
     }
@@ -107,7 +111,6 @@ public class Settings {
     	
     	scopeName.ifPresent(name -> {
     		this.addScope(name);
-    		this.reloadScopeTable(scopeListTable);
     	});
     }
 
@@ -159,87 +162,7 @@ public class Settings {
         scopeArray.remove(GLOBAL_SCOPE);
         return scopeArray;
     }
-
-    /**
-     * Show a JPanel where the use can view the settings and change them. An javaFx application must be started in order to run this function.
-     * @return true if successful, false otherwise
-     * @author Léonard
-     */
-    public boolean showPanel(){
-    	
-        //INIT
-        Stage stage = new Stage();
-        HashMap<String, Node> panels = new HashMap<>();
-        BorderPane rootNode = new BorderPane();
-        Scope globalScope = this.scopes.get(GLOBAL_SCOPE);
-        JFXListView<String> scopeListTable = new JFXListView<>();
-
-        //Adding all the panels
-        for(String scopeString : this.scopes.keySet()){
-            panels.put(scopeString, this.scopes.get(scopeString).generatePanel());
-        }
-
-        //SAVE BUTTON AND ITS PANEL
-        JFXButton saveButton = new JFXButton("Save");
-        saveButton.getStyleClass().add("btn");
-        saveButton.setMaxWidth(Integer.MAX_VALUE);
-        saveButton.setOnAction((e) ->{
-            stage.close();
-        });
-
-        //BOTTOM BUTTON
-        HBox bottom = new HBox(saveButton);
-        HBox.setHgrow(saveButton, Priority.ALWAYS);
-        bottom.setPadding(new Insets(10));
-
-        //ADDING LEFT PANEL (ALL THE SCOPES IN A LIST)
-        VBox scopeList = new VBox();
-        scopeList.setVgrow(scopeListTable, Priority.ALWAYS);
-        
-        //Le bouton pour ajouter un algorithme
-        JFXButton addAlgorithmButton = new JFXButton("Add algorithm");
-        addAlgorithmButton.setOnAction((event) -> {
-        	this.addScope(scopeListTable);
-        });
-        addAlgorithmButton.setMaxWidth(Double.MAX_VALUE);
-        addAlgorithmButton.getStyleClass().add("btn");
-        scopeList.getChildren().addAll(scopeListTable, addAlgorithmButton);
-        
-        this.reloadScopeTable(scopeListTable);
-        scopeListTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-
-        scopeListTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            if(newVal == null) {
-                scopeListTable.getSelectionModel().select(0);
-                rootNode.setCenter(panels.get(GLOBAL_SCOPE));
-            }
-            else{
-                rootNode.setCenter(panels.get(newVal));
-            }
-        });
-
-        //ADDING THE PANELS TO THE ROOT NODE
-        Node centerPanel = panels.get(GLOBAL_SCOPE);
-        rootNode.setCenter(centerPanel);
-        rootNode.setLeft(scopeList);
-        rootNode.setBottom(bottom);
-
-        //ADDING STYLE
-        Scene scene = new Scene(rootNode, 600, 400);
-        scene.getStylesheets().add("/css/general.css");
-        stage.setScene(scene);
-
-        stage.show();
-
-        return true;
-    }
     
-    private void reloadScopeTable(JFXListView<String> scopeListTable) {
-    	scopeListTable.getItems().clear();
-    	scopeListTable.getItems().addAll(this.scopes.keySet());
-        scopeListTable.getSelectionModel().select(0);
-    }
-
     /**
      * Creates a lockdowned version of this settings. The returned setting will only be limited to this scope.
      *

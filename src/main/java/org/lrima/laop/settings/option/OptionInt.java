@@ -2,6 +2,8 @@ package org.lrima.laop.settings.option;
 
 import javafx.scene.Node;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+import javafx.util.StringConverter;
 
 /**
  * Classe qui permet d'utiliser un Integer comme option
@@ -68,6 +70,14 @@ public class OptionInt implements Option<Integer>{
         spinner.valueProperty().addListener((obs, oldVal, newVal)->{
             value = newVal;
         });
+        
+        //DO NOT REMOVE or else the value is not updated when unfocusing the spinner
+        spinner.focusedProperty().addListener((obs, oldValue, newValue) -> {
+        	if (!newValue) {
+        	    spinner.increment(0);
+        	}
+        });
+        //END DO NOT REMOVE
 
         spinner.setMaxWidth(Integer.MAX_VALUE);
 
