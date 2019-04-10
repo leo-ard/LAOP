@@ -70,6 +70,7 @@ public class MainSimulationStage extends Stage {
 
         this.simulationEngine.setMainScene(this);
         this.simulationEngine.setOnBatchStarted(this::changeSimulation);
+        this.simulationEngine.setOnEnd(this::endSimulationAndShowResults);
 
         this.simulationDrawer.start();
     }
@@ -140,6 +141,14 @@ public class MainSimulationStage extends Stage {
         });
 
         this.setScene(scene);
+    }
+    
+    private void endSimulationAndShowResults(SimulationEngine engine) {
+    	Platform.runLater(() -> {
+    		ResultStage resultStage = new ResultStage();
+        	resultStage.show();
+        	this.close();
+    	});
     }
 
     public Timeline getTimeline() {

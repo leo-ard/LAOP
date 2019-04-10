@@ -38,6 +38,7 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
     private LearningAlgorithm learningAlgorithm;
 
     private ArrayList<GeneticNeuralNetwork> cars;
+    private boolean ended;
 
     /**
      * Creates a new Generation
@@ -51,7 +52,8 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
         this.onGenerationFinish = new ArrayList<>();
         this.learningAlgorithm = simulationEngine.generateLearningAlgorithm();
         this.realTime = new SimpleBooleanProperty();
-        autoRun = true;
+        this.autoRun = true;
+        this.ended =false;
     }
 
     /**
@@ -95,7 +97,9 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
      */
     public void nextGen() {
     	incrementGeneration();
-    	this.simulateGeneration();
+    	if(!this.ended) {
+    		this.simulateGeneration();
+    	}
     }
 
     /**
@@ -106,7 +110,7 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
     	int maxGenerations = (int) this.getSetting(LAOP.KEY_NUMBER_OF_GENERATIONS);
 
         //CHECK IF GENERATION IS OUT OF BOUNDS
-        if(generationCount > maxGenerations){
+        if(generationCount >= maxGenerations){
         	Console.info("Simulation " + this.simulationCount + " ended");
             //FIRE LISTENERS
         	this.onSimulationFinish.forEach(simulationAction -> simulationAction.handle(this));
@@ -118,6 +122,7 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
             if(simulationCount > (int) this.getSetting(LAOP.KEY_NUMBER_OF_SIMULATION)){
                 //FIRE END LISTENER
                 this.end.forEach(e -> e.accept(this));
+                this.ended = true;
             }
         }else {
         	Console.info("Generation " + generationCount + " / " + maxGenerations + " completed");

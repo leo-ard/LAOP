@@ -53,12 +53,22 @@ public class SimulationEngine {
     }
 
     private void nextBatch() {
+        Console.info("Batch %s started", this.getBatchCount() + 1);
+        
         currentSimulation = generateSimulation();
 
         this.onBatchStarted.forEach(b -> b.handle(this));
+        
         currentSimulation.start();
         currentSimulation.setEnd((simulation) -> {
         	this.currentScopeIndex++;
+        	
+        	//Check if all algorithms have been runned
+        	if(this.currentScopeIndex >= this.settings.getLocalScopeKeys().size()) {
+        		this.onEnd.forEach(b -> b.handle(this));
+        		
+        		return;
+        	}
         	
         	nextBatch();
         });
