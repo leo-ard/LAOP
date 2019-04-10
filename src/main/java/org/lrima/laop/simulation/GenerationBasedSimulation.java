@@ -132,6 +132,7 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
     private void simulateGeneration(){
         this.simulationEngine.getBuffer().clear();
         this.physicEngine = new PhysicEngine(this.simulationEngine.getBuffer(), this.simulationEngine.getMap());
+        
         this.realTime.addListener((observer, oldVal, newVal) -> {
         	this.physicEngine.setRealTime(newVal);
         });

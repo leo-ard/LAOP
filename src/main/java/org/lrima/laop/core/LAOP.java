@@ -58,7 +58,6 @@ public class LAOP {
 
     /**
      * Met les valeurs par défaut au settings
-     *
      */
     private void defaultSettings(){
         settings.set(Settings.GLOBAL_SCOPE, KEY_NUMBER_OF_CARS, DEFAULT_NUMBER_OF_CARS);
