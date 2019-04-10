@@ -14,6 +14,7 @@ import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.simulation.map.AbstractMap;
 import org.lrima.laop.simulation.map.BlankMap;
 import org.lrima.laop.simulation.map.MazeMap;
+import org.lrima.laop.utils.Console;
 import org.lrima.laop.utils.Actions.Action;
 
 import java.lang.reflect.Constructor;
@@ -24,7 +25,7 @@ public class SimulationEngine {
     private SimulationBuffer simulationBuffer;
     private Settings settings;
 
-    private String currentScope;
+    private int currentScopeIndex;
 
     private int batchCount;
 
@@ -34,16 +35,15 @@ public class SimulationEngine {
     private Stage mainScene;
     private AbstractMap map;
 
-    private Simulation currentSimulation;
+    private Simulation<?extends LearningAlgorithm<?extends CarController>> currentSimulation;
 
     public SimulationEngine(SimulationBuffer simulationBuffer, Settings settings) {
         this.simulationBuffer = simulationBuffer;
         this.settings = settings;
+        this.currentScopeIndex = 0;
 
         this.onBatchStarted = new ArrayList<>();
         this.onEnd = new ArrayList<>();
-
-        this.currentScope = this.settings.getLocalScopeKeys().get(0);
 
         map = new MazeMap(10);
 //        map = new BlankMap();
@@ -59,12 +59,16 @@ public class SimulationEngine {
 
         this.onBatchStarted.forEach(b -> b.handle(this));
         currentSimulation.start();
-        currentSimulation.setEnd((simulation) -> nextBatch());
+        currentSimulation.setEnd((simulation) -> {
+        	this.currentScopeIndex++;
+        	nextBatch();
+        });
         batchCount++;
     }
 
     private Simulation generateSimulation() {
-        Class<? extends LearningAlgorithm> learningAlgo = (Class<? extends LearningAlgorithm>) settings.get(currentScope, LAOP.KEY_LEARNING_CLASS);
+
+        Class<? extends LearningAlgorithm> learningAlgo = (Class<? extends LearningAlgorithm>) settings.get(this.getCurrentScope(), LAOP.KEY_LEARNING_CLASS);
 
         Class<? extends Simulation> simulationClass = learningAlgo.getDeclaredAnnotation(LearningAnotation.class).simulation();
         try {
@@ -85,7 +89,7 @@ public class SimulationEngine {
 
 
     CarController generateCurrentNetwork() {
-        Class<? extends CarController> carClass = (Class<? extends CarController>) settings.get(currentScope, LAOP.KEY_NETWORK_CLASS);
+        Class<? extends CarController> carClass = (Class<? extends CarController>) settings.get(this.getCurrentScope(), LAOP.KEY_NETWORK_CLASS);
 
         try {
             CarController carController = carClass.newInstance();
@@ -106,7 +110,7 @@ public class SimulationEngine {
     }
 
     LearningAlgorithm<? extends CarController> generateLearningAlgorithm() {
-        Class<? extends LearningAlgorithm> learningClass = (Class<? extends LearningAlgorithm>) settings.get(currentScope, LAOP.KEY_LEARNING_CLASS);
+        Class<? extends LearningAlgorithm> learningClass = (Class<? extends LearningAlgorithm>) settings.get(this.getCurrentScope(), LAOP.KEY_LEARNING_CLASS);
 
         try {
             return learningClass.newInstance();
@@ -142,7 +146,7 @@ public class SimulationEngine {
     }
 
     public LockedSetting getSettings() {
-        return this.settings.lock(currentScope);
+        return this.settings.lock(this.getCurrentScope());
     }
 
     public Simulation getSimulation() {
@@ -151,6 +155,10 @@ public class SimulationEngine {
 
     public void pause() {
         this.currentSimulation.pause();
+    }
+
+    private String getCurrentScope() {
+    	return this.settings.getLocalScopeKeys().get(this.currentScopeIndex);
     }
 
     public Stage getMainScene() {

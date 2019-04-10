@@ -43,7 +43,7 @@ public class ScopeModifierPanel extends GridPane {
         int i = 0;
         for(String key : scope.globalKeySet()){
             Option value = scope.get(key);
-
+            
             Label keyLabel = new Label(key);
 
             Node component = value.generateComponent();

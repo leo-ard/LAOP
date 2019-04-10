@@ -16,9 +16,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
-import javafx.stage.Stage;
 
 /**
  * Controller for the algorithm downloader stage
@@ -35,6 +35,9 @@ public class DownloadAlgorithmController implements Initializable {
 	@FXML
 	Label currentPageLbl;
 	
+	@FXML HBox errorBox;
+	@FXML HBox bottomBar;
+	
 	@FXML StackPane root;
 
 	private int currentPage = 1;
@@ -47,8 +50,21 @@ public class DownloadAlgorithmController implements Initializable {
 		this.nextPageBtn.setOnMouseClicked((event) -> this.nextPageClicked());
 		this.prevPageBtn.setOnMouseClicked((event) -> this.prevPageClicked());
 
-		Collection<AlgorithmBean> algorithms = this.getData(this.currentPage);
-		this.showAlgorithmList(algorithms);
+		try {
+			Collection<AlgorithmBean> algorithms = this.getData(this.currentPage);
+			this.showAlgorithmList(algorithms);
+			this.errorBox.setManaged(false);
+		}catch(Exception e) {
+			//Connection to LASP error
+			this.currentPageLbl.setVisible(false);
+			this.nextPageBtn.setVisible(false);
+			this.prevPageBtn.setVisible(false);
+			this.errorBox.setVisible(true);
+			this.bottomBar.setVisible(false);
+			this.bottomBar.setManaged(false);
+		}
+		
+		
 	}
 
 	/**

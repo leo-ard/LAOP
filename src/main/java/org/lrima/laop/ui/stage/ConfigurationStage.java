@@ -1,4 +1,4 @@
-package org.lrima.laop.ui;
+package org.lrima.laop.ui.stage;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXMLLoader;
@@ -40,7 +40,7 @@ public class ConfigurationStage extends Stage {
     LAOP laop;
 
     public ConfigurationStage(){
-        this.setTitle("LAOP : laop");
+        this.setTitle("LAOP : configuration");
 
         laop = new LAOP();
 

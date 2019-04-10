@@ -7,7 +7,15 @@ import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.concreteObjects.SimpleCar;
 import org.lrima.laop.simulation.data.GenerationData;
+import org.lrima.laop.utils.Console;
 import org.lrima.laop.utils.Actions.Action;
+
+import javafx.beans.InvalidationListener;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 import java.util.ArrayList;
 
@@ -17,8 +25,8 @@ import java.util.ArrayList;
  * @author Léonard
  */
 public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
-    private int simulationCount;
-    private int generationCount;
+    private int simulationCount = 1;
+    private int generationCount = 1;
 
     ArrayList<Action<GenerationBasedSimulation>> onSimulationFinish;
     ArrayList<Action<GenerationBasedSimulation>> onGenerationFinish;
@@ -26,6 +34,7 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
     private PhysicEngine physicEngine;
 
     private boolean autoRun;
+    private BooleanProperty realTime;
     private LearningAlgorithm learningAlgorithm;
 
     private ArrayList<GeneticNeuralNetwork> cars;
@@ -41,6 +50,7 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
         this.onSimulationFinish = new ArrayList<>();
         this.onGenerationFinish = new ArrayList<>();
         this.learningAlgorithm = simulationEngine.generateLearningAlgorithm();
+        this.realTime = new SimpleBooleanProperty();
         autoRun = true;
     }
 
@@ -50,7 +60,7 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
      */
     @Override
     public void start() {
-        this.nextGen();
+        this.simulateGeneration();
     }
 
     //temp
@@ -66,24 +76,25 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
     private ArrayList<SimpleCar> configureCar(){
         //TODO ConfigureCars depending on settings and currentScope
 
-        if(generationCount == 0){
+        if(generationCount == 1){
             ArrayList<SimpleCar> cars = generateCarObjects(100, (i) -> simulationEngine.generateCurrentNetwork());
             return cars;
         }
         else{
-
+        	//Make the cars learn
             cars = learningAlgorithm.learn(cars);
             ArrayList<SimpleCar> simpleCars = generateCarObjects(cars.size(), (i) -> cars.get(i));
             return simpleCars;
         }
     }
 
+
     /**
      * Precedes to next generation
      */
-    public void nextGen(){
-        simulateGeneration();
-        incrementGeneration();
+    public void nextGen() {
+    	incrementGeneration();
+    	this.simulateGeneration();
     }
 
     /**
@@ -91,22 +102,26 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
      * Increment the generation count and batch count. Calls the listener accordingly.
      */
     private void incrementGeneration(){
-        //FIRE LISTENERS
-        this.onGenerationFinish.forEach(simulationAction -> simulationAction.handle(this));
-        generationCount ++;
+    	int maxGenerations = (int) this.getSetting(LAOP.KEY_NUMBER_OF_GENERATIONS);
 
         //CHECK IF GENERATION IS OUT OF BOUNDS
-        if(generationCount > (int) this.simulationEngine.getSettings().get(LAOP.KEY_NUMBER_OF_GENERATIONS)){
+        if(generationCount > maxGenerations){
+        	Console.info("Simulation " + this.simulationCount + " ended");
             //FIRE LISTENERS
-            this.onSimulationFinish.forEach(simulationAction -> simulationAction.handle(this));
-            generationCount = 0;
+        	this.onSimulationFinish.forEach(simulationAction -> simulationAction.handle(this));
+            generationCount = 1;
             simulationCount++;
 
+
             //CHECK IF SIMULATION IS OUT OF BOUND
-            if(simulationCount > (int) this.simulationEngine.getSettings().get(LAOP.KEY_NUMBER_OF_SIMULATION)){
+            if(simulationCount > (int) this.getSetting(LAOP.KEY_NUMBER_OF_SIMULATION)){
                 //FIRE END LISTENER
                 this.end.forEach(e -> e.accept(this));
             }
+        }else {
+        	Console.info("Generation " + generationCount + " / " + maxGenerations + " completed");
+        	this.onGenerationFinish.forEach(simulationAction -> simulationAction.handle(this));
+            generationCount++;
         }
     }
 
@@ -117,8 +132,12 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
         this.simulationEngine.getBuffer().clear();
         this.physicEngine = new PhysicEngine(this.simulationEngine.getBuffer(), this.simulationEngine.getMap());
 
-        this.physicEngine.setWaitDeltaT(false);
+        this.realTime.addListener((observer, oldVal, newVal) -> {
+        	this.physicEngine.setRealTime(newVal);
+        });
+
         this.physicEngine.setFinishingConditions(PhysicEngine.ALL_CARS_DEAD);
+
         this.physicEngine.getCars().addAll(configureCar());
 
         this.physicEngine.setOnPhysicEngineFinishOnce(engine -> {
@@ -138,6 +157,7 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
      */
     public GenerationData getGenerationData() {
         GenerationData data = new GenerationData(this.generationCount);
+        data.setAverageFitness(cars);
 
         return data;
     }
@@ -158,6 +178,15 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
         return simulationCount;
     }
 
+    /**
+     * Retrieve a setting from the settings
+     * @param key the key associated with the setting
+     * @return the value store in the setting
+     */
+    private Object getSetting(String key) {
+    	return this.simulationEngine.getSettings().get(key);
+    }
+
     //TODO
     /**
      *
@@ -165,5 +194,15 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
      */
     public void setAutoRun(boolean autoRun) {
         this.autoRun = autoRun;
+    }
+
+    public BooleanProperty realTimeProperty() {
+    	return this.realTime;
+    }
+    public final boolean getRealTime() {
+    	return this.realTime.get();
+    }
+    public final void setRealTime(boolean value) {
+    	this.realTime.set(value);
     }
 }

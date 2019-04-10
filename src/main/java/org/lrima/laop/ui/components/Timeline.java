@@ -1,12 +1,15 @@
 package org.lrima.laop.ui.components;
 
+import org.lrima.laop.ui.SimulationDrawer;
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXSlider;
+
+import javafx.beans.property.BooleanProperty;
 import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import org.lrima.laop.ui.SimulationDrawer;
 
 /**
  * Creates a Timeline element (JavaFX)
@@ -78,5 +81,9 @@ public class Timeline extends HBox{
 
     public JFXSlider getSliderTimeLine() {
         return sliderTimeLine;
+    }
+    
+    public BooleanProperty getRealTimeAttribute() {
+    	return this.checkBoxRealTime.selectedProperty();
     }
 }

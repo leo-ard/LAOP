@@ -6,6 +6,7 @@ import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.abstractObjects.Box;
 import org.lrima.laop.physic.staticobjects.StaticLineObject;
+import org.lrima.laop.simulation.map.AbstractMap;
 import org.lrima.laop.simulation.map.LineCollidable;
 import org.lrima.laop.simulation.sensors.Sensor;
 import org.lrima.laop.simulation.sensors.data.SensorData;
@@ -34,8 +35,8 @@ public class SimpleCar extends Box {
      * @param position the position of the car
      * @param controller the consoller that the car must use
      */
-    public SimpleCar(Vector2d position, CarController controller) {
-        super(position, 2000, 30, 10);
+    public SimpleCar(AbstractMap map, Vector2d position, CarController controller) {
+        super(map, position, 2000, 30, 10);
 
         carController = controller;
         wheelDirection = 0;

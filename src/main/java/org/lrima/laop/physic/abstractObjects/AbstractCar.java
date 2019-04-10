@@ -5,6 +5,7 @@ import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.staticobjects.StaticLineObject;
 import org.lrima.laop.physic.staticobjects.StaticObject;
 import org.lrima.laop.physic.staticobjects.StaticObjectType;
+import org.lrima.laop.simulation.map.AbstractMap;
 import org.lrima.laop.simulation.map.LineCollidable;
 import org.lrima.laop.simulation.sensors.Sensor;
 import org.lrima.laop.simulation.sensors.data.SensorData;
@@ -29,6 +30,7 @@ public abstract class AbstractCar implements LineCollidable {
     protected double width;
     protected double height;
     protected ArrayList<Vector2d> forces;
+    protected AbstractMap map;
 
     //Used to disable collision detection right after the collision happened
     protected long stopCheckingCollisionAt;
@@ -41,7 +43,8 @@ public abstract class AbstractCar implements LineCollidable {
     /**
      * Create a new java.physic object with the default variables
      */
-    private AbstractCar(){
+    private AbstractCar(AbstractMap map){
+    	this.map = map;
         this.position = Vector2d.origin;
         this.velocity = Vector2d.origin;
         this.acceleration = Vector2d.origin;
@@ -55,14 +58,14 @@ public abstract class AbstractCar implements LineCollidable {
      * @param position the position of the object
      * @param mass the mass of the object
      */
-    public AbstractCar(Vector2d position, double mass){
-        this();
+    public AbstractCar(AbstractMap map, Vector2d position, double mass){
+        this(map);
         this.position = position;
         this.mass = mass;
     }
 
-    public AbstractCar(double mass){
-        this(Vector2d.origin, mass);
+    public AbstractCar(AbstractMap map, double mass){
+        this(map, Vector2d.origin, mass);
     }
 
     /**
@@ -250,5 +253,9 @@ public abstract class AbstractCar implements LineCollidable {
 
     public void setFitnessFunction(Function<AbstractCar, Double> function){
         this.fitnessFunction = function;
+    }
+    
+    public AbstractMap getMap() {
+    	return this.map;
     }
 }

@@ -10,10 +10,11 @@ import org.lrima.laop.network.concreteNetworks.FUCONN;
 import org.lrima.laop.network.concreteNetworks.NEAT;
 import org.lrima.laop.plugin.PluginLoader;
 import org.lrima.laop.settings.option.OptionClass;
-import org.lrima.laop.ui.MainSimulationStage;
+import org.lrima.laop.settings.Scope;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.SimulationEngine;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
+import org.lrima.laop.ui.stage.MainSimulationStage;
 import org.lrima.laop.utils.ClassUtils;
 import org.lrima.laop.utils.Console;
 
@@ -49,6 +50,7 @@ public class LAOP {
         neuralNetworksClasses.add(ManualCarController.class);
         neuralNetworksClasses.add(DL4J.class);
 
+        //Load the algorithm's jar
         PluginLoader.addDir("algos/");
         try {
             PluginLoader.load(this);
@@ -62,7 +64,6 @@ public class LAOP {
 
     /**
      * Met les valeurs par défaut au settings
-     *
      */
     private void defaultSettings(){
         settings.set(Settings.GLOBAL_SCOPE, KEY_NUMBER_OF_CARS, DEFAULT_NUMBER_OF_CARS);
@@ -82,10 +83,12 @@ public class LAOP {
      */
     public void addAlgorithm(String label, Class<? extends CarController> algorithmClass, Class<? extends LearningAlgorithm> learningClass, HashMap<String, Object> settings){
         if(this.settings.scopeExist(label))
+        	//todo: show error dialog
             throw new KeyAlreadyExistsException("The label "+label+" has already been assigned");
 
         this.settings.set(label, LAOP.KEY_NETWORK_CLASS, new OptionClass(algorithmClass, neuralNetworksClasses, (clazz) -> ClassUtils.checkIfGenericOfInterface((Class)this.settings.get(label, LAOP.KEY_LEARNING_CLASS), (Class)clazz)));
         this.settings.set(label, LAOP.KEY_LEARNING_CLASS, new OptionClass(learningClass, learningAlgorithmsClasses, (clazz) -> ClassUtils.checkIfGenericOfInterface((Class)this.settings.get(label, LAOP.KEY_LEARNING_CLASS), (Class)clazz)));
+        
         if(settings != null) settings.forEach((k, v) -> this.settings.set(label, k, v));
     }
 
@@ -101,13 +104,6 @@ public class LAOP {
             settings.set(label, key, value);
         else
             Console.err("Le scope " + label  +" n'existe pas. Il faut faire addAlgorithm() avant.");
-    }
-
-    /**
-     * Affiche un panneau pour les modifier les settings
-     */
-    public void showConfigurations() {
-        settings.showPanel();
     }
 
     /**
@@ -130,8 +126,10 @@ public class LAOP {
      * @param simulationDisplayMode a {@link org.lrima.laop.core.LAOP.SimulationDisplayMode} object.
      */
     public void startSimulation(SimulationDisplayMode simulationDisplayMode){
+    	//check if all the global scopes of the scopes are good
+    	
         SimulationBuffer simulationBuffer = new SimulationBuffer();
-        SimulationEngine simulationEngine = new SimulationEngine(simulationBuffer, settings);
+        SimulationEngine simulationEngine = new SimulationEngine(simulationBuffer, this.settings);
 
         if(simulationDisplayMode == simulationDisplayMode.WITH_INTERFACE){
             MainSimulationStage mainSimulationStage = new MainSimulationStage(simulationEngine);

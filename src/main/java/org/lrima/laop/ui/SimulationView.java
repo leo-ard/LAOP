@@ -2,6 +2,7 @@ package org.lrima.laop.ui;
 
 import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.simulation.Simulation;
+import org.lrima.laop.ui.stage.MainSimulationStage;
 
 public abstract class SimulationView<T extends Simulation> {
     T simulation;
