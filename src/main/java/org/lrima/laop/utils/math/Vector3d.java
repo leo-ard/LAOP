@@ -13,7 +13,7 @@ public class Vector3d implements Cloneable {
 
 
     /**
-     * Creates a new three dimensions vector from two values
+     * Creates a new three dimensions vector from two controls
      * @param x the first value
      * @param y the second value
      * @param z the third value

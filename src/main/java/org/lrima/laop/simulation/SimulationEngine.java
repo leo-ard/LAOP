@@ -12,6 +12,7 @@ import org.lrima.laop.settings.LockedSetting;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.simulation.map.AbstractMap;
+import org.lrima.laop.simulation.map.BlankMap;
 import org.lrima.laop.simulation.map.MazeMap;
 import org.lrima.laop.utils.Console;
 import org.lrima.laop.utils.Actions.Action;
@@ -45,6 +46,7 @@ public class SimulationEngine {
         this.onEnd = new ArrayList<>();
 
         map = new MazeMap(10);
+//        map = new BlankMap();
         map.bake();
     }
 
@@ -62,23 +64,21 @@ public class SimulationEngine {
         currentSimulation.start();
         currentSimulation.setEnd((simulation) -> {
         	this.currentScopeIndex++;
-        	
         	//Check if all algorithms have been runned
         	if(this.currentScopeIndex >= this.settings.getLocalScopeKeys().size()) {
         		this.onEnd.forEach(b -> b.handle(this));
         		
         		return;
         	}
-        	
         	nextBatch();
         });
         batchCount++;
     }
 
     private Simulation generateSimulation() {
-    	
+
         Class<? extends LearningAlgorithm> learningAlgo = (Class<? extends LearningAlgorithm>) settings.get(this.getCurrentScope(), LAOP.KEY_LEARNING_CLASS);
-        
+
         Class<? extends Simulation> simulationClass = learningAlgo.getDeclaredAnnotation(LearningAnotation.class).simulation();
         try {
             Constructor<? extends Simulation> simulationConstructor = simulationClass.getConstructor(SimulationEngine.class);
@@ -106,12 +106,16 @@ public class SimulationEngine {
                 carController.init(this.getSettings());
             }
             catch (AbstractMethodError e){}
+
+            if(carController instanceof ManualCarController)
+                ((ManualCarController) carController).configureListeners(this.mainScene);
+
             return carController;
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
 
-        return new ManualCarController(mainScene);
+        return new ManualCarController();
     }
 
     LearningAlgorithm<? extends CarController> generateLearningAlgorithm() {
@@ -161,8 +165,12 @@ public class SimulationEngine {
     public void pause() {
         this.currentSimulation.pause();
     }
-    
+
     private String getCurrentScope() {
     	return this.settings.getLocalScopeKeys().get(this.currentScopeIndex);
+    }
+
+    public Stage getMainScene() {
+        return mainScene;
     }
 }

@@ -49,7 +49,7 @@ public class Scope extends LinkedHashMap<String, Option> {
     }
 
     /**
-     * Rewrites the put method to transform the values into Options before putting it in the array.
+     * Rewrites the put method to transform the controls into Options before putting it in the array.
      *
      * @param key key with witch the value will be associated with
      * @param value value at that key
@@ -85,7 +85,7 @@ public class Scope extends LinkedHashMap<String, Option> {
     }
 
     /**
-     * Generates a javafx layout depending on the type of the values in the scope
+     * Generates a javafx layout depending on the type of the controls in the scope
      *
      * @return The javafx layout.
      */

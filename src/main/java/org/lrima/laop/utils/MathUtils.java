@@ -133,4 +133,32 @@ public class MathUtils {
 
     }
 
+    public static boolean arrayEquals(double[] captorValues, int i) {
+        for (double captorValue : captorValues) {
+            if(captorValue != i)
+                return false;
+        }
+
+        return true;
+    }
+
+    public static int[] convertToIntArray(double[] vector) {
+        int[] integerVector = new int[vector.length];
+
+        for (int i = 0; i < vector.length; i++) {
+            integerVector[i] = (int) Math.round(vector[i]);
+        }
+
+        return integerVector;
+    }
+
+    public static double[] convertToDoubleArray(int[] vector) {
+        double[] doubleVector = new double[vector.length];
+
+        for (int i = 0; i < vector.length; i++) {
+            doubleVector[i] = (double) vector[i];
+        }
+
+        return doubleVector;
+    }
 }

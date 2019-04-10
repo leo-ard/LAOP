@@ -11,11 +11,11 @@ import org.lrima.laop.settings.LockedSetting;
 public interface CarController {
 
     /**
-     * Fonction called by the car at each second. Take the sensors values and outputs the reaction of the car.
+     * Fonction called by the car at each second. Take the sensors controls and outputs the reaction of the car.
      *
      * See {@link org.lrima.laop.physic.concreteObjects.SimpleCar#nextStep()} to see usage.
      *
-     * @param captorValues the values of all the captors on the car
+     * @param captorValues the controls of all the captors on the car
      * @return how the car should be controlled
      */
     CarControls control(double ... captorValues);

@@ -13,7 +13,7 @@ public class Vector2d implements Cloneable {
     String tag;
 
     /**
-     * Creates a new two dimensions vector from two values
+     * Creates a new two dimensions vector from two controls
      * @param x the first value
      * @param y the second value
      */
@@ -125,7 +125,7 @@ public class Vector2d implements Cloneable {
     }
 
     /**
-     * Created a vector that posses -1, 0 or 1 in its values indicating witch sign is the vector at that coordonate
+     * Created a vector that posses -1, 0 or 1 in its controls indicating witch sign is the vector at that coordonate
      *
      * @return a new vector with the proprieties listed above
      */

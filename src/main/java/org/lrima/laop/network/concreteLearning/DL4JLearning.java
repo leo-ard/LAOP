@@ -5,6 +5,7 @@ import org.lrima.laop.network.LearningAnotation;
 import org.lrima.laop.network.concreteNetworks.DL4JNN;
 import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.simulation.RealTimeSimulation;
+import org.lrima.laop.simulation.sensors.CarSensor;
 
 import java.util.ArrayList;
 
@@ -17,6 +18,8 @@ public class DL4JLearning implements LearningAlgorithm<DL4JNN> {
     }
 
     public void init(ArrayList<AbstractCar> cars) {
+        cars.forEach(car -> car.addSensor(CarSensor.VELOCITY_SENSOR(car)));
+
 
     }
 }

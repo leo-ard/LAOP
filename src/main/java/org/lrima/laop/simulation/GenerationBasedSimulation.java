@@ -76,22 +76,21 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
      * @return
      */
     private ArrayList<SimpleCar> configureCar(){
+        //TODO ConfigureCars depending on settings and currentScope
+
         if(generationCount == 1){
-        	//Reset the cars
-            ArrayList<SimpleCar> cars = generateCarObjects((int)getSetting(LAOP.KEY_NUMBER_OF_CARS), (i) -> simulationEngine.generateCurrentNetwork());
-            learningAlgorithm.init(cars);
+            ArrayList<SimpleCar> cars = generateCarObjects(100, (i) -> simulationEngine.generateCurrentNetwork());
             return cars;
         }
         else{
         	//Make the cars learn
             cars = learningAlgorithm.learn(cars);
             ArrayList<SimpleCar> simpleCars = generateCarObjects(cars.size(), (i) -> cars.get(i));
-            learningAlgorithm.init(simpleCars);
             return simpleCars;
         }
     }
 
-    
+
     /**
      * Precedes to next generation
      */
@@ -116,7 +115,7 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
         	this.onSimulationFinish.forEach(simulationAction -> simulationAction.handle(this));
             generationCount = 1;
             simulationCount++;
-            
+
 
             //CHECK IF SIMULATION IS OUT OF BOUND
             if(simulationCount > (int) this.getSetting(LAOP.KEY_NUMBER_OF_SIMULATION)){
@@ -137,13 +136,13 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
     private void simulateGeneration(){
         this.simulationEngine.getBuffer().clear();
         this.physicEngine = new PhysicEngine(this.simulationEngine.getBuffer(), this.simulationEngine.getMap());
-        
+
         this.realTime.addListener((observer, oldVal, newVal) -> {
         	this.physicEngine.setRealTime(newVal);
         });
-        
+
         this.physicEngine.setFinishingConditions(PhysicEngine.ALL_CARS_DEAD);
-        
+
         this.physicEngine.getCars().addAll(configureCar());
 
         this.physicEngine.setOnPhysicEngineFinishOnce(engine -> {
@@ -164,7 +163,7 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
     public GenerationData getGenerationData() {
         GenerationData data = new GenerationData(this.generationCount);
         data.setAverageFitness(cars);
-        
+
         return data;
     }
 
@@ -183,7 +182,7 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
     public int getSimulationCount() {
         return simulationCount;
     }
-    
+
     /**
      * Retrieve a setting from the settings
      * @param key the key associated with the setting
@@ -201,7 +200,7 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
     public void setAutoRun(boolean autoRun) {
         this.autoRun = autoRun;
     }
-    
+
     public BooleanProperty realTimeProperty() {
     	return this.realTime;
     }

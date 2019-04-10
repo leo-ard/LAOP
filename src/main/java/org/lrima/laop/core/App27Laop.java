@@ -6,9 +6,16 @@ import javax.swing.*;
 
 /**
  * Temporary class to launch different parts of the application
+ *
  * @author Clement Bisaillon
+ * @version $Id: $Id
  */
 public class App27Laop {
+    /**
+     * <p>main.</p>
+     *
+     * @param args an array of {@link java.lang.String} objects.
+     */
     public static void main(String[] args) {
         JFrame frame = new JFrame();
         JPanel panel = new JPanel();
