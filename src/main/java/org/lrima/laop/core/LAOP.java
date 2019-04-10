@@ -26,6 +26,7 @@ import java.util.HashMap;
  * Main class to manage starting the simulation
  *
  * @author Léonard
+ * @version $Id: $Id
  */
 public class LAOP {
     //TODO : this is just for testing purpurses
@@ -34,6 +35,9 @@ public class LAOP {
 
     Settings settings;
 
+    /**
+     * <p>Constructor for LAOP.</p>
+     */
     public LAOP(){
         learningAlgorithmsClasses = new ArrayList<>();
         learningAlgorithmsClasses.add(GeneticLearning.class);
@@ -74,6 +78,7 @@ public class LAOP {
      * @param label l'identifiant de l'algorithme
      * @param algorithmClass la classe de l'algorithme
      * @param settings les configurations de l'algorithme
+     * @param learningClass a {@link java.lang.Class} object.
      */
     public void addAlgorithm(String label, Class<? extends CarController> algorithmClass, Class<? extends LearningAlgorithm> learningClass, HashMap<String, Object> settings){
         if(this.settings.scopeExist(label))
@@ -107,6 +112,7 @@ public class LAOP {
 
     /**
      * Checks if the settings are good to start the simulation
+     *
      * @return String - The error message
      */
     public String canStartSimulations() {
@@ -118,6 +124,11 @@ public class LAOP {
     	return "";
     }
     
+    /**
+     * <p>startSimulation.</p>
+     *
+     * @param simulationDisplayMode a {@link org.lrima.laop.core.LAOP.SimulationDisplayMode} object.
+     */
     public void startSimulation(SimulationDisplayMode simulationDisplayMode){
         SimulationBuffer simulationBuffer = new SimulationBuffer();
         SimulationEngine simulationEngine = new SimulationEngine(simulationBuffer, settings);
@@ -133,6 +144,8 @@ public class LAOP {
     }
     
     /**
+     * <p>Getter for the field <code>settings</code>.</p>
+     *
      * @return The settings of the laop instance
      */
     public Settings getSettings() {
@@ -144,31 +157,53 @@ public class LAOP {
         WITHOUT_INTERFACE
     }
 
+    /**
+     * <p>Getter for the field <code>neuralNetworksClasses</code>.</p>
+     *
+     * @return a {@link java.util.ArrayList} object.
+     */
     public ArrayList<Class<? extends CarController>> getNeuralNetworksClasses() {
         return neuralNetworksClasses;
     }
 
+    /**
+     * <p>Getter for the field <code>learningAlgorithmsClasses</code>.</p>
+     *
+     * @return a {@link java.util.ArrayList} object.
+     */
     public ArrayList<Class<? extends LearningAlgorithm>> getLearningAlgorithmsClasses() {
         return learningAlgorithmsClasses;
     }
 
     //ALL DEFAULT KEYS
+    /** Constant <code>DEFAULT_NUMBER_OF_SIMULATION=10</code> */
     public static int DEFAULT_NUMBER_OF_SIMULATION = 10;
+    /** Constant <code>KEY_NUMBER_OF_SIMULATION="NUMBER OF SIMULATIONS"</code> */
     public static String KEY_NUMBER_OF_SIMULATION = "NUMBER OF SIMULATIONS";
 
+    /** Constant <code>DEFAULT_NUMBER_OF_CARS=100</code> */
     public static final int DEFAULT_NUMBER_OF_CARS = 100;
+    /** Constant <code>KEY_NUMBER_OF_CARS="NUMBER OF CARS"</code> */
     public static final String KEY_NUMBER_OF_CARS = "NUMBER OF CARS";
 
+    /** Constant <code>DEFAULT_TIME_LIMIT=100</code> */
     public static final int DEFAULT_TIME_LIMIT = 100;
+    /** Constant <code>KEY_TIME_LIMIT="TIME LIMIT"</code> */
     public static final String KEY_TIME_LIMIT = "TIME LIMIT";
 
+    /** Constant <code>DEFAULT_NUMBER_OF_GENERATIONS=10</code> */
     public static final int DEFAULT_NUMBER_OF_GENERATIONS = 10;
+    /** Constant <code>KEY_NUMBER_OF_GENERATIONS="NUMBER OF GENERATIONS"</code> */
     public static final String KEY_NUMBER_OF_GENERATIONS = "NUMBER OF GENERATIONS";
 
+    /** Constant <code>KEY_NETWORK_CLASS="NEURAL NETWORK CLASS"</code> */
     public static final String KEY_NETWORK_CLASS = "NEURAL NETWORK CLASS";
+    /** Constant <code>KEY_LEARNING_CLASS="LEARNING ALGORITHM CLASS"</code> */
     public static final String KEY_LEARNING_CLASS = "LEARNING ALGORITHM CLASS";
 
+    /** Constant <code>KEY_NUMBER_OF_SENSORS="NUMBER OF SENSORS"</code> */
     public static final String KEY_NUMBER_OF_SENSORS = "NUMBER OF SENSORS";
+    /** Constant <code>DEFAULT_NUMBER_OF_SENSORS</code> */
     public static final Object DEFAULT_NUMBER_OF_SENSORS = 5;
 
 }

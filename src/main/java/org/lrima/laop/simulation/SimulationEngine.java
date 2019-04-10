@@ -12,6 +12,7 @@ import org.lrima.laop.settings.LockedSetting;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.simulation.map.AbstractMap;
+import org.lrima.laop.simulation.map.BlankMap;
 import org.lrima.laop.simulation.map.MazeMap;
 import org.lrima.laop.utils.Actions.Action;
 
@@ -92,12 +93,16 @@ public class SimulationEngine {
                 carController.init(this.getSettings());
             }
             catch (AbstractMethodError e){}
+
+            if(carController instanceof ManualCarController)
+                ((ManualCarController) carController).configureListeners(this.mainScene);
+
             return carController;
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
 
-        return new ManualCarController(mainScene);
+        return new ManualCarController();
     }
 
     LearningAlgorithm<? extends CarController> generateLearningAlgorithm() {
@@ -146,5 +151,9 @@ public class SimulationEngine {
 
     public void pause() {
         this.currentSimulation.pause();
+    }
+
+    public Stage getMainScene() {
+        return mainScene;
     }
 }

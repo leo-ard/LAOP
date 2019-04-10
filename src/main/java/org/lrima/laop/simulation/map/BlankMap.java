@@ -7,10 +7,6 @@ import java.awt.geom.Point2D;
  *
  */
 public class BlankMap extends AbstractMap {
-    @Override
-    public void bake() {
-
-    }
 
     @Override
     public Point2D getStartPoint() {

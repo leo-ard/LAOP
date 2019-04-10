@@ -67,16 +67,13 @@ public class GenerationBasedSimulation extends Simulation<GeneticLearning>{
         //TODO ConfigureCars depending on settings and currentScope
 
         if(generationCount == 0){
-            System.out.println("jsjsjsjsjsjsjsjsj");
             ArrayList<SimpleCar> cars = generateCarObjects(100, (i) -> simulationEngine.generateCurrentNetwork());
-            learningAlgorithm.init(cars);
             return cars;
         }
         else{
 
             cars = learningAlgorithm.learn(cars);
             ArrayList<SimpleCar> simpleCars = generateCarObjects(cars.size(), (i) -> cars.get(i));
-            learningAlgorithm.init(simpleCars);
             return simpleCars;
         }
     }

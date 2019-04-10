@@ -48,7 +48,7 @@ public class SimpleCar extends Box {
         if(this.dead) return;
         this.forces = new ArrayList<>();
 
-        //convert sensor into sensor values
+        //convert sensor into sensor controls
         double[] sensorValues = this.sensors.stream().mapToDouble(sensor -> sensor.getValue()).toArray();
         CarControls carControls = carController.control(sensorValues);
 
@@ -67,9 +67,8 @@ public class SimpleCar extends Box {
 
 //        this.angularAccel = PhysicUtils.angularAccel(this.wheelDirection, this.velocity);
 //        this.angularAccel = Math.min(Math.max(RANGE, angularAccel), -RANGE);
-        this.angularVelocity = this.velocity.modulus()*this.wheelDirection*PhysicEngine.DELTA_T * 0.08;
+        this.angularVelocity = this.velocity.modulus()*this.wheelDirection*PhysicEngine.DELTA_T * 0.03;
         this.rotation += angularVelocity;
-
 
         this.velocity = this.velocity.add(acceleration.multiply(PhysicEngine.DELTA_T));
         this.position = this.position.add(this.velocity.multiply(PhysicEngine.DELTA_T));

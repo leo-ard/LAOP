@@ -1,10 +1,6 @@
 package org.lrima.laop.network.nn;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.lrima.laop.utils.MathUtils;
-
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Léonard

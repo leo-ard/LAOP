@@ -6,6 +6,7 @@ package org.lrima.laop.physic;
  * @author Clement Bisaillon
  */
 public class CarControls {
+	public static final CarControls IDENTITY = new CarControls(0, 0, 0.5);
 	private double accelerationField;
 	private double breakField;
 	private double rotationField;
@@ -67,5 +68,10 @@ public class CarControls {
 	 */
 	public void setRotation(double rotation) {
 		this.rotationField = rotation;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("[%.2f, %.2f, %.2f]", accelerationField, breakField, rotationField);
 	}
 }

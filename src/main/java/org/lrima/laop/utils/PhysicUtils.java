@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class PhysicUtils {
     private static final double AIR_DENSITY = 1.225;
     private static final double CAR_AREA = 1.5;
-    private static final double TRAINER_COEFICIENT = 0.2;
+    private static final double TRAINER_COEFICIENT = 1;
 
 
     public static Vector2d accelFromForces(ArrayList<Vector2d> forces, double mass){

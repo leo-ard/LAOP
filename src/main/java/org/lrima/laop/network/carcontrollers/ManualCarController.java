@@ -13,51 +13,62 @@ import org.lrima.laop.settings.LockedSetting;
  * @author Léonard
  */
 public class ManualCarController implements CarController {
-    double[] values;
+    protected int[] controls;
 
-    /**
-     * Creates a new CarController that controls the car with W-A-S-D
-     *
-     * @param mainScene the node were this class will add the key listener to.
-     */
-    public ManualCarController(Stage mainScene){
-        values = new double[4];
+    public ManualCarController(){
+        controls = new int[4];
+    }
+
+    public void configureListeners(Stage mainScene){
         mainScene.getScene().setOnKeyPressed(this::handleKeyPress);
         mainScene.getScene().setOnKeyReleased(this::handleKeyReleased);
     }
 
     private void handleKeyPress(KeyEvent e) {
         if (e.getCode() == KeyCode.W) {
-            values[0] = 1;
+            controls[0] = 1;
         } if (e.getCode() == KeyCode.S) {
-            values[1] = 1;
+            controls[1] = 1;
         } if (e.getCode() == KeyCode.A) {
-            values[2] = 0.5;
+            controls[2] = 1;
         } if (e.getCode() == KeyCode.D) {
-            values[2] = -0.5;
+            controls[3] = 1;
         }
     }
 
     private void handleKeyReleased(KeyEvent e) {
         if (e.getCode() == KeyCode.W) {
-            values[0] = 0;
+            controls[0] = 0;
         } if (e.getCode() == KeyCode.S) {
-            values[1] = 0;
-        } if (e.getCode() == KeyCode.A) {
-            values[2] = 0;
-        } if (e.getCode() == KeyCode.D) {
-            values[2] = 0;
+            controls[1] = 0;
+        } if (e.getCode() == KeyCode.A && controls[2] == 1) {
+            controls[2] = 0;
+        } if (e.getCode() == KeyCode.D && controls[2] == 0) {
+            controls[3] = 0;
         }
     }
 
     @Override
     public CarControls control(double[] captorValues) {
-    	CarControls controls = new CarControls();
-    	
-    	controls.setAcceleration(this.values[0]);
-    	controls.setBreak(this.values[1]);
-    	controls.setRotation(this.values[2]);
-    	
+        return getControls(this.controls);
+    }
+
+    protected CarControls getControls(int[] inputValues){
+        CarControls controls = new CarControls();
+
+        controls.setAcceleration(inputValues[0]);
+        controls.setBreak(inputValues[1]);
+
+        if(inputValues[2] == inputValues[3]){
+            controls.setRotation(0.5);
+        }
+        else if(inputValues[2] == 1){
+            controls.setRotation(1);
+        }else if(inputValues[3] == 1){
+            controls.setRotation(0);
+        }
+
+
         return controls;
     }
 

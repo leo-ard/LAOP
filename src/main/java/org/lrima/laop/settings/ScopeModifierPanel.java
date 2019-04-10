@@ -13,14 +13,14 @@ import org.lrima.laop.settings.option.Option;
 import java.util.Set;
 
 /**
- * JavaFX Pane to display a scope. Within the pane, the values of the scope can be modified
+ * JavaFX Pane to display a scope. Within the pane, the controls of the scope can be modified
  * @author Léonard
  */
 public class ScopeModifierPanel extends GridPane {
     Scope scope;
 
     /**
-     * Creates a pane that displays the scope. Within the pane, the values of the scope can be modified
+     * Creates a pane that displays the scope. Within the pane, the controls of the scope can be modified
      *
      * @param scope The scope of the pane to display
      */
@@ -70,7 +70,7 @@ public class ScopeModifierPanel extends GridPane {
     }
 
     /**
-     * Handles the checkboxes that make some values global or local
+     * Handles the checkboxes that make some controls global or local
      *
      * @param b
      * @param old

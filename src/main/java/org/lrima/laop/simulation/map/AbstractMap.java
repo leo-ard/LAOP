@@ -26,6 +26,11 @@ public abstract class AbstractMap {
 	 * @author Léonard
 	 */
 	public void bake(){
+		if(lines.size() == 0){
+		    quadtree = new Quadtree(0, 0, 0, 1, 1);
+		    return;
+        }
+
 		float minx = lines.get(0).getX1();
 		float miny = lines.get(0).getY1();
 		float maxx = lines.get(0).getX1();

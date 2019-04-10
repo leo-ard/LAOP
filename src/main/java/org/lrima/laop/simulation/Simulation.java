@@ -65,6 +65,8 @@ public abstract class Simulation <T extends LearningAlgorithm>{
 
             carObjects.add(car);
         }
+
+        learningAlgorithm.init(carObjects);
         return carObjects;
     }
 }

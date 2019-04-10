@@ -19,7 +19,8 @@ public class ProximityLineSensor implements Sensor, LineCollidable {
 	//The car that this sensor is attached to
 	private SimpleCar car;
 	private double orientation;
-	public static final double SENSOR_LENGHT = 100;
+	public static final double SENSOR_LENGHT = 150;
+	public static final double SENSOR_LENGHT_MINUS_1 = 1.0/SENSOR_LENGHT;
 	private Point2D start;
 
 	private final Color SENSOR_COLOR = new Color(255.0/255, 137.0/255, 132.0/255, 1);
@@ -53,7 +54,7 @@ public class ProximityLineSensor implements Sensor, LineCollidable {
             float x = v[0] - x1;
             float y = v[1] - y1;
 
-            value = Math.min(Math.sqrt(x*x + y*y)*0.01, value);
+            value = Math.min(Math.sqrt(x*x + y*y)*SENSOR_LENGHT_MINUS_1, value);
         }
     }
 

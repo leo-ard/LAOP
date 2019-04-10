@@ -17,7 +17,7 @@ public class DenseLayer implements Layer {
 
 
     /**
-     * Created a Dense Layer and assign random values to all its weights and bias.
+     * Created a Dense Layer and assign random controls to all its weights and bias.
      *
      * @param size the number of neurons of this layer
      * @param previousLayerSize the previous layer's number of neurons (to adjust the number of weights accordingly)

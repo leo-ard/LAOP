@@ -47,7 +47,7 @@ public class PhysicEngine extends Thread {
     private AbstractMap map;
 
     //////Temporary
-    private final int MAX_ITERATION = 300;
+    private final int MAX_ITERATION = 30000;
     private int CURRENT_ITERATION = 0;
     //////Temporary
 

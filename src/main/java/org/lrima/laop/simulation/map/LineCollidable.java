@@ -16,7 +16,7 @@ public interface LineCollidable {
     void collide(StaticLineObject line);
 
     /**
-     * Called before each step to pre-calculate the values of x1, x2, y1, y2 (faster that way).
+     * Called before each step to pre-calculate the controls of x1, x2, y1, y2 (faster that way).
      *
      */
     void bake();
