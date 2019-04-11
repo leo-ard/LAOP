@@ -3,15 +3,18 @@ package org.lrima.laop.ui.components;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import org.lrima.laop.utils.Console;
+
+import com.jfoenix.controls.JFXCheckBox;
+
 import javafx.application.Platform;
-
-
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import org.lrima.laop.utils.Console;
 
 /**
  * Class to show the console panel
@@ -25,7 +28,7 @@ public class ConsolePanel extends ScrollPane {
 		super();
 
 		vBox = new VBox();
-		this.setContent(vBox);
+		
         vBox.setAlignment(Pos.TOP_LEFT);
         
         setVvalue(1);
@@ -35,6 +38,9 @@ public class ConsolePanel extends ScrollPane {
 
         vBox.setPrefWidth(MAX_WIDTH);
         this.getStyleClass().add("panel");
+        
+
+        this.setContent(vBox);
 
         this.setOut();
 	}
