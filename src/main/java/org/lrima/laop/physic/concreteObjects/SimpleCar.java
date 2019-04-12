@@ -73,11 +73,6 @@ public class SimpleCar extends Box {
 
         this.velocity = this.velocity.add(acceleration.multiply(PhysicEngine.DELTA_T));
         this.position = this.position.add(this.velocity.multiply(PhysicEngine.DELTA_T));
-
-        if(this.carController instanceof GeneticNeuralNetwork){
-            this.fitness = this.fitnessFunction.apply(this);
-            ((GeneticNeuralNetwork) this.carController).setFitness(this.fitness);
-        }
     }
 
     @Override

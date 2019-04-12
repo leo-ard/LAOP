@@ -1,11 +1,12 @@
 package org.lrima.laop.network;
 
 import org.lrima.laop.network.carcontrollers.CarController;
-import org.lrima.laop.physic.abstractObjects.AbstractCar;
-import org.lrima.laop.simulation.GenerationBasedSimulation;
+import org.lrima.laop.settings.LockedSetting;
+import org.lrima.laop.simulation.Environnement;
 
-import java.lang.annotation.Inherited;
 import java.util.ArrayList;
+
+
 
 /**
  * Interface to make a learning algorithm
@@ -20,6 +21,5 @@ public interface LearningAlgorithm <T extends CarController>{
      * @return a new set of car to test
      */
     ArrayList<T> learn(ArrayList<T> allCars);
-    void init(ArrayList<AbstractCar> cars);
-
+    void cycle(Environnement environnement);
 }

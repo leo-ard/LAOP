@@ -4,15 +4,12 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.lrima.laop.simulation.GenerationBasedSimulation;
-import org.lrima.laop.simulation.Simulation;
+import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.simulation.SimulationEngine;
 import org.lrima.laop.ui.SimulationDrawer;
 import org.lrima.laop.ui.SimulationView;
@@ -69,17 +66,16 @@ public class MainSimulationStage extends Stage {
         this.loadAllScenes();
 
         this.simulationEngine.setMainScene(this);
-        this.simulationEngine.setOnBatchStarted(this::changeSimulation);
+//        this.simulationEngine.setOnBatchStarted(this::changeSimulation);
         this.simulationEngine.setOnEnd(this::endSimulationAndShowResults);
 
         this.simulationDrawer.start();
     }
 
-    private void changeSimulation(SimulationEngine simulationEngine) {
-        Simulation simulation = simulationEngine.getSimulation();
+    private void changeSimulation(LearningAlgorithm learningAlgorithm) {
         reset(()->{
             SimulationView simulationView = null;
-            if(simulation instanceof GenerationBasedSimulation) simulationView = new GeneticStage((GenerationBasedSimulation) simulation);
+//            if(learningAlgorithm instanceof GeneticLearning) simulationView = new GeneticStage((GenerationBasedSimulation) simulation);
 
             if(simulationView != null)
                 simulationView.setup(this);

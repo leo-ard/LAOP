@@ -11,6 +11,7 @@ import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
+import org.lrima.laop.network.carcontrollers.CarController;
 import org.lrima.laop.network.carcontrollers.ManualCarController;
 import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.settings.LockedSetting;
@@ -32,8 +33,12 @@ public class DL4J extends ManualCarController implements DL4JNN {
     private MODE takeOverMode = MODE.WAIT_FOR_INPUT;
     private MODE oldTakeOverMode = MODE.AI_CONTROL;
 
+    private boolean disableHumanControls;
+
 
     public CarControls control(double... captorValues) {
+        if(disableHumanControls)
+            takeOverMode = MODE.AI_CONTROL;
         if(oldTakeOverMode != takeOverMode) {
             System.out.println("SWITCH TO " + takeOverMode);
         }
@@ -59,7 +64,6 @@ public class DL4J extends ManualCarController implements DL4JNN {
         if(tempMode == MODE.DIRECT_INPUT){
             INDArray expected = Nd4j.create(MathUtils.convertToDoubleArray(this.controls));
             this.addToData(captor, expected);
-
             network.fit(captor, expected);
         }
         else if(tempMode == MODE.AI_CONTROL){
@@ -114,7 +118,7 @@ public class DL4J extends ManualCarController implements DL4JNN {
 
         this.oldTakeOverMode = takeOverMode;
 
-        System.out.println(carControls);
+//        System.out.println(carControls);
 
         return carControls;
 
@@ -138,7 +142,7 @@ public class DL4J extends ManualCarController implements DL4JNN {
                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
                 .updater(new Sgd(0.05))
                 .list()
-                .layer(0, new DenseLayer.Builder().nIn(6).nOut(3).build())
+                .layer(0, new DenseLayer.Builder().nIn(5).nOut(3).build())
                 .layer(1, new DenseLayer.Builder().nOut(10).build())
                 .layer(2, new OutputLayer.Builder().nOut(4).lossFunction(LossFunctions.LossFunction.SQUARED_LOSS).build())
                 .backprop(true)
@@ -180,6 +184,19 @@ public class DL4J extends ManualCarController implements DL4JNN {
             onKeyReleased.handle(event);
 
         });*/
+    }
+
+    @Override
+    public void disableHumanControl() {
+        disableHumanControls = true;
+    }
+
+    @Override
+    public <T extends CarController> T copy() {
+        DL4J dl4J = new DL4J();
+
+        dl4J.network = this.network.clone();
+        return (T) dl4J;
     }
 
     private enum MODE {

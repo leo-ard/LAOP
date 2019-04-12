@@ -1,15 +1,14 @@
 package org.lrima.laop.ui.components;
 
-import java.util.ArrayList;
-
-import org.lrima.laop.simulation.GenerationBasedSimulation;
-import org.lrima.laop.ui.SimulationDrawer;
-import org.lrima.laop.ui.components.inspector.InspectorPanel;
-
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import org.lrima.laop.physic.PhysicEngine;
+import org.lrima.laop.ui.SimulationDrawer;
+import org.lrima.laop.ui.components.inspector.InspectorPanel;
+
+import java.util.ArrayList;
 
 public class LaopMenuBar extends MenuBar {
     private ArrayList<MenuItem> menuItems;
@@ -85,7 +84,7 @@ public class LaopMenuBar extends MenuBar {
         windowMenu.getItems().add(showCharts);
     }
     
-    public void addRealTime(GenerationBasedSimulation simulation) {
+    public void addRealTime(PhysicEngine simulation) {
     	this.realTimeCheck = new CheckMenuItem("Real time");
     	this.realTimeCheck.setSelected(false);
     	simulationMenu = new Menu("Simulation");
