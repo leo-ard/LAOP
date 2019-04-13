@@ -6,6 +6,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import org.lrima.laop.settings.LockedSetting;
+import org.lrima.laop.simulation.SimulationEngine;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * An concrete class of a CarController. Can control a car with the keys W-A-S-D.
@@ -53,6 +55,26 @@ public class ManualCarController implements CarController {
         return getControls(this.controls);
     }
 
+    @Override
+    public void init(LockedSetting lockedSetting) {
+
+    }
+
+    @Override
+    public <T extends CarController> T copy() {
+        return (T) new ManualCarController();
+    }
+
+    @Override
+    public void setFitness(double fitness) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public double getFitness() {
+        throw new NotImplementedException();
+    }
+
     protected CarControls getControls(int[] inputValues){
         CarControls controls = new CarControls();
 
@@ -70,10 +92,5 @@ public class ManualCarController implements CarController {
 
 
         return controls;
-    }
-
-    @Override
-    public void init(LockedSetting settings) {
-
     }
 }

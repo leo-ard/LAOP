@@ -12,6 +12,8 @@ import org.lrima.laop.plugin.PluginLoader;
 import org.lrima.laop.settings.option.OptionClass;
 import org.lrima.laop.settings.Scope;
 import org.lrima.laop.settings.Settings;
+import org.lrima.laop.simulation.Environnement;
+import org.lrima.laop.simulation.GenerationBasedEnvironnement;
 import org.lrima.laop.simulation.SimulationEngine;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.ui.stage.MainSimulationStage;
@@ -33,9 +35,9 @@ public class LAOP {
     //TODO : this is just for testing purpurses
     private ArrayList<Class<? extends LearningAlgorithm>> learningAlgorithmsClasses;
     private ArrayList<Class<? extends CarController>> neuralNetworksClasses;
+    private ArrayList<Class<? extends Environnement>> environnements;
 
     Settings settings;
-
     /**
      * <p>Constructor for LAOP.</p>
      */
@@ -49,6 +51,9 @@ public class LAOP {
         neuralNetworksClasses.add(FUCONN.class);
         neuralNetworksClasses.add(ManualCarController.class);
         neuralNetworksClasses.add(DL4J.class);
+
+        environnements = new ArrayList<>();
+        environnements.add(GenerationBasedEnvironnement.class);
 
         //Load the algorithm's jar
         PluginLoader.addDir("algos/");
@@ -71,6 +76,7 @@ public class LAOP {
         settings.set(Settings.GLOBAL_SCOPE, KEY_NUMBER_OF_SIMULATION, DEFAULT_NUMBER_OF_SIMULATION);
         settings.set(Settings.GLOBAL_SCOPE, KEY_NUMBER_OF_GENERATIONS, DEFAULT_NUMBER_OF_GENERATIONS);
         settings.set(Settings.GLOBAL_SCOPE, KEY_NUMBER_OF_SENSORS, DEFAULT_NUMBER_OF_SENSORS);
+        settings.set(Settings.GLOBAL_SCOPE, KEY_ENVIRONNEMENT_CLASS, new OptionClass<>(DEFAULT_ENVIRONNEMENT_CLASS, environnements, clazz -> false));
     }
 
     /**
@@ -86,9 +92,9 @@ public class LAOP {
         	//todo: show error dialog
             throw new KeyAlreadyExistsException("The label "+label+" has already been assigned");
 
-        this.settings.set(label, LAOP.KEY_NETWORK_CLASS, new OptionClass(algorithmClass, neuralNetworksClasses, (clazz) -> ClassUtils.checkIfGenericOfInterface((Class)this.settings.get(label, LAOP.KEY_LEARNING_CLASS), (Class)clazz)));
-        this.settings.set(label, LAOP.KEY_LEARNING_CLASS, new OptionClass(learningClass, learningAlgorithmsClasses, (clazz) -> ClassUtils.checkIfGenericOfInterface((Class)this.settings.get(label, LAOP.KEY_LEARNING_CLASS), (Class)clazz)));
-        
+        this.settings.set(label, LAOP.KEY_NETWORK_CLASS, new OptionClass<>(algorithmClass, neuralNetworksClasses, (clazz) -> ClassUtils.checkIfGenericOfInterface((Class)this.settings.get(label, LAOP.KEY_LEARNING_CLASS), (Class)clazz)));
+        this.settings.set(label, LAOP.KEY_LEARNING_CLASS, new OptionClass<>(learningClass, learningAlgorithmsClasses, (clazz) -> ClassUtils.checkIfGenericOfInterface((Class)this.settings.get(label, LAOP.KEY_LEARNING_CLASS), (Class)clazz)));
+
         if(settings != null) settings.forEach((k, v) -> this.settings.set(label, k, v));
     }
 
@@ -116,10 +122,10 @@ public class LAOP {
     	if(this.settings.getLocalScopeKeys().size() <= 0) {
     		return "No algorithms to run.";
     	}
-    	
+
     	return "";
     }
-    
+
     /**
      * <p>startSimulation.</p>
      *
@@ -127,7 +133,7 @@ public class LAOP {
      */
     public void startSimulation(SimulationDisplayMode simulationDisplayMode){
     	//check if all the global scopes of the scopes are good
-    	
+
         SimulationBuffer simulationBuffer = new SimulationBuffer();
         SimulationEngine simulationEngine = new SimulationEngine(simulationBuffer, this.settings);
 
@@ -138,7 +144,7 @@ public class LAOP {
 
         simulationEngine.start();
     }
-    
+
     /**
      * <p>Getter for the field <code>settings</code>.</p>
      *
@@ -148,11 +154,12 @@ public class LAOP {
     	return this.settings;
     }
 
+
+
     public enum SimulationDisplayMode{
         WITH_INTERFACE,
-        WITHOUT_INTERFACE
+        WITHOUT_INTERFACE;
     }
-
     /**
      * <p>Getter for the field <code>neuralNetworksClasses</code>.</p>
      *
@@ -171,11 +178,12 @@ public class LAOP {
         return learningAlgorithmsClasses;
     }
 
+
     //ALL DEFAULT KEYS
     /** Constant <code>DEFAULT_NUMBER_OF_SIMULATION=10</code> */
-    public static int DEFAULT_NUMBER_OF_SIMULATION = 10;
+    public static final int DEFAULT_NUMBER_OF_SIMULATION = 10;
     /** Constant <code>KEY_NUMBER_OF_SIMULATION="NUMBER OF SIMULATIONS"</code> */
-    public static String KEY_NUMBER_OF_SIMULATION = "NUMBER OF SIMULATIONS";
+    public static final String KEY_NUMBER_OF_SIMULATION = "NUMBER OF SIMULATIONS";
 
     /** Constant <code>DEFAULT_NUMBER_OF_CARS=100</code> */
     public static final int DEFAULT_NUMBER_OF_CARS = 100;
@@ -200,6 +208,10 @@ public class LAOP {
     /** Constant <code>KEY_NUMBER_OF_SENSORS="NUMBER OF SENSORS"</code> */
     public static final String KEY_NUMBER_OF_SENSORS = "NUMBER OF SENSORS";
     /** Constant <code>DEFAULT_NUMBER_OF_SENSORS</code> */
-    public static final Object DEFAULT_NUMBER_OF_SENSORS = 5;
+    public static final int DEFAULT_NUMBER_OF_SENSORS = 5;
 
+    /** Constant <code>KEY_ENVIRONNEMENT_CLASS = "ENVIRONNEMENT_CLASS"</code> */
+    public static final String KEY_ENVIRONNEMENT_CLASS = "ENVIRONNEMENT_CLASS";
+    /** Constant <code>DEFAULT_ENVIRONNEMENT_CLASS</code> */
+    public static final Class<? extends Environnement> DEFAULT_ENVIRONNEMENT_CLASS = GenerationBasedEnvironnement.class;
 }

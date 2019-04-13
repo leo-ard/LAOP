@@ -151,7 +151,7 @@ public class SimulationDrawer{
 	        gc.setTransform(this.affineTransform);
 
 	        //Draw the map
-	        simulationEngine.getMap().getLines().forEach(staticObject -> staticObject.draw(gc));
+	        simulationEngine.getEnvironnement().getMap().getLines().forEach(staticObject -> staticObject.draw(gc));
 
             for(CarData car : currentCars) {
 	            car.draw(gc, inspector.getSelectedObject() == car);
