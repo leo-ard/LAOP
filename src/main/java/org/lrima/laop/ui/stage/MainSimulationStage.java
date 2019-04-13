@@ -10,6 +10,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.lrima.laop.network.LearningAlgorithm;
+import org.lrima.laop.network.concreteLearning.GeneticLearning;
+import org.lrima.laop.simulation.GenerationBasedEnvironnement;
 import org.lrima.laop.simulation.SimulationEngine;
 import org.lrima.laop.ui.SimulationDrawer;
 import org.lrima.laop.ui.SimulationView;
@@ -66,16 +68,17 @@ public class MainSimulationStage extends Stage {
         this.loadAllScenes();
 
         this.simulationEngine.setMainScene(this);
-//        this.simulationEngine.setOnBatchStarted(this::changeSimulation);
+        this.simulationEngine.setOnBatchStarted(this::changeSimulation);
         this.simulationEngine.setOnEnd(this::endSimulationAndShowResults);
 
         this.simulationDrawer.start();
     }
 
-    private void changeSimulation(LearningAlgorithm learningAlgorithm) {
+    private void changeSimulation(SimulationEngine simulationEngine) {
         reset(()->{
             SimulationView simulationView = null;
-//            if(learningAlgorithm instanceof GeneticLearning) simulationView = new GeneticStage((GenerationBasedSimulation) simulation);
+            if(simulationEngine.getEnvironnement() instanceof GenerationBasedEnvironnement)
+                simulationView = new GeneticStage((GenerationBasedEnvironnement) simulationEngine.getEnvironnement());
 
             if(simulationView != null)
                 simulationView.setup(this);

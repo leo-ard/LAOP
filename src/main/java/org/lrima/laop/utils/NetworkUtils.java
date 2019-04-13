@@ -57,4 +57,13 @@ public class NetworkUtils {
     public static <T> ArrayList<CarController> toCarControllerArray(ArrayList<T> geneticLearnings) {
         return geneticLearnings.stream().map(carController -> (CarController) carController).collect(Collectors.toCollection(ArrayList::new));
     }
+
+    public static double average(ArrayList<? extends CarController> cars) {
+        double totalFitness = 0;
+        for(CarController car : cars) {
+            totalFitness += car.getFitness();
+        }
+
+        return totalFitness / cars.size();
+    }
 }

@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * A simulation that can take the LearningAlgorithms that uses generation bases learning
@@ -50,6 +52,7 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
     private Thread parallelThread;
     private boolean parallelThreadAlive;
     private PhysicEngine parallelPhysicEngine;
+    private PhysicEngine physicEngine;
     private BiFunction<Environnement, AbstractCar, Double> fitnessFunction = NetworkUtils.RANGE_FITNESS;
 
     /**
@@ -75,13 +78,14 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
             }
         }
 
-        PhysicEngine physicEngine = configureSimulation(cars);
+        physicEngine = configureSimulation(cars);
         physicEngine.run();
-        calculateFitness(physicEngine.getCars());
-        cars = physicEngine.extractNetworks();
+        ArrayList<AbstractCar> cars1 = physicEngine.getCars();
+        calculateFitness(cars1);
+        this.cars = (ArrayList<T>) cars1.stream().map(AbstractCar::getController).collect(Collectors.toCollection(ArrayList::new));
         incrementGeneration();
 
-        return cars;
+        return (ArrayList<T>) this.cars;
     }
 
     private <T extends CarController> void calculateFitness(ArrayList<AbstractCar> cars) {
@@ -108,9 +112,13 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
             }
 
             disable.accept(this.cars);
-            PhysicEngine physicEngine = configureSimulation(cars);
+            physicEngine = configureSimulation(cars);
             physicEngine.setRealTime(true);
             physicEngine.run();
+            ArrayList<AbstractCar> cars = physicEngine.getCars();
+            calculateFitness(cars);
+            this.cars = cars.stream().map(AbstractCar::getController).collect(Collectors.toCollection(ArrayList::new));
+
             incrementGeneration();
         }
         else{
@@ -225,7 +233,7 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
      */
     public GenerationData getGenerationData() {
         GenerationData data = new GenerationData(this.generationCount);
-//        data.setAverageFitness(cars);
+        data.setAverageFitness(NetworkUtils.average(cars));
 
         return data;
     }
@@ -298,6 +306,10 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
     @Override
     public BiFunction<Environnement, AbstractCar, Double> getFitenessFunction() {
         return null;
+    }
+
+    public PhysicEngine getPhysicEngine() {
+        return physicEngine;
     }
 }
 

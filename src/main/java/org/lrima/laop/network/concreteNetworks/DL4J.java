@@ -141,7 +141,7 @@ public class DL4J extends ManualCarController implements DL4JNN {
                 .weightInit(WeightInit.XAVIER)
                 .activation(Activation.RELU)
                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
-                .updater(new Sgd(0.05))
+                .updater(new Sgd(0.1))
                 .list()
                 .layer(0, new DenseLayer.Builder().nIn(5).nOut(3).build())
                 .layer(1, new DenseLayer.Builder().nOut(10).build())

@@ -1,19 +1,18 @@
 package org.lrima.laop.ui;
 
-import org.lrima.laop.network.LearningAlgorithm;
-import org.lrima.laop.simulation.Simulation;
+import org.lrima.laop.simulation.Environnement;
 import org.lrima.laop.ui.stage.MainSimulationStage;
 
-public abstract class SimulationView<T extends Simulation> {
-    T simulation;
+public abstract class SimulationView<T extends Environnement> {
+    T engironnement;
 
-    public SimulationView(T simulation){
-        this.simulation = simulation;
+    public SimulationView(T engironnement){
+        this.engironnement = engironnement;
     }
 
     public abstract void setup(MainSimulationStage mainSimulationStage);
 
-    public T getSimulation() {
-        return simulation;
+    public T getEngironnement() {
+        return engironnement;
     }
 }
