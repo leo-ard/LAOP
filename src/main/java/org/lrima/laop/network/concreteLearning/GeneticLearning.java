@@ -1,17 +1,11 @@
 package org.lrima.laop.network.concreteLearning;
 
 import org.lrima.laop.network.LearningAlgorithm;
-import org.lrima.laop.network.carcontrollers.CarController;
 import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
-import org.lrima.laop.physic.abstractObjects.AbstractCar;
-import org.lrima.laop.settings.LockedSetting;
 import org.lrima.laop.simulation.Environnement;
-import org.lrima.laop.utils.NetworkUtils;
 import org.lrima.laop.utils.math.RandomUtils;
 
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -30,6 +24,8 @@ public class GeneticLearning implements LearningAlgorithm<GeneticNeuralNetwork> 
                 .collect(Collectors.toList());
 
         double bestFitness = cars.get(0).getFitness();
+
+        System.out.println(bestFitness);
 
         //Keep only 50% best cars
         final int initialNumberOfCar = cars.size();

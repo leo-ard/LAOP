@@ -34,6 +34,7 @@ public class DL4J extends ManualCarController implements DL4JNN {
     private MODE oldTakeOverMode = MODE.AI_CONTROL;
 
     private boolean disableHumanControls;
+    private double fitness;
 
 
     public CarControls control(double... captorValues) {
@@ -197,6 +198,16 @@ public class DL4J extends ManualCarController implements DL4JNN {
 
         dl4J.network = this.network.clone();
         return (T) dl4J;
+    }
+
+    @Override
+    public void setFitness(double fitness) {
+        this.fitness = fitness;
+    }
+
+    @Override
+    public double getFitness() {
+        return fitness;
     }
 
     private enum MODE {

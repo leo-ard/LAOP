@@ -4,8 +4,8 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import org.lrima.laop.core.LAOP;
 import org.lrima.laop.network.carcontrollers.CarController;
-import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
 import org.lrima.laop.physic.PhysicEngine;
+import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.physic.concreteObjects.SimpleCar;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.simulation.data.GenerationData;
@@ -18,10 +18,11 @@ import org.lrima.laop.utils.NetworkUtils;
 import org.lrima.laop.utils.math.Vector2d;
 
 import java.awt.geom.Point2D;
+import java.util.AbstractCollection;
 import java.util.ArrayList;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * A simulation that can take the LearningAlgorithms that uses generation bases learning
@@ -49,6 +50,7 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
     private Thread parallelThread;
     private boolean parallelThreadAlive;
     private PhysicEngine parallelPhysicEngine;
+    private BiFunction<Environnement, AbstractCar, Double> fitnessFunction = NetworkUtils.RANGE_FITNESS;
 
     /**
      * Creates a new Generation
@@ -75,17 +77,17 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
 
         PhysicEngine physicEngine = configureSimulation(cars);
         physicEngine.run();
-        calculateFitness(cars);
+        calculateFitness(physicEngine.getCars());
         cars = physicEngine.extractNetworks();
         incrementGeneration();
-
 
         return cars;
     }
 
-    private <T extends CarController> void calculateFitness(ArrayList<T> cars) {
-        for (T car : cars) {
-//            NetworkUtils.RANGE_FITNESS.apply(this, car);
+    private <T extends CarController> void calculateFitness(ArrayList<AbstractCar> cars) {
+        for (AbstractCar car : cars) {
+            double fitness = fitnessFunction.apply(this, car);
+            car.getController().setFitness(fitness);
         }
     }
 
@@ -127,7 +129,7 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
     @Override
     public void run() {
         ArrayList<? extends CarController> array = null;
-        while(parallelThreadAlive){
+        while(!finished){
             System.out.println("Simulation 1");
             simulationEngine.getBuffer().clear();
 
@@ -291,6 +293,11 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
     @Override
     public AbstractMap getMap() {
         return map;
+    }
+
+    @Override
+    public BiFunction<Environnement, AbstractCar, Double> getFitenessFunction() {
+        return null;
     }
 }
 

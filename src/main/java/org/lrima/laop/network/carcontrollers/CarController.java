@@ -10,7 +10,6 @@ import org.lrima.laop.simulation.SimulationEngine;
  * @author Léonard
  */
 public interface CarController {
-
     /**
      * Fonction called by the car at each second. Take the sensors controls and outputs the reaction of the car.
      *
@@ -20,7 +19,8 @@ public interface CarController {
      * @return how the car should be controlled
      */
     CarControls control(double ... captorValues);
-
     void init(LockedSetting lockedSetting);
     <T extends CarController> T copy();
+    void setFitness(double fitness);
+    double getFitness();
 }
