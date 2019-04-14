@@ -48,7 +48,7 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
     private boolean finished;
 
     private SimulationBuffer buffer;
-    private AbstractMap map;
+    private MazeMap map;
     private SimulationEngine simulationEngine;
 
     private BatchData currentBatchData;
@@ -107,6 +107,10 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
 //            this.buffer = new SimulationBuffer();
             parallelThread = new Thread(this);
             parallelThread.start();
+        }
+
+        if(generationCount == 1){
+            this.map.randomize();
         }
 
         System.out.println("Simulation 2");
