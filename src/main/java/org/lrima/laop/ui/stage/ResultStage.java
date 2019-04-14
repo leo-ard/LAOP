@@ -1,9 +1,10 @@
 package org.lrima.laop.ui.stage;
 
-import org.lrima.laop.core.ConclusionTest;
+import org.lrima.laop.simulation.data.ResultData;
+import org.lrima.laop.ui.controllers.ResultController;
 
-import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -13,15 +14,10 @@ import javafx.stage.Stage;
  * @author Clement Bisaillon
  */
 public class ResultStage extends Stage {
+	ResultData data;
 	
-	public static void main(String[] args) {
-		new Thread(() ->
-        	Application.launch(ConclusionTest.class)
-		).start();
-	}
-	
-	
-	public ResultStage() {
+	public ResultStage(ResultData data) {
+		this.data = data;
 		this.setTitle("Results extracted from the simulations");
 		
 		this.loadScene();
@@ -32,8 +28,12 @@ public class ResultStage extends Stage {
 	 */
 	private void loadScene() {
 		try {
-			BorderPane root = FXMLLoader.load(getClass().getResource("/views/conclusion/results.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/conclusion/results.fxml"));
+			Parent parent = loader.load();
+			ResultController controller = loader.<ResultController>getController();
+			controller.initData(this.data);
 			
+			BorderPane root = loader.getRoot();
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add("/css/conclusion.css");
 			

@@ -1,30 +1,32 @@
 package org.lrima.laop.simulation;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.lrima.laop.core.LAOP;
 import org.lrima.laop.network.carcontrollers.CarController;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.physic.concreteObjects.SimpleCar;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
+import org.lrima.laop.simulation.data.BatchData;
 import org.lrima.laop.simulation.data.GenerationData;
+import org.lrima.laop.simulation.data.SimulationData;
 import org.lrima.laop.simulation.map.AbstractMap;
 import org.lrima.laop.simulation.map.MazeMap;
 import org.lrima.laop.simulation.sensors.ProximityLineSensor;
-import org.lrima.laop.utils.Actions.Procedure;
 import org.lrima.laop.utils.Console;
 import org.lrima.laop.utils.NetworkUtils;
+import org.lrima.laop.utils.Actions.Procedure;
 import org.lrima.laop.utils.math.Vector2d;
 
-import java.awt.geom.Point2D;
-import java.util.AbstractCollection;
-import java.util.ArrayList;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 
 /**
  * A simulation that can take the LearningAlgorithms that uses generation bases learning
@@ -49,6 +51,9 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
     private AbstractMap map;
     private SimulationEngine simulationEngine;
 
+    private BatchData currentBatchData;
+    private SimulationData currentSimulationData;
+    
     private Thread parallelThread;
     private boolean parallelThreadAlive;
     private PhysicEngine parallelPhysicEngine;
@@ -80,6 +85,7 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
 
         physicEngine = configureSimulation(cars);
         physicEngine.run();
+        
         ArrayList<AbstractCar> cars1 = physicEngine.getCars();
         calculateFitness(cars1);
         this.cars = (ArrayList<T>) cars1.stream().map(AbstractCar::getController).collect(Collectors.toCollection(ArrayList::new));
@@ -162,8 +168,13 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
     private void incrementGeneration() {
         int maxGenerations = (int) this.getSetting(LAOP.KEY_NUMBER_OF_GENERATIONS);
 
+        this.currentSimulationData.addData(this.getGenerationData());
+        
         //CHECK IF GENERATION IS OUT OF BOUNDS
         if (generationCount >= maxGenerations) {
+        	this.currentBatchData.addData(this.currentSimulationData);
+        	this.currentSimulationData = new SimulationData();
+        	
             Console.info("Simulation " + this.simulationCount + " finished");
             //FIRE LISTENERS
             this.onSimulationFinish.forEach(Procedure::invoke);
@@ -175,6 +186,7 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
             if (simulationCount > (int) this.getSetting(LAOP.KEY_NUMBER_OF_SIMULATION)) {
                 //FIRE END LISTENER
                 this.finished = true;
+                this.currentSimulationData = new SimulationData();
             }
         } else {
             Console.info("Generation " + generationCount + " / " + maxGenerations + " completed");
@@ -187,6 +199,7 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
      * Simulate a generation
      */
     private PhysicEngine configureSimulation(ArrayList<? extends CarController> cars) {
+    	
         this.buffer.clear();
         PhysicEngine physicEngine = new PhysicEngine(this.buffer, this.map);
 
@@ -232,10 +245,24 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
      * @author Clement Bisaillon
      */
     public GenerationData getGenerationData() {
-        GenerationData data = new GenerationData(this.generationCount);
+    	double[] fitnesses = new double[this.cars.size()];
+    	
+    	for(int i = 0 ; i < this.cars.size() ; i++) {
+    		fitnesses[i] = this.cars.get(i).getFitness();
+    	}
+    	
+        GenerationData data = new GenerationData(this.generationCount, this.simulationCount, fitnesses);
         data.setAverageFitness(NetworkUtils.average(cars));
 
         return data;
+    }
+    
+    /**
+     * Get the data about the current batch
+     * @return the data
+     */
+    @Override public BatchData getBatchData() {
+    	return this.currentBatchData;
     }
 
     public void setOnSimulationFinish(Procedure onSimulationFinish) {
@@ -293,9 +320,18 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
     @Override
     public void initialise(SimulationEngine simulationEngine) {
         this.simulationEngine = simulationEngine;
+        
+        this.currentBatchData = new BatchData(this.simulationEngine.getCurrentScope());
+        this.currentSimulationData = new SimulationData();
+        
         map = new MazeMap(10);
         map.bake();
         buffer = simulationEngine.getBuffer();
+    }
+    
+    @Override
+    public void setFinished(boolean finished) {
+    	this.finished = finished;
     }
 
     @Override

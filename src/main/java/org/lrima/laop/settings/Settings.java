@@ -1,26 +1,12 @@
 package org.lrima.laop.settings;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Optional;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 
-import javafx.geometry.Insets;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-
-import org.lrima.laop.core.LAOP;
-import org.lrima.laop.utils.Console;
 
 /**
  * Stores the settings in different scopes and allows the user to get and set the controls of the
@@ -161,6 +147,12 @@ public class Settings {
         ArrayList<String> scopeArray = new ArrayList<>(scopes.keySet());
         scopeArray.remove(GLOBAL_SCOPE);
         return scopeArray;
+    }
+    
+    public LinkedHashMap<String, Scope> getLocalScopes(){
+    	LinkedHashMap<String, Scope> scopes = new LinkedHashMap<String, Scope>(this.getScopes());
+    	scopes.remove(GLOBAL_SCOPE);
+    	return scopes;
     }
     
     /**

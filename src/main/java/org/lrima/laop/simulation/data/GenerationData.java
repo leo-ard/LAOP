@@ -12,10 +12,14 @@ import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
 public class GenerationData {
 
     private int generationNumber;
+    private int simulationNumber;
     private double averageFitness;
+    private double[] fitnesses;
 
-	public GenerationData(int generationNumber) {
+	public GenerationData(int generationNumber, int simulationNumber, double[] fitnesses) {
 		this.generationNumber = generationNumber;
+		this.simulationNumber = simulationNumber;
+		this.fitnesses = fitnesses;
 	}
 	
 	/**
@@ -31,5 +35,21 @@ public class GenerationData {
 
 	public void setAverageFitness(double averageFitness) {
 		this.averageFitness = averageFitness;
+	}
+	
+	public String getCsvLine() {
+		String start = 	this.simulationNumber + "," +
+						this.generationNumber + ",";
+		
+		String fitnessesString = "";
+		
+		for(int i = 0 ; i < this.fitnesses.length ; i++) {
+			fitnessesString += fitnesses[i];
+			if(i < this.fitnesses.length - 1) {
+				fitnessesString += ",";
+			}
+		}
+		
+		return start + fitnessesString;
 	}
 }

@@ -1,28 +1,20 @@
 package org.lrima.laop.simulation;
 
-import javafx.stage.Stage;
+import java.util.ArrayList;
+
 import org.lrima.laop.core.LAOP;
 import org.lrima.laop.network.LearningAlgorithm;
-import org.lrima.laop.network.LearningAnotation;
 import org.lrima.laop.network.carcontrollers.CarController;
 import org.lrima.laop.network.carcontrollers.ManualCarController;
-import org.lrima.laop.physic.concreteObjects.SimpleCar;
 import org.lrima.laop.settings.LockedSetting;
+import org.lrima.laop.settings.Scope;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
-import org.lrima.laop.simulation.map.AbstractMap;
-import org.lrima.laop.simulation.map.MazeMap;
-import org.lrima.laop.simulation.sensors.ProximityLineSensor;
+import org.lrima.laop.simulation.data.ResultData;
 import org.lrima.laop.utils.Console;
 import org.lrima.laop.utils.Actions.Action;
-import org.lrima.laop.utils.math.Vector2d;
 
-import java.awt.geom.Point2D;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
-import java.util.function.Function;
+import javafx.stage.Stage;
 
 public class SimulationEngine implements Runnable{
     private SimulationBuffer simulationBuffer;
@@ -35,6 +27,8 @@ public class SimulationEngine implements Runnable{
 
     private Stage mainScene;
 
+    
+    private ResultData data;
     private LearningAlgorithm learningAlgorithm;
     private Environnement environnement;
 
@@ -47,6 +41,7 @@ public class SimulationEngine implements Runnable{
 
         this.onBatchStarted = new ArrayList<>();
         this.onEnd = new ArrayList<>();
+        this.data = new ResultData(this.settings.getLocalScopes());
     }
 
     public void start(){
@@ -87,9 +82,13 @@ public class SimulationEngine implements Runnable{
             while (!this.environnement.isFinished()) {
                 learningAlgorithm.cycle(environnement);
             }
-
-
+           
+            this.data.addData(this.settings.getLocalScopeKeys().get(batchCount), this.environnement.getBatchData());
+            
+            environnement.setFinished(false);
         }
+        
+        this.onEnd.forEach((a) -> a.handle(this));
     }
 
     private Environnement generateEnvironnement() {
@@ -112,7 +111,7 @@ public class SimulationEngine implements Runnable{
 
 
     <T extends CarController> T generateCurrentNetwork() {
-        Class<? extends CarController> carClass = (Class<? extends CarController>) settings.get(this.getCurrentScope(), LAOP.KEY_NETWORK_CLASS);
+        Class<? extends CarController> carClass = (Class<? extends CarController>) settings.get(this.getCurrentScopeName(), LAOP.KEY_NETWORK_CLASS);
 
         try {
             T carController = (T) carClass.newInstance();
@@ -135,7 +134,7 @@ public class SimulationEngine implements Runnable{
     }
 
     LearningAlgorithm<? extends CarController> generateLearningAlgorithm() {
-        Class<? extends LearningAlgorithm> learningClass = (Class<? extends LearningAlgorithm>) settings.get(this.getCurrentScope(), LAOP.KEY_LEARNING_CLASS);
+        Class<? extends LearningAlgorithm> learningClass = (Class<? extends LearningAlgorithm>) settings.get(this.getCurrentScopeName(), LAOP.KEY_LEARNING_CLASS);
 
         try {
             return learningClass.newInstance();
@@ -167,7 +166,7 @@ public class SimulationEngine implements Runnable{
     }
 
     public LockedSetting getSettings() {
-        return this.settings.lock(this.getCurrentScope());
+        return this.settings.lock(this.getCurrentScopeName());
     }
 
     public Environnement getEnvironnement() {
@@ -178,12 +177,20 @@ public class SimulationEngine implements Runnable{
 //        this.environnement;
     }
 
-    private String getCurrentScope() {
+    public String getCurrentScopeName() {
     	return this.settings.getLocalScopeKeys().get(this.batchCount);
+    }
+    
+    public Scope getCurrentScope() {
+    	return this.settings.getLocalScopes().get(this.batchCount);
     }
 
     public Stage getMainScene() {
         return mainScene;
+    }
+    
+    public ResultData getData() {
+    	return this.data;
     }
 
     public LearningAlgorithm getCurrentLearning() {
