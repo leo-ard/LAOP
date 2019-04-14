@@ -1,11 +1,13 @@
 package org.lrima.laop.network.concreteNetworks;
 
 import org.lrima.laop.core.LAOP;
+import org.lrima.laop.network.carcontrollers.CarController;
 import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
 import org.lrima.laop.network.nn.DenseLayer;
 import org.lrima.laop.network.nn.NeuralNetwork;
 import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.settings.LockedSetting;
+import org.lrima.laop.simulation.SimulationEngine;
 import org.lrima.laop.utils.MathUtils;
 import org.lrima.laop.utils.math.RandomUtils;
 
@@ -37,19 +39,26 @@ public class FUCONN implements GeneticNeuralNetwork {
     }
 
     @Override
-    public void init(LockedSetting settings) {
-        neuralNetwork = new NeuralNetwork((Integer) settings.get(LAOP.KEY_NUMBER_OF_SENSORS));
-        neuralNetwork.addDenseLayer(2, MathUtils.LOGISTIC);
-        neuralNetwork.addDenseLayer(3, MathUtils.LOGISTIC);
-
-    }
-
-    @Override
     public CarControls control(double... captorValues) {
         //double[] data = new double[]{RandomUtils.getDouble(0, 1), 0, RandomUtils.getDouble(-1, 1)};
 //        double[] data = neuralNetwork.predict(captorValues);
 
         return new CarControls(neuralNetwork.predict(captorValues));
+    }
+
+    @Override
+    public void init(LockedSetting settings) {
+        neuralNetwork = new NeuralNetwork((Integer) settings.get(LAOP.KEY_NUMBER_OF_SENSORS));
+        neuralNetwork.addDenseLayer(2, MathUtils.LOGISTIC);
+        neuralNetwork.addDenseLayer(3, MathUtils.LOGISTIC);
+    }
+
+    @Override
+    public <T extends CarController> T copy() {
+        FUCONN fuconn = new FUCONN();
+        fuconn.neuralNetwork = new NeuralNetwork(this.neuralNetwork.getTopology(), this.neuralNetwork.getAllWeights(), new double[]{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0});
+
+        return (T) fuconn;
     }
 
     public static void main(String[] args){

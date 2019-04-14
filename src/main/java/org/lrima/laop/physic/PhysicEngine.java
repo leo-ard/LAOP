@@ -18,7 +18,9 @@ import org.lrima.laop.utils.Actions.Action;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import org.lrima.laop.utils.Actions.Procedure;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -26,15 +28,23 @@ import java.util.stream.Collectors;
  *
  * @author Clement Bisaillon and Léonard Oest OLeary
  */
-public class PhysicEngine extends Thread {
+public class PhysicEngine {
 	
-    public static Function<ArrayList<AbstractCar>, Boolean> ALL_CARS_DEAD = (list) -> {
-        for (AbstractCar abstractCar : list) {
+    public static Function<PhysicEngine, Boolean> ALL_CARS_DEAD = (physicEngine) -> {
+        for (AbstractCar abstractCar : physicEngine.getCars()) {
             if(!abstractCar.isDead()){
                 return false;
             }
         }
         return true;
+    };
+
+    public static Function<PhysicEngine, Boolean> TIME_LIMIT(int iterationLimit){
+        return (physic) -> {
+            if (physic.getCurrentIteration() > iterationLimit)
+                return false;
+            return true;
+        };
     };
 
     static public final double DELTA_T = 0.05;
@@ -50,14 +60,12 @@ public class PhysicEngine extends Thread {
     private ArrayList<Action<PhysicEngine>> onStep;
     private AbstractMap map;
 
-    //////Temporary
-    private final int MAX_ITERATION = 30000;
-    private int CURRENT_ITERATION = 0;
-    //////Temporary
+    private int currentIteration= 0;
+    private int timeLimit = 300;
 
     private SimulationBuffer simulationBuffer;
     private boolean realTime;
-    private Function<ArrayList<AbstractCar>, Boolean> finishingCondition;
+    private Function<PhysicEngine, Boolean> finishingCondition;
 
 
     /**
@@ -79,10 +87,9 @@ public class PhysicEngine extends Thread {
     /**
      * Run the physic engine
      */
-    @Override
     public void run() {
         //TODO : Condition : quand les voitures sont encore toutes vivante et qu'il reste du temps
-        while(running && (this.CURRENT_ITERATION < this.MAX_ITERATION)){
+        while(running){
             if(!this.pause) {
                 try {
                     this.nextStep();
@@ -91,10 +98,10 @@ public class PhysicEngine extends Thread {
                     //save the car's state in the buffer
                     this.saveCarsState();
 
-                    if(finishingCondition != null && finishingCondition.apply(this.cars))
+                    if(finishingCondition != null && (finishingCondition.apply(this) || currentIteration > timeLimit))
                         running = false;
 
-                    this.CURRENT_ITERATION++;
+                    this.currentIteration++;
                     if(this.realTime){
                         Thread.sleep((int)(PhysicEngine.DELTA_T*1000.0));
                     }
@@ -106,8 +113,7 @@ public class PhysicEngine extends Thread {
             }
         }
 
-        this.onPhysicEngineFinishOnce.forEach(action -> action.handle(this));
-        this.onPhysicEngineFinishOnce = new ArrayList<>();
+
     }
     
     /**
@@ -181,7 +187,7 @@ public class PhysicEngine extends Thread {
         this.onPhysicEngineFinishOnce.add(onPhysicEngineFinish);
     }
 
-    public void setFinishingConditions(Function<ArrayList<AbstractCar>, Boolean> finishingCondition){
+    public void setFinishingConditions(Function<PhysicEngine, Boolean> finishingCondition){
         this.finishingCondition = finishingCondition;
     }
 
@@ -198,8 +204,8 @@ public class PhysicEngine extends Thread {
     	return this.cars;
     }
 
-    public ArrayList extractNetworks() {
-        return (ArrayList) this.cars.stream().map(AbstractCar::getController).collect(Collectors.toList());
+    public <T extends CarController> ArrayList<T> extractNetworks() {
+        return (ArrayList<T>) this.cars.stream().map(AbstractCar::getController).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public boolean getPause() {
@@ -209,5 +215,17 @@ public class PhysicEngine extends Thread {
 
     public void setRealTime(boolean value) {
         this.realTime = value;
+    }
+
+    public void setBuffer(SimulationBuffer simulationBuffer) {
+        this.simulationBuffer = simulationBuffer;
+    }
+
+    public int getCurrentIteration() {
+        return currentIteration;
+    }
+
+    public void setTimeLimit(int timeLimit) {
+        this.timeLimit = timeLimit;
     }
 }

@@ -1,20 +1,20 @@
 package org.lrima.laop.ui.stage;
 
 import com.jfoenix.controls.JFXButton;
-import org.lrima.laop.simulation.GenerationBasedSimulation;
+import org.lrima.laop.simulation.GenerationBasedEnvironnement;
 import org.lrima.laop.ui.SimulationView;
 import org.lrima.laop.ui.components.ChartPanel;
 
-public class GeneticStage extends SimulationView<GenerationBasedSimulation> {
+public class GeneticStage extends SimulationView<GenerationBasedEnvironnement> {
 
     private ChartPanel chartPanel;
 
-    public GeneticStage(GenerationBasedSimulation generationBasedSimulation){
-        super(generationBasedSimulation);
+    public GeneticStage(GenerationBasedEnvironnement generationBasedEnvironnement){
+        super(generationBasedEnvironnement);
 
         this.chartPanel = new ChartPanel();
-        this.getSimulation().setOnGenerationFinish(simulation -> this.chartPanel.updateChartData(simulation.getGenerationData()));
-        this.getSimulation().setOnSimulationFinish(no -> this.chartPanel.resetChart());
+        generationBasedEnvironnement.setOnGenerationFinish(() -> this.chartPanel.updateChartData(generationBasedEnvironnement.getGenerationData()));
+        generationBasedEnvironnement.setOnSimulationFinish(() -> this.chartPanel.resetChart());
     }
 
 
@@ -22,18 +22,18 @@ public class GeneticStage extends SimulationView<GenerationBasedSimulation> {
     public void setup(MainSimulationStage mainSimulationStage) {
         JFXButton btnGenFinish = new JFXButton("Next generation");
         btnGenFinish.getStyleClass().add("btn-light");
-        btnGenFinish.setOnAction( e-> {
-            this.getSimulation().nextGen();
-        });
+//        btnGenFinish.setOnAction( e-> {
+//            this.getEngironnement().nextGen();
+//        });
         mainSimulationStage.getTimeline().getChildren().add(btnGenFinish);
-        
+
         mainSimulationStage.getTimeline().getRealTimeAttribute().addListener((observer, oldVal, newVal) -> {
-        	this.getSimulation().setAutoRun(newVal);
+        	this.getEngironnement().setAutoRun(newVal);
         });
 
         mainSimulationStage.getBotomBar().getChildren().add(chartPanel);
 
         mainSimulationStage.getMenuBar().addShowCharts(this.chartPanel);
-        mainSimulationStage.getMenuBar().addRealTime(this.getSimulation());
+        mainSimulationStage.getMenuBar().addRealTime(this.getEngironnement().getPhysicEngine());
     }
 }

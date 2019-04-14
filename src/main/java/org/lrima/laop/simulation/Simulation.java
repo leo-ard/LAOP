@@ -47,26 +47,4 @@ public abstract class Simulation <T extends LearningAlgorithm>{
     }
 
     public abstract void pause();
-
-    protected ArrayList<SimpleCar> generateCarObjects(int numberOfCars, Function<Integer, CarController> controllerFunction){
-        int numberOfSensors = (int) simulationEngine.getSettings().get(LAOP.KEY_NUMBER_OF_SENSORS);
-
-        ArrayList<SimpleCar> carObjects = new ArrayList<>();
-        for(int i = 0 ; i < numberOfCars ; i++) {
-            Point2D start = this.simulationEngine.getMap().getStartPoint();
-            SimpleCar car = new SimpleCar(this.simulationEngine.getMap(), new Vector2d(start.getX(), start.getY()), controllerFunction.apply(i));
-
-            double orientationIncrement = Math.PI / numberOfSensors;
-            //Create the sensors and assign them to the car
-            for(int x = 0 ; x < numberOfSensors; x++) {
-                ProximityLineSensor sensor = new ProximityLineSensor(car, (x * orientationIncrement) + orientationIncrement/2);
-                car.addSensor(sensor);
-            }
-
-            carObjects.add(car);
-        }
-
-        learningAlgorithm.init(carObjects);
-        return carObjects;
-    }
 }

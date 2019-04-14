@@ -6,26 +6,27 @@ import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.network.LearningAnotation;
 import org.lrima.laop.network.carcontrollers.CarController;
 import org.lrima.laop.network.carcontrollers.ManualCarController;
-import org.lrima.laop.physic.PhysicEngine;
-import org.lrima.laop.physic.abstractObjects.AbstractCar;
+import org.lrima.laop.physic.concreteObjects.SimpleCar;
 import org.lrima.laop.settings.LockedSetting;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.simulation.map.AbstractMap;
-import org.lrima.laop.simulation.map.BlankMap;
 import org.lrima.laop.simulation.map.MazeMap;
+import org.lrima.laop.simulation.sensors.ProximityLineSensor;
 import org.lrima.laop.utils.Console;
 import org.lrima.laop.utils.Actions.Action;
+import org.lrima.laop.utils.math.Vector2d;
 
+import java.awt.geom.Point2D;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 
-public class SimulationEngine {
+public class SimulationEngine implements Runnable{
     private SimulationBuffer simulationBuffer;
     private Settings settings;
-
-    private int currentScopeIndex;
 
     private int batchCount;
 
@@ -33,61 +34,74 @@ public class SimulationEngine {
     ArrayList<Action<SimulationEngine>> onEnd;
 
     private Stage mainScene;
-    private AbstractMap map;
 
-    private Simulation<?extends LearningAlgorithm<?extends CarController>> currentSimulation;
+    private LearningAlgorithm learningAlgorithm;
+    private Environnement environnement;
+
+    private Thread currentThread;
 
     public SimulationEngine(SimulationBuffer simulationBuffer, Settings settings) {
         this.simulationBuffer = simulationBuffer;
         this.settings = settings;
-        this.currentScopeIndex = 0;
+        this.batchCount = 0;
 
         this.onBatchStarted = new ArrayList<>();
         this.onEnd = new ArrayList<>();
-
-        map = new MazeMap(10);
-//        map = new BlankMap();
-        map.bake();
     }
 
     public void start(){
-        nextBatch();
+        currentThread = new Thread(this);
+        currentThread.start();
     }
 
-    private void nextBatch() {
-        Console.info("Batch %s started", this.getBatchCount() + 1);
-        
-        currentSimulation = generateSimulation();
+//    private void nextBatch() {
+//
+////        envrionnement = generateEnvironnement();
+//
+//
+//
+//
+//        envrionnement.start();
+//        envrionnement.setEnd((simulation) -> {
+//        	this.currentScopeIndex++;
+//        	//Check if all algorithms have been runned
+//        	if(this.currentScopeIndex >= this.settings.getLocalScopeKeys().size()) {
+//        		this.onEnd.forEach(b -> b.handle(this));
+//
+//        		return;
+//        	}
+//        	nextBatch();
+//        });
 
-        this.onBatchStarted.forEach(b -> b.handle(this));
-        
-        currentSimulation.start();
-        currentSimulation.setEnd((simulation) -> {
-        	this.currentScopeIndex++;
-        	//Check if all algorithms have been runned
-        	if(this.currentScopeIndex >= this.settings.getLocalScopeKeys().size()) {
-        		this.onEnd.forEach(b -> b.handle(this));
-        		
-        		return;
-        	}
-        	nextBatch();
-        });
-        batchCount++;
+//    }
+    @Override
+    public void run() {
+        this.environnement = generateEnvironnement();
+        this.environnement.initialise(this);
+
+        for (this.batchCount = 0; batchCount < this.settings.getLocalScopeKeys().size(); batchCount++) {
+            Console.info("Batch %s started", this.getBatchCount() + 1);
+            this.onBatchStarted.forEach(b -> b.handle(this));
+
+            learningAlgorithm = generateLearningAlgorithm();
+            while (!this.environnement.isFinished()) {
+                learningAlgorithm.cycle(environnement);
+            }
+
+
+        }
     }
 
-    private Simulation generateSimulation() {
+    private Environnement generateEnvironnement() {
+        Class<? extends Environnement> environnementClass = (Class<? extends Environnement>) settings.get(Settings.GLOBAL_SCOPE, LAOP.KEY_ENVIRONNEMENT_CLASS);
 
-        Class<? extends LearningAlgorithm> learningAlgo = (Class<? extends LearningAlgorithm>) settings.get(this.getCurrentScope(), LAOP.KEY_LEARNING_CLASS);
-
-        Class<? extends Simulation> simulationClass = learningAlgo.getDeclaredAnnotation(LearningAnotation.class).simulation();
         try {
-            Constructor<? extends Simulation> simulationConstructor = simulationClass.getConstructor(SimulationEngine.class);
-            return simulationConstructor.newInstance(this);
-        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            return environnementClass.newInstance();
+        } catch (IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
 
-        return new GenerationBasedSimulation(this);
+        return new GenerationBasedEnvironnement();
     }
 
 
@@ -97,15 +111,17 @@ public class SimulationEngine {
 
 
 
-    CarController generateCurrentNetwork() {
+    <T extends CarController> T generateCurrentNetwork() {
         Class<? extends CarController> carClass = (Class<? extends CarController>) settings.get(this.getCurrentScope(), LAOP.KEY_NETWORK_CLASS);
 
         try {
-            CarController carController = carClass.newInstance();
+            T carController = (T) carClass.newInstance();
+
             try{
                 carController.init(this.getSettings());
+            }catch(Exception e){
+                e.printStackTrace();
             }
-            catch (AbstractMethodError e){}
 
             if(carController instanceof ManualCarController)
                 ((ManualCarController) carController).configureListeners(this.mainScene);
@@ -115,7 +131,7 @@ public class SimulationEngine {
             e.printStackTrace();
         }
 
-        return new ManualCarController();
+        return (T) new ManualCarController();
     }
 
     LearningAlgorithm<? extends CarController> generateLearningAlgorithm() {
@@ -150,27 +166,27 @@ public class SimulationEngine {
         this.mainScene = mainScene;
     }
 
-    public AbstractMap getMap() {
-        return map;
-    }
-
     public LockedSetting getSettings() {
         return this.settings.lock(this.getCurrentScope());
     }
 
-    public Simulation getSimulation() {
-        return currentSimulation;
+    public Environnement getEnvironnement() {
+        return this.environnement;
     }
 
     public void pause() {
-        this.currentSimulation.pause();
+//        this.environnement;
     }
 
     private String getCurrentScope() {
-    	return this.settings.getLocalScopeKeys().get(this.currentScopeIndex);
+    	return this.settings.getLocalScopeKeys().get(this.batchCount);
     }
 
     public Stage getMainScene() {
         return mainScene;
+    }
+
+    public LearningAlgorithm getCurrentLearning() {
+        return learningAlgorithm;
     }
 }

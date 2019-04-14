@@ -1,8 +1,10 @@
 package org.lrima.laop.network.concreteNetworks;
 
+import org.lrima.laop.network.carcontrollers.CarController;
 import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
 import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.settings.LockedSetting;
+import org.lrima.laop.simulation.SimulationEngine;
 
 /**
  * An implementation of the NEAT algorithm. See paper here : http://nn.cs.utexas.edu/downloads/papers/stanley.ec02.pdf
@@ -19,10 +21,6 @@ public class NEAT implements GeneticNeuralNetwork {
         return this;
     }
 
-    @Override
-    public void init(LockedSetting settings) {
-
-    }
 
     @Override
     public void setFitness(double fitness) {
@@ -36,10 +34,16 @@ public class NEAT implements GeneticNeuralNetwork {
 
     @Override
     public CarControls control(double... sensorValues) {
-
-
-
-
         return new CarControls(1, 0, 0);
+    }
+
+    @Override
+    public void init(LockedSetting lockedSetting) {
+
+    }
+
+    @Override
+    public <T extends CarController> T copy() {
+        return null;
     }
 }

@@ -18,15 +18,6 @@ public class GenerationData {
 		this.generationNumber = generationNumber;
 	}
 	
-	public void setAverageFitness(ArrayList<GeneticNeuralNetwork> cars) {
-		double totalFitness = 0;
-		for(GeneticNeuralNetwork car : cars) {
-			totalFitness += car.getFitness();
-		}
-		
-		this.averageFitness = totalFitness / cars.size();
-	}
-	
 	/**
 	 * @return the average fitness score of the generation
 	 */
@@ -36,5 +27,9 @@ public class GenerationData {
 	
 	public int getGenerationNumber() {
 		return this.generationNumber;
+	}
+
+	public void setAverageFitness(double averageFitness) {
+		this.averageFitness = averageFitness;
 	}
 }
