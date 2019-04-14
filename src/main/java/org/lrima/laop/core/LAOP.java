@@ -190,8 +190,8 @@ public class LAOP {
     /** Constant <code>KEY_NUMBER_OF_CARS="NUMBER OF CARS"</code> */
     public static final String KEY_NUMBER_OF_CARS = "NUMBER OF CARS";
 
-    /** Constant <code>DEFAULT_TIME_LIMIT=100</code> */
-    public static final int DEFAULT_TIME_LIMIT = 100;
+    /** Constant <code>DEFAULT_TIME_LIMIT=3000</code> */
+    public static final int DEFAULT_TIME_LIMIT = 3000;
     /** Constant <code>KEY_TIME_LIMIT="TIME LIMIT"</code> */
     public static final String KEY_TIME_LIMIT = "TIME LIMIT";
 

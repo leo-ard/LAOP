@@ -34,7 +34,6 @@ import javafx.beans.property.SimpleBooleanProperty;
  * @author Léonard
  */
 public class GenerationBasedEnvironnement implements Environnement, Runnable {
-    private static final int TIME_LIMIT = 300;
     private int simulationCount = 1;
     private int generationCount = 1;
 
@@ -129,7 +128,7 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
         }
         else{
             try {
-                Thread.sleep(10);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -143,7 +142,7 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
     @Override
     public void run() {
         ArrayList<? extends CarController> array = null;
-        while(!finished){
+        while(parallelThreadAlive){
             System.out.println("Simulation 1");
             simulationEngine.getBuffer().clear();
 
@@ -154,6 +153,7 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
 
             parallelPhysicEngine = configureSimulation(array);
             parallelPhysicEngine.setBuffer(this.simulationEngine.getBuffer());
+            parallelPhysicEngine.setAddToBuffer(false);
             parallelPhysicEngine.setRealTime(true);
 
             parallelPhysicEngine.run();
@@ -187,6 +187,10 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
                 //FIRE END LISTENER
                 this.finished = true;
                 this.currentSimulationData = new SimulationData();
+                this.parallelThreadAlive = false;
+                this.parallelThread = null;
+                this.simulationCount = 1;
+                this.generationCount = 1;
             }
         } else {
             Console.info("Generation " + generationCount + " / " + maxGenerations + " completed");
@@ -208,7 +212,7 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
         });
 
         physicEngine.setFinishingConditions(PhysicEngine.ALL_CARS_DEAD);
-        physicEngine.setTimeLimit(TIME_LIMIT);
+        physicEngine.setTimeLimit((Integer) this.simulationEngine.getSettings().get(LAOP.KEY_TIME_LIMIT));
 
         physicEngine.getCars().addAll(generateCarObjects(cars.size(), (i) -> cars.get(i)));
 
@@ -251,7 +255,7 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
     		fitnesses[i] = this.cars.get(i).getFitness();
     	}
     	
-        GenerationData data = new GenerationData(this.generationCount, this.simulationCount, fitnesses);
+        GenerationData data = new GenerationData((int) this.physicEngine.getTime(), this.generationCount, this.simulationCount, fitnesses);
         data.setAverageFitness(NetworkUtils.average(cars));
 
         return data;

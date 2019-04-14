@@ -141,7 +141,7 @@ public class DL4J extends ManualCarController implements DL4JNN {
                 .weightInit(WeightInit.XAVIER)
                 .activation(Activation.RELU)
                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
-                .updater(new Sgd(0.1))
+                .updater(new Sgd(0.03))
                 .list()
                 .layer(0, new DenseLayer.Builder().nIn(5).nOut(3).build())
                 .layer(1, new DenseLayer.Builder().nOut(10).build())
@@ -196,7 +196,8 @@ public class DL4J extends ManualCarController implements DL4JNN {
     public <T extends CarController> T copy() {
         DL4J dl4J = new DL4J();
 
-        dl4J.network = this.network.clone();
+        dl4J.network = this.network;
+        dl4J.disableHumanControl();
         return (T) dl4J;
     }
 

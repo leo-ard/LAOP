@@ -19,13 +19,15 @@ public class GeneticLearning implements LearningAlgorithm<GeneticNeuralNetwork> 
     @Override
     public ArrayList<GeneticNeuralNetwork> learn(ArrayList<GeneticNeuralNetwork> cars) {
         //sort by best-fitness
-        cars = (ArrayList<GeneticNeuralNetwork>) cars.stream()
-                .sorted((gn1, gn2)-> (int) (gn2.getFitness()-gn1.getFitness()))
-                .collect(Collectors.toList());
+        try{
+            cars = (ArrayList<GeneticNeuralNetwork>) cars.stream()
+                    .sorted((gn1, gn2)-> (int) (gn2.getFitness()-gn1.getFitness()))
+                    .collect(Collectors.toList());
+        }catch(IllegalArgumentException e){
+            e.printStackTrace();
+        }
 
         double bestFitness = cars.get(0).getFitness();
-
-        System.out.println(bestFitness);
 
         //Keep only 50% best cars
         final int initialNumberOfCar = cars.size();

@@ -39,14 +39,6 @@ public class PhysicEngine {
         return true;
     };
 
-    public static Function<PhysicEngine, Boolean> TIME_LIMIT(int iterationLimit){
-        return (physic) -> {
-            if (physic.getCurrentIteration() > iterationLimit)
-                return false;
-            return true;
-        };
-    };
-
     static public final double DELTA_T = 0.05;
     public static final double GRAVITY = 9.8;
 
@@ -61,11 +53,13 @@ public class PhysicEngine {
     private AbstractMap map;
 
     private int currentIteration= 0;
-    private int timeLimit = 300;
+    private int timeLimit;
+    private long time;
 
     private SimulationBuffer simulationBuffer;
     private boolean realTime;
     private Function<PhysicEngine, Boolean> finishingCondition;
+    private boolean addToBuffer;
 
 
     /**
@@ -81,6 +75,7 @@ public class PhysicEngine {
         this.map = map;
         
         this.realTime = false;
+        this.addToBuffer = true;
     }
 
 
@@ -92,6 +87,7 @@ public class PhysicEngine {
         while(running){
             if(!this.pause) {
                 try {
+                    long dt = System.currentTimeMillis();
                     this.nextStep();
                     this.checkCollision();
 
@@ -102,8 +98,13 @@ public class PhysicEngine {
                         running = false;
 
                     this.currentIteration++;
+                    dt = System.currentTimeMillis() - dt;
+                    time += PhysicEngine.DELTA_T * 1000;
+                    System.out.println(time);
                     if(this.realTime){
-                        Thread.sleep((int)(PhysicEngine.DELTA_T*1000.0));
+                        int sleepTime = (int)(PhysicEngine.DELTA_T*1000.0 - dt);
+                        if(sleepTime <= 0) sleepTime = 1;
+                        Thread.sleep(sleepTime);
                     }
                     else
                         Thread.sleep(1);
@@ -122,13 +123,19 @@ public class PhysicEngine {
      */
     private void saveCarsState() {
     	if(this.simulationBuffer != null) {
-	    	SimulationSnapshot snapshot = new SimulationSnapshot();
+	    	if(addToBuffer){
+                SimulationSnapshot snapshot = new SimulationSnapshot();
+                for(AbstractCar car : this.cars) {
+                    snapshot.addCar(new CarData(car));
+                }
 
-	    	for(AbstractCar car : this.cars) {
-	    		snapshot.addCar(new CarData(car));
-	    	}
-	    	
-	    	this.simulationBuffer.addSnapshot(snapshot);
+                this.simulationBuffer.addSnapshot(snapshot);
+            }
+	    	else{
+	    	    for (AbstractCar car : cars) {
+                    this.simulationBuffer.insetLast(new CarData(car));
+                }
+            }
     	}
     }
 
@@ -227,5 +234,17 @@ public class PhysicEngine {
 
     public void setTimeLimit(int timeLimit) {
         this.timeLimit = timeLimit;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public boolean isAddToBuffer() {
+        return addToBuffer;
+    }
+
+    public void setAddToBuffer(boolean addToBuffer) {
+        this.addToBuffer = addToBuffer;
     }
 }

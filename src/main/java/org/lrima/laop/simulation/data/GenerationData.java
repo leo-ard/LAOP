@@ -15,11 +15,13 @@ public class GenerationData {
     private int simulationNumber;
     private double averageFitness;
     private double[] fitnesses;
+    private int time;
 
-	public GenerationData(int generationNumber, int simulationNumber, double[] fitnesses) {
+	public GenerationData(int time, int generationNumber, int simulationNumber, double[] fitnesses) {
 		this.generationNumber = generationNumber;
 		this.simulationNumber = simulationNumber;
 		this.fitnesses = fitnesses;
+		this.time = time;
 	}
 	
 	/**
@@ -39,7 +41,8 @@ public class GenerationData {
 	
 	public String getCsvLine() {
 		String start = 	this.simulationNumber + "," +
-						this.generationNumber + ",";
+						this.generationNumber + "," +
+						this.time + ",";
 		
 		String fitnessesString = "";
 		
