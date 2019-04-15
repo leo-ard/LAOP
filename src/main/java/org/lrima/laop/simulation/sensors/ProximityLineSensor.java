@@ -49,7 +49,6 @@ public class ProximityLineSensor implements Sensor, LineCollidable {
     public void collide(StaticLineObject line) {
         float[] v = MathUtils.segmentIntersection(x1, y1, x2, y2, line.getX1(), line.getY1(), line.getX2(), line.getY2());
 
-        //TODO : NE MARCHE PAS
         if(v!=null){
             float x = v[0] - x1;
             float y = v[1] - y1;

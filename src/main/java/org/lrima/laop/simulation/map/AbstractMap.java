@@ -4,6 +4,7 @@ import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+import javafx.scene.canvas.GraphicsContext;
 import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.physic.staticobjects.StaticLineObject;
 import org.lrima.laop.physic.staticobjects.StaticObject;
@@ -83,5 +84,9 @@ public abstract class AbstractMap {
 	 */
 	public ArrayList<StaticLineObject> getLines(){
 		return this.lines;
+	}
+
+    public void draw(GraphicsContext gc){
+		lines.forEach(line -> line.draw(gc));
 	}
 }

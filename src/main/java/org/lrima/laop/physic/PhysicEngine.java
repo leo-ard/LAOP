@@ -1,26 +1,16 @@
 package org.lrima.laop.physic;
 
-import java.awt.geom.Area;
 import java.util.ArrayList;
 
 import org.lrima.laop.network.carcontrollers.CarController;
-import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
-import org.lrima.laop.network.nn.NeuralNetwork;
 import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.physic.concreteObjects.SimpleCar;
-import org.lrima.laop.physic.staticobjects.StaticLineObject;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.simulation.buffer.SimulationSnapshot;
 import org.lrima.laop.simulation.data.CarData;
 import org.lrima.laop.simulation.map.AbstractMap;
-import org.lrima.laop.simulation.map.LineCollidable;
 import org.lrima.laop.utils.Actions.Action;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import org.lrima.laop.utils.Actions.Procedure;
-
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -29,7 +19,7 @@ import java.util.stream.Collectors;
  * @author Clement Bisaillon and Léonard Oest OLeary
  */
 public class PhysicEngine {
-	
+
     public static Function<PhysicEngine, Boolean> ALL_CARS_DEAD = (physicEngine) -> {
         for (AbstractCar abstractCar : physicEngine.getCars()) {
             if(!abstractCar.isDead()){
@@ -79,7 +69,7 @@ public class PhysicEngine {
         this.cars = new ArrayList<>();
         this.onPhysicEngineFinishOnce = new ArrayList<>();
         this.map = map;
-        
+
         this.realTime = false;
     }
 
@@ -92,7 +82,7 @@ public class PhysicEngine {
         while(running){
             if(!this.pause) {
                 try {
-                    this.nextStep();
+//                    this.nextStep();
                     this.checkCollision();
 
                     //save the car's state in the buffer
@@ -112,10 +102,8 @@ public class PhysicEngine {
                 }
             }
         }
-
-
     }
-    
+
     /**
      * Save the state of each cars in a simulation snapshot then
      * adds it to the simulation buffer
@@ -127,7 +115,7 @@ public class PhysicEngine {
 	    	for(AbstractCar car : this.cars) {
 	    		snapshot.addCar(new CarData(car));
 	    	}
-	    	
+
 	    	this.simulationBuffer.addSnapshot(snapshot);
     	}
     }
@@ -135,11 +123,11 @@ public class PhysicEngine {
     /**
      * Move the concreteObjects in the simulation
      */
-    private void nextStep(){
-        for (AbstractCar car : cars) {
-            car.nextStep();
-        }
-    }
+//    private void nextStep(){
+//        for (AbstractCar car : cars) {
+//            car.nextStep();
+//        }
+//    }
 
     /**
      * Check if there are collisions.
@@ -194,8 +182,8 @@ public class PhysicEngine {
     public void setOnStep(Action<PhysicEngine> onStep){
         this.onStep.add(onStep);
     }
-    
-    
+
+
 
     /**
      * @return The list of cars in the physic engine
@@ -204,14 +192,14 @@ public class PhysicEngine {
     	return this.cars;
     }
 
-    public <T extends CarController> ArrayList<T> extractNetworks() {
-        return (ArrayList<T>) this.cars.stream().map(AbstractCar::getController).collect(Collectors.toCollection(ArrayList::new));
-    }
+//    public <T extends CarController> ArrayList<T> extractNetworks() {
+////        return (ArrayList<T>) this.cars.stream().map(AbstractCar::getController).collect(Collectors.toCollection(ArrayList::new));
+//    }
 
     public boolean getPause() {
         return pause;
     }
-    
+
 
     public void setRealTime(boolean value) {
         this.realTime = value;

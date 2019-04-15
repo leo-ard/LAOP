@@ -17,6 +17,7 @@ import org.lrima.laop.utils.Actions.Action;
 import javafx.stage.Stage;
 
 public class SimulationEngine implements Runnable{
+    public static Stage mainScene;
     private SimulationBuffer simulationBuffer;
     private Settings settings;
 
@@ -24,8 +25,6 @@ public class SimulationEngine implements Runnable{
 
     ArrayList<Action<SimulationEngine>> onBatchStarted;
     ArrayList<Action<SimulationEngine>> onEnd;
-
-    private Stage mainScene;
 
     
     private ResultData data;
@@ -72,22 +71,19 @@ public class SimulationEngine implements Runnable{
     @Override
     public void run() {
         this.environnement = generateEnvironnement();
-        this.environnement.initialise(this);
+        this.environnement.init(this);
 
+        //train
         for (this.batchCount = 0; batchCount < this.settings.getLocalScopeKeys().size(); batchCount++) {
             Console.info("Batch %s started", this.getBatchCount() + 1);
             this.onBatchStarted.forEach(b -> b.handle(this));
 
             learningAlgorithm = generateLearningAlgorithm();
-            while (!this.environnement.isFinished()) {
-                learningAlgorithm.cycle(environnement);
-            }
-           
-            this.data.addData(this.settings.getLocalScopeKeys().get(batchCount), this.environnement.getBatchData());
-            
-            environnement.setFinished(false);
+            learningAlgorithm.train(environnement);
+
+//            this.data.addData(this.settings.getLocalScopeKeys().get(batchCount), this.environnement.getBatchData());
         }
-        
+
         this.onEnd.forEach((a) -> a.handle(this));
     }
 
@@ -100,7 +96,7 @@ public class SimulationEngine implements Runnable{
             e.printStackTrace();
         }
 
-        return new GenerationBasedEnvironnement();
+        return new BetterEnvironnement();
     }
 
 
@@ -133,7 +129,7 @@ public class SimulationEngine implements Runnable{
         return (T) new ManualCarController();
     }
 
-    LearningAlgorithm<? extends CarController> generateLearningAlgorithm() {
+    LearningAlgorithm generateLearningAlgorithm() {
         Class<? extends LearningAlgorithm> learningClass = (Class<? extends LearningAlgorithm>) settings.get(this.getCurrentScopeName(), LAOP.KEY_LEARNING_CLASS);
 
         try {

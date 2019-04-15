@@ -38,11 +38,9 @@ public class DL4J extends ManualCarController implements DL4JNN {
 
 
     public CarControls control(double... captorValues) {
-        if(disableHumanControls){
+        if(disableHumanControls) {
             takeOverMode = MODE.AI_CONTROL;
-        }else
-            takeOverMode = MODE.DIRECT_INPUT;
-
+        }
 
         if(oldTakeOverMode != takeOverMode) {
             System.out.println("SWITCH TO " + takeOverMode);
@@ -145,7 +143,7 @@ public class DL4J extends ManualCarController implements DL4JNN {
         }
     }
 
-    public void init(LockedSetting settings) {
+    public void init() {
         MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
                 .weightInit(WeightInit.XAVIER)
                 .activation(Activation.RELU)

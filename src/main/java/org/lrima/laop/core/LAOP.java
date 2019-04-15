@@ -9,11 +9,10 @@ import org.lrima.laop.network.concreteNetworks.DL4J;
 import org.lrima.laop.network.concreteNetworks.FUCONN;
 import org.lrima.laop.network.concreteNetworks.NEAT;
 import org.lrima.laop.plugin.PluginLoader;
-import org.lrima.laop.settings.option.OptionClass;
-import org.lrima.laop.settings.Scope;
 import org.lrima.laop.settings.Settings;
+import org.lrima.laop.settings.option.OptionClass;
+import org.lrima.laop.simulation.BetterEnvironnement;
 import org.lrima.laop.simulation.Environnement;
-import org.lrima.laop.simulation.GenerationBasedEnvironnement;
 import org.lrima.laop.simulation.SimulationEngine;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.ui.stage.MainSimulationStage;
@@ -53,7 +52,7 @@ public class LAOP {
         neuralNetworksClasses.add(DL4J.class);
 
         environnements = new ArrayList<>();
-        environnements.add(GenerationBasedEnvironnement.class);
+        environnements.add(BetterEnvironnement.class);
 
         //Load the algorithm's jar
         PluginLoader.addDir("algos/");
@@ -213,5 +212,5 @@ public class LAOP {
     /** Constant <code>KEY_ENVIRONNEMENT_CLASS = "ENVIRONNEMENT_CLASS"</code> */
     public static final String KEY_ENVIRONNEMENT_CLASS = "ENVIRONNEMENT_CLASS";
     /** Constant <code>DEFAULT_ENVIRONNEMENT_CLASS</code> */
-    public static final Class<? extends Environnement> DEFAULT_ENVIRONNEMENT_CLASS = GenerationBasedEnvironnement.class;
+    public static final Class<? extends Environnement> DEFAULT_ENVIRONNEMENT_CLASS = BetterEnvironnement.class;
 }

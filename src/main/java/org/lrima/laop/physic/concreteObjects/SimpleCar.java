@@ -1,7 +1,5 @@
 package org.lrima.laop.physic.concreteObjects;
 
-import org.lrima.laop.network.carcontrollers.CarController;
-import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
 import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.abstractObjects.Box;
@@ -21,7 +19,6 @@ import java.util.ArrayList;
  * @author Léonard
  */
 public class SimpleCar extends Box {
-    private CarController carController;
     double wheelDirection;
     final double RANGE = -Math.PI/4;
     private ArrayList<Sensor> sensors;
@@ -33,25 +30,22 @@ public class SimpleCar extends Box {
      * Creates a new car with position <code>position</code> and controller <code>controller</code>
      *
      * @param position the position of the car
-     * @param controller the consoller that the car must use
      */
-    public SimpleCar(AbstractMap map, Vector2d position, CarController controller) {
+    public SimpleCar(AbstractMap map, Vector2d position) {
         super(map, position, 2000, 30, 10);
 
-        carController = controller;
         wheelDirection = 0;
         this.sensors = new ArrayList<>();
         this.collidableSensors = new ArrayList<>();
     }
 
     @Override
-    public void nextStep() {
+    public void nextStep(CarControls carControls) {
         if(this.dead) return;
         this.forces = new ArrayList<>();
 
         //convert sensor into sensor controls
         double[] sensorValues = this.sensors.stream().mapToDouble(sensor -> sensor.getValue()).toArray();
-        CarControls carControls = carController.control(sensorValues);
 
         this.forces.add(PhysicUtils.accelFromBackWeels(carControls.getAcceleration(), rotation, wheelDirection, RANGE));
         this.forces.get(0).setTag("Accel from back");
@@ -68,11 +62,15 @@ public class SimpleCar extends Box {
 
 //        this.angularAccel = PhysicUtils.angularAccel(this.wheelDirection, this.velocity);
 //        this.angularAccel = Math.min(Math.max(RANGE, angularAccel), -RANGE);
-        this.angularVelocity = this.velocity.modulus()*this.wheelDirection*PhysicEngine.DELTA_T * 0.03;
+        this.angularVelocity = this.velocity.modulus()*this.wheelDirection* PhysicEngine.DELTA_T * 0.03;
         this.rotation += angularVelocity;
 
         this.velocity = this.velocity.add(acceleration.multiply(PhysicEngine.DELTA_T));
         this.position = this.position.add(this.velocity.multiply(PhysicEngine.DELTA_T));
+    }
+
+    public ArrayList<Sensor> getSensors() {
+        return sensors;
     }
 
     @Override
@@ -94,10 +92,6 @@ public class SimpleCar extends Box {
         }
 
         return list;
-    }
-
-    public CarController getController() {
-        return carController;
     }
 
     /**

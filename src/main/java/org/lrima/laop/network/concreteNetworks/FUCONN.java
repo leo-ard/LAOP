@@ -40,15 +40,19 @@ public class FUCONN implements GeneticNeuralNetwork {
 
     @Override
     public CarControls control(double... captorValues) {
-        //double[] data = new double[]{RandomUtils.getDouble(0, 1), 0, RandomUtils.getDouble(-1, 1)};
+//        double[] data = new double[]{RandomUtils.getDouble(0, 1), 0, RandomUtils.getDouble(-1, 1)};
 //        double[] data = neuralNetwork.predict(captorValues);
 
         return new CarControls(neuralNetwork.predict(captorValues));
     }
 
     @Override
-    public void init(LockedSetting settings) {
-        neuralNetwork = new NeuralNetwork((Integer) settings.get(LAOP.KEY_NUMBER_OF_SENSORS));
+    public void init(LockedSetting lockedSetting) {
+
+    }
+
+    public void init() {
+        neuralNetwork = new NeuralNetwork(5);
         neuralNetwork.addDenseLayer(2, MathUtils.LOGISTIC);
         neuralNetwork.addDenseLayer(3, MathUtils.LOGISTIC);
     }

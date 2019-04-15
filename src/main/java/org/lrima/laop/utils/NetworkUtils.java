@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
 
 public class NetworkUtils {
 
-    public static BiFunction<Environnement, AbstractCar, Double> RANGE_FITNESS = ((env, car) -> {
-        Point2D carPos = new Point2D.Double(car.getPosition().getX(), car.getPosition().getY());
-        return env.getMap().distanceFromStart(carPos);
-    });
+//    public static BiFunction<Environnement, AbstractCar, Double> RANGE_FITNESS = ((env, car) -> {
+//        Point2D carPos = new Point2D.Double(car.getPosition().getX(), car.getPosition().getY());
+//        return env.getMap().distanceFromStart(carPos);
+//    });
 
     public static double[] flatArray(double[][][] array) {
         ArrayList<Double> all = new ArrayList<>();

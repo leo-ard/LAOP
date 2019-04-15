@@ -1,17 +1,14 @@
 package org.lrima.laop.physic.abstractObjects;
 
 import org.lrima.laop.network.carcontrollers.CarController;
+import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.physic.PhysicEngine;
-import org.lrima.laop.physic.staticobjects.StaticLineObject;
-import org.lrima.laop.physic.staticobjects.StaticObject;
-import org.lrima.laop.physic.staticobjects.StaticObjectType;
 import org.lrima.laop.simulation.map.AbstractMap;
 import org.lrima.laop.simulation.map.LineCollidable;
 import org.lrima.laop.simulation.sensors.Sensor;
 import org.lrima.laop.simulation.sensors.data.SensorData;
 import org.lrima.laop.utils.math.Vector2d;
 
-import java.awt.geom.Area;
 import java.util.ArrayList;
 import java.util.function.Function;
 
@@ -215,8 +212,9 @@ public abstract class AbstractCar implements LineCollidable {
     /**
      * Calculates and set the position of the object and all its children depending on
      * the sum of the forces applied to them
+     * @param carControls
      */
-    public abstract void nextStep();
+    public abstract void nextStep(CarControls carControls);
 
     /**
      * @return the center of the object
@@ -244,8 +242,6 @@ public abstract class AbstractCar implements LineCollidable {
      * @return ArrayList of sensor data
      */
     public abstract ArrayList<SensorData> getSensorsData();
-
-    public abstract CarController getController();
 
     public double getFitness(){
         return this.fitness;
