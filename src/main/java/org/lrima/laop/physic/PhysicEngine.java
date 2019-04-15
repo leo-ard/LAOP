@@ -100,7 +100,6 @@ public class PhysicEngine {
                     this.currentIteration++;
                     dt = System.currentTimeMillis() - dt;
                     time += PhysicEngine.DELTA_T * 1000;
-                    System.out.println(time);
                     if(this.realTime){
                         int sleepTime = (int)(PhysicEngine.DELTA_T*1000.0 - dt);
                         if(sleepTime <= 0) sleepTime = 1;

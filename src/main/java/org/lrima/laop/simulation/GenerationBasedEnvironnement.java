@@ -47,7 +47,7 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
     private boolean finished;
 
     private SimulationBuffer buffer;
-    private AbstractMap map;
+    private MazeMap map;
     private SimulationEngine simulationEngine;
 
     private BatchData currentBatchData;
@@ -103,9 +103,12 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
     @Override
     public void parallelEvaluation(Consumer<ArrayList<? extends CarController>> disable) {
         if(parallelThread == null){
-//            this.buffer = new SimulationBuffer();
             parallelThread = new Thread(this);
             parallelThread.start();
+        }
+
+        if(generationCount == 1){
+            this.map.randomize();
         }
 
         System.out.println("Simulation 2");
@@ -149,11 +152,12 @@ public class GenerationBasedEnvironnement implements Environnement, Runnable {
             if(array == null){
                 array = new ArrayList<>();
                 array.add(this.simulationEngine.generateCurrentNetwork());
-            };
+            }
 
             parallelPhysicEngine = configureSimulation(array);
             parallelPhysicEngine.setBuffer(this.simulationEngine.getBuffer());
             parallelPhysicEngine.setAddToBuffer(false);
+
             parallelPhysicEngine.setRealTime(true);
 
             parallelPhysicEngine.run();

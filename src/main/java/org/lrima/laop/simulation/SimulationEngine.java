@@ -33,9 +33,11 @@ public class SimulationEngine implements Runnable{
     private Environnement environnement;
 
     private Thread currentThread;
+    private SimulationBuffer displayBuffer;
 
     public SimulationEngine(SimulationBuffer simulationBuffer, Settings settings) {
         this.simulationBuffer = simulationBuffer;
+        displayBuffer = new SimulationBuffer();
         this.settings = settings;
         this.batchCount = 0;
 
@@ -195,5 +197,9 @@ public class SimulationEngine implements Runnable{
 
     public LearningAlgorithm getCurrentLearning() {
         return learningAlgorithm;
+    }
+
+    public SimulationBuffer getDisplayBuffer() {
+        return displayBuffer;
     }
 }

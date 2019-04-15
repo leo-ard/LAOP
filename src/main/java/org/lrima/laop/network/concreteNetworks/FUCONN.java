@@ -49,7 +49,7 @@ public class FUCONN implements GeneticNeuralNetwork {
     @Override
     public void init(LockedSetting settings) {
         neuralNetwork = new NeuralNetwork((Integer) settings.get(LAOP.KEY_NUMBER_OF_SENSORS));
-        neuralNetwork.addDenseLayer(2, MathUtils.LOGISTIC);
+        neuralNetwork.addDenseLayer(4, MathUtils.LOGISTIC);
         neuralNetwork.addDenseLayer(3, MathUtils.LOGISTIC);
     }
 

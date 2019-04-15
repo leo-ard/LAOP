@@ -29,6 +29,7 @@ public class DL4J extends ManualCarController implements DL4JNN {
     private MultiLayerNetwork network;
     private INDArray features;
     private INDArray labels;
+    private int learning = 0;
 
     private MODE takeOverMode = MODE.WAIT_FOR_INPUT;
     private MODE oldTakeOverMode = MODE.AI_CONTROL;
@@ -38,8 +39,13 @@ public class DL4J extends ManualCarController implements DL4JNN {
 
 
     public CarControls control(double... captorValues) {
-        if(disableHumanControls)
+        if(disableHumanControls){
+            System.out.println(learning);
             takeOverMode = MODE.AI_CONTROL;
+        }else
+            takeOverMode = MODE.DIRECT_INPUT;
+
+
         if(oldTakeOverMode != takeOverMode) {
             System.out.println("SWITCH TO " + takeOverMode);
         }
@@ -66,17 +72,19 @@ public class DL4J extends ManualCarController implements DL4JNN {
             INDArray expected = Nd4j.create(MathUtils.convertToDoubleArray(this.controls));
             this.addToData(captor, expected);
             network.fit(captor, expected);
+            learning++;
         }
         else if(tempMode == MODE.AI_CONTROL){
             double[] output = network.output(captor).toDoubleVector();
-            carControls = super.getControls(MathUtils.convertToIntArray(output));
+
+            carControls = super.getControls(output);
         }
         else if(tempMode == MODE.LEARNING_FROM_DIRECT_INPUT){
             INDArray expected = Nd4j.create(this.controls);
             network.fit(captor, expected);
 
             double[] output = network.output(captor).toDoubleVector();
-            carControls = super.getControls(MathUtils.convertToIntArray(output));
+            carControls = super.getControls(output);
         }
         if(tempMode == MODE.RECORD_DATA){
             INDArray expected = Nd4j.create(MathUtils.convertToDoubleArray(this.controls));
@@ -119,10 +127,15 @@ public class DL4J extends ManualCarController implements DL4JNN {
 
         this.oldTakeOverMode = takeOverMode;
 
-//        System.out.println(carControls);
+        if(takeOverMode == MODE.AI_CONTROL)
+            System.out.println(carControls);
 
         return carControls;
 
+    }
+
+    public void setTakeOverMode(MODE takeOverMode) {
+        this.takeOverMode = takeOverMode;
     }
 
     private void addToData(INDArray feature, INDArray label){
@@ -138,13 +151,13 @@ public class DL4J extends ManualCarController implements DL4JNN {
 
     public void init(LockedSetting settings) {
         MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
-                .weightInit(WeightInit.XAVIER)
+                .weightInit(WeightInit.NORMAL)
                 .activation(Activation.RELU)
                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
-                .updater(new Sgd(0.03))
+                .updater(new Sgd(0.1))
                 .list()
                 .layer(0, new DenseLayer.Builder().nIn(5).nOut(3).build())
-                .layer(1, new DenseLayer.Builder().nOut(10).build())
+                .layer(1, new DenseLayer.Builder().nOut(3).build())
                 .layer(2, new OutputLayer.Builder().nOut(4).lossFunction(LossFunctions.LossFunction.SQUARED_LOSS).build())
                 .backprop(true)
                 .build();
@@ -195,9 +208,9 @@ public class DL4J extends ManualCarController implements DL4JNN {
     @Override
     public <T extends CarController> T copy() {
         DL4J dl4J = new DL4J();
-
-        dl4J.network = this.network;
-        dl4J.disableHumanControl();
+        dl4J.network = this.network.clone();
+        dl4J.disableHumanControls = true;
+        dl4J.learning = learning;
         return (T) dl4J;
     }
 

@@ -7,6 +7,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import org.lrima.laop.settings.LockedSetting;
 import org.lrima.laop.simulation.SimulationEngine;
+import org.lrima.laop.utils.MathUtils;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
@@ -75,20 +76,30 @@ public class ManualCarController implements CarController {
         throw new NotImplementedException();
     }
 
-    protected CarControls getControls(int[] inputValues){
+    protected CarControls getControls(int[] input){
+        return getControls(MathUtils.convertToDoubleArray(input));
+    }
+
+    protected CarControls getControls(double[] inputValues){
         CarControls controls = new CarControls();
 
         controls.setAcceleration(inputValues[0]);
-        controls.setBreak(inputValues[1]);
+        controls.setBreak(Math.round(inputValues[1]));
 
-        if(inputValues[2] == inputValues[3]){
-            controls.setRotation(0.5);
-        }
-        else if(inputValues[2] == 1){
-            controls.setRotation(1);
-        }else if(inputValues[3] == 1){
-            controls.setRotation(0);
-        }
+
+        controls.setRotation(0.5 + inputValues[2] *0.5 + inputValues[3] * -0.5);
+
+//        int left = (int) Math.round(inputValues[2]);
+//        int right = (int) Math.round(inputValues[3]);
+//
+//        if(left == right){
+//            controls.setRotation(0.5);
+//        }
+//        else if(left == 1){
+//            controls.setRotation(1);
+//        }else if(right == 1){
+//            controls.setRotation(0);
+//        }
 
 
         return controls;
