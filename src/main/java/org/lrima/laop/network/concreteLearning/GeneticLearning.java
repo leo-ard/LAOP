@@ -81,9 +81,9 @@ public class GeneticLearning implements LearningAlgorithm{
 
                 if(time > 300){
                     learn(geneticNN);
-                    env.reset(geneticNN.size());
                     time = 0;
                     env.evaluate(this);
+                    env.reset(geneticNN.size());
                 }
 
                 try {
@@ -94,8 +94,9 @@ public class GeneticLearning implements LearningAlgorithm{
             }
             time = 0;
             learn(geneticNN);
-            env.reset(geneticNN.size());
             env.evaluate(this);
+            env.reset(geneticNN.size());
+            System.out.println("FINISHED");
         }
 
 
