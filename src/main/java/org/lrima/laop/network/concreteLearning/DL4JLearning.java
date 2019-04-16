@@ -3,7 +3,7 @@ package org.lrima.laop.network.concreteLearning;
 import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.network.concreteNetworks.DL4J;
 import org.lrima.laop.physic.CarControls;
-import org.lrima.laop.physic.abstractObjects.AbstractCar;
+import org.lrima.laop.physic.SimpleCar;
 import org.lrima.laop.simulation.Agent;
 import org.lrima.laop.simulation.Environnement;
 import org.lrima.laop.simulation.LearningEngine;
@@ -51,7 +51,7 @@ public class DL4JLearning implements LearningAlgorithm {
     }
 
 
-    public void init(ArrayList<AbstractCar> cars) {
+    public void init(ArrayList<SimpleCar> cars) {
         cars.forEach(car -> car.addSensor(CarSensor.VELOCITY_SENSOR(car)));
     }
 }

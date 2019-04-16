@@ -1,20 +1,20 @@
 package org.lrima.laop.simulation.sensors;
 
-import org.lrima.laop.physic.abstractObjects.AbstractCar;
+import org.lrima.laop.physic.SimpleCar;
 import org.lrima.laop.simulation.sensors.data.SingleValueData;
 
 import java.util.function.Function;
 
 public class CarSensor implements Sensor{
-    public static CarSensor VELOCITY_SENSOR(AbstractCar abstractCar){
+    public static CarSensor VELOCITY_SENSOR(SimpleCar abstractCar){
         return new CarSensor(abstractCar, (car) -> car.getVelocity().modulus()/200.0);
     }
 
 
-    AbstractCar abstractCar;
-    Function<AbstractCar, Double> function;
+    SimpleCar abstractCar;
+    Function<SimpleCar, Double> function;
 
-    public CarSensor(AbstractCar abstractCar, Function<AbstractCar, Double> function) {
+    public CarSensor(SimpleCar abstractCar, Function<SimpleCar, Double> function) {
         this.abstractCar = abstractCar;
         this.function = function;
     }

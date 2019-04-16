@@ -3,7 +3,7 @@ package org.lrima.laop.simulation;
 import javafx.scene.canvas.GraphicsContext;
 import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.physic.CarControls;
-import org.lrima.laop.physic.concreteObjects.SimpleCar;
+import org.lrima.laop.physic.SimpleCar;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.simulation.buffer.SimulationSnapshot;
 import org.lrima.laop.simulation.data.CarData;
@@ -15,11 +15,12 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class BetterEnvironnement implements MultiAgentEnvironnement {
-    MazeMap mazeMap;
-    SimulationBuffer buffer;
-
-    ArrayList<SimpleCar> simpleCars;
-    boolean finished;
+    private MazeMap mazeMap;
+    private SimulationBuffer buffer;
+    private ArrayList<SimpleCar> simpleCars;
+    private boolean finished;
+    private final int MAX_CHANGE_MAP = 10;
+    private int changeMap = MAX_CHANGE_MAP;
 
     void BetterEnvironnement() {
         buffer = new SimulationBuffer();
@@ -52,11 +53,19 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
 
     @Override
     public ArrayList<Agent> reset(int numberOfCars) {
-        mazeMap = new MazeMap(10);
-        mazeMap.bake();
+        if(changeMap == MAX_CHANGE_MAP){
+            mazeMap = new MazeMap(10);
+            mazeMap.bake();
+            changeMap = 0;
+        }
+        else{
+            changeMap++;
+        }
+
         buffer.clear();
         ArrayList<Agent> agents = new ArrayList<>();
         simpleCars = generateCarObjects(numberOfCars);
+        finished = false;
 
         for (SimpleCar simpleCar : simpleCars) {
             mazeMap.collide(simpleCar);
@@ -72,7 +81,7 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
         ArrayList<SimpleCar> carObjects = new ArrayList<>();
         for(int i = 0 ; i < numberOfCars ; i++) {
             Point2D start = mazeMap.getStartPoint();
-            SimpleCar car = new SimpleCar(mazeMap, new Vector2d(start.getX(), start.getY()));
+            SimpleCar car = new SimpleCar(new Vector2d(start.getX(), start.getY()));
 
             double orientationIncrement = Math.PI / numberOfSensors;
             //Create the sensors and assign them to the car
@@ -111,10 +120,8 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
         Agent agent = reset();
         while(!this.isFinished()){
             CarControls carControls = learningAlgorithm.test(agent);
-
             Agent agent1 = this.step(carControls);
             this.render();
-            System.out.println(agent1.getReward());
         }
 
     }
