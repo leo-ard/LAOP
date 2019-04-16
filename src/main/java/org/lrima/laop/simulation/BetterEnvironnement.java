@@ -2,8 +2,7 @@ package org.lrima.laop.simulation;
 
 import javafx.scene.canvas.GraphicsContext;
 import org.lrima.laop.physic.CarControls;
-import org.lrima.laop.physic.abstractObjects.AbstractCar;
-import org.lrima.laop.physic.concreteObjects.SimpleCar;
+import org.lrima.laop.physic.SimpleCar;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.simulation.buffer.SimulationSnapshot;
 import org.lrima.laop.simulation.data.CarData;
@@ -72,7 +71,7 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
         ArrayList<SimpleCar> carObjects = new ArrayList<>();
         for(int i = 0 ; i < numberOfCars ; i++) {
             Point2D start = mazeMap.getStartPoint();
-            SimpleCar car = new SimpleCar(mazeMap, new Vector2d(start.getX(), start.getY()));
+            SimpleCar car = new SimpleCar(new Vector2d(start.getX(), start.getY()));
 
             double orientationIncrement = Math.PI / numberOfSensors;
             //Create the sensors and assign them to the car

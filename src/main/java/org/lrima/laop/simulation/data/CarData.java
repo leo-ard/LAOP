@@ -7,8 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.lrima.laop.physic.abstractObjects.AbstractCar;
-import org.lrima.laop.physic.concreteObjects.SimpleCar;
+import org.lrima.laop.physic.SimpleCar;
 import org.lrima.laop.ui.Drawable;
 import org.lrima.laop.ui.components.inspector.Inspectable;
 import org.lrima.laop.utils.math.Vector2d;

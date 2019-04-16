@@ -4,7 +4,6 @@ package org.lrima.laop.utils;
 import org.lrima.laop.network.carcontrollers.CarController;
 import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
 import org.lrima.laop.physic.CarControls;
-import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.simulation.Environnement;
 
 import java.awt.geom.Point2D;

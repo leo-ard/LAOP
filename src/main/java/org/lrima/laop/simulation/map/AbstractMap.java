@@ -5,7 +5,6 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import javafx.scene.canvas.GraphicsContext;
-import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.physic.staticobjects.StaticLineObject;
 import org.lrima.laop.physic.staticobjects.StaticObject;
 

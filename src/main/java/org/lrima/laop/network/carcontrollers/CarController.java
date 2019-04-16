@@ -1,7 +1,6 @@
 package org.lrima.laop.network.carcontrollers;
 
 import org.lrima.laop.physic.CarControls;
-import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.settings.LockedSetting;
 
 /**
