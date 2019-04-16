@@ -52,13 +52,7 @@ public class GeneticLearning implements LearningAlgorithm{
 
     @Override
     public void train(Environnement env1) {
-        MultiAgentEnvironnement env;
-        try{
-            env = (MultiAgentEnvironnement) env1;
-        }catch(Exception e){
-            e.printStackTrace();
-            return;
-        }
+        MultiAgentEnvironnement env = (MultiAgentEnvironnement) env1;
 
         geneticNN = new ArrayList<>();
 

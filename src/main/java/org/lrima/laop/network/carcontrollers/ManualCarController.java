@@ -6,7 +6,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import org.lrima.laop.settings.LockedSetting;
-import org.lrima.laop.simulation.SimulationEngine;
 import org.lrima.laop.utils.MathUtils;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 

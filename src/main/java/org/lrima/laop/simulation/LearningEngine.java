@@ -16,15 +16,15 @@ import org.lrima.laop.utils.Actions.Action;
 
 import javafx.stage.Stage;
 
-public class SimulationEngine implements Runnable{
+public class LearningEngine implements Runnable{
     public static Stage mainScene;
     private SimulationBuffer simulationBuffer;
     private Settings settings;
 
     private int batchCount;
 
-    ArrayList<Action<SimulationEngine>> onBatchStarted;
-    ArrayList<Action<SimulationEngine>> onEnd;
+    ArrayList<Action<LearningEngine>> onBatchStarted;
+    ArrayList<Action<LearningEngine>> onEnd;
 
     
     private ResultData data;
@@ -33,7 +33,9 @@ public class SimulationEngine implements Runnable{
 
     private Thread currentThread;
 
-    public SimulationEngine(SimulationBuffer simulationBuffer, Settings settings) {
+    public static double DELTA_T = 0.05;
+
+    public LearningEngine(SimulationBuffer simulationBuffer, Settings settings) {
         this.simulationBuffer = simulationBuffer;
         this.settings = settings;
         this.batchCount = 0;
@@ -141,11 +143,11 @@ public class SimulationEngine implements Runnable{
         return null;
     }
 
-    public void setOnBatchStarted(Action<SimulationEngine> onBatchFinished) {
+    public void setOnBatchStarted(Action<LearningEngine> onBatchFinished) {
         this.onBatchStarted.add(onBatchFinished);
     }
 
-    public void setOnEnd(Action<SimulationEngine> onEnd) {
+    public void setOnEnd(Action<LearningEngine> onEnd) {
         this.onEnd.add(onEnd);
     }
 

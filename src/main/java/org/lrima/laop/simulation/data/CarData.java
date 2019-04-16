@@ -5,12 +5,10 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.lrima.laop.physic.abstractObjects.AbstractCar;
-import org.lrima.laop.simulation.sensors.Sensor;
-import org.lrima.laop.simulation.sensors.data.SensorData;
+import org.lrima.laop.physic.concreteObjects.SimpleCar;
 import org.lrima.laop.ui.Drawable;
 import org.lrima.laop.ui.components.inspector.Inspectable;
 import org.lrima.laop.utils.math.Vector2d;
@@ -37,13 +35,13 @@ public class CarData implements Inspectable, Drawable {
     private ArrayList<Vector2d> forces;
     private final Color CAR_COLOR = new Color(32.0/255.0, 78.0/255.0, 95.0/255.0, 1);
     
-    private ArrayList<SensorData> sensors;
+    private ArrayList<Drawable> sensors;
 
     /**
      * Retrieve information from a car
      * @param car the car
      */
-    public CarData(AbstractCar car) {
+    public CarData(SimpleCar car) {
         this.x = car.getPosition().getX();
         this.y = car.getPosition().getY();
         this.width = car.getWidth();

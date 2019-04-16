@@ -1,7 +1,6 @@
 package org.lrima.laop.ui.components;
 
 import javafx.application.Platform;
-import org.lrima.laop.simulation.SimulationEngine;
 import org.lrima.laop.simulation.data.GenerationData;
 
 import javafx.geometry.Insets;

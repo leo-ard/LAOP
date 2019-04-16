@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import org.lrima.laop.simulation.SimulationEngine;
+import org.lrima.laop.simulation.LearningEngine;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.simulation.data.CarData;
 import org.lrima.laop.ui.components.inspector.InspectorPanel;
@@ -22,14 +22,14 @@ import javafx.scene.transform.NonInvertibleTransformException;
 
 
 /**
- * Class that draws the simulationEngine into the canvas according to the buffer
+ * Class that draws the learningEngine into the canvas according to the buffer
  * @author Léonard
  */
 public class SimulationDrawer{
     private Canvas canvas;
     private InspectorPanel inspector;
 
-    private SimulationEngine simulationEngine;
+    private LearningEngine learningEngine;
 
     private Affine affineTransform;
     private double mouseXPressed, mouseYPressed;
@@ -52,14 +52,14 @@ public class SimulationDrawer{
 
 
     /**
-     * Draws the simulationEngine into the canvas according to the SimulationEngine
+     * Draws the learningEngine into the canvas according to the LearningEngine
      *  @param canvas The canvas to draw on
-     * @param simulationEngine The SimulationEngine to take the information from
+     * @param learningEngine The LearningEngine to take the information from
      * @param inspector
      */
-    public SimulationDrawer(Canvas canvas, SimulationEngine simulationEngine, InspectorPanel inspector) {
+    public SimulationDrawer(Canvas canvas, LearningEngine learningEngine, InspectorPanel inspector) {
         this.canvas = canvas;
-        this.simulationEngine = simulationEngine;
+        this.learningEngine = learningEngine;
         this.affineTransform = new Affine();
         this.inspector = inspector;
 
@@ -79,7 +79,7 @@ public class SimulationDrawer{
         AnimationTimer animationTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                SimulationBuffer simulationBuffer = simulationEngine.getBuffer();
+                SimulationBuffer simulationBuffer = learningEngine.getBuffer();
                 int size = simulationBuffer.getSize();
                 //update slider
                 slider.setMax(size-1);
@@ -138,7 +138,7 @@ public class SimulationDrawer{
      * Draws the state of the cars at the specified time
      **/
     private void drawStep(){
-        if(this.simulationEngine.getBuffer().getSize() > 0) {
+        if(this.learningEngine.getBuffer().getSize() > 0) {
             this.inspector.update();
 	        GraphicsContext gc = canvas.getGraphicsContext2D();
 	
@@ -151,7 +151,7 @@ public class SimulationDrawer{
 	        gc.setTransform(this.affineTransform);
 
 	        //Draw the map
-	        simulationEngine.getEnvironnement().draw(gc);
+	        learningEngine.getEnvironnement().draw(gc);
 
             for(CarData car : currentCars) {
 	            car.draw(gc, inspector.getSelectedObject() == car);

@@ -13,7 +13,7 @@ import org.lrima.laop.settings.Settings;
 import org.lrima.laop.settings.option.OptionClass;
 import org.lrima.laop.simulation.BetterEnvironnement;
 import org.lrima.laop.simulation.Environnement;
-import org.lrima.laop.simulation.SimulationEngine;
+import org.lrima.laop.simulation.LearningEngine;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.ui.stage.MainSimulationStage;
 import org.lrima.laop.utils.ClassUtils;
@@ -134,14 +134,14 @@ public class LAOP {
     	//check if all the global scopes of the scopes are good
 
         SimulationBuffer simulationBuffer = new SimulationBuffer();
-        SimulationEngine simulationEngine = new SimulationEngine(simulationBuffer, this.settings);
+        LearningEngine learningEngine = new LearningEngine(simulationBuffer, this.settings);
 
         if(simulationDisplayMode == simulationDisplayMode.WITH_INTERFACE){
-            MainSimulationStage mainSimulationStage = new MainSimulationStage(simulationEngine);
+            MainSimulationStage mainSimulationStage = new MainSimulationStage(learningEngine);
             mainSimulationStage.show();
         }
 
-        simulationEngine.start();
+        learningEngine.start();
     }
 
     /**

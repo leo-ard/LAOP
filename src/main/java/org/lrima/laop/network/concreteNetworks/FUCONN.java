@@ -1,13 +1,10 @@
 package org.lrima.laop.network.concreteNetworks;
 
-import org.lrima.laop.core.LAOP;
 import org.lrima.laop.network.carcontrollers.CarController;
 import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
-import org.lrima.laop.network.nn.DenseLayer;
 import org.lrima.laop.network.nn.NeuralNetwork;
 import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.settings.LockedSetting;
-import org.lrima.laop.simulation.SimulationEngine;
 import org.lrima.laop.utils.MathUtils;
 import org.lrima.laop.utils.math.RandomUtils;
 

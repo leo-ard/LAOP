@@ -1,12 +1,9 @@
 package org.lrima.laop.physic.abstractObjects;
 
-import org.lrima.laop.network.carcontrollers.CarController;
 import org.lrima.laop.physic.CarControls;
-import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.simulation.map.AbstractMap;
 import org.lrima.laop.simulation.map.LineCollidable;
 import org.lrima.laop.simulation.sensors.Sensor;
-import org.lrima.laop.simulation.sensors.data.SensorData;
 import org.lrima.laop.utils.math.Vector2d;
 
 import java.util.ArrayList;
@@ -142,14 +139,6 @@ public abstract class AbstractCar implements LineCollidable {
     }
 
     /**
-     * Get the weight vector of this object based on the gravity of the java.physic engine
-     * @return the weight of the object
-     */
-    public double getWeight(){
-        return this.mass * PhysicEngine.GRAVITY;
-    }
-
-    /**
      * Get the direction of the physicable object
      * @return the direction
      */
@@ -235,13 +224,6 @@ public abstract class AbstractCar implements LineCollidable {
      * @return arrayList of sensors
      */
     public abstract ArrayList<LineCollidable> getCollidableSensors();
-
-    /**
-     * Returns a list of all the sensor data
-     *
-     * @return ArrayList of sensor data
-     */
-    public abstract ArrayList<SensorData> getSensorsData();
 
     public double getFitness(){
         return this.fitness;

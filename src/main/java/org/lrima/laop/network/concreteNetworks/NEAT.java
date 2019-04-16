@@ -4,7 +4,6 @@ import org.lrima.laop.network.carcontrollers.CarController;
 import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
 import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.settings.LockedSetting;
-import org.lrima.laop.simulation.SimulationEngine;
 
 /**
  * An implementation of the NEAT algorithm. See paper here : http://nn.cs.utexas.edu/downloads/papers/stanley.ec02.pdf

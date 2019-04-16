@@ -1,8 +1,6 @@
 package org.lrima.laop.simulation;
 
-import javafx.scene.canvas.GraphicsContext;
 import org.lrima.laop.physic.CarControls;
-import org.lrima.laop.settings.LockedSetting;
 import org.lrima.laop.ui.Drawable;
 
 public interface Environnement extends Drawable {
@@ -15,7 +13,7 @@ public interface Environnement extends Drawable {
 
     void render();
 
-    void init(SimulationEngine simulationEngine);
+    void init(LearningEngine learningEngine);
 
 //    AbstractMap getMap();
 //    BiFunction<Environnement, AbstractCar, Double> getFitenessFunction();

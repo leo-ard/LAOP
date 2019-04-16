@@ -4,7 +4,6 @@ import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.ui.SimulationDrawer;
 import org.lrima.laop.ui.components.inspector.InspectorPanel;
 
@@ -84,16 +83,16 @@ public class LaopMenuBar extends MenuBar {
         windowMenu.getItems().add(showCharts);
     }
     
-    public void addRealTime(PhysicEngine simulation) {
-    	this.realTimeCheck = new CheckMenuItem("Real time");
-    	this.realTimeCheck.setSelected(false);
-    	simulationMenu = new Menu("Simulation");
-    	
-    	this.realTimeCheck.selectedProperty().addListener((observer, oldVal, newVal) -> {
-    		simulation.setRealTime(newVal);
-    	});
-    	
-    	simulationMenu.getItems().add(this.realTimeCheck);
-    	this.getMenus().add(simulationMenu);
-    }
+//    public void addRealTime(PhysicEngine simulation) {
+//    	this.realTimeCheck = new CheckMenuItem("Real time");
+//    	this.realTimeCheck.setSelected(false);
+//    	simulationMenu = new Menu("Simulation");
+//
+//    	this.realTimeCheck.selectedProperty().addListener((observer, oldVal, newVal) -> {
+//    		simulation.setRealTime(newVal);
+//    	});
+//
+//    	simulationMenu.getItems().add(this.realTimeCheck);
+//    	this.getMenus().add(simulationMenu);
+//    }
 }

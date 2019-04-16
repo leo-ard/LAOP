@@ -1,13 +1,13 @@
 package org.lrima.laop.physic.concreteObjects;
 
 import org.lrima.laop.physic.CarControls;
-import org.lrima.laop.physic.PhysicEngine;
 import org.lrima.laop.physic.abstractObjects.Box;
 import org.lrima.laop.physic.staticobjects.StaticLineObject;
+import org.lrima.laop.simulation.LearningEngine;
 import org.lrima.laop.simulation.map.AbstractMap;
 import org.lrima.laop.simulation.map.LineCollidable;
 import org.lrima.laop.simulation.sensors.Sensor;
-import org.lrima.laop.simulation.sensors.data.SensorData;
+import org.lrima.laop.simulation.sensors.SensorData;
 import org.lrima.laop.utils.PhysicUtils;
 import org.lrima.laop.utils.math.Vector2d;
 
@@ -62,11 +62,11 @@ public class SimpleCar extends Box {
 
 //        this.angularAccel = PhysicUtils.angularAccel(this.wheelDirection, this.velocity);
 //        this.angularAccel = Math.min(Math.max(RANGE, angularAccel), -RANGE);
-        this.angularVelocity = this.velocity.modulus()*this.wheelDirection* PhysicEngine.DELTA_T * 0.03;
+        this.angularVelocity = this.velocity.modulus()*this.wheelDirection* LearningEngine.DELTA_T * 0.03;
         this.rotation += angularVelocity;
 
-        this.velocity = this.velocity.add(acceleration.multiply(PhysicEngine.DELTA_T));
-        this.position = this.position.add(this.velocity.multiply(PhysicEngine.DELTA_T));
+        this.velocity = this.velocity.add(acceleration.multiply(LearningEngine.DELTA_T));
+        this.position = this.position.add(this.velocity.multiply(LearningEngine.DELTA_T));
     }
 
     public ArrayList<Sensor> getSensors() {
@@ -83,7 +83,6 @@ public class SimpleCar extends Box {
         return collidableSensors;
     }
 
-    @Override
     public ArrayList<SensorData> getSensorsData() {
         ArrayList<SensorData> list = new ArrayList();
 

@@ -1,7 +1,6 @@
 package org.lrima.laop.simulation.sensors;
 
 import org.lrima.laop.physic.abstractObjects.AbstractCar;
-import org.lrima.laop.simulation.sensors.data.SensorData;
 import org.lrima.laop.simulation.sensors.data.SingleValueData;
 
 import java.util.function.Function;

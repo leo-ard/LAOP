@@ -5,7 +5,6 @@ import org.lrima.laop.physic.concreteObjects.SimpleCar;
 import org.lrima.laop.physic.staticobjects.StaticLineObject;
 import org.lrima.laop.simulation.map.LineCollidable;
 import org.lrima.laop.simulation.sensors.data.ProximityLineSensorData;
-import org.lrima.laop.simulation.sensors.data.SensorData;
 import org.lrima.laop.utils.MathUtils;
 import org.lrima.laop.utils.math.Vector2d;
 
