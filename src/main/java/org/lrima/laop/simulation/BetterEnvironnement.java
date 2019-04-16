@@ -122,6 +122,8 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
             CarControls carControls = learningAlgorithm.test(agent);
             Agent agent1 = this.step(carControls);
             this.render();
+
+
         }
 
     }
@@ -133,8 +135,7 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
 
 
     private double evalFitness(SimpleCar car){
-        double fitness = mazeMap.distanceFromStart(new Point2D.Double(car.getPosition().getX(), car.getPosition().getY()));
-        return fitness;
+        return mazeMap.distanceFromStart(new Point2D.Double(car.getPosition().getX(), car.getPosition().getY()));
     }
 
 

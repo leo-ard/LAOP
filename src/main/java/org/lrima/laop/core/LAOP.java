@@ -1,13 +1,8 @@
 package org.lrima.laop.core;
 
+import org.lrima.laop.network.DL4J.DL4J;
+import org.lrima.laop.network.FUCONN.GeneticLearning;
 import org.lrima.laop.network.LearningAlgorithm;
-import org.lrima.laop.network.carcontrollers.CarController;
-import org.lrima.laop.network.carcontrollers.ManualCarController;
-import org.lrima.laop.network.concreteLearning.DL4JLearning;
-import org.lrima.laop.network.concreteLearning.GeneticLearning;
-import org.lrima.laop.network.concreteNetworks.DL4J;
-import org.lrima.laop.network.concreteNetworks.FUCONN;
-import org.lrima.laop.network.concreteNetworks.NEAT;
 import org.lrima.laop.plugin.PluginLoader;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.settings.option.OptionClass;
@@ -33,7 +28,6 @@ import java.util.HashMap;
 public class LAOP {
     //TODO : this is just for testing purpurses
     private ArrayList<Class<? extends LearningAlgorithm>> learningAlgorithmsClasses;
-    private ArrayList<Class<? extends CarController>> neuralNetworksClasses;
     private ArrayList<Class<? extends Environnement>> environnements;
 
     Settings settings;
@@ -43,13 +37,7 @@ public class LAOP {
     public LAOP(){
         learningAlgorithmsClasses = new ArrayList<>();
         learningAlgorithmsClasses.add(GeneticLearning.class);
-        learningAlgorithmsClasses.add(DL4JLearning.class);
-
-        neuralNetworksClasses = new ArrayList<>();
-        neuralNetworksClasses.add(NEAT.class);
-        neuralNetworksClasses.add(FUCONN.class);
-        neuralNetworksClasses.add(ManualCarController.class);
-        neuralNetworksClasses.add(DL4J.class);
+        learningAlgorithmsClasses.add(DL4J.DL4JLearning.class);
 
         environnements = new ArrayList<>();
         environnements.add(BetterEnvironnement.class);
@@ -82,16 +70,14 @@ public class LAOP {
      * Ajoute un algorithme à notre platforme
      *
      * @param label l'identifiant de l'algorithme
-     * @param algorithmClass la classe de l'algorithme
      * @param settings les configurations de l'algorithme
      * @param learningClass a {@link java.lang.Class} object.
      */
-    public void addAlgorithm(String label, Class<? extends CarController> algorithmClass, Class<? extends LearningAlgorithm> learningClass, HashMap<String, Object> settings){
+    public void addAlgorithm(String label, Class<? extends LearningAlgorithm> learningClass, HashMap<String, Object> settings){
         if(this.settings.scopeExist(label))
         	//todo: show error dialog
             throw new KeyAlreadyExistsException("The label "+label+" has already been assigned");
 
-        this.settings.set(label, LAOP.KEY_NETWORK_CLASS, new OptionClass<>(algorithmClass, neuralNetworksClasses, (clazz) -> ClassUtils.checkIfGenericOfInterface((Class)this.settings.get(label, LAOP.KEY_LEARNING_CLASS), (Class)clazz)));
         this.settings.set(label, LAOP.KEY_LEARNING_CLASS, new OptionClass<>(learningClass, learningAlgorithmsClasses, (clazz) -> ClassUtils.checkIfGenericOfInterface((Class)this.settings.get(label, LAOP.KEY_LEARNING_CLASS), (Class)clazz)));
 
         if(settings != null) settings.forEach((k, v) -> this.settings.set(label, k, v));
@@ -158,14 +144,6 @@ public class LAOP {
     public enum SimulationDisplayMode{
         WITH_INTERFACE,
         WITHOUT_INTERFACE;
-    }
-    /**
-     * <p>Getter for the field <code>neuralNetworksClasses</code>.</p>
-     *
-     * @return a {@link java.util.ArrayList} object.
-     */
-    public ArrayList<Class<? extends CarController>> getNeuralNetworksClasses() {
-        return neuralNetworksClasses;
     }
 
     /**

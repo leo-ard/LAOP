@@ -45,13 +45,9 @@ public class PluginLoader {
             PluginActivator activator = (PluginActivator) activatorClass.newInstance();
             activator.initiate(laop);
         }
-        if(manifest.getMainAttributes().getValue(ALGORITHM_CLASS_TAG) != null){
-            Class allgorithmClass = classLoader.loadClass(manifest.getMainAttributes().getValue(ALGORITHM_CLASS_TAG));
-            laop.getNeuralNetworksClasses().add(allgorithmClass);
-        }
         if(manifest.getMainAttributes().getValue(LEARNING_CLASS_TAG) != null){
             Class allgorithmClass = classLoader.loadClass(manifest.getMainAttributes().getValue(LEARNING_CLASS_TAG));
-            laop.getNeuralNetworksClasses().add(allgorithmClass);
+            laop.getLearningAlgorithmsClasses().add(allgorithmClass);
         }
     }
 

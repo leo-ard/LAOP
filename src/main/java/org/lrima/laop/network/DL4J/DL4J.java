@@ -1,4 +1,4 @@
-package org.lrima.laop.network.concreteNetworks;
+package org.lrima.laop.network.DL4J;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
@@ -11,10 +11,14 @@ import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
-import org.lrima.laop.network.carcontrollers.CarController;
-import org.lrima.laop.network.carcontrollers.ManualCarController;
+import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.physic.CarControls;
-import org.lrima.laop.settings.LockedSetting;
+import org.lrima.laop.physic.SimpleCar;
+import org.lrima.laop.simulation.Agent;
+import org.lrima.laop.simulation.Environnement;
+import org.lrima.laop.simulation.LearningEngine;
+import org.lrima.laop.simulation.sensors.CarSensor;
+import org.lrima.laop.simulation.sensors.Sensor;
 import org.lrima.laop.utils.MathUtils;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -24,8 +28,9 @@ import org.nd4j.linalg.learning.config.Sgd;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 import java.io.File;
+import java.util.ArrayList;
 
-public class DL4J extends ManualCarController implements DL4JNN {
+public class DL4J extends ManualCarController {
     private MultiLayerNetwork network;
     private INDArray features;
     private INDArray labels;
@@ -194,27 +199,8 @@ public class DL4J extends ManualCarController implements DL4JNN {
         });*/
     }
 
-    @Override
     public void disableHumanControl() {
         disableHumanControls = true;
-    }
-
-    @Override
-    public <T extends CarController> T copy() {
-        DL4J dl4J = new DL4J();
-        dl4J.network = this.network;
-        dl4J.disableHumanControls = true;
-        return (T) dl4J;
-    }
-
-    @Override
-    public void setFitness(double fitness) {
-        this.fitness = fitness;
-    }
-
-    @Override
-    public double getFitness() {
-        return fitness;
     }
 
     private enum MODE {
@@ -226,5 +212,49 @@ public class DL4J extends ManualCarController implements DL4JNN {
         TRAIN_ON_RECORDED_DATA,
         EXPORT_DATA,
         LOAD_DATA;
+    }
+
+    public static class DL4JLearning implements LearningAlgorithm {
+        private DL4J dl4J;
+
+        @Override
+        public void train(Environnement env) {
+            dl4J = new DL4J();
+            dl4J.init();
+            dl4J.configureListeners(LearningEngine.mainScene);
+
+            Agent agent = env.reset();
+
+            while(true){
+                if(env.isFinished())
+                    env.reset();
+
+                ArrayList<Sensor> sensors = agent.getSensors();
+                double[] sensorValues = sensors.stream().mapToDouble(Sensor::getValue).toArray();
+
+                CarControls carControls = dl4J.control(sensorValues);
+
+                agent = env.step(carControls);
+                env.render();
+
+                try {
+                    Thread.sleep((long) (LearningEngine.DELTA_T * 1000));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        public CarControls test(Agent agent) {
+            double[] sensorValues = agent.getSensors().stream().mapToDouble(Sensor::getValue).toArray();
+            dl4J.disableHumanControl();
+            return dl4J.control(sensorValues);
+        }
+
+
+        public void init(ArrayList<SimpleCar> cars) {
+            cars.forEach(car -> car.addSensor(CarSensor.VELOCITY_SENSOR(car)));
+        }
     }
 }

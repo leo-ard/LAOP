@@ -1,20 +1,17 @@
 package org.lrima.laop.simulation;
 
-import java.util.ArrayList;
-
+import javafx.stage.Stage;
 import org.lrima.laop.core.LAOP;
 import org.lrima.laop.network.LearningAlgorithm;
-import org.lrima.laop.network.carcontrollers.CarController;
-import org.lrima.laop.network.carcontrollers.ManualCarController;
 import org.lrima.laop.settings.LockedSetting;
 import org.lrima.laop.settings.Scope;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.simulation.data.ResultData;
-import org.lrima.laop.utils.Console;
 import org.lrima.laop.utils.Actions.Action;
+import org.lrima.laop.utils.Console;
 
-import javafx.stage.Stage;
+import java.util.ArrayList;
 
 public class LearningEngine implements Runnable{
     public static Stage mainScene;
@@ -104,31 +101,6 @@ public class LearningEngine implements Runnable{
 
     public SimulationBuffer getBuffer() {
         return simulationBuffer;
-    }
-
-
-
-    <T extends CarController> T generateCurrentNetwork() {
-        Class<? extends CarController> carClass = (Class<? extends CarController>) settings.get(this.getCurrentScopeName(), LAOP.KEY_NETWORK_CLASS);
-
-        try {
-            T carController = (T) carClass.newInstance();
-
-            try{
-                carController.init(this.getSettings());
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-
-            if(carController instanceof ManualCarController)
-                ((ManualCarController) carController).configureListeners(this.mainScene);
-
-            return carController;
-        } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-        return (T) new ManualCarController();
     }
 
     LearningAlgorithm generateLearningAlgorithm() {
