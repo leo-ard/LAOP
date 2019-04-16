@@ -1,8 +1,8 @@
 package org.lrima.laop.simulation;
 
 import javafx.scene.canvas.GraphicsContext;
+import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.physic.CarControls;
-import org.lrima.laop.physic.abstractObjects.AbstractCar;
 import org.lrima.laop.physic.concreteObjects.SimpleCar;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.simulation.buffer.SimulationSnapshot;
@@ -107,9 +107,23 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
     }
 
     @Override
+    public void evaluate(LearningAlgorithm learningAlgorithm) {
+        Agent agent = reset();
+        while(!this.isFinished()){
+            CarControls carControls = learningAlgorithm.test(agent);
+
+            Agent agent1 = this.step(carControls);
+            this.render();
+            System.out.println(agent1.getReward());
+        }
+
+    }
+
+    @Override
     public void draw(GraphicsContext gc) {
         this.mazeMap.draw(gc);
     }
+
 
     private double evalFitness(SimpleCar car){
         double fitness = mazeMap.distanceFromStart(new Point2D.Double(car.getPosition().getX(), car.getPosition().getY()));

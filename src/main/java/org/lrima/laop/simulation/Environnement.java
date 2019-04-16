@@ -1,5 +1,6 @@
 package org.lrima.laop.simulation;
 
+import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.ui.Drawable;
 
@@ -14,6 +15,7 @@ public interface Environnement extends Drawable {
     void render();
 
     void init(LearningEngine learningEngine);
+    void evaluate(LearningAlgorithm learningAlgorithm);
 
 //    AbstractMap getMap();
 //    BiFunction<Environnement, AbstractCar, Double> getFitenessFunction();

@@ -83,6 +83,7 @@ public class GeneticLearning implements LearningAlgorithm{
                     learn(geneticNN);
                     env.reset(geneticNN.size());
                     time = 0;
+                    env.evaluate(this);
                 }
 
                 try {
@@ -94,6 +95,7 @@ public class GeneticLearning implements LearningAlgorithm{
             time = 0;
             learn(geneticNN);
             env.reset(geneticNN.size());
+            env.evaluate(this);
         }
 
 
@@ -102,6 +104,8 @@ public class GeneticLearning implements LearningAlgorithm{
 
     @Override
     public CarControls test(Agent agent) {
-        return null;
+        double[] sensorValues = agent.getSensors().stream().mapToDouble(Sensor::getValue).toArray();
+        System.out.println("testing...");
+        return geneticNN.get(0).control(sensorValues);
     }
 }
