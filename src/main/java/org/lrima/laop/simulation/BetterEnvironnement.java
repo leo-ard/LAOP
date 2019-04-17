@@ -1,6 +1,7 @@
 package org.lrima.laop.simulation;
 
 import javafx.scene.canvas.GraphicsContext;
+import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.physic.SimpleCar;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
@@ -14,11 +15,12 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class BetterEnvironnement implements MultiAgentEnvironnement {
-    MazeMap mazeMap;
-    SimulationBuffer buffer;
-
-    ArrayList<SimpleCar> simpleCars;
-    boolean finished;
+    private MazeMap mazeMap;
+    private SimulationBuffer buffer;
+    private ArrayList<SimpleCar> simpleCars;
+    private boolean finished;
+    private final int MAX_CHANGE_MAP = 10;
+    private int changeMap = MAX_CHANGE_MAP;
 
     void BetterEnvironnement() {
         buffer = new SimulationBuffer();
@@ -51,11 +53,19 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
 
     @Override
     public ArrayList<Agent> reset(int numberOfCars) {
-        mazeMap = new MazeMap(10);
-        mazeMap.bake();
+        if(changeMap == MAX_CHANGE_MAP){
+            mazeMap = new MazeMap(10);
+            mazeMap.bake();
+            changeMap = 0;
+        }
+        else{
+            changeMap++;
+        }
+
         buffer.clear();
         ArrayList<Agent> agents = new ArrayList<>();
         simpleCars = generateCarObjects(numberOfCars);
+        finished = false;
 
         for (SimpleCar simpleCar : simpleCars) {
             mazeMap.collide(simpleCar);
@@ -106,13 +116,26 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
     }
 
     @Override
+    public void evaluate(LearningAlgorithm learningAlgorithm) {
+        Agent agent = reset();
+        while(!this.isFinished()){
+            CarControls carControls = learningAlgorithm.test(agent);
+            Agent agent1 = this.step(carControls);
+            this.render();
+
+
+        }
+
+    }
+
+    @Override
     public void draw(GraphicsContext gc) {
         this.mazeMap.draw(gc);
     }
 
+
     private double evalFitness(SimpleCar car){
-        double fitness = mazeMap.distanceFromStart(new Point2D.Double(car.getPosition().getX(), car.getPosition().getY()));
-        return fitness;
+        return mazeMap.distanceFromStart(new Point2D.Double(car.getPosition().getX(), car.getPosition().getY()));
     }
 
 

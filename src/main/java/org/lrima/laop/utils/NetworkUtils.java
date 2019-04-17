@@ -1,22 +1,9 @@
 package org.lrima.laop.utils;
 
 
-import org.lrima.laop.network.carcontrollers.CarController;
-import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
-import org.lrima.laop.physic.CarControls;
-import org.lrima.laop.simulation.Environnement;
-
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
 public class NetworkUtils {
-
-//    public static BiFunction<Environnement, AbstractCar, Double> RANGE_FITNESS = ((env, car) -> {
-//        Point2D carPos = new Point2D.Double(car.getPosition().getX(), car.getPosition().getY());
-//        return env.getMap().distanceFromStart(carPos);
-//    });
 
     public static double[] flatArray(double[][][] array) {
         ArrayList<Double> all = new ArrayList<>();
@@ -51,18 +38,5 @@ public class NetworkUtils {
         }
 
         return remaped;
-    }
-
-    public static <T> ArrayList<CarController> toCarControllerArray(ArrayList<T> geneticLearnings) {
-        return geneticLearnings.stream().map(carController -> (CarController) carController).collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    public static double average(ArrayList<? extends CarController> cars) {
-        double totalFitness = 0;
-        for(CarController car : cars) {
-            totalFitness += car.getFitness();
-        }
-
-        return totalFitness / cars.size();
     }
 }

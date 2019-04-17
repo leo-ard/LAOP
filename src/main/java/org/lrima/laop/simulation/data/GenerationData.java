@@ -1,9 +1,5 @@
 package org.lrima.laop.simulation.data;
 
-import java.util.ArrayList;
-
-import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
-
 /**
  * Used to store the information of a generation such as
  * the average fitness score, the number of car, etc...

@@ -6,8 +6,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import org.lrima.laop.core.LAOP;
-import org.lrima.laop.network.concreteLearning.GeneticLearning;
-import org.lrima.laop.network.concreteNetworks.NEAT;
+import org.lrima.laop.network.FUCONN.GeneticLearning;
 import org.lrima.laop.settings.Scope;
 import org.lrima.laop.ui.stage.DownloadAlgorithmDialog;
 
@@ -50,7 +49,7 @@ public class ConfigurationController implements Initializable {
     	Optional<String> scopeName = scopeNameDialog.showAndWait();
     	
     	scopeName.ifPresent(name -> {
-    		this.laop.addAlgorithm(name, NEAT.class, GeneticLearning.class, new HashMap<>());
+    		this.laop.addAlgorithm(name, GeneticLearning.class, new HashMap<>());
     		this.reloadScopeTableFromSettings();
     	});
     }

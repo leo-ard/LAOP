@@ -1,8 +1,7 @@
-package org.lrima.laop.network.concreteLearning;
+package org.lrima.laop.network.FUCONN;
 
 import org.lrima.laop.network.LearningAlgorithm;
-import org.lrima.laop.network.concreteNetworks.FUCONN;
-import org.lrima.laop.network.genetics.GeneticNeuralNetwork;
+import org.lrima.laop.network.FUCONN.FUCONN;
 import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.simulation.Agent;
 import org.lrima.laop.simulation.Environnement;
@@ -19,19 +18,23 @@ import java.util.stream.Collectors;
  * @author Léonard
  */
 public class GeneticLearning implements LearningAlgorithm{
-    ArrayList<GeneticNeuralNetwork> geneticNN;
+    ArrayList<FUCONN> geneticNN;
 
-    public ArrayList<GeneticNeuralNetwork> learn(ArrayList<GeneticNeuralNetwork> cars) {
+    public ArrayList<FUCONN> learn(ArrayList<FUCONN> cars) {
         //sort by best-fitness
-        cars = (ArrayList<GeneticNeuralNetwork>) cars.stream()
-                .sorted((gn1, gn2)-> (int) (gn2.getFitness()-gn1.getFitness()))
+        cars = (ArrayList<FUCONN>) cars.stream()
+                .sorted((gn1, gn2)-> {
+                    int i = (int)gn2.getFitness()-(int)gn1.getFitness();
+                    System.out.println(gn2.getFitness() + " " + gn1.getFitness()+ " " + i);
+                    return i;
+                })
                 .collect(Collectors.toList());
 
         double bestFitness = cars.get(0).getFitness();
 
         //Keep only 50% best cars
-        final int initialNumberOfCar = cars.size();
-        ArrayList<GeneticNeuralNetwork> bestPerformingCars = new ArrayList<>();
+        final int initialNumberOfCar = 100;
+        ArrayList<FUCONN> bestPerformingCars = new ArrayList<>();
         for(int i = 0 ; i < cars.size() / 2 ; i++) {
             bestPerformingCars.add(cars.get(i));
         }
@@ -39,10 +42,10 @@ public class GeneticLearning implements LearningAlgorithm{
 
         //Repopulate
         while(cars.size() < initialNumberOfCar){
-            GeneticNeuralNetwork random1 = bestPerformingCars.get(RandomUtils.getInteger(0, bestPerformingCars.size()-1));
-            GeneticNeuralNetwork random2 = bestPerformingCars.get(RandomUtils.getInteger(0, bestPerformingCars.size()-1));
+            FUCONN random1 = bestPerformingCars.get(RandomUtils.getInteger(0, bestPerformingCars.size()-1));
+            FUCONN random2 = bestPerformingCars.get(RandomUtils.getInteger(0, bestPerformingCars.size()-1));
 
-            GeneticNeuralNetwork geneticNeuralNetwork = random1.crossOver(random2);
+            FUCONN geneticNeuralNetwork = random1.crossOver(random2);
 
             cars.add(geneticNeuralNetwork);
         }
@@ -66,7 +69,7 @@ public class GeneticLearning implements LearningAlgorithm{
         long time = 0;
 
         while(true){
-            while(!env.isFinished()){
+            while(!env.isFinished() && time < 300){
                 time++;
 
                 ArrayList<CarControls> carControls = new ArrayList<>();
@@ -78,30 +81,19 @@ public class GeneticLearning implements LearningAlgorithm{
 
                 agents = env.step(carControls);
                 env.render();
-
-                if(time > 300){
-                    learn(geneticNN);
-                    env.reset(geneticNN.size());
-                    time = 0;
-                }
-
-                try {
-                    Thread.sleep(2);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             }
+
+            geneticNN = learn(geneticNN);
             time = 0;
-            learn(geneticNN);
+            env.evaluate(this);
             env.reset(geneticNN.size());
         }
-
-
-
     }
 
     @Override
     public CarControls test(Agent agent) {
-        return null;
+        double[] sensorValues = agent.getSensors().stream().mapToDouble(Sensor::getValue).toArray();
+        System.out.println("testing...");
+        return geneticNN.get(0).control(sensorValues);
     }
 }
