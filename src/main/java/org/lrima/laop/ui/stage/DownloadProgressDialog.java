@@ -54,7 +54,7 @@ public class DownloadProgressDialog extends Stage {
 
 	private void startDownload() {
 		try {
-			URL url = new URL("http://localhost:8000/posts/" + this.algorithm.getId() + "/download");
+			URL url = new URL("https://lasp.lrima.cmaisonneuve.qc.ca/posts/" + this.algorithm.getId() + "/download");
 			BufferedInputStream in = new BufferedInputStream(url.openStream());
 			FileOutputStream fileOutputStream = new FileOutputStream("algos/" + algorithm.getTitle() + algorithm.getId() + ".jar");
 			byte dataBuffer[] = new byte[256];
