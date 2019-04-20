@@ -17,6 +17,7 @@ public class FUCONN {
     public FUCONN crossOver(FUCONN otherGeneticNeuralNetwork) {
         FUCONN other = otherGeneticNeuralNetwork;
 
+        //WEIGHTS
         double[] weightOther = other.neuralNetwork.getAllWeights();
         double[] weightThis = this.neuralNetwork.getAllWeights();
         double[] newWeights = new double[weightOther.length];
@@ -24,14 +25,13 @@ public class FUCONN {
         for (int i = 0; i < newWeights.length; i++) {
             newWeights[i] = RandomUtils.getBoolean()? weightOther[i] : weightThis[i];
 
-            if(RandomUtils.getDouble(0, 100) > 10){
+            if(RandomUtils.getDouble(0, 100) > 2){
                 newWeights[i] = RandomUtils.getDouble(-5, 5);
             }
-
         }
 
         FUCONN newNetwork = new FUCONN();
-        newNetwork.neuralNetwork = new NeuralNetwork(this.neuralNetwork.getTopology(), newWeights, new double[]{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0});
+        newNetwork.neuralNetwork = new NeuralNetwork(this.neuralNetwork.getTopology(), newWeights);
 
         return newNetwork;
     }
@@ -42,7 +42,7 @@ public class FUCONN {
 
     public void init() {
         neuralNetwork = new NeuralNetwork(5);
-        neuralNetwork.addDenseLayer(2, MathUtils.LOGISTIC);
+        neuralNetwork.addDenseLayer(4, MathUtils.LOGISTIC);
         neuralNetwork.addDenseLayer(3, MathUtils.LOGISTIC);
     }
 

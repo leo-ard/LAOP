@@ -56,7 +56,12 @@ public class SimpleCar implements LineCollidable {
         this.velocity = Vector2d.origin;
         this.acceleration = Vector2d.origin;
         this.rotation = 0;
-        
+    }
+
+
+    public SimpleCar(Vector2d position, double rotation){
+        this(position);
+        this.rotation = rotation;
     }
 
    

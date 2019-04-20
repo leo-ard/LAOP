@@ -22,10 +22,6 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
     private final int MAX_CHANGE_MAP = 10;
     private int changeMap = MAX_CHANGE_MAP;
 
-    void BetterEnvironnement() {
-        buffer = new SimulationBuffer();
-    }
-
     @Override
     public ArrayList<Agent> step(ArrayList<CarControls> carControls) {
         ArrayList<Agent> agents = new ArrayList<>();
@@ -63,9 +59,9 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
         }
 
         buffer.clear();
+        finished = false;
         ArrayList<Agent> agents = new ArrayList<>();
         simpleCars = generateCarObjects(numberOfCars);
-        finished = false;
 
         for (SimpleCar simpleCar : simpleCars) {
             mazeMap.collide(simpleCar);
@@ -81,7 +77,7 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
         ArrayList<SimpleCar> carObjects = new ArrayList<>();
         for(int i = 0 ; i < numberOfCars ; i++) {
             Point2D start = mazeMap.getStartPoint();
-            SimpleCar car = new SimpleCar(new Vector2d(start.getX(), start.getY()));
+            SimpleCar car = new SimpleCar(new Vector2d(start.getX(), start.getY()), mazeMap.getOrientation());
 
             double orientationIncrement = Math.PI / numberOfSensors;
             //Create the sensors and assign them to the car
@@ -112,7 +108,6 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
     @Override
     public void init(LearningEngine learningEngine) {
         this.buffer = learningEngine.getBuffer();
-
     }
 
     @Override
@@ -120,10 +115,8 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
         Agent agent = reset();
         while(!this.isFinished()){
             CarControls carControls = learningAlgorithm.test(agent);
-            Agent agent1 = this.step(carControls);
+            agent = this.step(carControls);
             this.render();
-
-
         }
 
     }

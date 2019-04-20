@@ -25,17 +25,16 @@ public class GeneticLearning implements LearningAlgorithm{
         cars = (ArrayList<FUCONN>) cars.stream()
                 .sorted((gn1, gn2)-> {
                     int i = (int)gn2.getFitness()-(int)gn1.getFitness();
-                    System.out.println(gn2.getFitness() + " " + gn1.getFitness()+ " " + i);
                     return i;
                 })
                 .collect(Collectors.toList());
 
-        double bestFitness = cars.get(0).getFitness();
+        System.out.println(cars.get(0).getFitness());
 
         //Keep only 50% best cars
         final int initialNumberOfCar = 100;
         ArrayList<FUCONN> bestPerformingCars = new ArrayList<>();
-        for(int i = 0 ; i < cars.size() / 2 ; i++) {
+        for(int i = 0 ; i < initialNumberOfCar / 2 ; i++) {
             bestPerformingCars.add(cars.get(i));
         }
         cars = bestPerformingCars;
@@ -69,7 +68,7 @@ public class GeneticLearning implements LearningAlgorithm{
         long time = 0;
 
         while(true){
-            while(!env.isFinished() && time < 300){
+            while(!env.isFinished() && time < 2000){
                 time++;
 
                 ArrayList<CarControls> carControls = new ArrayList<>();
@@ -86,14 +85,13 @@ public class GeneticLearning implements LearningAlgorithm{
             geneticNN = learn(geneticNN);
             time = 0;
             env.evaluate(this);
-            env.reset(geneticNN.size());
+            agents = env.reset(geneticNN.size());
         }
     }
 
     @Override
     public CarControls test(Agent agent) {
         double[] sensorValues = agent.getSensors().stream().mapToDouble(Sensor::getValue).toArray();
-        System.out.println("testing...");
         return geneticNN.get(0).control(sensorValues);
     }
 }

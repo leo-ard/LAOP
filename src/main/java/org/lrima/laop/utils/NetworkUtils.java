@@ -26,7 +26,7 @@ public class NetworkUtils {
             int nbNeurons = topology[i];
             int nbNeuronsNext = topology[i+1];
 
-            double[][] submap = new double[nbNeuronsNext][nbNeurons];
+            double[][] submap = new double[nbNeuronsNext][nbNeurons + 1];
 
             for (int j = 0; j < submap.length; j++) {
                 for (int k = 0; k < submap[j].length; k++) {

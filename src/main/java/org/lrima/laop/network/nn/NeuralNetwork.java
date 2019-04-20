@@ -1,5 +1,6 @@
 package org.lrima.laop.network.nn;
 
+import jdk.internal.cmm.SystemResourcePressureImpl;
 import org.lrima.laop.utils.MathUtils;
 import org.lrima.laop.utils.NetworkUtils;
 
@@ -24,16 +25,17 @@ public class NeuralNetwork {
         layers = new ArrayList<>();
     }
 
-    public NeuralNetwork(int[] topology, double[] weights, double[] bias){
+    public NeuralNetwork(int[] topology, double[] weights){
         this.inputSize = topology[0];
 
         this.layers = new ArrayList<>();
+
         double[][][] allweghts = NetworkUtils.remap(topology, weights);
 
-        for (double[][] allweght : allweghts) {
-            this.layers.add(new DenseLayer(allweght, bias, MathUtils.LOGISTIC));
+        for (int i = 0; i < allweghts.length; i++) {
+            double[][] allweght = allweghts[i];
+            this.layers.add(new DenseLayer(allweght, MathUtils.LOGISTIC));
         }
-
     }
 
     /**
@@ -124,19 +126,15 @@ public class NeuralNetwork {
         NeuralNetwork neuralNetwork = new NeuralNetwork(3);
 
         double[][] weights = new double[][]{
-                {2, -1, 3},
-                {1, 3, -2},
-                {5, 2, -4},
-                {3, 2, 1}
-        };
-
-        double[] bias = new double[]{
-                2, 3, 4, 1
+                {2, -1, 3, 2},
+                {1, 3, -2, 3},
+                {5, 2, -4, 4},
+                {3, 2, 1, 1}
         };
 
         double[] inputs = new double[]{2, 2, 2};
 
-        DenseLayer layer = new DenseLayer(weights, bias, MathUtils.LOGISTIC);
+        DenseLayer layer = new DenseLayer(weights, MathUtils.LOGISTIC);
 
         neuralNetwork.getLayers().add(layer);
 
@@ -145,13 +143,25 @@ public class NeuralNetwork {
         double[] prediction = new double[4];
         for(int i = 0; i < weights.length; i++){
             double sum = 0;
-            for(int j = 0; j < weights[i].length; j++){
+            for(int j = 0; j < weights[i].length - 1; j++){
                 sum += weights[i][j] * inputs[j];
             }
-            sum += bias[i];
+
+            sum += weights[i][inputs.length];
 
             prediction[i] = MathUtils.LOGISTIC.apply(sum);
         }
+
+/*
+        for (double v : prediction) {
+            System.out.print(v + "\t");
+        }
+        System.out.println();
+        for (double v : predictionNN) {
+            System.out.print(v + "\t");
+        }
+
+        /**/
 
         double[][][] expected = new double[1][][];
         for (int i = 0; i < neuralNetwork.layers.size(); i++) {
@@ -180,15 +190,7 @@ public class NeuralNetwork {
 
 
 
-        /*
-        for (double v : prediction) {
-            System.out.print(v + "\t");
-        }
-        System.out.println();
-        for (double v : predictionNN) {
-            System.out.print(v + "\t");
-        }*/
-
+        /**/
 
     }
 }
