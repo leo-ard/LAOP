@@ -141,10 +141,10 @@ public class MainSimulationStage extends Stage {
     
     private void endSimulationAndShowResults(LearningEngine engine) {
     	Platform.runLater(() -> {
-    		System.out.println(engine.getData());
-    		ResultStage resultStage = new ResultStage(engine.getData());
-        	resultStage.show();
-        	this.close();
+//    		System.out.println(engine.getData());
+//    		ResultStage resultStage = new ResultStage(engine.getData());
+//        	resultStage.show();
+//        	this.close();
     	});
     }
 

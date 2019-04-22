@@ -1,6 +1,7 @@
 package org.lrima.laop.core;
 
 import org.lrima.laop.network.DL4J.DL4J;
+import org.lrima.laop.network.DL4J.DL4JLearning;
 import org.lrima.laop.network.FUCONN.GeneticLearning;
 import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.plugin.PluginLoader;
@@ -37,7 +38,7 @@ public class LAOP {
     public LAOP(){
         learningAlgorithmsClasses = new ArrayList<>();
         learningAlgorithmsClasses.add(GeneticLearning.class);
-        learningAlgorithmsClasses.add(DL4J.DL4JLearning.class);
+        learningAlgorithmsClasses.add(DL4JLearning.class);
 
         environnements = new ArrayList<>();
         environnements.add(BetterEnvironnement.class);
@@ -177,8 +178,6 @@ public class LAOP {
     /** Constant <code>KEY_NUMBER_OF_GENERATIONS="NUMBER OF GENERATIONS"</code> */
     public static final String KEY_NUMBER_OF_GENERATIONS = "NUMBER OF GENERATIONS";
 
-    /** Constant <code>KEY_NETWORK_CLASS="NEURAL NETWORK CLASS"</code> */
-    public static final String KEY_NETWORK_CLASS = "NEURAL NETWORK CLASS";
     /** Constant <code>KEY_LEARNING_CLASS="LEARNING ALGORITHM CLASS"</code> */
     public static final String KEY_LEARNING_CLASS = "LEARNING ALGORITHM CLASS";
 

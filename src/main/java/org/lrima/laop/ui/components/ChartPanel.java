@@ -1,7 +1,6 @@
 package org.lrima.laop.ui.components;
 
 import javafx.application.Platform;
-import org.lrima.laop.simulation.data.GenerationData;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Side;
@@ -79,7 +78,7 @@ public class ChartPanel extends HBox {
 		this.yAxis.setUpperBound(this.maxY);
 	}
 
-	public void updateChartData(GenerationData pastGeneration) {
+	/*public void updateChartData(GenerationData pastGeneration) {
 		//Add new data to the series from the past generation
 		double averageFitnessScore = pastGeneration.getAverageFitness();
 		int generationNumber = pastGeneration.getGenerationNumber();
@@ -100,5 +99,5 @@ public class ChartPanel extends HBox {
 
 			this.averageFitnessSerie.getData().add(data);
 		});
-	}
+	}*/
 }

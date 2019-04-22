@@ -2,11 +2,12 @@ package org.lrima.laop.simulation;
 
 import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.physic.CarControls;
+import org.lrima.laop.simulation.data.AlgorithmsData;
 import org.lrima.laop.ui.Drawable;
 
+import java.util.ArrayList;
+
 public interface Environnement extends Drawable {
-//    <T extends CarController> ArrayList<T> evaluate(ArrayList<T> cars);
-//    void parallelEvaluation(Consumer<ArrayList<? extends CarController>> cars);
     boolean isFinished();
 
     Agent reset();
@@ -15,11 +16,12 @@ public interface Environnement extends Drawable {
     void render();
 
     void init(LearningEngine learningEngine);
-    void evaluate(LearningAlgorithm learningAlgorithm);
 
-//    AbstractMap getMap();
-//    BiFunction<Environnement, AbstractCar, Double> getFitenessFunction();
-//
-//    BatchData getBatchData();
-//    void setFinished(boolean finished);
+    AlgorithmsData evaluate(LearningAlgorithm[] trained, int max);
+    default void evaluate(LearningAlgorithm learningAlgorithm){
+        LearningAlgorithm[] trained = new LearningAlgorithm[]{learningAlgorithm};
+        this.evaluate(trained, 1);
+    }
+
+    ArrayList<Double> getData();
 }

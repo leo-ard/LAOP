@@ -11,14 +11,7 @@ import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
-import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.physic.CarControls;
-import org.lrima.laop.physic.SimpleCar;
-import org.lrima.laop.simulation.Agent;
-import org.lrima.laop.simulation.Environnement;
-import org.lrima.laop.simulation.LearningEngine;
-import org.lrima.laop.simulation.sensors.CarSensor;
-import org.lrima.laop.simulation.sensors.Sensor;
 import org.lrima.laop.utils.MathUtils;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -28,7 +21,7 @@ import org.nd4j.linalg.learning.config.Sgd;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class DL4J extends ManualCarController {
     private MultiLayerNetwork network;
@@ -39,7 +32,6 @@ public class DL4J extends ManualCarController {
     private MODE oldTakeOverMode = MODE.AI_CONTROL;
 
     private boolean disableHumanControls;
-    private double fitness;
 
 
     public CarControls control(double... captorValues) {
@@ -143,8 +135,12 @@ public class DL4J extends ManualCarController {
             labels = label;
         }
         else{
-            features = Nd4j.vstack(features, feature);
-            labels = Nd4j.vstack(labels, label);
+            try{
+                features = Nd4j.vstack(features, feature);
+                labels = Nd4j.vstack(labels, label);
+            }catch (Exception e){
+
+            }
         }
     }
 
@@ -212,49 +208,5 @@ public class DL4J extends ManualCarController {
         TRAIN_ON_RECORDED_DATA,
         EXPORT_DATA,
         LOAD_DATA;
-    }
-
-    public static class DL4JLearning implements LearningAlgorithm {
-        private DL4J dl4J;
-
-        @Override
-        public void train(Environnement env) {
-            dl4J = new DL4J();
-            dl4J.init();
-            dl4J.configureListeners(LearningEngine.mainScene);
-
-            Agent agent = env.reset();
-
-            while(true){
-                if(env.isFinished())
-                    env.reset();
-
-                ArrayList<Sensor> sensors = agent.getSensors();
-                double[] sensorValues = sensors.stream().mapToDouble(Sensor::getValue).toArray();
-
-                CarControls carControls = dl4J.control(sensorValues);
-
-                agent = env.step(carControls);
-                env.render();
-
-                try {
-                    Thread.sleep((long) (LearningEngine.DELTA_T * 1000));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        @Override
-        public CarControls test(Agent agent) {
-            double[] sensorValues = agent.getSensors().stream().mapToDouble(Sensor::getValue).toArray();
-            dl4J.disableHumanControl();
-            return dl4J.control(sensorValues);
-        }
-
-
-        public void init(ArrayList<SimpleCar> cars) {
-            cars.forEach(car -> car.addSensor(CarSensor.VELOCITY_SENSOR(car)));
-        }
     }
 }

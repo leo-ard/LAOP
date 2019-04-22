@@ -6,6 +6,7 @@ import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.physic.SimpleCar;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.simulation.buffer.SimulationSnapshot;
+import org.lrima.laop.simulation.data.AlgorithmsData;
 import org.lrima.laop.simulation.data.CarData;
 import org.lrima.laop.simulation.map.MazeMap;
 import org.lrima.laop.simulation.sensors.ProximityLineSensor;
@@ -19,8 +20,9 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
     private SimulationBuffer buffer;
     private ArrayList<SimpleCar> simpleCars;
     private boolean finished;
-    private final int MAX_CHANGE_MAP = 10;
+    private final int MAX_CHANGE_MAP = 1;
     private int changeMap = MAX_CHANGE_MAP;
+    private ArrayList<Double> data = new ArrayList<>();
 
     @Override
     public ArrayList<Agent> step(ArrayList<CarControls> carControls) {
@@ -36,7 +38,6 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
             if(!simpleCar.isDead()){
                 finished = false;
             }
-
         }
 
         return agents;
@@ -111,14 +112,36 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
     }
 
     @Override
-    public void evaluate(LearningAlgorithm learningAlgorithm) {
-        Agent agent = reset();
-        while(!this.isFinished()){
-            CarControls carControls = learningAlgorithm.test(agent);
-            agent = this.step(carControls);
+    public AlgorithmsData evaluate(LearningAlgorithm[] trained, int maxBatch) {
+        ArrayList<Agent> agents = reset(trained.length);
+        AlgorithmsData trainedData = new AlgorithmsData();
+        int i = 0;
+        while(i < maxBatch) {
+            ArrayList<CarControls> carControls = new ArrayList<>();
+            for (int j = 0; j < trained.length; j++) {
+                carControls.add(trained[j].test(agents.get(j)));
+            }
+
+            if(this.isFinished()){
+                i++;
+                for (int j = 0; j < agents.size(); j++) {
+                    trainedData.put(trained[j].getClass().getName(), agents.get(j).reward);
+                }
+                data.add(agents.get(0).reward);
+                agents = reset(trained.length);
+            }else{
+                agents = step(carControls);
+            }
             this.render();
         }
 
+        return trainedData;
+    }
+
+
+    @Override
+    public ArrayList<Double> getData() {
+        return data;
     }
 
     @Override
@@ -128,8 +151,6 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
 
 
     private double evalFitness(SimpleCar car){
-        return mazeMap.distanceFromStart(new Point2D.Double(car.getPosition().getX(), car.getPosition().getY()));
+        return car.getDistanceTraveled();
     }
-
-
 }

@@ -7,7 +7,7 @@ import org.lrima.laop.settings.LockedSetting;
 import org.lrima.laop.settings.Scope;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
-import org.lrima.laop.simulation.data.ResultData;
+import org.lrima.laop.simulation.data.AlgorithmsData;
 import org.lrima.laop.utils.Actions.Action;
 import org.lrima.laop.utils.Console;
 
@@ -23,10 +23,10 @@ public class LearningEngine implements Runnable{
     ArrayList<Action<LearningEngine>> onBatchStarted;
     ArrayList<Action<LearningEngine>> onEnd;
 
-    
-    private ResultData data;
     private LearningAlgorithm learningAlgorithm;
     private Environnement environnement;
+    private AlgorithmsData learningData;
+    private AlgorithmsData trainedData;
 
     private Thread currentThread;
 
@@ -39,7 +39,7 @@ public class LearningEngine implements Runnable{
 
         this.onBatchStarted = new ArrayList<>();
         this.onEnd = new ArrayList<>();
-        this.data = new ResultData(this.settings.getLocalScopes());
+        this.learningData = new AlgorithmsData();
     }
 
     public void start(){
@@ -47,30 +47,12 @@ public class LearningEngine implements Runnable{
         currentThread.start();
     }
 
-//    private void nextBatch() {
-//
-////        envrionnement = generateEnvironnement();
-//
-//
-//
-//
-//        envrionnement.start();
-//        envrionnement.setEnd((simulation) -> {
-//        	this.currentScopeIndex++;
-//        	//Check if all algorithms have been runned
-//        	if(this.currentScopeIndex >= this.settings.getLocalScopeKeys().size()) {
-//        		this.onEnd.forEach(b -> b.handle(this));
-//
-//        		return;
-//        	}
-//        	nextBatch();
-//        });
-
-//    }
     @Override
     public void run() {
         this.environnement = generateEnvironnement();
         this.environnement.init(this);
+
+        LearningAlgorithm[] trained = new LearningAlgorithm[this.settings.getLocalScopeKeys().size()];
 
         //train
         for (this.batchCount = 0; batchCount < this.settings.getLocalScopeKeys().size(); batchCount++) {
@@ -80,10 +62,20 @@ public class LearningEngine implements Runnable{
             learningAlgorithm = generateLearningAlgorithm();
             learningAlgorithm.train(environnement);
 
-//            this.data.addData(this.settings.getLocalScopeKeys().get(batchCount), this.environnement.getBatchData());
+            learningData.put(getCurrentScopeName(), environnement.getData());
+            trained[batchCount] = learningAlgorithm;
         }
 
-        this.onEnd.forEach((a) -> a.handle(this));
+        //TODO : faire le cas ou c'est pas un multi
+
+        environnement = generateEnvironnement();
+        environnement.init(this);
+        trainedData = environnement.evaluate(trained,100);
+
+
+        onEnd.forEach((a) -> a.handle(this));
+        learningData.toCsv();
+        trainedData.toCsv();
     }
 
     private Environnement generateEnvironnement() {
@@ -157,10 +149,6 @@ public class LearningEngine implements Runnable{
 
     public Stage getMainScene() {
         return mainScene;
-    }
-    
-    public ResultData getData() {
-    	return this.data;
     }
 
     public LearningAlgorithm getCurrentLearning() {

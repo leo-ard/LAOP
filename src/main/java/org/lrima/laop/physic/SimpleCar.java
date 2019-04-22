@@ -33,9 +33,8 @@ public class SimpleCar implements LineCollidable {
     private double rotation;
     private double angularVelocity;
     private ArrayList<Vector2d> forces;
-    
-    private long stopCheckingCollisionAt;
-    private final int MINIMUM_TIME_BEFORE_COLLISION_AGAIN = 100;
+
+    private double distanceTraveled;
 
     //OPTIMISATION
     private ArrayList<LineCollidable> collidableSensors;
@@ -94,7 +93,9 @@ public class SimpleCar implements LineCollidable {
         this.rotation += angularVelocity;
 
         this.velocity = this.velocity.add(acceleration.multiply(LearningEngine.DELTA_T));
-       
+
+        distanceTraveled += this.velocity.modulus();
+
         this.position = this.position.add(this.velocity.multiply(LearningEngine.DELTA_T));
     }
     
@@ -279,15 +280,6 @@ public class SimpleCar implements LineCollidable {
     }
 
     /**
-     * Check if the object can collide. It is necessary to stop reacting to collisions for a small
-     * amount of time after a collision occurred or else it would collide indefinitely.
-     * @return true if the object can react to collisions, false otherwise
-     */
-    protected boolean canCollide(){
-        return (System.currentTimeMillis() - this.stopCheckingCollisionAt > this.MINIMUM_TIME_BEFORE_COLLISION_AGAIN);
-    }
-
-    /**
      * Resets the velocity of the object
      */
     protected void resetVelocity() {
@@ -357,5 +349,9 @@ public class SimpleCar implements LineCollidable {
      */
     public double getHeight() {
     	return this.CAR_HEIGHT;
+    }
+
+    public double getDistanceTraveled() {
+        return distanceTraveled;
     }
 }

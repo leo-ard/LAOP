@@ -1,7 +1,6 @@
 package org.lrima.laop.network.FUCONN;
 
 import org.lrima.laop.network.LearningAlgorithm;
-import org.lrima.laop.network.FUCONN.FUCONN;
 import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.simulation.Agent;
 import org.lrima.laop.simulation.Environnement;
@@ -66,8 +65,8 @@ public class GeneticLearning implements LearningAlgorithm{
 
         ArrayList<Agent> agents = env.reset(100);
         long time = 0;
-
-        while(true){
+        int episode = 0;
+        while(episode < 100){
             while(!env.isFinished() && time < 2000){
                 time++;
 
@@ -86,6 +85,7 @@ public class GeneticLearning implements LearningAlgorithm{
             time = 0;
             env.evaluate(this);
             agents = env.reset(geneticNN.size());
+            episode++;
         }
     }
 
