@@ -97,6 +97,10 @@ public class LAOP {
 
         if(settings != null) settings.forEach((k, v) -> this.settings.set(label, k, v));
     }
+    
+    public void removeAlgorithm(String label) {
+    	this.settings.removeScope(label);
+    }
 
     /**
      * Met a jour une valeur dans les settings
