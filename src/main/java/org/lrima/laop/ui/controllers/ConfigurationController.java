@@ -128,25 +128,26 @@ public class ConfigurationController implements Initializable {
     private class AlgorithmCell extends ListCell<String> {
     	HBox cellContent = new HBox();
     	Label name;
-    	Label deleteBtn;
+    	JFXButton deleteBtn;
     	
     	public AlgorithmCell() {
     		super();
     		
     		cellContent.setPadding(new Insets(0, 10, 0, 10));
     		name = new Label("");
-    		deleteBtn = new Label("DELETE");
+    		deleteBtn = new JFXButton("X");
     		deleteBtn.getStyleClass().add("btn-danger");
     		
     		Region space = new Region();
             HBox.setHgrow(space, Priority.ALWAYS);
             
             deleteBtn.setOnMouseClicked((event) ->{
-            	ConfigurationController.this.laop.removeAlgorithm(this.getItem());
-            	getListView().getItems().remove(getItem());
-            	this.name.setText("");
-            	this.deleteBtn.setText("");
-            	ConfigurationController.this.reloadScopeTableFromSettings();
+            	if(!getItem().equals("GLOBAL")) {
+            		ConfigurationController.this.laop.removeAlgorithm(this.getItem());
+                	getListView().getItems().remove(getItem());
+                	ConfigurationController.this.reloadScopeTableFromSettings();
+            	}
+            	
             });
             
             this.cellContent.getChildren().addAll(name, space, deleteBtn);
@@ -158,14 +159,13 @@ public class ConfigurationController implements Initializable {
             
             cellContent.setAlignment(Pos.CENTER);
             if (item != null) {
-            	
-            	if(item.equals("GLOBAL")) {
-            		this.deleteBtn.setText("");
-            	}
             	//Algorithm name label
             	this.name.setText(item);
             	
                 setGraphic(this.cellContent);
+            }
+            else {
+            	setGraphic(null);
             }
         }
     }
