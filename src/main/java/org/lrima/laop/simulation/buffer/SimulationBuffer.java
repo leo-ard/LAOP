@@ -2,7 +2,6 @@ package org.lrima.laop.simulation.buffer;
 
 import java.util.ArrayList;
 
-import org.lrima.laop.simulation.data.BatchData;
 import org.lrima.laop.simulation.data.CarData;
 import org.lrima.laop.utils.Actions.Action;
 
