@@ -2,6 +2,7 @@ package org.lrima.laop.simulation.buffer;
 
 import java.util.ArrayList;
 
+import org.lrima.laop.simulation.data.BatchData;
 import org.lrima.laop.simulation.data.CarData;
 import org.lrima.laop.utils.Actions.Action;
 
@@ -65,5 +66,11 @@ public class SimulationBuffer  {
 
     public void clear() {
         snapshots = new ArrayList<>();
+    }
+
+    public void insetLast(CarData carData) {
+        if(this.snapshots.size() != 0){
+            this.snapshots.get(this.snapshots.size()-1).addCar(carData);
+        }
     }
 }

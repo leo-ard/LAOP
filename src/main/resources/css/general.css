@@ -15,6 +15,12 @@
     -jfx-button-type: RAISED;
 }
 
+.btn-danger{
+    -fx-background-color : #FF8984;
+    -fx-text-fill : #FFFFFF;
+    -jfx-button-type: RAISED;
+}
+
 .medium{
     -fx-background-color : #3944ff;
     -fx-text-fill : #FFFFFF;

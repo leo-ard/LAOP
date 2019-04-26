@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.ResourceBundle;
 
+import org.lrima.laop.ui.I18n;
 import org.lrima.laop.utils.lasp.AlgorithmsApiGateway;
 import org.lrima.laop.utils.lasp.beans.algorithm.AlgorithmBean;
 import org.lrima.laop.utils.lasp.beans.algorithm.AlgorithmResponseBean;
@@ -37,6 +38,7 @@ public class DownloadAlgorithmController implements Initializable {
 	
 	@FXML HBox errorBox;
 	@FXML HBox bottomBar;
+	@FXML Label algorithmLabel;
 	
 	@FXML StackPane root;
 
@@ -63,8 +65,8 @@ public class DownloadAlgorithmController implements Initializable {
 			this.bottomBar.setVisible(false);
 			this.bottomBar.setManaged(false);
 		}
-		
-		
+
+		I18n.bind(algorithmLabel, nextPageBtn, prevPageBtn);
 	}
 
 	/**

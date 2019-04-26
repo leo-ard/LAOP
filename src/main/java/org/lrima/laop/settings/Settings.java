@@ -105,7 +105,7 @@ public class Settings {
      * @param scope - the name of the scope. This field is not case-sensitive
      * @return true if successful, false otherwise
      */
-    private boolean removeScope(String scope){
+    public boolean removeScope(String scope){
         //If the scope doesn't exists, return false
         if (this.scopes.get(scope) == null) {
             return false;

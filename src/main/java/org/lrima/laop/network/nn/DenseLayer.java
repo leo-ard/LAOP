@@ -1,7 +1,9 @@
 package org.lrima.laop.network.nn;
 
+import org.lrima.laop.utils.MathUtils;
 import org.lrima.laop.utils.math.RandomUtils;
 
+import java.util.Arrays;
 import java.util.function.Function;
 
 /**
@@ -11,9 +13,8 @@ import java.util.function.Function;
  */
 public class DenseLayer implements Layer {
     private double[][] weights;
-    private double[] bias;
     private Function<Double, Double> activationFunction;
-    int size;
+    private int size;
 
 
     /**
@@ -27,14 +28,12 @@ public class DenseLayer implements Layer {
         this.size = size;
         this.activationFunction = activationFunction;
 
-        this.weights = new double[this.size][previousLayerSize];
-        this.bias = new double[this.size];
+        this.weights = new double[this.size][previousLayerSize + 1];
 
-        for(int i = 0; i < this.size; i++){
+        for(int i = 0; i < this.size;i++){
             for(int j = 0; j < previousLayerSize; j++){
                 weights[i][j] = getRandomWeight();
             }
-            bias[i] = getRandomBias();
         }
     }
 
@@ -42,23 +41,12 @@ public class DenseLayer implements Layer {
      * Created a Dense layer by attributing its weights and bias
      *
      * @param weights A matrix of weights. Its size becomes the size of this layer. The first column is the current neuron and the rows are all the connections to the neurons.
-     * @param bias A vector of all the biases at each neuron
      * @param activationFunction the activation function
      */
-    public DenseLayer(double[][] weights, double[] bias, Function<Double, Double> activationFunction){
+    public DenseLayer(double[][] weights, Function<Double, Double> activationFunction){
         this.weights = weights;
-        this.bias = bias;
         this.activationFunction = activationFunction;
         this.size = this.weights.length;
-    }
-
-
-    /**
-     *
-     * @return a random bias
-     */
-    private double getRandomBias() {
-        return RandomUtils.getDouble(-5, 5);
     }
 
     /**
@@ -90,16 +78,17 @@ public class DenseLayer implements Layer {
      * Calculates the weithed sum of the neuron at index <code>neuron</code> with weights <code> weights</code>
      *
      * @param neuron the index of the current neuron being calculated
-     * @param weights the weights of the current neuron
+     * @param neuronValues the weights of the current neuron
      * @return
      */
-    private double getWeightedSum(int neuron, double[] weights) {
+    private double getWeightedSum(int neuron, double[] neuronValues) {
         double sum = 0;
-        for(int i = 0; i < this.weights[neuron].length; i++){
-            sum += this.weights[neuron][i] * weights[i];
+        for(int i = 0; i < neuronValues.length; i++){
+            sum += this.weights[neuron][i] * neuronValues[i];
         }
 
-        sum += bias[neuron];
+        //BIAS
+        sum += this.weights[neuron][neuronValues.length];
 
         sum = activationFunction.apply(sum);
 
@@ -108,27 +97,25 @@ public class DenseLayer implements Layer {
 
     @Override
     public int size() {
-        return size;
+        return weights.length;
     }
 
     public double[][] getWeights() {
         return weights;
     }
 
-    public double[][] getWeightsAndBias() {
-        double[][] weightsAndBias = new double[this.size][weights[0].length+1];
+    public static void main(String[] args){
+        NeuralNetwork neuralNetwork = new NeuralNetwork(5);
+        neuralNetwork.addDenseLayer(2, MathUtils.LOGISTIC);
+        neuralNetwork.addDenseLayer(3, MathUtils.LOGISTIC);
 
-        for (int i = 0; i < weights.length; i++) {
-            for (int j = 0; j < weights[i].length; j++) {
-                weightsAndBias[i][j] = this.weights[i][j];
-            }
-            weightsAndBias[i][this.weights[i].length] = bias[i];
-        }
+        System.out.println(Arrays.toString(neuralNetwork.predict(new double[]{0, 1, 2, 3, 4})));
+        System.out.println(Arrays.toString(neuralNetwork.getAllWeights()));
+        System.out.println(neuralNetwork.getAllWeights().length);
 
-        return weightsAndBias;
+        System.out.println(Arrays.toString(neuralNetwork.getTopology()));
+        NeuralNetwork neuralNetwork1 = new NeuralNetwork(neuralNetwork.getTopology(), neuralNetwork.getAllWeights());
+        System.out.println(Arrays.toString(neuralNetwork1.getAllWeights()));
     }
 
-    public double[] getBias() {
-        return bias;
-    }
 }

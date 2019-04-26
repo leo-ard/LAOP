@@ -17,7 +17,7 @@ import com.google.gson.reflect.TypeToken;
  */
 public class AlgorithmsApiGateway extends ApiCaller {
 	private final Type COLLECTION_TYPE = new TypeToken<Collection<AlgorithmBean>>(){}.getType();
-	private final String ALGORITHM_LIST_ENDPOINT = "http://localhost:8000/api/posts";
+	private final String ALGORITHM_LIST_ENDPOINT = "https://lasp.lrima.cmaisonneuve.qc.ca/api/posts";
 	private HashMap<Integer, AlgorithmResponseBean> cache;
 	
 	public AlgorithmsApiGateway() {

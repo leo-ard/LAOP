@@ -5,10 +5,11 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import javafx.scene.control.Label;
 import org.lrima.laop.core.LAOP;
-import org.lrima.laop.network.concreteLearning.GeneticLearning;
-import org.lrima.laop.network.concreteNetworks.NEAT;
+import org.lrima.laop.network.FUCONN.GeneticLearning;
 import org.lrima.laop.settings.Scope;
+import org.lrima.laop.ui.I18n;
 import org.lrima.laop.ui.stage.DownloadAlgorithmDialog;
 
 import com.jfoenix.controls.JFXButton;
@@ -19,10 +20,20 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 /**
  * Class that controls the configuration panel (configuration.fxml)
@@ -31,10 +42,12 @@ import javafx.stage.Stage;
  */
 public class ConfigurationController implements Initializable {
     
-    @FXML private JFXListView<String> scopeList;
+    @FXML private ListView<String> scopeList;
     @FXML private BorderPane settingsContainer;
     @FXML private JFXButton downloadBtn;
-    private LAOP laop;
+    @FXML private Label settingLabel;
+    @FXML private Label algorithmLabel;
+    protected LAOP laop;
     private HashMap<String, Node> panels;
     private Stage parent;
 
@@ -50,7 +63,7 @@ public class ConfigurationController implements Initializable {
     	Optional<String> scopeName = scopeNameDialog.showAndWait();
     	
     	scopeName.ifPresent(name -> {
-    		this.laop.addAlgorithm(name, NEAT.class, GeneticLearning.class, new HashMap<>());
+    		this.laop.addAlgorithm(name, GeneticLearning.class, new HashMap<>());
     		this.reloadScopeTableFromSettings();
     	});
     }
@@ -58,6 +71,14 @@ public class ConfigurationController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {    
     	this.panels = new HashMap<>();
+    	this.scopeList.setCellFactory(new Callback<ListView<String>,
+                ListCell<String>>() {
+            @Override
+            public ListCell<String> call(ListView<String> list) {
+                return new AlgorithmCell();
+            }
+        }
+    );
     	scopeList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if(newVal == null) {
                 scopeList.getSelectionModel().select(0);
@@ -71,6 +92,9 @@ public class ConfigurationController implements Initializable {
     		//Open the download dialog
     		DownloadAlgorithmDialog dialog = new DownloadAlgorithmDialog(parent);
     	});
+        System.out.println(downloadBtn + " " + settingLabel + " " + algorithmLabel);
+		I18n.bind(downloadBtn, settingLabel, algorithmLabel);
+
     }
     
     public void setLaop(LAOP laop) {
@@ -107,6 +131,50 @@ public class ConfigurationController implements Initializable {
     	scopeList.getSelectionModel().selectLast();
     }
 
+    private class AlgorithmCell extends ListCell<String> {
+    	HBox cellContent = new HBox();
+    	Label name;
+    	JFXButton deleteBtn;
+
+    	public AlgorithmCell() {
+    		super();
+
+    		cellContent.setPadding(new Insets(0, 10, 0, 10));
+    		name = new Label("");
+    		deleteBtn = new JFXButton("X");
+    		deleteBtn.getStyleClass().add("btn-danger");
+
+    		Region space = new Region();
+            HBox.setHgrow(space, Priority.ALWAYS);
+
+            deleteBtn.setOnMouseClicked((event) ->{
+            	if(!getItem().equals("GLOBAL")) {
+            		ConfigurationController.this.laop.removeAlgorithm(this.getItem());
+                	getListView().getItems().remove(getItem());
+                	ConfigurationController.this.reloadScopeTableFromSettings();
+            	}
+
+            });
+
+            this.cellContent.getChildren().addAll(name, space, deleteBtn);
+    	}
+
+        @Override
+        public void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);
+
+            cellContent.setAlignment(Pos.CENTER);
+            if (item != null) {
+            	//Algorithm name label
+            	this.name.setText(item);
+
+                setGraphic(this.cellContent);
+            }
+            else {
+            	setGraphic(null);
+            }
+        }
+    }
 
 
 }

@@ -9,8 +9,8 @@ public class ConclusionTest extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		ResultStage stage = new ResultStage();
-		stage.show();
+//		ResultStage stage = new ResultStage();
+//		stage.show();
 		
 	}
 

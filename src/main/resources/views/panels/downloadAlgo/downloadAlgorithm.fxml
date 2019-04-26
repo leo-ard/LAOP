@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import com.jfoenix.controls.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.lrima.laop.ui.controllers.downloadAlgorithm.DownloadAlgorithmController">
+<StackPane fx:id="root" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.lrima.laop.ui.controllers.downloadAlgorithm.DownloadAlgorithmController">
    <children>
       <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
          <top>
             <HBox prefHeight="65.0" prefWidth="600.0" styleClass="panel-header" BorderPane.alignment="CENTER">
                <children>
-                  <Label prefHeight="65.0" prefWidth="462.0" text="Algorithms shared on LASP">
+                  <Label fx:id="algorithmLabel" prefHeight="65.0" prefWidth="462.0" text="\%algorithm-share">
                      <padding>
                         <Insets left="20.0" />
                      </padding>
@@ -43,13 +47,13 @@
                   </ScrollPane>
                   <HBox fx:id="bottomBar" alignment="CENTER" prefHeight="60.0" prefWidth="600.0">
                      <children>
-                        <JFXButton fx:id="prevPageBtn" styleClass="btn" text="Previous page">
+                        <JFXButton fx:id="prevPageBtn" styleClass="btn" text="\%previous">
                            <HBox.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </HBox.margin>
                         </JFXButton>
                         <Label fx:id="currentPageLbl" alignment="CENTER" prefHeight="86.0" prefWidth="49.0" text="1" />
-                        <JFXButton fx:id="nextPageBtn" styleClass="btn" text="Next page">
+                        <JFXButton fx:id="nextPageBtn" styleClass="btn" text="\%next">
                            <HBox.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </HBox.margin>

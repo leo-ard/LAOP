@@ -1,11 +1,9 @@
 package org.lrima.laop.simulation.map;
 
-import java.awt.geom.Area;
-import java.awt.geom.Point2D;
-
 import org.lrima.laop.physic.staticobjects.StaticLineObject;
-import org.lrima.laop.physic.staticobjects.StaticObject;
 import org.lrima.laop.utils.math.RandomUtils;
+
+import java.awt.geom.Point2D;
 
 /**
  * Map made like a randomly generated maze
@@ -21,7 +19,9 @@ public class MazeMap extends AbstractMap {
     private boolean[][] visited;
     private Point2D start;
 
-    public MazeMap(int numberOfSquareX) {
+	private double orientation;
+
+	public MazeMap(int numberOfSquareX) {
     	super();
     	this.numberSquareX = numberOfSquareX;
 
@@ -29,8 +29,9 @@ public class MazeMap extends AbstractMap {
     	this.generate(1, 1);
     	this.createMazeObjects();
     	this.generateStartLocation();
+
     }
-    
+
     /**
      * Initialize the maze with each border present
      */
@@ -45,7 +46,7 @@ public class MazeMap extends AbstractMap {
     		visited[0][y] = true;
     		visited[this.numberSquareX + 1][y] = true;
     	}
-    	
+
     	//initialize all walls as present
     	this.north = new boolean[this.numberSquareX + 2][this.numberSquareX + 2];
     	this.west = new boolean[this.numberSquareX + 2][this.numberSquareX + 2];
@@ -60,7 +61,7 @@ public class MazeMap extends AbstractMap {
     		}
     	}
     }
-    
+
     /**
      * Generate the maze
      * @param x the position in x to generate the maze from
@@ -69,7 +70,7 @@ public class MazeMap extends AbstractMap {
     private void generate(int x, int y) {
     	visited[x][y] = true;
     	while(hasNeighbors(x, y)) {
-    		
+
     		while(true) {
     			int neighbor = RandomUtils.getInteger(0, 3);
     			if(neighbor == 0 && !visited[x + 1][y]) {
@@ -103,7 +104,7 @@ public class MazeMap extends AbstractMap {
     		}
     	}
     }
-    
+
     /**
      * Check if a square has neighbors that are not visited
      * @param x the position in x of the node
@@ -115,38 +116,38 @@ public class MazeMap extends AbstractMap {
     	boolean left = false;
     	boolean top = false;
     	boolean bottom = false;
-    	
+
     	if(x + 1 < visited.length) {
     		right = !visited[x + 1][y];
     	}
-    	
+
     	if(x - 1 >= 0) {
     		left = !visited[x - 1][y];
     	}
-    	
+
     	if(y - 1 >= 0) {
     		top = !visited[x][y - 1];
     	}
-    	
+
     	if(y + 1 < visited[0].length) {
     		bottom = !visited[x][y + 1];
     	}
-    	
+
     	return right || left || top || bottom;
     }
-    
+
     /**
      * Create the lines of the maze from the generated maze
      */
     private void createMazeObjects() {
     	//North lines
     	for(int x = 1 ; x < north.length - 1 ; x++) {
-    		for(int y = 1 ; y < north[0].length - 1 ; y++) {
-    			if(north[x][y]) {
-    				this.lines.add(new StaticLineObject((x - 1) * MAP_SQUARE_WIDTH, (y - 1) * MAP_SQUARE_WIDTH, x * MAP_SQUARE_WIDTH, (y - 1) * MAP_SQUARE_WIDTH));
-    			}
-    		}
-    	}
+			for(int y = 1 ; y < north[0].length - 1 ; y++) {
+				if(north[x][y]) {
+					this.lines.add(new StaticLineObject((x - 1) * MAP_SQUARE_WIDTH, (y - 1) * MAP_SQUARE_WIDTH, x * MAP_SQUARE_WIDTH, (y - 1) * MAP_SQUARE_WIDTH));
+				}
+			}
+		}
     	//South lines
     	for(int x = 1 ; x < south.length - 1 ; x++) {
     		for(int y = 1 ; y < south[0].length - 1 ; y++) {
@@ -172,18 +173,22 @@ public class MazeMap extends AbstractMap {
     		}
     	}
     }
-    
+
     /**
      * Generate the starting location after creating the maze
      */
     private void generateStartLocation() {
-    	int randomX = RandomUtils.getInteger(0, numberSquareX - 1);
-    	int randomY = RandomUtils.getInteger(0, numberSquareX - 1);
-    	
-    	this.start = new Point2D.Double((randomX * MAP_SQUARE_WIDTH) + MAP_SQUARE_WIDTH / 2, (randomY * MAP_SQUARE_WIDTH) + 10);
-    }
-    
-    
+		int randomX = 0;//RandomUtils.getInteger(0, numberSquareX - 1);
+		int randomY = 0;//RandomUtils.getInteger(0, numberSquareX - 1);
+
+
+		this.start = new Point2D.Double((randomX * MAP_SQUARE_WIDTH) + MAP_SQUARE_WIDTH / 2, (randomY * MAP_SQUARE_WIDTH) + 10);
+		if(south[1][1]){
+			orientation = 3*Math.PI/2;
+		}
+	}
+
+
     /**
      * Randomly create a maze representing the map
      */
@@ -195,4 +200,8 @@ public class MazeMap extends AbstractMap {
     public Point2D getStartPoint() {
     	return this.start;
     }
+
+	public double getOrientation() {
+		return orientation;
+	}
 }
