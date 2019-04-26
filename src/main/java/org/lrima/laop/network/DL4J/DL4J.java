@@ -27,6 +27,7 @@ public class DL4J extends ManualCarController {
     private MultiLayerNetwork network;
     private INDArray features;
     private INDArray labels;
+    private int learning = 0;
 
     private MODE takeOverMode = MODE.WAIT_FOR_INPUT;
     private MODE oldTakeOverMode = MODE.AI_CONTROL;
@@ -65,6 +66,7 @@ public class DL4J extends ManualCarController {
             INDArray expected = Nd4j.create(MathUtils.convertToDoubleArray(this.controls));
             this.addToData(captor, expected);
             network.fit(captor, expected);
+            learning++;
         }
         else if(tempMode == MODE.AI_CONTROL){
             double[] output = network.output(captor).toDoubleVector();
@@ -119,7 +121,8 @@ public class DL4J extends ManualCarController {
 
         this.oldTakeOverMode = takeOverMode;
 
-//        System.out.println(carControls);
+        if(takeOverMode == MODE.AI_CONTROL)
+            System.out.println(carControls);
 
         return carControls;
 
@@ -146,7 +149,7 @@ public class DL4J extends ManualCarController {
 
     public void init() {
         MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
-                .weightInit(WeightInit.XAVIER)
+                .weightInit(WeightInit.NORMAL)
                 .activation(Activation.RELU)
                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
                 .updater(new Sgd(0.1))

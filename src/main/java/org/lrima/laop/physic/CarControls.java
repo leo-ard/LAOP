@@ -29,6 +29,10 @@ public class CarControls {
 	 * @return The acceleration from the array received from an algorithm
 	 */
 	public double getAcceleration() {
+		if(accelerationField < 0.0001){
+			accelerationField = 0;
+		}
+
 		return this.accelerationField;
 	}
 	

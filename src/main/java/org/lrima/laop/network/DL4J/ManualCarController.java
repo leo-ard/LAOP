@@ -64,17 +64,20 @@ public class ManualCarController  {
         controls.setAcceleration(inputValues[0]);
         controls.setBreak(Math.round(inputValues[1]));
 
-        int left = (int) Math.round(inputValues[2]);
-        int right = (int) Math.round(inputValues[3]);
 
-        if(left == right){
-            controls.setRotation(0.5);
-        }
-        else if(left == 1){
-            controls.setRotation(1);
-        }else if(right == 1){
-            controls.setRotation(0);
-        }
+        controls.setRotation(0.5 + inputValues[2] *0.5 + inputValues[3] * -0.5);
+
+//        int left = (int) Math.round(inputValues[2]);
+//        int right = (int) Math.round(inputValues[3]);
+//
+//        if(left == right){
+//            controls.setRotation(0.5);
+//        }
+//        else if(left == 1){
+//            controls.setRotation(1);
+//        }else if(right == 1){
+//            controls.setRotation(0);
+//        }
 
 
         return controls;

@@ -22,7 +22,7 @@ public class AlgorithmsApiGateway extends ApiCaller {
 	
 	public AlgorithmsApiGateway() {
 		this.cache = new HashMap<Integer, AlgorithmResponseBean>();
-	} 
+	}
 	
 	/**
 	 * Retrieve all the algorithms from the LASP database

@@ -29,11 +29,13 @@ public class LearningEngine implements Runnable{
     private AlgorithmsData trainedData;
 
     private Thread currentThread;
+    private SimulationBuffer displayBuffer;
 
     public static double DELTA_T = 0.05;
 
     public LearningEngine(SimulationBuffer simulationBuffer, Settings settings) {
         this.simulationBuffer = simulationBuffer;
+        displayBuffer = new SimulationBuffer();
         this.settings = settings;
         this.batchCount = 0;
 
@@ -153,5 +155,9 @@ public class LearningEngine implements Runnable{
 
     public LearningAlgorithm getCurrentLearning() {
         return learningAlgorithm;
+    }
+
+    public SimulationBuffer getDisplayBuffer() {
+        return displayBuffer;
     }
 }

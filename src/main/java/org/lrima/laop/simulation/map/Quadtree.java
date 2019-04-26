@@ -138,6 +138,7 @@ public class Quadtree {
             return new int[]{i1};
         }
 
+        //si ils sont en diagonales
         if(i1+i2 == 3){
             return new int[]{0, 1, 2, 3};
         }
