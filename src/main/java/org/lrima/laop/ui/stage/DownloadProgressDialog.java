@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 
+import org.lrima.laop.ui.I18n;
 import org.lrima.laop.ui.controllers.downloadAlgorithm.DownloadProgressController;
 import org.lrima.laop.utils.lasp.beans.algorithm.AlgorithmBean;
 
@@ -24,7 +25,7 @@ public class DownloadProgressDialog extends Stage {
 
 	public DownloadProgressDialog(AlgorithmBean algorithm) {
 		this.algorithm = algorithm;
-		this.setTitle("Download progress");
+		I18n.bind("download-progress", this::setTitle);
 		this.initModality(Modality.APPLICATION_MODAL);
 
 		this.configureDialogComponents();
@@ -54,7 +55,7 @@ public class DownloadProgressDialog extends Stage {
 
 	private void startDownload() {
 		try {
-			URL url = new URL("https://lasp.lrima.cmaisonneuve.qc.ca/api/posts/" + this.algorithm.getId() + "/download");
+			URL url = new URL("https://lasp.lrima.cmaisonneuve.qc.ca/posts/" + this.algorithm.getId() + "/download");
 			BufferedInputStream in = new BufferedInputStream(url.openStream());
 			FileOutputStream fileOutputStream = new FileOutputStream("algos/" + algorithm.getTitle() + algorithm.getId() + ".jar");
 			byte dataBuffer[] = new byte[256];
@@ -69,8 +70,8 @@ public class DownloadProgressDialog extends Stage {
 			
 			//Show an alert dialog telling the user that the file has been saved
 			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setHeaderText("Download successful");
-			alert.setContentText("The algorithm was downloaded successfully. Don't forget to rate it !");
+			alert.setHeaderText(I18n.getString("download-succes"));
+			alert.setContentText(I18n.getString("download-succes-long"));
 			alert.showAndWait();
 			this.close();
 

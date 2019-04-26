@@ -32,6 +32,13 @@ public class I18n {
         }
     }
 
+    public static void bind(StringBuilder string){
+        if(string.toString().startsWith("%")){
+            allKeys.put(string.substring(1), (key) -> string.replace(0, string.length(), key));
+            string.replace(0, string.length(), messages.getString(string.substring(1)));
+        }
+    }
+
     public static void bind(MenuItem menuItem){
         String string = menuItem.getText();
         if(string.startsWith("%")){
@@ -70,5 +77,9 @@ public class I18n {
         for (Labeled labeled : labeleds) {
             remove(labeled);
         }
+    }
+
+    public static String getString(String s) {
+        return messages.getString(s);
     }
 }

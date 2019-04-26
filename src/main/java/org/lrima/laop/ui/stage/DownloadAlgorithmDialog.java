@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.lrima.laop.ui.I18n;
 
 /**
  * Show a dialog to allow the user to download an algorithm from 
@@ -12,7 +13,6 @@ import javafx.stage.Stage;
  * @author Clement Bisaillon
  */
 public class DownloadAlgorithmDialog extends Stage {
-	
 	Scene scene;
 	
 	/**
@@ -20,7 +20,7 @@ public class DownloadAlgorithmDialog extends Stage {
 	 * @param parent the parent stage
 	 */
 	public DownloadAlgorithmDialog(Stage parent) {
-		this.setTitle("Algorithm downloader");
+		I18n.bind("algorithm-download", this::setTitle);
 		this.initOwner(parent);
 		this.initModality(Modality.APPLICATION_MODAL);
 		

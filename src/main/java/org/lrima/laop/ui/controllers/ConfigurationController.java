@@ -71,14 +71,7 @@ public class ConfigurationController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {    
     	this.panels = new HashMap<>();
-    	this.scopeList.setCellFactory(new Callback<ListView<String>,
-                ListCell<String>>() {
-            @Override
-            public ListCell<String> call(ListView<String> list) {
-                return new AlgorithmCell();
-            }
-        }
-    );
+    	this.scopeList.setCellFactory(list -> new AlgorithmCell());
     	scopeList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if(newVal == null) {
                 scopeList.getSelectionModel().select(0);
@@ -90,7 +83,7 @@ public class ConfigurationController implements Initializable {
     	
     	downloadBtn.setOnMouseClicked((event) -> {
     		//Open the download dialog
-    		DownloadAlgorithmDialog dialog = new DownloadAlgorithmDialog(parent);
+            new DownloadAlgorithmDialog(parent);
     	});
         System.out.println(downloadBtn + " " + settingLabel + " " + algorithmLabel);
 		I18n.bind(downloadBtn, settingLabel, algorithmLabel);

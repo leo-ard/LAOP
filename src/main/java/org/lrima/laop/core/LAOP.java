@@ -1,6 +1,5 @@
 package org.lrima.laop.core;
 
-import org.lrima.laop.network.DL4J.DL4J;
 import org.lrima.laop.network.DL4J.DL4JLearning;
 import org.lrima.laop.network.FUCONN.GeneticLearning;
 import org.lrima.laop.network.LearningAlgorithm;
@@ -131,6 +130,7 @@ public class LAOP {
         LearningEngine learningEngine = new LearningEngine(simulationBuffer, this.settings);
 
         if(simulationDisplayMode == simulationDisplayMode.WITH_INTERFACE){
+
             MainSimulationStage mainSimulationStage = new MainSimulationStage(learningEngine);
             mainSimulationStage.show();
         }
