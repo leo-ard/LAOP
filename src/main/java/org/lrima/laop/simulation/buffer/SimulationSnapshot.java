@@ -1,6 +1,6 @@
 package org.lrima.laop.simulation.buffer;
 
-import org.lrima.laop.physic.concreteObjects.SimpleCar;
+import org.lrima.laop.physic.SimpleCar;
 import org.lrima.laop.simulation.data.CarData;
 
 import java.util.ArrayList;

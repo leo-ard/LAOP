@@ -4,6 +4,8 @@ import java.awt.geom.Point2D;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.transform.MatrixType;
+import org.lrima.laop.simulation.sensors.SensorData;
+import org.lrima.laop.ui.Drawable;
 
 /**
  * The data to save the state of the proximity sensor

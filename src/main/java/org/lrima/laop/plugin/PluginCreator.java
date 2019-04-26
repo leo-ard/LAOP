@@ -1,6 +1,6 @@
 package org.lrima.laop.plugin;
 
-import org.lrima.laop.network.carcontrollers.CarController;
+import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.utils.ClassUtils;
 
 import java.io.FileInputStream;
@@ -46,11 +46,7 @@ public class PluginCreator {
             return "Manifest-Version: 1.0\n"+
                     PluginLoader.ACTIVATOR_CLASS_TAG + ": " + learningAlgo.getName()+"\n";
         }
-        if (ClassUtils.checkIfInterface(learningAlgo, CarController.class)) {
-            return "Manifest-Version: 1.0\n"+
-                    PluginLoader.ALGORITHM_CLASS_TAG + ": " +learningAlgo.getName()+"\n";
-        }
-        if(ClassUtils.checkIfInterface(learningAlgo, PluginActivator.class)){
+        if(ClassUtils.checkIfInterface(learningAlgo, LearningAlgorithm.class)){
             return "Manifest-Version: 1.0\n"+
                     PluginLoader.LEARNING_CLASS_TAG + ": " + learningAlgo.getName()+"\n";
         }

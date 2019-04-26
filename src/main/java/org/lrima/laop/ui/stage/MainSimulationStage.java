@@ -9,26 +9,21 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.lrima.laop.network.LearningAlgorithm;
-import org.lrima.laop.network.concreteLearning.GeneticLearning;
-import org.lrima.laop.simulation.GenerationBasedEnvironnement;
-import org.lrima.laop.simulation.SimulationEngine;
+import org.lrima.laop.simulation.LearningEngine;
 import org.lrima.laop.ui.SimulationDrawer;
-import org.lrima.laop.ui.SimulationView;
 import org.lrima.laop.ui.components.ConsolePanel;
 import org.lrima.laop.ui.components.LaopMenuBar;
 import org.lrima.laop.ui.components.Timeline;
 import org.lrima.laop.ui.components.inspector.InspectorPanel;
-import org.lrima.laop.utils.Actions.Procedure;
 
 
 /**
- * Class that displays the simulationEngine with the side panels
+ * Class that displays the learningEngine with the side panels
  *
  * @author Léonard
  */
 public class MainSimulationStage extends Stage {
-    private SimulationEngine simulationEngine;
+    private LearningEngine learningEngine;
     private Timeline timeline;
     private Canvas canvas;
 
@@ -43,17 +38,17 @@ public class MainSimulationStage extends Stage {
     private VBox bottomBar;
 
     /**
-     * Initialize a new simulationEngine stage with a specific simulationEngine buffer
-     * @param simulationEngine the simulationEngine to initialize the simulationEngine stage with
+     * Initialize a new learningEngine stage with a specific learningEngine buffer
+     * @param learningEngine the learningEngine to initialize the learningEngine stage with
      */
-    public MainSimulationStage(SimulationEngine simulationEngine){
-        this.setTitle("LAOP : SimulationEngine");
-        this.simulationEngine = simulationEngine;
+    public MainSimulationStage(LearningEngine learningEngine){
+        this.setTitle("LAOP : LearningEngine");
+        this.learningEngine = learningEngine;
 
         this.canvas = new Canvas(WINDOW_WIDTH, WINDOW_HEIGHT);
         this.inspector = new InspectorPanel();
         this.consolePanel = new ConsolePanel();
-        this.simulationDrawer = new SimulationDrawer(canvas, simulationEngine, inspector);
+        this.simulationDrawer = new SimulationDrawer(canvas, learningEngine, inspector);
         this.timeline = new Timeline(simulationDrawer);
         this.simulationDrawer.setSlider(this.timeline.getSliderTimeLine());
 
@@ -67,34 +62,10 @@ public class MainSimulationStage extends Stage {
 
         this.loadAllScenes();
 
-        this.simulationEngine.setMainScene(this);
-        this.simulationEngine.setOnBatchStarted(this::changeSimulation);
-        this.simulationEngine.setOnEnd(this::endSimulationAndShowResults);
+        this.learningEngine.setMainScene(this);
+        this.learningEngine.setOnEnd(this::endSimulationAndShowResults);
 
         this.simulationDrawer.start();
-    }
-
-    private void changeSimulation(SimulationEngine simulationEngine) {
-        reset(()->{
-            SimulationView simulationView = null;
-            if(simulationEngine.getEnvironnement() instanceof GenerationBasedEnvironnement)
-                simulationView = new GeneticStage((GenerationBasedEnvironnement) simulationEngine.getEnvironnement());
-
-            if(simulationView != null)
-                simulationView.setup(this);
-        });
-    }
-
-    private void reset(Procedure runLater) {
-        Platform.runLater(() -> {
-            this.menuBar.reset();
-            this.timeline.reset();
-
-            this.bottomBar.getChildren().clear();
-            this.bottomBar.getChildren().add(this.timeline);
-
-            runLater.invoke();
-        });
     }
 
     /**
@@ -135,19 +106,19 @@ public class MainSimulationStage extends Stage {
 
         scene.setOnKeyPressed(key->{
             if(key.getCharacter().equals("p")){
-                this.simulationEngine.pause();
+                this.learningEngine.pause();
             }
         });
 
         this.setScene(scene);
     }
     
-    private void endSimulationAndShowResults(SimulationEngine engine) {
+    private void endSimulationAndShowResults(LearningEngine engine) {
     	Platform.runLater(() -> {
-    		System.out.println(engine.getData());
-    		ResultStage resultStage = new ResultStage(engine.getData());
-        	resultStage.show();
-        	this.close();
+//    		System.out.println(engine.getData());
+//    		ResultStage resultStage = new ResultStage(engine.getData());
+//        	resultStage.show();
+//        	this.close();
     	});
     }
 

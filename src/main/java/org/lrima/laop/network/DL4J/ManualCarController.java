@@ -1,4 +1,4 @@
-package org.lrima.laop.network.carcontrollers;
+package org.lrima.laop.network.DL4J;
 
 import org.lrima.laop.physic.CarControls;
 
@@ -6,7 +6,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import org.lrima.laop.settings.LockedSetting;
-import org.lrima.laop.simulation.SimulationEngine;
 import org.lrima.laop.utils.MathUtils;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -15,7 +14,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  *
  * @author Léonard
  */
-public class ManualCarController implements CarController {
+public class ManualCarController  {
     protected int[] controls;
 
     public ManualCarController(){
@@ -51,29 +50,8 @@ public class ManualCarController implements CarController {
         }
     }
 
-    @Override
     public CarControls control(double[] captorValues) {
         return getControls(this.controls);
-    }
-
-    @Override
-    public void init(LockedSetting lockedSetting) {
-
-    }
-
-    @Override
-    public <T extends CarController> T copy() {
-        return (T) new ManualCarController();
-    }
-
-    @Override
-    public void setFitness(double fitness) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public double getFitness() {
-        throw new NotImplementedException();
     }
 
     protected CarControls getControls(int[] input){

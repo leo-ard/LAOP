@@ -1,21 +1,17 @@
 package org.lrima.laop.core;
 
+import org.lrima.laop.network.DL4J.DL4J;
+import org.lrima.laop.network.DL4J.DL4JLearning;
+import org.lrima.laop.network.FUCONN.GeneticLearning;
 import org.lrima.laop.network.LearningAlgorithm;
-import org.lrima.laop.network.carcontrollers.CarController;
-import org.lrima.laop.network.carcontrollers.ManualCarController;
-import org.lrima.laop.network.concreteLearning.DL4JLearning;
-import org.lrima.laop.network.concreteLearning.GeneticLearning;
-import org.lrima.laop.network.concreteNetworks.DL4J;
-import org.lrima.laop.network.concreteNetworks.FUCONN;
-import org.lrima.laop.network.concreteNetworks.NEAT;
 import org.lrima.laop.plugin.PluginLoader;
-import org.lrima.laop.settings.option.OptionClass;
-import org.lrima.laop.settings.Scope;
 import org.lrima.laop.settings.Settings;
+import org.lrima.laop.settings.option.OptionClass;
+import org.lrima.laop.simulation.BetterEnvironnement;
 import org.lrima.laop.simulation.Environnement;
-import org.lrima.laop.simulation.GenerationBasedEnvironnement;
-import org.lrima.laop.simulation.SimulationEngine;
+import org.lrima.laop.simulation.LearningEngine;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
+import org.lrima.laop.ui.I18n;
 import org.lrima.laop.ui.stage.MainSimulationStage;
 import org.lrima.laop.utils.ClassUtils;
 import org.lrima.laop.utils.Console;
@@ -24,6 +20,7 @@ import javax.management.openmbean.KeyAlreadyExistsException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * Main class to manage starting the simulation
@@ -34,7 +31,6 @@ import java.util.HashMap;
 public class LAOP {
     //TODO : this is just for testing purpurses
     private ArrayList<Class<? extends LearningAlgorithm>> learningAlgorithmsClasses;
-    private ArrayList<Class<? extends CarController>> neuralNetworksClasses;
     private ArrayList<Class<? extends Environnement>> environnements;
 
     Settings settings;
@@ -42,18 +38,13 @@ public class LAOP {
      * <p>Constructor for LAOP.</p>
      */
     public LAOP(){
+        I18n.update(new Locale("fr", "CA"));
         learningAlgorithmsClasses = new ArrayList<>();
         learningAlgorithmsClasses.add(GeneticLearning.class);
         learningAlgorithmsClasses.add(DL4JLearning.class);
 
-        neuralNetworksClasses = new ArrayList<>();
-        neuralNetworksClasses.add(NEAT.class);
-        neuralNetworksClasses.add(FUCONN.class);
-        neuralNetworksClasses.add(ManualCarController.class);
-        neuralNetworksClasses.add(DL4J.class);
-
         environnements = new ArrayList<>();
-        environnements.add(GenerationBasedEnvironnement.class);
+        environnements.add(BetterEnvironnement.class);
 
         //Load the algorithm's jar
         PluginLoader.addDir("algos/");
@@ -83,21 +74,19 @@ public class LAOP {
      * Ajoute un algorithme à notre platforme
      *
      * @param label l'identifiant de l'algorithme
-     * @param algorithmClass la classe de l'algorithme
      * @param settings les configurations de l'algorithme
      * @param learningClass a {@link java.lang.Class} object.
      */
-    public void addAlgorithm(String label, Class<? extends CarController> algorithmClass, Class<? extends LearningAlgorithm> learningClass, HashMap<String, Object> settings){
+    public void addAlgorithm(String label, Class<? extends LearningAlgorithm> learningClass, HashMap<String, Object> settings){
         if(this.settings.scopeExist(label))
         	//todo: show error dialog
             throw new KeyAlreadyExistsException("The label "+label+" has already been assigned");
 
-        this.settings.set(label, LAOP.KEY_NETWORK_CLASS, new OptionClass<>(algorithmClass, neuralNetworksClasses, (clazz) -> ClassUtils.checkIfGenericOfInterface((Class)this.settings.get(label, LAOP.KEY_LEARNING_CLASS), (Class)clazz)));
         this.settings.set(label, LAOP.KEY_LEARNING_CLASS, new OptionClass<>(learningClass, learningAlgorithmsClasses, (clazz) -> ClassUtils.checkIfGenericOfInterface((Class)this.settings.get(label, LAOP.KEY_LEARNING_CLASS), (Class)clazz)));
 
         if(settings != null) settings.forEach((k, v) -> this.settings.set(label, k, v));
     }
-    
+
     public void removeAlgorithm(String label) {
     	this.settings.removeScope(label);
     }
@@ -139,14 +128,14 @@ public class LAOP {
     	//check if all the global scopes of the scopes are good
 
         SimulationBuffer simulationBuffer = new SimulationBuffer();
-        SimulationEngine simulationEngine = new SimulationEngine(simulationBuffer, this.settings);
+        LearningEngine learningEngine = new LearningEngine(simulationBuffer, this.settings);
 
         if(simulationDisplayMode == simulationDisplayMode.WITH_INTERFACE){
-            MainSimulationStage mainSimulationStage = new MainSimulationStage(simulationEngine);
+            MainSimulationStage mainSimulationStage = new MainSimulationStage(learningEngine);
             mainSimulationStage.show();
         }
 
-        simulationEngine.start();
+        learningEngine.start();
     }
 
     /**
@@ -163,14 +152,6 @@ public class LAOP {
     public enum SimulationDisplayMode{
         WITH_INTERFACE,
         WITHOUT_INTERFACE;
-    }
-    /**
-     * <p>Getter for the field <code>neuralNetworksClasses</code>.</p>
-     *
-     * @return a {@link java.util.ArrayList} object.
-     */
-    public ArrayList<Class<? extends CarController>> getNeuralNetworksClasses() {
-        return neuralNetworksClasses;
     }
 
     /**
@@ -204,8 +185,6 @@ public class LAOP {
     /** Constant <code>KEY_NUMBER_OF_GENERATIONS="NUMBER OF GENERATIONS"</code> */
     public static final String KEY_NUMBER_OF_GENERATIONS = "NUMBER OF GENERATIONS";
 
-    /** Constant <code>KEY_NETWORK_CLASS="NEURAL NETWORK CLASS"</code> */
-    public static final String KEY_NETWORK_CLASS = "NEURAL NETWORK CLASS";
     /** Constant <code>KEY_LEARNING_CLASS="LEARNING ALGORITHM CLASS"</code> */
     public static final String KEY_LEARNING_CLASS = "LEARNING ALGORITHM CLASS";
 
@@ -217,5 +196,5 @@ public class LAOP {
     /** Constant <code>KEY_ENVIRONNEMENT_CLASS = "ENVIRONNEMENT_CLASS"</code> */
     public static final String KEY_ENVIRONNEMENT_CLASS = "ENVIRONNEMENT_CLASS";
     /** Constant <code>DEFAULT_ENVIRONNEMENT_CLASS</code> */
-    public static final Class<? extends Environnement> DEFAULT_ENVIRONNEMENT_CLASS = GenerationBasedEnvironnement.class;
+    public static final Class<? extends Environnement> DEFAULT_ENVIRONNEMENT_CLASS = BetterEnvironnement.class;
 }

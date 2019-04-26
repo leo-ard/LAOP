@@ -13,6 +13,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import org.lrima.laop.core.LAOP;
+import org.lrima.laop.ui.I18n;
 import org.lrima.laop.ui.controllers.ConfigurationController;
 import org.lrima.laop.utils.FXUtils;
 
@@ -27,17 +28,17 @@ public class ConfigurationStage extends Stage {
     /**
      *  Array of all the panels that must be displayed
      */
-    ArrayList<Parent> scenes;
+    private ArrayList<Parent> scenes;
 
     /**
      *  Indicates which panel is displayed
      */
-    int panelIndex;
+    private int panelIndex;
 
-    JFXButton left;
-    JFXButton right;
-    BorderPane root;
-    LAOP laop;
+    private JFXButton left;
+    private JFXButton right;
+    private BorderPane root;
+    private LAOP laop;
 
     public ConfigurationStage(){
         this.setTitle("LAOP : configuration");
@@ -47,10 +48,10 @@ public class ConfigurationStage extends Stage {
         loadAllScenes();
 
         //Initialisation of the next and back button
-        left = new JFXButton("next");
+        left = new JFXButton("%next");
         left.getStyleClass().add("btn");
 
-        right = new JFXButton("back");
+        right = new JFXButton("%back");
         right.getStyleClass().add("btn");
 
         setButtonLabels(panelIndex);
@@ -72,6 +73,7 @@ public class ConfigurationStage extends Stage {
         Scene scene = new Scene(root);
         scene.getStylesheets().add("/css/general.css");
 
+        I18n.bind(left, right);
         this.setScene(scene);
     }
 
@@ -109,18 +111,23 @@ public class ConfigurationStage extends Stage {
      */
     private void setButtonLabels(int panelIdex){
         if(panelIdex == 0){
-            left.setText("demo");
+            left.setText("");
             left.setOnAction((e)-> launchDemo());
-            right.setText("next");
+            right.setText("%next");
             right.setOnAction((e)-> next());
             right.setButtonType(JFXButton.ButtonType.RAISED);
+            left.setVisible(false);
 
         } else if(panelIdex > 0){
-            left.setText("Go Back");
+            left.setVisible(true);
+            left.setText("%go-back");
             left.setOnAction((e)-> back());
-            right.setText("simulate");
+            right.setText("%simulate");
             right.setOnAction((e)-> simulate());
         }
+
+        I18n.remove(left, right);
+        I18n.bind(left, right);
 
     }
 

@@ -21,7 +21,7 @@ public class App27Laop {
         JPanel panel = new JPanel();
         
         JButton testConfig = new JButton("Test Configuration");
-        JButton testSimulation = new JButton("Test SimulationEngine");
+        JButton testSimulation = new JButton("Test LearningEngine");
 
         testConfig.addActionListener(e -> {
         	frame.dispose();

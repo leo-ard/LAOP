@@ -1,4 +1,4 @@
-package org.lrima.laop.network.concreteNetworks;
+package org.lrima.laop.network.DL4J;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
@@ -11,10 +11,7 @@ import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
-import org.lrima.laop.network.carcontrollers.CarController;
-import org.lrima.laop.network.carcontrollers.ManualCarController;
 import org.lrima.laop.physic.CarControls;
-import org.lrima.laop.settings.LockedSetting;
 import org.lrima.laop.utils.MathUtils;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -24,8 +21,9 @@ import org.nd4j.linalg.learning.config.Sgd;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 import java.io.File;
+import java.util.concurrent.ExecutionException;
 
-public class DL4J extends ManualCarController implements DL4JNN {
+public class DL4J extends ManualCarController {
     private MultiLayerNetwork network;
     private INDArray features;
     private INDArray labels;
@@ -35,16 +33,12 @@ public class DL4J extends ManualCarController implements DL4JNN {
     private MODE oldTakeOverMode = MODE.AI_CONTROL;
 
     private boolean disableHumanControls;
-    private double fitness;
 
 
     public CarControls control(double... captorValues) {
-        if(disableHumanControls){
-            System.out.println(learning);
+        if(disableHumanControls) {
             takeOverMode = MODE.AI_CONTROL;
-        }else
-            takeOverMode = MODE.DIRECT_INPUT;
-
+        }
 
         if(oldTakeOverMode != takeOverMode) {
             System.out.println("SWITCH TO " + takeOverMode);
@@ -144,12 +138,16 @@ public class DL4J extends ManualCarController implements DL4JNN {
             labels = label;
         }
         else{
-            features = Nd4j.vstack(features, feature);
-            labels = Nd4j.vstack(labels, label);
+            try{
+                features = Nd4j.vstack(features, feature);
+                labels = Nd4j.vstack(labels, label);
+            }catch (Exception e){
+
+            }
         }
     }
 
-    public void init(LockedSetting settings) {
+    public void init() {
         MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
                 .weightInit(WeightInit.NORMAL)
                 .activation(Activation.RELU)
@@ -157,7 +155,7 @@ public class DL4J extends ManualCarController implements DL4JNN {
                 .updater(new Sgd(0.1))
                 .list()
                 .layer(0, new DenseLayer.Builder().nIn(5).nOut(3).build())
-                .layer(1, new DenseLayer.Builder().nOut(3).build())
+                .layer(1, new DenseLayer.Builder().nOut(10).build())
                 .layer(2, new OutputLayer.Builder().nOut(4).lossFunction(LossFunctions.LossFunction.SQUARED_LOSS).build())
                 .backprop(true)
                 .build();
@@ -200,28 +198,8 @@ public class DL4J extends ManualCarController implements DL4JNN {
         });*/
     }
 
-    @Override
     public void disableHumanControl() {
         disableHumanControls = true;
-    }
-
-    @Override
-    public <T extends CarController> T copy() {
-        DL4J dl4J = new DL4J();
-        dl4J.network = this.network.clone();
-        dl4J.disableHumanControls = true;
-        dl4J.learning = learning;
-        return (T) dl4J;
-    }
-
-    @Override
-    public void setFitness(double fitness) {
-        this.fitness = fitness;
-    }
-
-    @Override
-    public double getFitness() {
-        return fitness;
     }
 
     private enum MODE {

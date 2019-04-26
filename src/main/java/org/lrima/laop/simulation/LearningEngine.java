@@ -1,41 +1,39 @@
 package org.lrima.laop.simulation;
 
-import java.util.ArrayList;
-
+import javafx.stage.Stage;
 import org.lrima.laop.core.LAOP;
 import org.lrima.laop.network.LearningAlgorithm;
-import org.lrima.laop.network.carcontrollers.CarController;
-import org.lrima.laop.network.carcontrollers.ManualCarController;
 import org.lrima.laop.settings.LockedSetting;
 import org.lrima.laop.settings.Scope;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
-import org.lrima.laop.simulation.data.ResultData;
-import org.lrima.laop.utils.Console;
+import org.lrima.laop.simulation.data.AlgorithmsData;
 import org.lrima.laop.utils.Actions.Action;
+import org.lrima.laop.utils.Console;
 
-import javafx.stage.Stage;
+import java.util.ArrayList;
 
-public class SimulationEngine implements Runnable{
+public class LearningEngine implements Runnable{
+    public static Stage mainScene;
     private SimulationBuffer simulationBuffer;
     private Settings settings;
 
     private int batchCount;
 
-    ArrayList<Action<SimulationEngine>> onBatchStarted;
-    ArrayList<Action<SimulationEngine>> onEnd;
+    ArrayList<Action<LearningEngine>> onBatchStarted;
+    ArrayList<Action<LearningEngine>> onEnd;
 
-    private Stage mainScene;
-
-    
-    private ResultData data;
     private LearningAlgorithm learningAlgorithm;
     private Environnement environnement;
+    private AlgorithmsData learningData;
+    private AlgorithmsData trainedData;
 
     private Thread currentThread;
     private SimulationBuffer displayBuffer;
 
-    public SimulationEngine(SimulationBuffer simulationBuffer, Settings settings) {
+    public static double DELTA_T = 0.05;
+
+    public LearningEngine(SimulationBuffer simulationBuffer, Settings settings) {
         this.simulationBuffer = simulationBuffer;
         displayBuffer = new SimulationBuffer();
         this.settings = settings;
@@ -43,7 +41,7 @@ public class SimulationEngine implements Runnable{
 
         this.onBatchStarted = new ArrayList<>();
         this.onEnd = new ArrayList<>();
-        this.data = new ResultData(this.settings.getLocalScopes());
+        this.learningData = new AlgorithmsData();
     }
 
     public void start(){
@@ -51,46 +49,35 @@ public class SimulationEngine implements Runnable{
         currentThread.start();
     }
 
-//    private void nextBatch() {
-//
-////        envrionnement = generateEnvironnement();
-//
-//
-//
-//
-//        envrionnement.start();
-//        envrionnement.setEnd((simulation) -> {
-//        	this.currentScopeIndex++;
-//        	//Check if all algorithms have been runned
-//        	if(this.currentScopeIndex >= this.settings.getLocalScopeKeys().size()) {
-//        		this.onEnd.forEach(b -> b.handle(this));
-//
-//        		return;
-//        	}
-//        	nextBatch();
-//        });
-
-//    }
     @Override
     public void run() {
         this.environnement = generateEnvironnement();
-        this.environnement.initialise(this);
+        this.environnement.init(this);
 
+        LearningAlgorithm[] trained = new LearningAlgorithm[this.settings.getLocalScopeKeys().size()];
+
+        //train
         for (this.batchCount = 0; batchCount < this.settings.getLocalScopeKeys().size(); batchCount++) {
             Console.info("Batch %s started", this.getBatchCount() + 1);
             this.onBatchStarted.forEach(b -> b.handle(this));
 
             learningAlgorithm = generateLearningAlgorithm();
-            while (!this.environnement.isFinished()) {
-                learningAlgorithm.cycle(environnement);
-            }
-           
-            this.data.addData(this.settings.getLocalScopeKeys().get(batchCount), this.environnement.getBatchData());
-            
-            environnement.setFinished(false);
+            learningAlgorithm.train(environnement);
+
+            learningData.put(getCurrentScopeName(), environnement.getData());
+            trained[batchCount] = learningAlgorithm;
         }
-        
-        this.onEnd.forEach((a) -> a.handle(this));
+
+        //TODO : faire le cas ou c'est pas un multi
+
+        environnement = generateEnvironnement();
+        environnement.init(this);
+        trainedData = environnement.evaluate(trained,100);
+
+
+        onEnd.forEach((a) -> a.handle(this));
+        learningData.toCsv();
+        trainedData.toCsv();
     }
 
     private Environnement generateEnvironnement() {
@@ -102,7 +89,7 @@ public class SimulationEngine implements Runnable{
             e.printStackTrace();
         }
 
-        return new GenerationBasedEnvironnement();
+        return new BetterEnvironnement();
     }
 
 
@@ -110,32 +97,7 @@ public class SimulationEngine implements Runnable{
         return simulationBuffer;
     }
 
-
-
-    <T extends CarController> T generateCurrentNetwork() {
-        Class<? extends CarController> carClass = (Class<? extends CarController>) settings.get(this.getCurrentScopeName(), LAOP.KEY_NETWORK_CLASS);
-
-        try {
-            T carController = (T) carClass.newInstance();
-
-            try{
-                carController.init(this.getSettings());
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-
-            if(carController instanceof ManualCarController)
-                ((ManualCarController) carController).configureListeners(this.mainScene);
-
-            return carController;
-        } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-        return (T) new ManualCarController();
-    }
-
-    LearningAlgorithm<? extends CarController> generateLearningAlgorithm() {
+    LearningAlgorithm generateLearningAlgorithm() {
         Class<? extends LearningAlgorithm> learningClass = (Class<? extends LearningAlgorithm>) settings.get(this.getCurrentScopeName(), LAOP.KEY_LEARNING_CLASS);
 
         try {
@@ -147,11 +109,11 @@ public class SimulationEngine implements Runnable{
         return null;
     }
 
-    public void setOnBatchStarted(Action<SimulationEngine> onBatchFinished) {
+    public void setOnBatchStarted(Action<LearningEngine> onBatchFinished) {
         this.onBatchStarted.add(onBatchFinished);
     }
 
-    public void setOnEnd(Action<SimulationEngine> onEnd) {
+    public void setOnEnd(Action<LearningEngine> onEnd) {
         this.onEnd.add(onEnd);
     }
 
@@ -189,10 +151,6 @@ public class SimulationEngine implements Runnable{
 
     public Stage getMainScene() {
         return mainScene;
-    }
-    
-    public ResultData getData() {
-    	return this.data;
     }
 
     public LearningAlgorithm getCurrentLearning() {
