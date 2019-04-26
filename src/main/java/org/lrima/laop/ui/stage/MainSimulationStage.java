@@ -11,12 +11,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.lrima.laop.simulation.LearningEngine;
 import org.lrima.laop.ui.SimulationDrawer;
-import org.lrima.laop.ui.SimulationView;
 import org.lrima.laop.ui.components.ConsolePanel;
 import org.lrima.laop.ui.components.LaopMenuBar;
 import org.lrima.laop.ui.components.Timeline;
 import org.lrima.laop.ui.components.inspector.InspectorPanel;
-import org.lrima.laop.utils.Actions.Procedure;
 
 
 /**
@@ -65,33 +63,9 @@ public class MainSimulationStage extends Stage {
         this.loadAllScenes();
 
         this.learningEngine.setMainScene(this);
-        this.learningEngine.setOnBatchStarted(this::changeSimulation);
         this.learningEngine.setOnEnd(this::endSimulationAndShowResults);
 
         this.simulationDrawer.start();
-    }
-
-    private void changeSimulation(LearningEngine learningEngine) {
-        reset(()->{
-            SimulationView simulationView = null;
-//            if(learningEngine.getEnvironnement() instanceof GenerationBasedEnvironnement)
-//                simulationView = new GeneticStage((GenerationBasedEnvironnement) learningEngine.getEnvironnement());
-
-            if(simulationView != null)
-                simulationView.setup(this);
-        });
-    }
-
-    private void reset(Procedure runLater) {
-        Platform.runLater(() -> {
-            this.menuBar.reset();
-            this.timeline.reset();
-
-            this.bottomBar.getChildren().clear();
-            this.bottomBar.getChildren().add(this.timeline);
-
-            runLater.invoke();
-        });
     }
 
     /**

@@ -5,9 +5,11 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import javafx.scene.control.Label;
 import org.lrima.laop.core.LAOP;
 import org.lrima.laop.network.FUCONN.GeneticLearning;
 import org.lrima.laop.settings.Scope;
+import org.lrima.laop.ui.I18n;
 import org.lrima.laop.ui.stage.DownloadAlgorithmDialog;
 
 import com.jfoenix.controls.JFXButton;
@@ -33,6 +35,8 @@ public class ConfigurationController implements Initializable {
     @FXML private JFXListView<String> scopeList;
     @FXML private BorderPane settingsContainer;
     @FXML private JFXButton downloadBtn;
+    @FXML private Label settingLabel;
+    @FXML private Label algorithmLabel;
     private LAOP laop;
     private HashMap<String, Node> panels;
     private Stage parent;
@@ -70,6 +74,9 @@ public class ConfigurationController implements Initializable {
     		//Open the download dialog
     		DownloadAlgorithmDialog dialog = new DownloadAlgorithmDialog(parent);
     	});
+        System.out.println(downloadBtn + " " + settingLabel + " " + algorithmLabel);
+		I18n.bind(downloadBtn, settingLabel, algorithmLabel);
+
     }
     
     public void setLaop(LAOP laop) {

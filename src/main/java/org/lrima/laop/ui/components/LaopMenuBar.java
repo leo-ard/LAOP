@@ -1,13 +1,12 @@
 package org.lrima.laop.ui.components;
 
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
+import org.lrima.laop.ui.I18n;
 import org.lrima.laop.ui.SimulationDrawer;
 import org.lrima.laop.ui.components.inspector.InspectorPanel;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class LaopMenuBar extends MenuBar {
     private ArrayList<MenuItem> menuItems;
@@ -25,9 +24,9 @@ public class LaopMenuBar extends MenuBar {
     private MenuItem resetView;
 
     public void init(ConsolePanel consolePanel, InspectorPanel inspector, SimulationDrawer simulationDrawer){
-        windowMenu = new Menu("Window");
-        showConsole = new CheckMenuItem("Console");
-        showCarInfo = new CheckMenuItem("Car info");
+        windowMenu = new Menu("%window");
+        showConsole = new CheckMenuItem("%console");
+        showCarInfo = new CheckMenuItem("%car-info");
         
         showConsole.setSelected(true);
         showCarInfo.setSelected(false);
@@ -49,26 +48,31 @@ public class LaopMenuBar extends MenuBar {
         });
 
 
-        view = new Menu("View");
+        view = new Menu("%view");
 
-        resetView = new MenuItem("Reset View");
+        resetView = new MenuItem("%reset-view");
         resetView.setOnAction(e -> simulationDrawer.resetView());
 
+        Menu lang = new Menu("%language");
+        ToggleGroup toggleGroup = new ToggleGroup();
+        RadioMenuItem lang_en = new RadioMenuItem("%english");
+        lang_en.setOnAction((e)->{
+            I18n.update(new Locale("en", "CA"));
+        });
+        lang_en.setToggleGroup(toggleGroup);
+        RadioMenuItem lang_fr = new RadioMenuItem("%french");
+        lang_fr.setOnAction((e)->{
+            I18n.update(new Locale("fr", "CA"));
+        });
+        lang_fr.setToggleGroup(toggleGroup);
+
+        lang.getItems().addAll(lang_en, lang_fr);
         windowMenu.getItems().addAll(showConsole, showCarInfo);
         view.getItems().add(resetView);
 
-        this.getMenus().addAll(windowMenu, view);
-    }
+        this.getMenus().addAll(windowMenu, view, lang);
 
-    public void reset(){
-        this.getMenus().clear();
-        windowMenu.getItems().clear();
-        view.getItems().clear();
-
-        windowMenu.getItems().addAll(showConsole, showCarInfo);
-        view.getItems().add(resetView);
-
-        this.getMenus().addAll(windowMenu, view);
+        I18n.bind(windowMenu, showCarInfo, showConsole, view, resetView, lang, lang_en, lang_fr);
     }
 
     public void addShowCharts(ChartPanel chartPanel) {

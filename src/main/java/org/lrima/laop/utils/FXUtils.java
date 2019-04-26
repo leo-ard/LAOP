@@ -1,5 +1,6 @@
 package org.lrima.laop.utils;
 
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 
 import java.io.IOException;

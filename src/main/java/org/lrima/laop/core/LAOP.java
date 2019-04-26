@@ -11,6 +11,7 @@ import org.lrima.laop.simulation.BetterEnvironnement;
 import org.lrima.laop.simulation.Environnement;
 import org.lrima.laop.simulation.LearningEngine;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
+import org.lrima.laop.ui.I18n;
 import org.lrima.laop.ui.stage.MainSimulationStage;
 import org.lrima.laop.utils.ClassUtils;
 import org.lrima.laop.utils.Console;
@@ -19,6 +20,7 @@ import javax.management.openmbean.KeyAlreadyExistsException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * Main class to manage starting the simulation
@@ -36,6 +38,7 @@ public class LAOP {
      * <p>Constructor for LAOP.</p>
      */
     public LAOP(){
+        I18n.update(new Locale("fr", "CA"));
         learningAlgorithmsClasses = new ArrayList<>();
         learningAlgorithmsClasses.add(GeneticLearning.class);
         learningAlgorithmsClasses.add(DL4JLearning.class);
