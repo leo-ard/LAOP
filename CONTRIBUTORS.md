@@ -1,4 +1,4 @@
-#LAOP contributors (sorted alphabetically)
+# LAOP contributors (sorted alphabetically)
 
 * **Charlotte Barette Brisson**
     * Translation and text correction
