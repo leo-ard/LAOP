@@ -22,7 +22,7 @@ These instructions will get you a copy of the project up and running on your loc
     > cd LAOP_alpha
     > mvn install
     ```
-1. Run the graphical interface runing the main method of **org.lrima.laop.core.App27Laop**
+1. Run the graphical interface by running the main method of **org.lrima.laop.core.App27Laop**
 
 
 ## Built With
@@ -39,11 +39,11 @@ These instructions will get you a copy of the project up and running on your loc
 * **Léonard Oest O'Leary** - 
 * **Clément Bisaillon** - [GitHub](https://github.com/cbisaillon), [LinkedIn](https://www.linkedin.com/in/clementbisaillon/)
 
-See also the list of [contributors](https://github.com/LAOP_alpha/CONTRIBUTORS.md) who participated in this project.
+See also the list of [contributors](CONTRIBUTORS.md) who participated in this project.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/LAOP_alpha/LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
 
