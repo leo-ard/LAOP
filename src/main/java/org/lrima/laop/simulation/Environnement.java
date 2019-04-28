@@ -16,12 +16,4 @@ public interface Environnement extends Drawable {
     void render();
 
     void init(LearningEngine learningEngine);
-
-    AlgorithmsData evaluate(LearningAlgorithm[] trained, int max);
-    default void evaluate(LearningAlgorithm learningAlgorithm){
-        LearningAlgorithm[] trained = new LearningAlgorithm[]{learningAlgorithm};
-        this.evaluate(trained, 1);
-    }
-
-    ArrayList<Double> getData();
 }

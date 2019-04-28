@@ -35,7 +35,7 @@ public class SimulationDrawer{
     private double mouseXPressed, mouseYPressed;
 
     private int currentStep;
-    private double currentZoom = 0;
+    private double currentZoom;
 
     private Slider slider;
     private boolean autoDraw;
@@ -221,6 +221,7 @@ public class SimulationDrawer{
 
     public void resetView(){
         this.affineTransform.setToIdentity();
+        this.currentZoom = 0.0;
     }
 
     private void handleScroll(ScrollEvent e) {

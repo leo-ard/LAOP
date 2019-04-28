@@ -1,6 +1,5 @@
 package org.lrima.laop.network.DL4J;
 
-import org.lrima.laop.network.DL4J.DL4J;
 import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.physic.SimpleCar;
@@ -15,21 +14,17 @@ public class DL4JLearning implements LearningAlgorithm {
     private DL4J dl4J;
 
     @Override
-    public void train(Environnement env) {
+    public void train(Environnement env, LearningEngine learningEngine) {
         dl4J = new DL4J();
         dl4J.init();
         dl4J.configureListeners(LearningEngine.mainScene);
 
         Agent agent = env.reset();
-
-        int episode = 0;
-        while(episode < 20){
+        while(learningEngine.whileButtonNotPressed()){
             if(env.isFinished()){
-//                env.evaluate(this);/
-                env.reset();
-                episode++;
+                learningEngine.evaluate(this);
+                dl4J.setAIControl(false);
             }
-
             ArrayList<Sensor> sensors = agent.getSensors();
             double[] sensorValues = sensors.stream().mapToDouble(Sensor::getValue).toArray();
 
@@ -49,7 +44,7 @@ public class DL4JLearning implements LearningAlgorithm {
     @Override
     public CarControls test(Agent agent) {
         double[] sensorValues = agent.getSensors().stream().mapToDouble(Sensor::getValue).toArray();
-        dl4J.disableHumanControl();
+        dl4J.setAIControl(true);
         return dl4J.control(sensorValues);
     }
 

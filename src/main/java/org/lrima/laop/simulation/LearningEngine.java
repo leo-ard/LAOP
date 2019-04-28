@@ -3,6 +3,7 @@ package org.lrima.laop.simulation;
 import javafx.stage.Stage;
 import org.lrima.laop.core.LAOP;
 import org.lrima.laop.network.LearningAlgorithm;
+import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.settings.LockedSetting;
 import org.lrima.laop.settings.Scope;
 import org.lrima.laop.settings.Settings;
@@ -33,6 +34,8 @@ public class LearningEngine implements Runnable{
 
     public static double DELTA_T = 0.05;
 
+    public boolean alive;
+
     public LearningEngine(SimulationBuffer simulationBuffer, Settings settings) {
         this.simulationBuffer = simulationBuffer;
         displayBuffer = new SimulationBuffer();
@@ -42,6 +45,7 @@ public class LearningEngine implements Runnable{
         this.onBatchStarted = new ArrayList<>();
         this.onEnd = new ArrayList<>();
         this.learningData = new AlgorithmsData();
+        this.trainedData = new AlgorithmsData();
     }
 
     public void start(){
@@ -58,13 +62,13 @@ public class LearningEngine implements Runnable{
 
         //train
         for (this.batchCount = 0; batchCount < this.settings.getLocalScopeKeys().size(); batchCount++) {
+            alive = true;
             Console.info("Batch %s started", this.getBatchCount() + 1);
             this.onBatchStarted.forEach(b -> b.handle(this));
 
             learningAlgorithm = generateLearningAlgorithm();
-            learningAlgorithm.train(environnement);
+            learningAlgorithm.train(environnement, this);
 
-            learningData.put(getCurrentScopeName(), environnement.getData());
             trained[batchCount] = learningAlgorithm;
         }
 
@@ -72,7 +76,30 @@ public class LearningEngine implements Runnable{
 
         environnement = generateEnvironnement();
         environnement.init(this);
-        trainedData = environnement.evaluate(trained,100);
+
+        if(environnement instanceof MultiAgentEnvironnement){
+            int episode = 0;
+            ArrayList<Agent> agents = ((MultiAgentEnvironnement) environnement).reset(trained.length);
+            while(episode < 100){
+                while (!environnement.isFinished()){
+                    ArrayList<CarControls> carControls = new ArrayList<>();
+                    for (int i = 0; i < trained.length; i++) {
+                        carControls.add(trained[i].test(agents.get(i)));
+                    }
+                    agents = ((MultiAgentEnvironnement) environnement).step(carControls);
+
+                }
+                for (int i = 0; i < trained.length; i++) {
+                    trainedData.put("trained-"+learningAlgorithm.getClass().getName(), agents.get(i).reward);
+                }
+                episode++;
+            }
+
+
+        }
+        else
+            throw new RuntimeException("Do not support sigle environnemnt yet");
+
 
 
         onEnd.forEach((a) -> a.handle(this));
@@ -90,6 +117,14 @@ public class LearningEngine implements Runnable{
         }
 
         return new BetterEnvironnement();
+    }
+
+    public void evaluate(LearningAlgorithm learningAlgorithm){
+        Agent agent = this.environnement.reset();
+        while(!this.environnement.isFinished()){
+            agent = this.environnement.step(learningAlgorithm.test(agent));
+        }
+        learningData.put("learning-" + getCurrentScopeName(), agent.reward);
     }
 
 
@@ -159,5 +194,13 @@ public class LearningEngine implements Runnable{
 
     public SimulationBuffer getDisplayBuffer() {
         return displayBuffer;
+    }
+
+    public boolean whileButtonNotPressed() {
+        return alive;
+    }
+
+    public void nextAlgorithm(){
+        alive = false;
     }
 }

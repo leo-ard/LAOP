@@ -13,6 +13,7 @@
          </font>
       </Label>
       <Label fx:id="text" alignment="TOP_LEFT" layoutX="14.0" layoutY="116.0" prefHeight="232.0" prefWidth="420.0" text="\%text-entry" textAlignment="JUSTIFY" wrapText="true" />
-      <ChoiceBox fx:id="choiceBox" layoutX="284.0" layoutY="554.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="choiceBox" layoutX="284.0" layoutY="561.0" prefWidth="150.0" />
+      <Label fx:id="selectLanguageLabel" alignment="CENTER_RIGHT" layoutX="90.0" layoutY="565.0" prefHeight="17.0" prefWidth="186.0" text="\%select-language" textAlignment="RIGHT" />
    </children>
 </AnchorPane>

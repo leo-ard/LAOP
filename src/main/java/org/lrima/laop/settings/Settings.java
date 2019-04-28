@@ -84,21 +84,6 @@ public class Settings {
         newScope.setGlobalScope(this.scopes.get(GLOBAL_SCOPE));
         this.scopes.put(name, newScope);
     }
-    
-    /**
-     * Add a scope when the user clicks the add algorithm button
-     */
-    public void addScope(JFXListView scopeListTable) {
-    	//Ask for the name of the scope
-    	TextInputDialog scopeNameDialog = new TextInputDialog();
-    	scopeNameDialog.setTitle("Scope name");
-    	scopeNameDialog.setHeaderText("Choose a name for the new scope");
-    	Optional<String> scopeName = scopeNameDialog.showAndWait();
-    	
-    	scopeName.ifPresent(name -> {
-    		this.addScope(name);
-    	});
-    }
 
     /**
      * Removes a scope from the settings

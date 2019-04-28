@@ -63,8 +63,6 @@ public class LAOP {
     private void defaultSettings(){
         settings.set(Settings.GLOBAL_SCOPE, KEY_NUMBER_OF_CARS, DEFAULT_NUMBER_OF_CARS);
         settings.set(Settings.GLOBAL_SCOPE, KEY_TIME_LIMIT, DEFAULT_TIME_LIMIT);
-        settings.set(Settings.GLOBAL_SCOPE, KEY_NUMBER_OF_SIMULATION, DEFAULT_NUMBER_OF_SIMULATION);
-        settings.set(Settings.GLOBAL_SCOPE, KEY_NUMBER_OF_GENERATIONS, DEFAULT_NUMBER_OF_GENERATIONS);
         settings.set(Settings.GLOBAL_SCOPE, KEY_NUMBER_OF_SENSORS, DEFAULT_NUMBER_OF_SENSORS);
         settings.set(Settings.GLOBAL_SCOPE, KEY_ENVIRONNEMENT_CLASS, new OptionClass<>(DEFAULT_ENVIRONNEMENT_CLASS, environnements, clazz -> false));
     }
@@ -107,12 +105,12 @@ public class LAOP {
     /**
      * Checks if the settings are good to start the simulation
      *
-     * @return String - The error message
+     * @return String - The key of the message (so it can be translated)
      */
     public String canStartSimulations() {
     	//Check if there are algorithms to run
     	if(this.settings.getLocalScopeKeys().size() <= 0) {
-    		return "No algorithms to run.";
+    		return "no-algorithm-error";
     	}
 
     	return "";
@@ -163,13 +161,6 @@ public class LAOP {
         return learningAlgorithmsClasses;
     }
 
-
-    //ALL DEFAULT KEYS
-    /** Constant <code>DEFAULT_NUMBER_OF_SIMULATION=10</code> */
-    public static final int DEFAULT_NUMBER_OF_SIMULATION = 10;
-    /** Constant <code>KEY_NUMBER_OF_SIMULATION="NUMBER OF SIMULATIONS"</code> */
-    public static final String KEY_NUMBER_OF_SIMULATION = "NUMBER OF SIMULATIONS";
-
     /** Constant <code>DEFAULT_NUMBER_OF_CARS=100</code> */
     public static final int DEFAULT_NUMBER_OF_CARS = 100;
     /** Constant <code>KEY_NUMBER_OF_CARS="NUMBER OF CARS"</code> */
@@ -179,11 +170,6 @@ public class LAOP {
     public static final int DEFAULT_TIME_LIMIT = 3000;
     /** Constant <code>KEY_TIME_LIMIT="TIME LIMIT"</code> */
     public static final String KEY_TIME_LIMIT = "TIME LIMIT";
-
-    /** Constant <code>DEFAULT_NUMBER_OF_GENERATIONS=10</code> */
-    public static final int DEFAULT_NUMBER_OF_GENERATIONS = 10;
-    /** Constant <code>KEY_NUMBER_OF_GENERATIONS="NUMBER OF GENERATIONS"</code> */
-    public static final String KEY_NUMBER_OF_GENERATIONS = "NUMBER OF GENERATIONS";
 
     /** Constant <code>KEY_LEARNING_CLASS="LEARNING ALGORITHM CLASS"</code> */
     public static final String KEY_LEARNING_CLASS = "LEARNING ALGORITHM CLASS";

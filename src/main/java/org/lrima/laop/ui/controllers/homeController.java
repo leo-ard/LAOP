@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 public class homeController implements Initializable {
     @FXML  Label text;
     @FXML ChoiceBox<String> choiceBox;
+    @FXML Label selectLanguageLabel;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -30,7 +31,12 @@ public class homeController implements Initializable {
             }
         });
 
-        I18n.bind(text);
+        if(I18n.getLocal().getLanguage().equals("fr")){
+            choiceBox.getSelectionModel().select(frenchLabel);
+        }else {
+            choiceBox.getSelectionModel().select(englishLabel);
+        }
+        I18n.bind(text, selectLanguageLabel);
 
     }
 }

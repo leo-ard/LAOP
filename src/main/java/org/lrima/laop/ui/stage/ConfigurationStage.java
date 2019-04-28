@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -73,7 +74,6 @@ public class ConfigurationStage extends Stage {
         Scene scene = new Scene(root);
         scene.getStylesheets().add("/css/general.css");
 
-        I18n.bind(left, right);
         this.setScene(scene);
     }
 
@@ -117,6 +117,7 @@ public class ConfigurationStage extends Stage {
             right.setOnAction((e)-> next());
             right.setButtonType(JFXButton.ButtonType.RAISED);
             left.setVisible(false);
+            I18n.removeKey("simulate");
 
         } else if(panelIdex > 0){
             left.setVisible(true);
@@ -124,9 +125,9 @@ public class ConfigurationStage extends Stage {
             left.setOnAction((e)-> back());
             right.setText("%simulate");
             right.setOnAction((e)-> simulate());
+            I18n.removeKey("next");
         }
 
-        I18n.remove(left, right);
         I18n.bind(left, right);
 
     }
@@ -136,19 +137,20 @@ public class ConfigurationStage extends Stage {
      */
     private void simulate() {
     	//Check if there are errors before running the simulation
-    	String error = laop.canStartSimulations();
+    	String errorKey = laop.canStartSimulations();
     	
     	
     	//Run the simulation if there are no errors
-    	if(error.length() == 0) {
+    	if(errorKey.length() == 0) {
     		this.close();
     		laop.startSimulation(LAOP.SimulationDisplayMode.WITH_INTERFACE);
     	}
     	else {
     		//Show an error dialog with the error
     		Alert alert = new Alert(AlertType.ERROR);
-    		alert.setHeaderText("Error in the configuration");
-    		alert.setContentText(error);
+    		alert.setTitle(I18n.getString("error"));
+    		alert.setHeaderText(I18n.getString("error-name"));
+    		alert.setContentText(I18n.getString(errorKey));
     		alert.show();
     	}
     }

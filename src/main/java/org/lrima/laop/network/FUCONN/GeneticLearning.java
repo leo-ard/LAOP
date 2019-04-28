@@ -4,6 +4,7 @@ import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.simulation.Agent;
 import org.lrima.laop.simulation.Environnement;
+import org.lrima.laop.simulation.LearningEngine;
 import org.lrima.laop.simulation.MultiAgentEnvironnement;
 import org.lrima.laop.simulation.sensors.Sensor;
 import org.lrima.laop.utils.math.RandomUtils;
@@ -52,7 +53,7 @@ public class GeneticLearning implements LearningAlgorithm{
     }
 
     @Override
-    public void train(Environnement env1) {
+    public void train(Environnement env1, LearningEngine learningEngine) {
         MultiAgentEnvironnement env = (MultiAgentEnvironnement) env1;
 
         geneticNN = new ArrayList<>();
@@ -64,12 +65,8 @@ public class GeneticLearning implements LearningAlgorithm{
         }
 
         ArrayList<Agent> agents = env.reset(100);
-        long time = 0;
-        int episode = 0;
-        while(episode < 100){
-            while(!env.isFinished() && time < 2000){
-                time++;
-
+        while(learningEngine.whileButtonNotPressed()){
+            while(!env.isFinished()){
                 ArrayList<CarControls> carControls = new ArrayList<>();
                 for (int i = 0; i < geneticNN.size(); i++) {
                     geneticNN.get(i).setFitness(agents.get(i).getReward());
@@ -82,10 +79,8 @@ public class GeneticLearning implements LearningAlgorithm{
             }
 
             geneticNN = learn(geneticNN);
-            time = 0;
-            env.evaluate(this);
+            learningEngine.evaluate(this);
             agents = env.reset(geneticNN.size());
-            episode++;
         }
     }
 

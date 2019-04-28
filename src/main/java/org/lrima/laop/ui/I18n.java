@@ -32,13 +32,6 @@ public class I18n {
         }
     }
 
-    public static void bind(StringBuilder string){
-        if(string.toString().startsWith("%")){
-            allKeys.put(string.substring(1), (key) -> string.replace(0, string.length(), key));
-            string.replace(0, string.length(), messages.getString(string.substring(1)));
-        }
-    }
-
     public static void bind(MenuItem menuItem){
         String string = menuItem.getText();
         if(string.startsWith("%")){
@@ -61,25 +54,19 @@ public class I18n {
         allKeys.put(key, value);
     }
 
-    public static void remove(Labeled labeled){
-        String label = labeled.getText();
-        if(label.startsWith("%")){
-            String key = label.substring(1);
-            allKeys.remove(key);
-        }
-    }
-
     public static void reset(){
         allKeys = new HashMap<>();
     }
 
-    public static void remove(Labeled ... labeleds) {
-        for (Labeled labeled : labeleds) {
-            remove(labeled);
-        }
+    public static void removeKey(String key) {
+        allKeys.remove(key);
     }
 
     public static String getString(String s) {
         return messages.getString(s);
+    }
+
+    public static Locale getLocal() {
+        return messages.getLocale();
     }
 }

@@ -198,8 +198,8 @@ public class DL4J extends ManualCarController {
         });*/
     }
 
-    public void disableHumanControl() {
-        disableHumanControls = true;
+    public void setAIControl(boolean val) {
+        disableHumanControls = val;
     }
 
     private enum MODE {

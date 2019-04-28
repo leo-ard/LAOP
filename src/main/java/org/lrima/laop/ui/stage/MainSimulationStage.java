@@ -1,5 +1,6 @@
 package org.lrima.laop.ui.stage;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Scene;
@@ -65,6 +66,12 @@ public class MainSimulationStage extends Stage {
 
         this.learningEngine.setMainScene(this);
         this.learningEngine.setOnEnd(this::endSimulationAndShowResults);
+
+        JFXButton nextAlgorithm = new JFXButton("%next-algorithm");
+        nextAlgorithm.setOnAction((e)-> {
+            learningEngine.nextAlgorithm();
+        });
+        timeline.getChildren().add(nextAlgorithm);
 
         this.simulationDrawer.start();
     }

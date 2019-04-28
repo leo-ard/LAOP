@@ -58,8 +58,8 @@ public class ConfigurationController implements Initializable {
     @FXML protected void addAlgorithmClicked(ActionEvent event) {
     	//Ask for the name of the scope
     	TextInputDialog scopeNameDialog = new TextInputDialog();
-    	scopeNameDialog.setTitle("Scope name");
-    	scopeNameDialog.setHeaderText("Choose a name for the new scope");
+    	scopeNameDialog.setTitle(I18n.getString("scope-name"));
+    	scopeNameDialog.setHeaderText(I18n.getString("scope-name-long"));
     	Optional<String> scopeName = scopeNameDialog.showAndWait();
     	
     	scopeName.ifPresent(name -> {
