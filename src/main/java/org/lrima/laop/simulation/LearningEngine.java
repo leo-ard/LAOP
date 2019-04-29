@@ -8,7 +8,7 @@ import org.lrima.laop.settings.LockedSetting;
 import org.lrima.laop.settings.Scope;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
-import org.lrima.laop.simulation.data.AlgorithmsData;
+import org.lrima.laop.simulation.data.AlgorithmData;
 import org.lrima.laop.utils.Actions.Action;
 import org.lrima.laop.utils.Console;
 
@@ -26,8 +26,8 @@ public class LearningEngine implements Runnable{
 
     private LearningAlgorithm learningAlgorithm;
     private Environnement environnement;
-    private AlgorithmsData learningData;
-    private AlgorithmsData trainedData;
+    private AlgorithmData learningData;
+    private AlgorithmData trainedData;
 
     private Thread currentThread;
     private SimulationBuffer displayBuffer;
@@ -44,8 +44,8 @@ public class LearningEngine implements Runnable{
 
         this.onBatchStarted = new ArrayList<>();
         this.onEnd = new ArrayList<>();
-        this.learningData = new AlgorithmsData();
-        this.trainedData = new AlgorithmsData();
+        this.learningData = new AlgorithmData();
+        this.trainedData = new AlgorithmData();
     }
 
     public void start(){
@@ -90,21 +90,17 @@ public class LearningEngine implements Runnable{
 
                 }
                 for (int i = 0; i < trained.length; i++) {
-                    trainedData.put("trained-"+learningAlgorithm.getClass().getName(), agents.get(i).reward);
+                    trainedData.put(this.settings.getLocalScopeKeys().get(i), agents.get(i).reward);
                 }
                 episode++;
             }
-
-
         }
         else
             throw new RuntimeException("Do not support sigle environnemnt yet");
 
-
-
         onEnd.forEach((a) -> a.handle(this));
-        learningData.toCsv();
-        trainedData.toCsv();
+        learningData.toCsv("learning");
+        trainedData.toCsv("training");
     }
 
     private Environnement generateEnvironnement() {
@@ -120,11 +116,21 @@ public class LearningEngine implements Runnable{
     }
 
     public void evaluate(LearningAlgorithm learningAlgorithm){
+        int MAX = 10;
+        int episode = 0;
         Agent agent = this.environnement.reset();
-        while(!this.environnement.isFinished()){
-            agent = this.environnement.step(learningAlgorithm.test(agent));
+        double sum = 0;
+        while(episode < MAX){
+            while(!this.environnement.isFinished()) {
+                agent = this.environnement.step(learningAlgorithm.test(agent));
+                environnement.render();
+            }
+            sum += agent.reward;
+            episode++;
+            agent = this.environnement.reset();
         }
-        learningData.put("learning-" + getCurrentScopeName(), agent.reward);
+
+        learningData.put("learning-" + getCurrentScopeName(), sum/MAX);
     }
 
 
@@ -202,5 +208,13 @@ public class LearningEngine implements Runnable{
 
     public void nextAlgorithm(){
         alive = false;
+    }
+
+    public AlgorithmData getTrainingData() {
+        return trainedData;
+    }
+
+    public AlgorithmData getLearningData() {
+        return learningData;
     }
 }

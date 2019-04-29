@@ -2,6 +2,7 @@ package org.lrima.laop.simulation.data;
 
 import org.lrima.laop.utils.CSVUtils;
 
+import javax.jnlp.IntegrationService;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -9,18 +10,21 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class AlgorithmsData extends ArrayList<ArrayList<Double>> {
+public class AlgorithmData extends ArrayList<ArrayList<Double>> {
     Date start = new Date();
     HashMap<String, ArrayList<Double>> values = new HashMap<>();
+    Consumer<String> valueAdded;
 
-    public void toCsv() {
+    public void toCsv(String prefix) {
         //Create a directory with the time of the simulation start in /data
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/d/HH-mm-ss");
         for(String scope : values.keySet()) {
             String directory = "data/" + dateFormat.format(this.start);
-            File file = new File(directory, scope + ".csv");
+            File file = new File(directory, prefix + "-" + scope + ".csv");
             file.getParentFile().mkdirs();
 
             ArrayList<String> values = this.values.get(scope).stream()
@@ -37,14 +41,18 @@ public class AlgorithmsData extends ArrayList<ArrayList<Double>> {
         }
     }
 
-    public void put(String scope, ArrayList<Double> data){
-        this.values.put(scope, data);
-    }
-
     public void put(String scope, Double data){
         values.computeIfAbsent(scope, k -> new ArrayList<>());
         this.values.get(scope).add(data);
+        if(valueAdded != null)
+            valueAdded.accept(scope);
     }
 
+    public HashMap<String, ArrayList<Double>> getData(){
+        return values;
+    }
 
+    public void setOnAddValue(Consumer<String> stringConsumer){
+        this.valueAdded = stringConsumer;
+    }
 }

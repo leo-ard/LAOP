@@ -1,6 +1,8 @@
 package org.lrima.laop.utils;
 
 
+import com.sun.org.apache.xpath.internal.functions.FuncId;
+import com.sun.org.apache.xpath.internal.functions.Function2Args;
 import org.lrima.laop.utils.math.Vector2d;
 
 import java.lang.reflect.Array;
@@ -15,6 +17,7 @@ import java.util.stream.Stream;
  */
 public class MathUtils {
     public static final Function<Double, Double> LOGISTIC = (x) -> 1.0/(1.0 + Math.exp(-x));
+    public static final Function<Double, Double> TANH = Math::tanh;
     private static final double FLOAT_DELTA = 0.0001;
 
 

@@ -9,6 +9,9 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import org.lrima.laop.simulation.data.AlgorithmData;
+
+import java.util.ArrayList;
 
 /**
  * Panel to show to progression of the current simulation.
@@ -20,28 +23,15 @@ public class ChartPanel extends HBox {
 	private NumberAxis xAxis;
 	private NumberAxis yAxis;
 	private LineChart<Number, Number> chart;
-	private double maxY;
-	private double minY;
 	
 	private XYChart.Series<Number, Number> averageFitnessSerie;
 	
 	public ChartPanel() {
-		this.maxY = 0;
-		this.minY = 0;
-		
-		this.setPadding(new Insets(10, 10, 10, 10));
-		
-		this.setPrefHeight(200);
+		this.setPadding(new Insets(0));
+		this.setPrefHeight(300);
 		HBox.setHgrow(this, Priority.ALWAYS);
 		
 		this.getStyleClass().add("panel");
-
-//		simulation.setOnGenerationFinish( (sim) -> {
-//			this.updateChartData(sim.getGenerationData());
-//		});
-//		simulation.setOnSimulationFinish((sim) -> {
-//			this.resetChart();
-//		});
 
 		this.setupChart();
 	}
@@ -54,8 +44,8 @@ public class ChartPanel extends HBox {
 		this.yAxis = new NumberAxis("Score", 0, 500, 100);
 		this.chart = new LineChart<>(xAxis, yAxis);
 		
-//		this.chart.setTitle("Fitness score by generation");
-//		this.chart.setCreateSymbols(false);
+		this.chart.setTitle("Fitness score by generation");
+		this.chart.setCreateSymbols(false);
 		this.chart.setLegendSide(Side.RIGHT);
 		ChartPanel.setHgrow(chart, Priority.ALWAYS);
 
@@ -63,41 +53,42 @@ public class ChartPanel extends HBox {
 		this.averageFitnessSerie = new XYChart.Series<>();
 		this.averageFitnessSerie.setName("Average fitness");
 		this.chart.getData().add(this.averageFitnessSerie);
-		
+
 		this.getChildren().add(this.chart);
 		
 	}
 
-	public void resetChart() {
-		//Reset the series and the generation count
-		this.averageFitnessSerie.getData().clear();
-		this.maxY = 0;
-		this.minY = 0;
-		
-		this.yAxis.setLowerBound(this.minY);
-		this.yAxis.setUpperBound(this.maxY);
-	}
+	public void link(AlgorithmData algorithmData){
+	    algorithmData.setOnAddValue((scope) ->{
+	        ArrayList<Double> d = algorithmData.getData().get(scope);
+	        updateChartData(d, scope);
+        });
+    }
 
-	/*public void updateChartData(GenerationData pastGeneration) {
+	public void updateChartData(ArrayList<Double> values, String name) {
+	    this.averageFitnessSerie.getData().clear();
+
 		//Add new data to the series from the past generation
-		double averageFitnessScore = pastGeneration.getAverageFitness();
-		int generationNumber = pastGeneration.getGenerationNumber();
 		Platform.runLater(() -> {
-			XYChart.Data<Number, Number> data = new XYChart.Data(generationNumber, averageFitnessScore);
-			
-			//Change the bounds of the chart
-			if(averageFitnessScore > this.maxY) {
-				this.maxY = averageFitnessScore;
-			}
-			else if(averageFitnessScore < this.minY) {
-				this.minY = averageFitnessScore;
-			}
-			
-			this.yAxis.setLowerBound(this.minY);
-			this.yAxis.setUpperBound(this.maxY);
-			this.xAxis.setUpperBound(generationNumber);
+		    ArrayList<XYChart.Data<Number, Number>> data = new ArrayList<>();
+            for (int i = 0; i < values.size(); i++) {
+                data.add(new XYChart.Data<>(i+1, values.get(i)));
+            }
 
-			this.averageFitnessSerie.getData().add(data);
+			double max = 0;
+            for (Double value : values) {
+                max = Math.max(max, value);
+            }
+
+            this.yAxis.setTickUnit(max/10);
+
+			this.yAxis.setLowerBound(0);
+			this.yAxis.setUpperBound(max);
+			this.xAxis.setUpperBound(values.size());
+
+			this.chart.setTitle(name);
+
+			this.averageFitnessSerie.getData().addAll(data);
 		});
-	}*/
+	}
 }

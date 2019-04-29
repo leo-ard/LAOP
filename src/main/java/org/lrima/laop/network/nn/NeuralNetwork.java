@@ -34,7 +34,7 @@ public class NeuralNetwork {
 
         for (int i = 0; i < allweghts.length; i++) {
             double[][] allweght = allweghts[i];
-            this.layers.add(new DenseLayer(allweght, MathUtils.LOGISTIC));
+            this.layers.add(new DenseLayer(allweght, MathUtils.TANH));
         }
     }
 

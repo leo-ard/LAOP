@@ -1,5 +1,7 @@
 package org.lrima.laop.utils.math;
 
+import java.awt.geom.Point2D;
+
 /**
  * Stores a two dimensions vector
  * @author Clement Bisaillon
@@ -168,5 +170,9 @@ public class Vector2d implements Cloneable {
 
     public void setTag(String tag){
         this.tag = tag;
+    }
+
+    public Point2D asPoint() {
+        return new Point2D.Double(this.getX(), this.getY());
     }
 }

@@ -55,7 +55,7 @@ public class DL4J extends ManualCarController {
         //ALL MODES
 
         if(takeOverMode == MODE.WAIT_FOR_INPUT) {
-            if (controls[0] == 0 && controls[1] == 0 && controls[2] == 0 && controls[3] == 0) {
+            if (controls[0] == 0 && controls[1] == 0) {
                 tempMode = MODE.AI_CONTROL;
             }else{
                 tempMode = MODE.DIRECT_INPUT;
@@ -70,7 +70,7 @@ public class DL4J extends ManualCarController {
         }
         else if(tempMode == MODE.AI_CONTROL){
             double[] output = network.output(captor).toDoubleVector();
-
+            System.out.println(output);
             carControls = super.getControls(output);
         }
         else if(tempMode == MODE.LEARNING_FROM_DIRECT_INPUT){
@@ -150,13 +150,13 @@ public class DL4J extends ManualCarController {
     public void init() {
         MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
                 .weightInit(WeightInit.NORMAL)
-                .activation(Activation.RELU)
+                .activation(Activation.TANH)
                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
                 .updater(new Sgd(0.1))
                 .list()
-                .layer(0, new DenseLayer.Builder().nIn(5).nOut(3).build())
-                .layer(1, new DenseLayer.Builder().nOut(10).build())
-                .layer(2, new OutputLayer.Builder().nOut(4).lossFunction(LossFunctions.LossFunction.SQUARED_LOSS).build())
+                .layer(0, new DenseLayer.Builder().activation(Activation.TANH).nIn(5).nOut(3).build())
+                .layer(1, new DenseLayer.Builder().activation(Activation.TANH).nOut(10).build())
+                .layer(2, new OutputLayer.Builder().activation(Activation.TANH).nOut(2).lossFunction(LossFunctions.LossFunction.SQUARED_LOSS).build())
                 .backprop(true)
                 .build();
 
@@ -202,7 +202,7 @@ public class DL4J extends ManualCarController {
         disableHumanControls = val;
     }
 
-    private enum MODE {
+    public enum MODE {
         WAIT_FOR_INPUT,
         AI_CONTROL,
         DIRECT_INPUT,

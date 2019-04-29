@@ -1,5 +1,7 @@
 package org.lrima.laop.ui.stage;
 
+import org.lrima.laop.simulation.data.AlgorithmData;
+import org.lrima.laop.ui.I18n;
 import org.lrima.laop.ui.controllers.ResultController;
 
 import javafx.fxml.FXMLLoader;
@@ -13,14 +15,14 @@ import javafx.stage.Stage;
  * @author Clement Bisaillon
  */
 public class ResultStage extends Stage {
-//	ResultData data;
-	
-//	public ResultStage(ResultData data) {
-//		this.data = data;
-//		this.setTitle("Results extracted from the simulations");
-//
-//		this.loadScene();
-//	}
+	AlgorithmData learningData;
+	AlgorithmData trainingData;
+
+	public ResultStage(AlgorithmData learningData, AlgorithmData trainingData) {
+		I18n.bind("result-title", this::setTitle);
+		this.learningData = learningData;
+		this.trainingData = trainingData;
+	}
 	
 	/**
 	 * Load the scene from the fxml file

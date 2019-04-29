@@ -18,11 +18,13 @@ public class DL4JLearning implements LearningAlgorithm {
         dl4J = new DL4J();
         dl4J.init();
         dl4J.configureListeners(LearningEngine.mainScene);
+        dl4J.setTakeOverMode(DL4J.MODE.DIRECT_INPUT);
 
         Agent agent = env.reset();
         while(learningEngine.whileButtonNotPressed()){
             if(env.isFinished()){
                 learningEngine.evaluate(this);
+                dl4J.setTakeOverMode(DL4J.MODE.DIRECT_INPUT);
                 dl4J.setAIControl(false);
             }
             ArrayList<Sensor> sensors = agent.getSensors();
@@ -45,6 +47,7 @@ public class DL4JLearning implements LearningAlgorithm {
     public CarControls test(Agent agent) {
         double[] sensorValues = agent.getSensors().stream().mapToDouble(Sensor::getValue).toArray();
         dl4J.setAIControl(true);
+        dl4J.setTakeOverMode(DL4J.MODE.AI_CONTROL);
         return dl4J.control(sensorValues);
     }
 

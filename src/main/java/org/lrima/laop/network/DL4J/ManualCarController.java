@@ -18,7 +18,7 @@ public class ManualCarController  {
     protected int[] controls;
 
     public ManualCarController(){
-        controls = new int[4];
+        controls = new int[2];
     }
 
     public void configureListeners(Stage mainScene){
@@ -30,11 +30,11 @@ public class ManualCarController  {
         if (e.getCode() == KeyCode.W) {
             controls[0] = 1;
         } if (e.getCode() == KeyCode.S) {
-            controls[1] = 1;
+            controls[0] = -1;
         } if (e.getCode() == KeyCode.A) {
-            controls[2] = 1;
+            controls[1] = -1;
         } if (e.getCode() == KeyCode.D) {
-            controls[3] = 1;
+            controls[1] = 1;
         }
     }
 
@@ -42,11 +42,11 @@ public class ManualCarController  {
         if (e.getCode() == KeyCode.W) {
             controls[0] = 0;
         } if (e.getCode() == KeyCode.S) {
+            controls[0] = 0;
+        } if (e.getCode() == KeyCode.A) {
             controls[1] = 0;
-        } if (e.getCode() == KeyCode.A && controls[2] == 1) {
-            controls[2] = 0;
-        } if (e.getCode() == KeyCode.D && controls[2] == 0) {
-            controls[3] = 0;
+        } if (e.getCode() == KeyCode.D) {
+            controls[1] = 0;
         }
     }
 
@@ -61,11 +61,11 @@ public class ManualCarController  {
     protected CarControls getControls(double[] inputValues){
         CarControls controls = new CarControls();
 
+
         controls.setAcceleration(inputValues[0]);
-        controls.setBreak(Math.round(inputValues[1]));
+        controls.setRotation(inputValues[1]);
 
 
-        controls.setRotation(0.5 + inputValues[2] *0.5 + inputValues[3] * -0.5);
 
 //        int left = (int) Math.round(inputValues[2]);
 //        int right = (int) Math.round(inputValues[3]);

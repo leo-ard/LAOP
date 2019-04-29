@@ -18,8 +18,6 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
     private SimulationBuffer buffer;
     private ArrayList<SimpleCar> simpleCars;
     private boolean finished;
-    private final int MAX_CHANGE_MAP = 1;
-    private int changeMap = MAX_CHANGE_MAP;
     private int step = 0;
 
     @Override
@@ -53,14 +51,8 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
 
     @Override
     public ArrayList<Agent> reset(int numberOfCars) {
-        if(changeMap == MAX_CHANGE_MAP){
-            mazeMap = new MazeMap(10);
-            mazeMap.bake();
-            changeMap = 0;
-        }
-        else{
-            changeMap++;
-        }
+        mazeMap = new MazeMap(10);
+        mazeMap.bake();
 
         step = 0;
         buffer.clear();
@@ -122,6 +114,6 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
 
 
     private double evalFitness(SimpleCar car){
-        return car.getDistanceTraveled();
+        return car.getDistanceTraveled() * mazeMap.distanceFromStart(car.getPosition().asPoint());
     }
 }

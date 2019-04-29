@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import org.lrima.laop.simulation.LearningEngine;
 import org.lrima.laop.ui.I18n;
 import org.lrima.laop.ui.SimulationDrawer;
+import org.lrima.laop.ui.components.ChartPanel;
 import org.lrima.laop.ui.components.ConsolePanel;
 import org.lrima.laop.ui.components.LaopMenuBar;
 import org.lrima.laop.ui.components.Timeline;
@@ -38,6 +39,7 @@ public class MainSimulationStage extends Stage {
 
     private LaopMenuBar menuBar;
     private VBox bottomBar;
+    private ChartPanel chartPanel;
 
     /**
      * Initialize a new learningEngine stage with a specific learningEngine buffer
@@ -53,6 +55,8 @@ public class MainSimulationStage extends Stage {
         this.simulationDrawer = new SimulationDrawer(canvas, learningEngine, inspector);
         this.timeline = new Timeline(simulationDrawer);
         this.simulationDrawer.setSlider(this.timeline.getSliderTimeLine());
+        this.chartPanel = new ChartPanel();
+        this.chartPanel.link(learningEngine.getLearningData());
 
         this.menuBar = new LaopMenuBar();
         this.menuBar.init(consolePanel, inspector, simulationDrawer);
@@ -90,6 +94,7 @@ public class MainSimulationStage extends Stage {
         //Add the timeLine and the chart panel to the bottom
         bottomBar = new VBox();
         bottomBar.getChildren().add(this.timeline);
+        bottomBar.getChildren().add(this.chartPanel);
 
         uiElements.setBottom(bottomBar);
         uiElements.setRight(inspector);
@@ -123,10 +128,9 @@ public class MainSimulationStage extends Stage {
     
     private void endSimulationAndShowResults(LearningEngine engine) {
     	Platform.runLater(() -> {
-//    		System.out.println(engine.getData());
-//    		ResultStage resultStage = new ResultStage(engine.getData());
-//        	resultStage.show();
-//        	this.close();
+    		ResultStage resultStage = new ResultStage(engine.getLearningData(), engine.getTrainingData());
+        	resultStage.show();
+        	this.close();
     	});
     }
 

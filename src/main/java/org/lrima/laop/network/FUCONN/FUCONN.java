@@ -42,8 +42,8 @@ public class FUCONN {
 
     public void init() {
         neuralNetwork = new NeuralNetwork(5);
-        neuralNetwork.addDenseLayer(4, MathUtils.LOGISTIC);
-        neuralNetwork.addDenseLayer(3, MathUtils.LOGISTIC);
+        neuralNetwork.addDenseLayer(5, MathUtils.TANH);
+        neuralNetwork.addDenseLayer(2, MathUtils.TANH);
     }
 
     public static void main(String[] args){

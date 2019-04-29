@@ -19,7 +19,7 @@ import org.lrima.laop.utils.math.Vector2d;
  */
 public class SimpleCar implements LineCollidable {
     double wheelDirection;
-    final double RANGE = -Math.PI/4;
+    final double RANGE = 0.04;
     private ArrayList<Sensor> sensors;
     
     private final double CAR_WIDTH = 12;
@@ -69,13 +69,14 @@ public class SimpleCar implements LineCollidable {
         
         this.forces = new ArrayList<>();
 
-        //convert sensor into sensor controls
-        double[] sensorValues = this.sensors.stream().mapToDouble(sensor -> sensor.getValue()).toArray();
 
-        this.forces.add(PhysicUtils.accelFromBackWeels(carControls.getAcceleration(), rotation, wheelDirection, RANGE));
+        double breakForce = Math.abs(Math.min(carControls.getAcceleration(), 0));
+        double accelForce = Math.max(carControls.getAcceleration(), 0);
+
+        this.forces.add(PhysicUtils.accelFromBackWeels(accelForce, rotation));
         this.forces.get(0).setTag("Accel from back");
         
-        this.forces.add(PhysicUtils.breakForce(this.velocity, carControls.getBreak()));
+        this.forces.add(PhysicUtils.breakForce(this.velocity, breakForce));
         this.forces.get(1).setTag("Break force");
         this.forces.add(PhysicUtils.airResistance(this.velocity));
         this.forces.get(2).setTag("Air resistance");
@@ -85,11 +86,11 @@ public class SimpleCar implements LineCollidable {
         
         this.acceleration = PhysicUtils.accelFromForces(forces, this.CAR_MASS);
 
-        this.wheelDirection = (carControls.getRotation()-0.5) * 2 * RANGE;
+        this.wheelDirection = carControls.getRotation() * RANGE;
 
 //        this.angularAccel = PhysicUtils.angularAccel(this.wheelDirection, this.velocity);
 //        this.angularAccel = Math.min(Math.max(RANGE, angularAccel), -RANGE);
-        this.angularVelocity = this.velocity.modulus()*this.wheelDirection* LearningEngine.DELTA_T * 0.03;
+        this.angularVelocity = this.velocity.modulus()*this.wheelDirection* LearningEngine.DELTA_T;
         this.rotation += angularVelocity;
 
         this.velocity = this.velocity.add(acceleration.multiply(LearningEngine.DELTA_T));

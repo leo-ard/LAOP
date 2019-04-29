@@ -37,9 +37,9 @@ public class PhysicUtils {
         return resistance.multiply(-c);
     }
 
-    public static Vector2d accelFromBackWeels(double accelAmount, double rotation, double wheelDirection, double range) {
+    public static Vector2d accelFromBackWeels(double accelAmount, double rotation) {
         int initForce = 200_000;
-        return new Vector2d(0, initForce * accelAmount).rotate(rotation + wheelDirection*range, Vector2d.origin);
+        return new Vector2d(0, initForce * accelAmount).rotate(rotation, Vector2d.origin);
     }
 
     public static double angularAccel(double wheelDirection, Vector2d velocity) {
