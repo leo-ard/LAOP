@@ -114,6 +114,6 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
 
 
     private double evalFitness(SimpleCar car){
-        return car.getDistanceTraveled() * mazeMap.distanceFromStart(car.getPosition().asPoint());
+        return car.getDistanceTraveled() + Math.pow(mazeMap.distanceFromStart(car.getPosition().asPoint()), 2);
     }
 }

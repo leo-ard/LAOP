@@ -2,14 +2,18 @@ package org.lrima.laop.network.DL4J;
 
 import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.physic.CarControls;
-import org.lrima.laop.physic.SimpleCar;
 import org.lrima.laop.simulation.Agent;
 import org.lrima.laop.simulation.Environnement;
 import org.lrima.laop.simulation.LearningEngine;
-import org.lrima.laop.simulation.sensors.CarSensor;
 import org.lrima.laop.simulation.sensors.Sensor;
 
 import java.util.ArrayList;
+
+/**
+ * Class that has the first kind of learning : the supervised learning
+ *
+ * @author Léonard
+ */
 public class DL4JLearning implements LearningAlgorithm {
     private DL4J dl4J;
 
@@ -17,7 +21,7 @@ public class DL4JLearning implements LearningAlgorithm {
     public void train(Environnement env, LearningEngine learningEngine) {
         dl4J = new DL4J();
         dl4J.init();
-        dl4J.configureListeners(LearningEngine.mainScene);
+        dl4J.configureListeners(learningEngine.getMainScene());
         dl4J.setTakeOverMode(DL4J.MODE.DIRECT_INPUT);
 
         Agent agent = env.reset();
@@ -49,10 +53,5 @@ public class DL4JLearning implements LearningAlgorithm {
         dl4J.setAIControl(true);
         dl4J.setTakeOverMode(DL4J.MODE.AI_CONTROL);
         return dl4J.control(sensorValues);
-    }
-
-
-    public void init(ArrayList<SimpleCar> cars) {
-        cars.forEach(car -> car.addSensor(CarSensor.VELOCITY_SENSOR(car)));
     }
 }

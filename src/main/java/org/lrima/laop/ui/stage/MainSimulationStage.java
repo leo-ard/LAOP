@@ -1,6 +1,7 @@
 package org.lrima.laop.ui.stage;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Scene;
@@ -122,6 +123,20 @@ public class MainSimulationStage extends Stage {
                 this.learningEngine.pause();
             }
         });
+
+        //CHECKBOX
+        JFXCheckBox checkBoxRealTime = new JFXCheckBox("");
+        checkBoxRealTime.selectedProperty().addListener((obs, oldVal, newVal) -> {
+            this.timeline.disable(newVal);
+            simulationDrawer.setRealTime(newVal);
+            if(newVal)
+                learningEngine.resume();
+            else
+                learningEngine.pause();
+        });
+        checkBoxRealTime.selectedProperty().setValue(true);
+        this.timeline.getChildren().addAll(checkBoxRealTime);
+
 
         this.setScene(scene);
     }

@@ -15,7 +15,7 @@ import org.lrima.laop.utils.Console;
 import java.util.ArrayList;
 
 public class LearningEngine implements Runnable{
-    public static Stage mainScene;
+    public static double DELTA_T = 0.05;
     private SimulationBuffer simulationBuffer;
     private Settings settings;
 
@@ -28,13 +28,15 @@ public class LearningEngine implements Runnable{
     private Environnement environnement;
     private AlgorithmData learningData;
     private AlgorithmData trainedData;
+    private Stage mainScene;
 
     private Thread currentThread;
+    private final Object lock = new Object();
     private SimulationBuffer displayBuffer;
 
-    public static double DELTA_T = 0.05;
-
-    public boolean alive;
+    private boolean alive;
+    private boolean pause;
+    private boolean paused = false;
 
     public LearningEngine(SimulationBuffer simulationBuffer, Settings settings) {
         this.simulationBuffer = simulationBuffer;
@@ -55,6 +57,12 @@ public class LearningEngine implements Runnable{
 
     @Override
     public void run() {
+        synchronized (lock){
+            runn();
+        }
+    }
+
+    public void runn(){
         this.environnement = generateEnvironnement();
         this.environnement.init(this);
 
@@ -69,7 +77,10 @@ public class LearningEngine implements Runnable{
             learningAlgorithm = generateLearningAlgorithm();
             learningAlgorithm.train(environnement, this);
 
+
             trained[batchCount] = learningAlgorithm;
+
+
         }
 
         //TODO : faire le cas ou c'est pas un multi
@@ -116,6 +127,17 @@ public class LearningEngine implements Runnable{
     }
 
     public void evaluate(LearningAlgorithm learningAlgorithm){
+        if(pause){
+            synchronized (lock){
+                try {
+                    paused = true;
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
         int MAX = 10;
         int episode = 0;
         Agent agent = this.environnement.reset();
@@ -150,6 +172,20 @@ public class LearningEngine implements Runnable{
         return null;
     }
 
+    public void pause(){
+        this.pause = true;
+    }
+
+    public void resume(){
+        if(paused){
+            synchronized (lock){
+                this.pause = false;
+                lock.notifyAll();
+            }
+            paused = false;
+        }
+    }
+
     public void setOnBatchStarted(Action<LearningEngine> onBatchFinished) {
         this.onBatchStarted.add(onBatchFinished);
     }
@@ -176,10 +212,6 @@ public class LearningEngine implements Runnable{
 
     public Environnement getEnvironnement() {
         return this.environnement;
-    }
-
-    public void pause() {
-//        this.environnement;
     }
 
     public String getCurrentScopeName() {

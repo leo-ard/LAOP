@@ -1,13 +1,10 @@
 package org.lrima.laop.network.DL4J;
 
-import org.lrima.laop.physic.CarControls;
-
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import org.lrima.laop.settings.LockedSetting;
+import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.utils.MathUtils;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * An concrete class of a CarController. Can control a car with the keys W-A-S-D.
@@ -26,6 +23,11 @@ public class ManualCarController  {
         mainScene.getScene().setOnKeyReleased(this::handleKeyReleased);
     }
 
+    /**
+     * Handles the key press event
+     *
+     * @param e the key event
+     */
     private void handleKeyPress(KeyEvent e) {
         if (e.getCode() == KeyCode.W) {
             controls[0] = 1;
@@ -38,6 +40,11 @@ public class ManualCarController  {
         }
     }
 
+    /**
+     * handles the key released event
+     *
+     * @param e the key event
+     */
     private void handleKeyReleased(KeyEvent e) {
         if (e.getCode() == KeyCode.W) {
             controls[0] = 0;
@@ -50,36 +57,23 @@ public class ManualCarController  {
         }
     }
 
+    /**
+     * Control the car depending on the controls. It does not take the captors values in consideration
+     *
+     * @param captorValues the captor values
+     * @return the CarControl
+     */
     public CarControls control(double[] captorValues) {
-        return getControls(this.controls);
+        return new CarControls(MathUtils.convertToDoubleArray(this.controls));
     }
 
-    protected CarControls getControls(int[] input){
-        return getControls(MathUtils.convertToDoubleArray(input));
-    }
-
+    /**
+     * Transform an array into car controls
+     *
+     * @param inputValues - an array with the values of each output value
+     * @return the car controls
+     */
     protected CarControls getControls(double[] inputValues){
-        CarControls controls = new CarControls();
-
-
-        controls.setAcceleration(inputValues[0]);
-        controls.setRotation(inputValues[1]);
-
-
-
-//        int left = (int) Math.round(inputValues[2]);
-//        int right = (int) Math.round(inputValues[3]);
-//
-//        if(left == right){
-//            controls.setRotation(0.5);
-//        }
-//        else if(left == 1){
-//            controls.setRotation(1);
-//        }else if(right == 1){
-//            controls.setRotation(0);
-//        }
-
-
-        return controls;
+        return new CarControls(inputValues);
     }
 }

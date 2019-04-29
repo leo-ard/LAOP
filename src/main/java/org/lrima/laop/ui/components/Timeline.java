@@ -29,6 +29,12 @@ public class Timeline extends HBox{
         init();
     }
 
+    public void disable(boolean b){
+        this.simulationDrawer.setRealTime(b);
+        this.sliderTimeLine.setDisable(b);
+        this.playButton.setDisable(b);
+    }
+
     private void init() {
         this.getStyleClass().add("panel");
 
@@ -55,19 +61,12 @@ public class Timeline extends HBox{
 
         sliderTimeLine.setOnMousePressed(e -> this.simulationDrawer.stopAutoDraw());
 
-        checkBoxRealTime = new JFXCheckBox("");
-        checkBoxRealTime.selectedProperty().addListener((obs, oldVal, newVal) -> {
-            this.sliderTimeLine.setDisable(newVal);
-            playButton.setDisable(newVal);
-            playButton.setIsPlaying(false);
-            simulationDrawer.setRealTime(newVal);
-        });
-        checkBoxRealTime.selectedProperty().setValue(true);
+
 
 
         HBox.setMargin(sliderTimeLine, new Insets(7,0,7,0));
 
-        this.getChildren().addAll(playButton, sliderTimeLine, checkBoxRealTime);
+        this.getChildren().addAll(playButton, sliderTimeLine);
         this.setSpacing(10);
         this.setPadding(new Insets(5));
 

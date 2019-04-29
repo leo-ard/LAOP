@@ -20,8 +20,14 @@ import java.util.stream.Collectors;
 public class GeneticLearning implements LearningAlgorithm{
     ArrayList<FUCONN> geneticNN;
 
-    public ArrayList<FUCONN> learn(ArrayList<FUCONN> cars) {
-        //sort by best-fitness
+    /**
+     * Makes the array of cars better by doing the three main phases : evaluation, selection and reproduction
+     *
+     * @param cars - the array of cars
+     * @return a better array of cars
+     */
+    private ArrayList<FUCONN> learn(ArrayList<FUCONN> cars) {
+        //Evaluation : sort by best-fitness
         cars = (ArrayList<FUCONN>) cars.stream()
                 .sorted((gn1, gn2)-> {
                     int i = (int)gn2.getFitness()-(int)gn1.getFitness();
@@ -31,7 +37,7 @@ public class GeneticLearning implements LearningAlgorithm{
 
         System.out.println(cars.get(0).getFitness());
 
-        //Keep only 50% best cars
+        //Selection : keep only 50% best cars
         final int initialNumberOfCar = 100;
         ArrayList<FUCONN> bestPerformingCars = new ArrayList<>();
         for(int i = 0 ; i < initialNumberOfCar / 2 ; i++) {
@@ -39,7 +45,7 @@ public class GeneticLearning implements LearningAlgorithm{
         }
         cars = bestPerformingCars;
 
-        //Repopulate
+        //Repopulation : repopulate the set of cars with newly generated ones
         while(cars.size() < initialNumberOfCar){
             FUCONN random1 = bestPerformingCars.get(RandomUtils.getInteger(0, bestPerformingCars.size()-1));
             FUCONN random2 = bestPerformingCars.get(RandomUtils.getInteger(0, bestPerformingCars.size()-1));
@@ -77,6 +83,7 @@ public class GeneticLearning implements LearningAlgorithm{
                 agents = env.step(carControls);
                 env.render();
             }
+
 
             geneticNN = learn(geneticNN);
             learningEngine.evaluate(this);

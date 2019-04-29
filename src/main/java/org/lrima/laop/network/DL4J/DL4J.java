@@ -21,22 +21,31 @@ import org.nd4j.linalg.learning.config.Sgd;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 import java.io.File;
-import java.util.concurrent.ExecutionException;
 
+/**
+ * Neural network for the supervised DL4J algorithm.
+ *
+ * @author Léonard
+ */
 public class DL4J extends ManualCarController {
     private MultiLayerNetwork network;
     private INDArray features;
     private INDArray labels;
-    private int learning = 0;
 
     private MODE takeOverMode = MODE.WAIT_FOR_INPUT;
     private MODE oldTakeOverMode = MODE.AI_CONTROL;
 
-    private boolean disableHumanControls;
+    private boolean aiControl;
 
 
+    /**
+     * Controls the car given the captor values.
+     *
+     * @param captorValues The captor values
+     * @return the Car controls to perform on the car
+     */
     public CarControls control(double... captorValues) {
-        if(disableHumanControls) {
+        if(aiControl) {
             takeOverMode = MODE.AI_CONTROL;
         }
 
@@ -66,7 +75,6 @@ public class DL4J extends ManualCarController {
             INDArray expected = Nd4j.create(MathUtils.convertToDoubleArray(this.controls));
             this.addToData(captor, expected);
             network.fit(captor, expected);
-            learning++;
         }
         else if(tempMode == MODE.AI_CONTROL){
             double[] output = network.output(captor).toDoubleVector();
@@ -128,10 +136,21 @@ public class DL4J extends ManualCarController {
 
     }
 
+    /**
+     * The takeovermode changes the way the car behaves when controlled
+     *
+     * @param takeOverMode change the given mode to this
+     */
     public void setTakeOverMode(MODE takeOverMode) {
         this.takeOverMode = takeOverMode;
     }
 
+    /**
+     * Add the the features/labels to a set to perform training on it
+     *
+     * @param feature the features, often the car captors
+     * @param label the labels, often the car controls
+     */
     private void addToData(INDArray feature, INDArray label){
         if(features.rows() == 0){
             features = feature;
@@ -147,6 +166,10 @@ public class DL4J extends ManualCarController {
         }
     }
 
+    /**
+     * Initialize the neural network
+     *
+     */
     public void init() {
         MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
                 .weightInit(WeightInit.NORMAL)
@@ -190,18 +213,20 @@ public class DL4J extends ManualCarController {
                 this.takeOverMode = MODE.TRAIN_ON_RECORDED_DATA;
             }
         });
-
-        /*EventHandler<? super KeyEvent> onKeyReleased = mainScene.getScene().getOnKeyReleased();
-        mainScene.getScene().setOnKeyReleased(event->{
-            onKeyReleased.handle(event);
-
-        });*/
     }
 
+    /**
+     * Sets the ai control. If true, only the ai can control the car.
+     *
+     * @param val if the car should be only controlled by the ai or not
+     */
     public void setAIControl(boolean val) {
-        disableHumanControls = val;
+        aiControl = val;
     }
 
+    /**
+     * Types of control possible
+     */
     public enum MODE {
         WAIT_FOR_INPUT,
         AI_CONTROL,

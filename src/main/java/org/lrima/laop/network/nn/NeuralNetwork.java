@@ -10,6 +10,8 @@ import java.util.function.Function;
 
 /**
  * Creates a neural network containing a certain number of layers.
+ *
+ * @author Léonard
  */
 public class NeuralNetwork {
     ArrayList<Layer> layers;

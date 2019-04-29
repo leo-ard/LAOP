@@ -14,6 +14,12 @@ public class FUCONN {
     NeuralNetwork neuralNetwork;
     double fitness;
 
+    /**
+     * Creates a new instance of FUCONN that has similar properties as the this and other.
+     *
+     * @param otherGeneticNeuralNetwork - the other FUCONN
+     * @return a new neural network that has similar proprieties as the two other (this and the one in parameters)
+     */
     public FUCONN crossOver(FUCONN otherGeneticNeuralNetwork) {
         FUCONN other = otherGeneticNeuralNetwork;
 
@@ -36,26 +42,40 @@ public class FUCONN {
         return newNetwork;
     }
 
+    /**
+     * Outputs the value value depending on the captor values
+     *
+     * @param captorValues - the values of the captors
+     * @return the CarControls
+     */
     public CarControls control(double... captorValues) {
         return new CarControls(neuralNetwork.predict(captorValues));
     }
 
+    /**
+     * Initialize the neural network.
+     *
+     */
     public void init() {
         neuralNetwork = new NeuralNetwork(5);
         neuralNetwork.addDenseLayer(5, MathUtils.TANH);
         neuralNetwork.addDenseLayer(2, MathUtils.TANH);
     }
 
-    public static void main(String[] args){
-        NeuralNetwork neuralNetwork = new NeuralNetwork(5);
-        neuralNetwork.addDenseLayer(2, MathUtils.LOGISTIC);
-        neuralNetwork.addDenseLayer(3, MathUtils.LOGISTIC);
-    }
-
+    /**
+     * Sets the fitness values (value that determines the performance of a car)
+     *
+     * @param fitness the new value of the fitness
+     */
     public void setFitness(double fitness) {
         this.fitness = fitness;
     }
 
+    /**
+     * returns the current fitness values
+     *
+     * @return the fitness value
+     */
     public double getFitness() {
         return fitness;
     }
