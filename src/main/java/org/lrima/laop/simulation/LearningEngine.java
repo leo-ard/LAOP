@@ -5,7 +5,6 @@ import org.lrima.laop.core.LAOP;
 import org.lrima.laop.network.LearningAlgorithm;
 import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.settings.LockedSetting;
-import org.lrima.laop.settings.Scope;
 import org.lrima.laop.settings.Settings;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
 import org.lrima.laop.simulation.data.AlgorithmData;
@@ -14,6 +13,11 @@ import org.lrima.laop.utils.Console;
 
 import java.util.ArrayList;
 
+/**
+ * A engine that will simulate all the learning engines
+ *
+ * @author Léonard
+ */
 public class LearningEngine implements Runnable{
     public static double DELTA_T = 0.05;
     private SimulationBuffer simulationBuffer;
@@ -21,8 +25,8 @@ public class LearningEngine implements Runnable{
 
     private int batchCount;
 
-    ArrayList<Action<LearningEngine>> onBatchStarted;
-    ArrayList<Action<LearningEngine>> onEnd;
+    private ArrayList<Action<LearningEngine>> onBatchStarted;
+    private ArrayList<Action<LearningEngine>> onEnd;
 
     private LearningAlgorithm learningAlgorithm;
     private Environnement environnement;
@@ -30,17 +34,20 @@ public class LearningEngine implements Runnable{
     private AlgorithmData trainedData;
     private Stage mainScene;
 
-    private Thread currentThread;
     private final Object lock = new Object();
-    private SimulationBuffer displayBuffer;
 
     private boolean alive;
     private boolean pause;
     private boolean paused = false;
 
+    /**
+     * Creates a new learning engine
+     *
+     * @param simulationBuffer the simulation buffer to write to
+     * @param settings the settings to get the learning algorithms from
+     */
     public LearningEngine(SimulationBuffer simulationBuffer, Settings settings) {
         this.simulationBuffer = simulationBuffer;
-        displayBuffer = new SimulationBuffer();
         this.settings = settings;
         this.batchCount = 0;
 
@@ -50,19 +57,26 @@ public class LearningEngine implements Runnable{
         this.trainedData = new AlgorithmData();
     }
 
+    /**
+     * Start the learning engine by creating a new thread
+     *
+     */
     public void start(){
-        currentThread = new Thread(this);
+        Thread currentThread = new Thread(this);
         currentThread.start();
     }
 
     @Override
     public void run() {
         synchronized (lock){
-            runn();
+            runAll();
         }
     }
 
-    public void runn(){
+    /**
+     * Run all the learning algorithms one after the other
+     */
+    private void runAll(){
         this.environnement = generateEnvironnement();
         this.environnement.init(this);
 
@@ -117,6 +131,12 @@ public class LearningEngine implements Runnable{
         trainedData.toCsv("training");
     }
 
+
+    /**
+     * Creates a new Environnement instance depending on the one selected in the settings
+     *
+     * @return the selected environnement
+     */
     private Environnement generateEnvironnement() {
         Class<? extends Environnement> environnementClass = (Class<? extends Environnement>) settings.get(Settings.GLOBAL_SCOPE, LAOP.KEY_ENVIRONNEMENT_CLASS);
 
@@ -129,6 +149,11 @@ public class LearningEngine implements Runnable{
         return new BetterEnvironnement();
     }
 
+    /**
+     * Evaluate a given learning algorithm
+     *
+     * @param learningAlgorithm the learning algorithm that must be tested
+     */
     public void evaluate(LearningAlgorithm learningAlgorithm){
         if(pause){
             synchronized (lock){
@@ -159,11 +184,16 @@ public class LearningEngine implements Runnable{
     }
 
 
+    /**
+     * The buffer used in this simulation
+     *
+     * @return the simulation buffer
+     */
     public SimulationBuffer getBuffer() {
         return simulationBuffer;
     }
 
-    LearningAlgorithm generateLearningAlgorithm() {
+    private LearningAlgorithm generateLearningAlgorithm() {
         Class<? extends LearningAlgorithm> learningClass = (Class<? extends LearningAlgorithm>) settings.get(this.getCurrentScopeName(), LAOP.KEY_LEARNING_CLASS);
 
         try {
@@ -175,10 +205,16 @@ public class LearningEngine implements Runnable{
         return null;
     }
 
+    /**
+     * Pause the simulation
+     */
     public void pause(){
         this.pause = true;
     }
 
+    /**
+     * Resume the simulation
+     */
     public void resume(){
         if(paused){
             synchronized (lock){
@@ -189,14 +225,29 @@ public class LearningEngine implements Runnable{
         }
     }
 
+    /**
+     * Sets an action to do at the start of each batch
+     *
+     * @param onBatchFinished the action to perform
+     */
     public void setOnBatchStarted(Action<LearningEngine> onBatchFinished) {
         this.onBatchStarted.add(onBatchFinished);
     }
 
+    /**
+     * Sets an action at the end of the all the simulations
+     *
+     * @param onEnd the action to perform
+     */
     public void setOnEnd(Action<LearningEngine> onEnd) {
         this.onEnd.add(onEnd);
     }
 
+    /**
+     * gets the batch passed till now
+     *
+     * @return the batch count
+     */
     public int getBatchCount() {
         return batchCount;
     }
@@ -209,42 +260,74 @@ public class LearningEngine implements Runnable{
         this.mainScene = mainScene;
     }
 
+    /**
+     * Gets the settings
+     *
+     * @return the settings
+     */
     public LockedSetting getSettings() {
         return this.settings.lock(this.getCurrentScopeName());
     }
 
+    /**
+     * Gets the environnement
+     *
+     * @return the environnement
+     */
     public Environnement getEnvironnement() {
         return this.environnement;
     }
 
+    /**
+     * Gets the current scope name
+     *
+     * @return the current scope name
+     */
     private String getCurrentScopeName() {
     	return this.settings.getLocalScopeKeys().get(this.batchCount);
     }
 
+    /**
+     * Gets the main scene
+     *
+     * @return the main scene
+     */
     public Stage getMainScene() {
         return mainScene;
     }
 
-    public LearningAlgorithm getCurrentLearning() {
-        return learningAlgorithm;
-    }
 
-    public SimulationBuffer getDisplayBuffer() {
-        return displayBuffer;
-    }
-
+    /**
+     * Returns true if the simulation should continue
+     *
+     * @return
+     */
     public boolean whileButtonNotPressed() {
         return alive;
     }
 
+    /**
+     * Goes to the next algorithm
+     *
+     */
     public void nextAlgorithm(){
         alive = false;
     }
 
+    /**
+     * Gets the training data
+     *
+     * @return the training data
+     */
     public AlgorithmData getTrainingData() {
         return trainedData;
     }
 
+    /**
+     * Gets the learning data
+     *
+     * @return the learning data
+     */
     public AlgorithmData getLearningData() {
         return learningData;
     }

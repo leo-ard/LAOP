@@ -4,6 +4,8 @@ import org.lrima.laop.physic.staticobjects.StaticLineObject;
 
 /**
  * Interface for all objects that can collide with a line (like a car)
+ *
+ * @author Léonard
  */
 public interface LineCollidable {
 

@@ -58,7 +58,7 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
     }
 
     @Override
-    public ArrayList<Agent> reset(int numberOfCars) {
+    public ArrayList<Agent> reset(int numberOfAgents) {
         mazeMap = new MazeMap(mapSize);
         mazeMap.bake();
 
@@ -66,7 +66,7 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
         buffer.clear();
         finished = false;
         ArrayList<Agent> agents = new ArrayList<>();
-        simpleCars = generateCarObjects(numberOfCars);
+        simpleCars = generateCarObjects(numberOfAgents);
 
         for (SimpleCar simpleCar : simpleCars) {
             mazeMap.collide(simpleCar);

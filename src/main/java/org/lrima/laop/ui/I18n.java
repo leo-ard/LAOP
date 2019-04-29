@@ -1,6 +1,5 @@
 package org.lrima.laop.ui;
 
-import com.jfoenix.controls.JFXButton;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.MenuItem;
 
@@ -9,15 +8,30 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
+/**
+ * Utility class to make Internalisation possible
+ *
+ * @author Leonard
+ */
 public class I18n {
     private static HashMap<String, Consumer<String>> allKeys = new HashMap<>();
     private static ResourceBundle messages = ResourceBundle.getBundle("lang/messages");
 
+    /**
+     * Update the current language by the one specifies in parameters
+     *
+     * @param locale the new local to use
+     */
     public static void update(Locale locale){
         messages = ResourceBundle.getBundle("lang/messages", locale);
         allKeys.forEach((key, consumer) -> consumer.accept(messages.getString(key)));
     }
 
+    /**
+     * Bind the text of the label in parameters to the key of the text.
+     *
+     * @param labeled
+     */
     public static void bind(Labeled labeled){
         String string = labeled.getText();
         if(string.startsWith("%")){

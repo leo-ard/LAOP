@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 /**
  * Class used to optimise the seach for possinle colisions between LineCollidables and StaticLines
+ *
+ * @author Léonard
  */
 public class Quadtree {
     private final int MIN_OBJECTS = 20;

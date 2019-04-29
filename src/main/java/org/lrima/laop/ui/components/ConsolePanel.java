@@ -24,6 +24,9 @@ public class ConsolePanel extends ScrollPane {
 	private final int MAX_WIDTH = 200;
     private VBox vBox;
 
+    /**
+     * Creates a new console panel
+     */
     public ConsolePanel() {
 		super();
 
