@@ -63,13 +63,10 @@ public class SimulationBuffer  {
         return this.snapshots.size();
     }
 
+    /**
+     * resets all the snapshots
+     */
     public void clear() {
         snapshots = new ArrayList<>();
-    }
-
-    public void insetLast(CarData carData) {
-        if(this.snapshots.size() != 0){
-            this.snapshots.get(this.snapshots.size()-1).addCar(carData);
-        }
     }
 }

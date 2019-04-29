@@ -72,14 +72,14 @@ public class ScopeModifierPanel extends GridPane {
     /**
      * Handles the checkboxes that make some controls global or local
      *
-     * @param b
-     * @param old
-     * @param newVal
-     * @param overriteGlobal
-     * @param key
+     * @param obs observer
+     * @param old old value
+     * @param newVal new value
+     * @param overrideGlobal the checkbox override global
+     * @param key key name
      */
-    private void handleCheckBoxListener(ObservableValue<? extends Boolean> b, Boolean old, Boolean newVal, CheckBox overriteGlobal, String key) {
-        int row = GridPane.getRowIndex(overriteGlobal);
+    private void handleCheckBoxListener(ObservableValue<? extends Boolean> obs, Boolean old, Boolean newVal, CheckBox overrideGlobal, String key) {
+        int row = GridPane.getRowIndex(overrideGlobal);
         Node componentToReplace = this.getNodeByRowColumnIndex(1, row);
         this.getChildren().remove(componentToReplace);
 

@@ -12,7 +12,9 @@ import java.util.ArrayList;
 public class SimulationSnapshot {
     ArrayList<CarData> cars;
 
-
+    /**
+     * Creates a new simulation snapshot
+     */
     public SimulationSnapshot(){
         cars = new ArrayList<>();
     }

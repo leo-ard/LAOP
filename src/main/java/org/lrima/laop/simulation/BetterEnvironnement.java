@@ -80,7 +80,7 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
         ArrayList<SimpleCar> carObjects = new ArrayList<>();
         for(int i = 0 ; i < numberOfCars ; i++) {
             Point2D start = mazeMap.getStartPoint();
-            SimpleCar car = new SimpleCar(new Vector2d(start.getX(), start.getY()), mazeMap.getOrientation());
+            SimpleCar car = new SimpleCar(new Vector2d(start.getX(), start.getY()), mazeMap.getStartingOrientation());
 
             double orientationIncrement = Math.PI / numberOfSensors;
             //Create the sensors and assign them to the car

@@ -17,14 +17,24 @@ import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
 
+/**
+ * An option that can take a class as parameters
+ *
+ * @author Léonard
+ * @param <T> the class type
+ */
 public class OptionClass<T> implements Option<Class<?>> {
     Class<?> value;
     HashMap<String, Class<? extends T>> allClasses;
-    Function<Class, Boolean> isValid;
 
-    public OptionClass(Class<?> value, ArrayList<Class<? extends T>> allAvailableClasses, Function<Class, Boolean> isValid) {
+    /**
+     * Creates a new option class with the call value and the possible class AllAvailableClasses
+     *
+     * @param value the default selected value
+     * @param allAvailableClasses all the other possible classes
+     */
+    public OptionClass(Class<?> value, ArrayList<Class<? extends T>> allAvailableClasses) {
     	this.value = value;
-    	this.isValid = isValid;
 
     	allClasses = new HashMap<>();
         for (Class<? extends T> allAvailableClass : allAvailableClasses) {
@@ -53,13 +63,6 @@ public class OptionClass<T> implements Option<Class<?>> {
         stringComboBox.getSelectionModel().select(value.getSimpleName());
         stringComboBox.getSelectionModel().selectedItemProperty().addListener((s, oldOb, newOb) ->{
             setValue(allClasses.get(newOb));
-            if(isValid.apply(this.value)){
-                stringComboBox.focusColorProperty().set(Color.BLUE);
-            }
-            else{
-                stringComboBox.focusColorProperty().set(Color.RED);
-
-            }
         });
         
         return stringComboBox;

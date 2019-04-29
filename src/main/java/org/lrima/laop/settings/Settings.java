@@ -12,7 +12,7 @@ import javafx.scene.control.TextInputDialog;
  * Stores the settings in different scopes and allows the user to get and set the controls of the
  * different settings. The scope is used to differentiate for example the settings for one
  * algorithm and the others
- * @author Clement Bisaillon et Léonard Oest O'Leary
+ * @author Clement Bisaillon
  */
 public class Settings {
     public final static String GLOBAL_SCOPE = "GLOBAL";
@@ -133,7 +133,12 @@ public class Settings {
         scopeArray.remove(GLOBAL_SCOPE);
         return scopeArray;
     }
-    
+
+    /**
+     * gets an array of all the local scopes
+     *
+     * @return an array containing all the local scopes
+     */
     public LinkedHashMap<String, Scope> getLocalScopes(){
     	LinkedHashMap<String, Scope> scopes = new LinkedHashMap<String, Scope>(this.getScopes());
     	scopes.remove(GLOBAL_SCOPE);

@@ -201,7 +201,12 @@ public class MazeMap extends AbstractMap {
     	return this.start;
     }
 
-	public double getOrientation() {
+	/**
+	 * Gets the starting orientation
+	 *
+	 * @return the starting orientation
+	 */
+	public double getStartingOrientation() {
 		return orientation;
 	}
 }

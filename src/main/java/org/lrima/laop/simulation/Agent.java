@@ -1,6 +1,5 @@
 package org.lrima.laop.simulation;
 
-import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.simulation.sensors.Sensor;
 
 import java.util.ArrayList;
