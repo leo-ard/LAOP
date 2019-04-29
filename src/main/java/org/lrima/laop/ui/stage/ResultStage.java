@@ -15,10 +15,15 @@ import javafx.stage.Stage;
  * @author Clement Bisaillon
  */
 public class ResultStage extends Stage {
-	AlgorithmData learningData;
-	AlgorithmData trainingData;
+	private AlgorithmData learningData;
+	private AlgorithmData trainingData;
 
-	public ResultStage(AlgorithmData learningData, AlgorithmData trainingData) {
+	/**
+	 * Instantiate a new result stage with all the data required to show the results
+	 * @param learningData the data related to the learning of the algorithms
+	 * @param trainingData the data related to the training of the algorithms
+	 */
+	ResultStage(AlgorithmData learningData, AlgorithmData trainingData) {
 		I18n.bind("result-title", this::setTitle);
 		this.learningData = learningData;
 		this.trainingData = trainingData;

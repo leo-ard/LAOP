@@ -91,8 +91,12 @@ public class ConfigurationController implements Initializable {
 		I18n.bind(downloadBtn, settingLabel, algorithmLabel);
 
     }
-    
-    public void setLaop(LAOP laop) {
+
+	/**
+	 * Attach the LAOP instance to this controller
+	 * @param laop the LAOP instance
+	 */
+	public void setLaop(LAOP laop) {
     	this.laop = laop;
     	this.reloadScopeTableFromSettings();
     }
@@ -126,12 +130,15 @@ public class ConfigurationController implements Initializable {
     	scopeList.getSelectionModel().selectLast();
     }
 
-    private class AlgorithmCell extends ListCell<String> {
+	/**
+	 * Used to display a button to remove the row next to the label
+	 */
+	private class AlgorithmCell extends ListCell<String> {
     	HBox cellContent = new HBox();
     	Label name;
     	JFXButton deleteBtn;
 
-    	public AlgorithmCell() {
+    	AlgorithmCell() {
     		super();
 
     		cellContent.setPadding(new Insets(0, 10, 0, 10));

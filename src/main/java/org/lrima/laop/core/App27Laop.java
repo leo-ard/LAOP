@@ -17,33 +17,6 @@ public class App27Laop {
      * @param args an array of {@link java.lang.String} objects.
      */
     public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        JPanel panel = new JPanel();
-        
-        JButton testConfig = new JButton("Test Configuration");
-        JButton testSimulation = new JButton("Test LearningEngine");
-
-        testConfig.addActionListener(e -> {
-        	frame.dispose();
-        	new Thread(() -> 
-        			Application.launch(LaopMain.class)
-        	).start();
-        });
-       
-        testSimulation.addActionListener(e -> {
-            frame.dispose();
-            new Thread(() ->
-                    Application.launch(LaopGraphical.class)
-            ).start();
-        });
-
-
-        panel.add(testConfig);
-        panel.add(testSimulation);
-        frame.getContentPane().add(panel);
-        frame.pack();
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-        frame.setVisible(true);
+        new Thread(() -> Application.launch(LaopGraphical.class)).start();
     }
 }

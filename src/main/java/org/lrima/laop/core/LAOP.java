@@ -28,7 +28,6 @@ import java.util.Locale;
  * @version $Id: $Id
  */
 public class LAOP {
-    //TODO : this is just for testing purpurses
     private ArrayList<Class<? extends LearningAlgorithm>> learningAlgorithmsClasses;
     private ArrayList<Class<? extends Environnement>> environnements;
 

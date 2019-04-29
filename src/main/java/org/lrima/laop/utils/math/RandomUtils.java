@@ -1,7 +1,5 @@
 package org.lrima.laop.utils.math;
 
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -20,22 +18,18 @@ public class RandomUtils {
 	}
 	
 	/**
-	 * @param bounds the bounds of the map
-	 * @return a random point inside bounds
-	 */
-	public static Point2D.Double getPoint(Rectangle2D bounds){
-		int x = getInteger((int)bounds.getMinX(), (int)bounds.getMaxX());
-		int y = getInteger((int)bounds.getMinY(), (int)bounds.getMaxY());
-		return new Point2D.Double(x, y);
-	}
-	
-	/**
 	 * @return a random boolean value
 	 */
 	public static boolean getBoolean() {
 		return ThreadLocalRandom.current().nextBoolean();
 	}
 
+	/**
+	 * Get a random double between a range
+	 * @param min the minimum value
+	 * @param max the maximum value
+	 * @return a random double between min and max inclusively
+	 */
 	public static double getDouble(int min, int max) {
 		return ThreadLocalRandom.current().nextDouble(min, max);
 	}

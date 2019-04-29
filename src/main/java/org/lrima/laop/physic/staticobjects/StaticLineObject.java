@@ -3,18 +3,13 @@ package org.lrima.laop.physic.staticobjects;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import org.lrima.laop.utils.GraphicsUtils;
-
-import java.awt.geom.Area;
-import java.awt.geom.Line2D;
-import java.awt.geom.Path2D;
 
 /**
  * Static object of a simulation representing a single line
  * @author Clement Bisaillon
  */
 public class StaticLineObject implements StaticObject {
-    float x1, y1, x2, y2;
+    private float x1, y1, x2, y2;
     private final Color COLOR = new Color(32.0/255.0, 78.0/255.0, 95.0/255.0, 1);
 
     /**
@@ -49,18 +44,30 @@ public class StaticLineObject implements StaticObject {
     	return StaticObjectType.STATIC_LINE;
     }
 
+    /**
+     * @return The x component of the first point on the line
+     */
     public float getX1() {
         return x1;
     }
 
+    /**
+     * @return The x component of the second point on the line
+     */
     public float getX2() {
         return x2;
     }
 
+    /**
+     * @return The y component of the first point on the line
+     */
     public float getY1() {
         return y1;
     }
 
+    /**
+     * @return The y component of the second point on the line
+     */
     public float getY2() {
         return y2;
     }

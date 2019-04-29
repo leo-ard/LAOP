@@ -17,12 +17,20 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * A dialog that shows the progress of the download of a file
+ * @author Clement Bisaillon
+ */
 public class DownloadProgressDialog extends Stage {
 
 	private Scene scene;
 	private AlgorithmBean algorithm;
 	private DownloadProgressController controller;
 
+	/**
+	 * Initialize the dialog with the algorithm to download
+	 * @param algorithm the algorithm to download
+	 */
 	public DownloadProgressDialog(AlgorithmBean algorithm) {
 		this.algorithm = algorithm;
 		I18n.bind("download-progress", this::setTitle);
@@ -34,6 +42,9 @@ public class DownloadProgressDialog extends Stage {
 		this.startDownload();
 	}
 
+	/**
+	 * Configure the components in the dialog
+	 */
 	private void configureDialogComponents() {
 		try {
 			FXMLLoader loader = new FXMLLoader(
@@ -53,6 +64,9 @@ public class DownloadProgressDialog extends Stage {
 		}
 	}
 
+	/**
+	 * Start the download of the file
+	 */
 	private void startDownload() {
 		try {
 			URL url = new URL("https://lasp.lrima.cmaisonneuve.qc.ca/posts/" + this.algorithm.getId() + "/download");

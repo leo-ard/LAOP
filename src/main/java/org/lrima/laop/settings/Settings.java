@@ -2,11 +2,6 @@ package org.lrima.laop.settings;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Optional;
-
-import com.jfoenix.controls.JFXListView;
-
-import javafx.scene.control.TextInputDialog;
 
 /**
  * Stores the settings in different scopes and allows the user to get and set the controls of the
@@ -24,7 +19,9 @@ public class Settings {
     private LinkedHashMap<String, Scope> scopes;
 
 
-
+    /**
+     * Initiates the settings by reseting the scopes and by adding a global scope
+     */
     public Settings(){
         scopes = new LinkedHashMap<>();
         scopes.put(GLOBAL_SCOPE, new Scope());
@@ -77,9 +74,8 @@ public class Settings {
     /**
      * Add a new scope to the settings.
      * @param name - the name of the scope. This field is not case-sensitive
-     * @return true if successful, false otherwise
      */
-    public void addScope(String name){
+    private void addScope(String name){
         Scope newScope = new Scope();
         newScope.setGlobalScope(this.scopes.get(GLOBAL_SCOPE));
         this.scopes.put(name, newScope);
@@ -140,7 +136,7 @@ public class Settings {
      * @return an array containing all the local scopes
      */
     public LinkedHashMap<String, Scope> getLocalScopes(){
-    	LinkedHashMap<String, Scope> scopes = new LinkedHashMap<String, Scope>(this.getScopes());
+    	LinkedHashMap<String, Scope> scopes = new LinkedHashMap<>(this.getScopes());
     	scopes.remove(GLOBAL_SCOPE);
     	return scopes;
     }

@@ -25,7 +25,10 @@ public class ChartPanel extends HBox {
 	private LineChart<Number, Number> chart;
 	
 	private XYChart.Series<Number, Number> averageFitnessSerie;
-	
+
+	/**
+	 * Instantiate a new chart panel with the default parameters
+	 */
 	public ChartPanel() {
 		this.setPadding(new Insets(0));
 		this.setPrefHeight(300);
@@ -58,6 +61,10 @@ public class ChartPanel extends HBox {
 		
 	}
 
+	/**
+	 * Links the data of the algorithm to this chart
+	 * @param algorithmData the data of the algorithm
+	 */
 	public void link(AlgorithmData algorithmData){
 	    algorithmData.setOnAddValue((scope) ->{
 	        ArrayList<Double> d = algorithmData.getData().get(scope);
@@ -65,7 +72,12 @@ public class ChartPanel extends HBox {
         });
     }
 
-	public void updateChartData(ArrayList<Double> values, String name) {
+	/**
+	 * Updates the data of the chart
+	 * @param values the data represented as an array of double
+	 * @param name the name of the data serie
+	 */
+	private void updateChartData(ArrayList<Double> values, String name) {
 	    this.averageFitnessSerie.getData().clear();
 
 		//Add new data to the series from the past generation

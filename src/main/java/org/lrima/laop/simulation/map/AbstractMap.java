@@ -1,29 +1,27 @@
 package org.lrima.laop.simulation.map;
 
-import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-
 import javafx.scene.canvas.GraphicsContext;
 import org.lrima.laop.physic.staticobjects.StaticLineObject;
-import org.lrima.laop.physic.staticobjects.StaticObject;
 
 /**
  * Object representing every kind of maps
  * @author Clement Bisaillon
  */
 public abstract class AbstractMap {
-	protected ArrayList<StaticLineObject> lines;
-	protected Quadtree quadtree;
-	
+	ArrayList<StaticLineObject> lines;
+	Quadtree quadtree;
+
+	/**
+	 * Initiate a map by reseting its array of lines
+	 */
 	public AbstractMap() {
 		this.lines = new ArrayList<>();
 	}
 	
 	/**
 	 * Converts the lines of the map to multiple areas containing the same type of lines
-	 *
-	 * @author Léonard
 	 */
 	public void bake(){
 		if(lines.size() == 0){
@@ -55,9 +53,8 @@ public abstract class AbstractMap {
 	}
 
 	/**
-	 *
-	 * @param lineCollidable
-	 * @author Léonard
+	 * Tell the quadtree that a line collided with the map
+	 * @param lineCollidable the line that collided with the map
 	 */
 	public void collide(LineCollidable lineCollidable){
 		lineCollidable.bake();
@@ -77,14 +74,11 @@ public abstract class AbstractMap {
 	public double distanceFromStart(Point2D point) {
 		return point.distance(getStartPoint());
 	}
-	
-	/**
-	 * @return All the lines in the map
-	 */
-	public ArrayList<StaticLineObject> getLines(){
-		return this.lines;
-	}
 
+	/**
+	 * Draw the map on the screen
+	 * @param gc the graphical context to draw to
+	 */
     public void draw(GraphicsContext gc){
 		lines.forEach(line -> line.draw(gc));
 	}

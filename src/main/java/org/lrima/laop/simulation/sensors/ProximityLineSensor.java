@@ -19,12 +19,14 @@ public class ProximityLineSensor implements Sensor, LineCollidable {
 	//The car that this sensor is attached to
 	private SimpleCar car;
 	private double orientation;
-	public static final double SENSOR_LENGHT = 150;
-	public static final double SENSOR_LENGHT_MINUS_1 = 1.0/SENSOR_LENGHT;
+	private static final double SENSOR_LENGHT = 150;
+	private static final double SENSOR_LENGHT_MINUS_1 = 1.0/SENSOR_LENGHT;
 	private Point2D start;
 
 	private final Color SENSOR_COLOR = new Color(255.0/255, 137.0/255, 132.0/255, 1);
     private double value;
+    //For optimization
+    private float x1, x2, y1, y2;
 
     public ProximityLineSensor(SimpleCar car, double orientation) {
 		this.car = car;
@@ -57,7 +59,7 @@ public class ProximityLineSensor implements Sensor, LineCollidable {
         }
     }
 
-    float x1, x2, y1, y2;
+
     @Override
     public void bake() {
         this.value = 1;

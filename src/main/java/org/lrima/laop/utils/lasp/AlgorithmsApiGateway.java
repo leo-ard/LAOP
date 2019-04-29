@@ -19,9 +19,12 @@ public class AlgorithmsApiGateway extends ApiCaller {
 	private final Type COLLECTION_TYPE = new TypeToken<Collection<AlgorithmBean>>(){}.getType();
 	private final String ALGORITHM_LIST_ENDPOINT = "https://lasp.lrima.cmaisonneuve.qc.ca/api/posts";
 	private HashMap<Integer, AlgorithmResponseBean> cache;
-	
+
+	/**
+	 * Initiate the api gateway by reseting the cache
+	 */
 	public AlgorithmsApiGateway() {
-		this.cache = new HashMap<Integer, AlgorithmResponseBean>();
+		this.cache = new HashMap<>();
 	}
 	
 	/**

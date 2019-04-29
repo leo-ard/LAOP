@@ -11,8 +11,7 @@ public class Vector2d implements Cloneable {
     private double x;
     private double y;
 
-    //TODO : maybe tem
-    String tag;
+    private String tag;
 
     /**
      * Creates a new two dimensions vector from two controls
@@ -91,30 +90,34 @@ public class Vector2d implements Cloneable {
         return new Vector2d(x, y);
     }
 
+    /**
+     * @return the x component of the vector
+     */
     public double getX() {
         return x;
     }
+
+    /**
+     * @return the y component of the vector
+     */
     public double getY() {
         return y;
     }
 
+    /**
+     * @return the vector in a string
+     */
     public String toString(){
         return String.format("[%.2f, %.2f]", this.x, this.y);
     }
 
+    /**
+     * @return the tag associated with the algorithm
+     */
     public String getTag() {
         return tag;
     }
 
-    /**
-     * Power a vector by a factor i
-     *
-     * @param i the power
-     * @return a new vector with power i
-     */
-    public Vector2d power(int i) {
-        return new Vector2d(Math.pow(this.x, i), Math.pow(this.y, i));
-    }
 
     /**
      * Power a vector by a factor 2
@@ -133,16 +136,6 @@ public class Vector2d implements Cloneable {
      */
     public Vector2d sign() {
         return new Vector2d(Math.signum(this.x), Math.signum(this.y));
-    }
-
-    /**
-     * Do the dot product between two vectors
-     *
-     * @param v the other vector
-     * @return the dot product between this and v
-     */
-    public double dot(Vector2d v) {
-        return this.x * v.x + this.y * v.y;
     }
 
     /**
@@ -168,10 +161,17 @@ public class Vector2d implements Cloneable {
         return new Vector2d(x, y);
     }
 
+    /**
+     * Set the tag of the vector
+     * @param tag the tag
+     */
     public void setTag(String tag){
         this.tag = tag;
     }
 
+    /**
+     * @return the vector as a Point2D object
+     */
     public Point2D asPoint() {
         return new Point2D.Double(this.getX(), this.getY());
     }

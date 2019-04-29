@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.*?>
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.lrima.laop.ui.controllers.homeController">
+<AnchorPane prefHeight="600.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.lrima.laop.ui.controllers.HomeController">
    <children>
       <Label layoutX="147.0" layoutY="14.0" text="LAOP">
          <font>
@@ -20,7 +15,7 @@
       <Label fx:id="text" alignment="TOP_LEFT" layoutX="14.0" layoutY="116.0" prefHeight="232.0" prefWidth="420.0" text="\%text-entry" textAlignment="JUSTIFY" wrapText="true" />
       <ChoiceBox fx:id="choiceBox" layoutX="284.0" layoutY="561.0" prefWidth="150.0" />
       <Label fx:id="selectLanguageLabel" alignment="CENTER_RIGHT" layoutX="90.0" layoutY="565.0" prefHeight="17.0" prefWidth="186.0" text="\%select-language" textAlignment="RIGHT" />
-      <JFXButton fx:id="viewUserGuideBtn" layoutX="147.0" layoutY="389.0" styleClass="btn" text="Guide utilisateur" />
-      <JFXButton fx:id="viewScientificConceptsBtn" layoutX="125.0" layoutY="436.0" styleClass="btn" text="Concepts scientifiques" />
+      <JFXButton fx:id="viewUserGuideBtn" layoutX="147.0" layoutY="389.0" styleClass="btn" text="Guide utilisateur" AnchorPane.leftAnchor="147.0" AnchorPane.rightAnchor="149.0" />
+      <JFXButton fx:id="viewScientificConceptsBtn" layoutX="125.0" layoutY="436.0" styleClass="btn" text="Concepts scientifiques" AnchorPane.leftAnchor="147.0" AnchorPane.rightAnchor="149.0" />
    </children>
 </AnchorPane>
