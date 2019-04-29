@@ -34,6 +34,9 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.lrima.laop.utils.ImageDefilementTMP;
+
+import javax.swing.*;
 
 /**
  * Class that controls the configuration panel (configuration.fxml)
@@ -85,7 +88,6 @@ public class ConfigurationController implements Initializable {
     		//Open the download dialog
             new DownloadAlgorithmDialog(parent);
     	});
-        System.out.println(downloadBtn + " " + settingLabel + " " + algorithmLabel);
 		I18n.bind(downloadBtn, settingLabel, algorithmLabel);
 
     }
@@ -160,6 +162,12 @@ public class ConfigurationController implements Initializable {
             if (item != null) {
             	//Algorithm name label
             	this.name.setText(item);
+            	if(item.equals("GLOBAL")){
+            		this.deleteBtn.setVisible(false);
+				}
+				else{
+					this.deleteBtn.setVisible(true);
+				}
 
                 setGraphic(this.cellContent);
             }
