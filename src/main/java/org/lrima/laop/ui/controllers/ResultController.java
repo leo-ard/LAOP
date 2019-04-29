@@ -16,7 +16,12 @@ import javafx.scene.layout.BorderPane;
 import org.lrima.laop.simulation.data.AlgorithmData;
 import org.lrima.laop.ui.components.ChartPanel;
 
-public class ResultController implements Initializable {
+/**
+ * javafx controller for the result page
+ *
+ * @author Léonard
+ */
+public class ResultController {
 
 	AlgorithmData learning;
 	AlgorithmData training;
@@ -31,13 +36,12 @@ public class ResultController implements Initializable {
 
 	HashMap<String, Chart> charts;
 
-
-	
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-
-    }
-	
+    /**
+     * Initialize the page with the values algorithmData and trainingData
+     *
+     * @param learning the learning data
+     * @param training the training data
+     */
 	public void initData(AlgorithmData learning, AlgorithmData training) {
 		this.learning = learning;
 		this.training = training;
@@ -53,11 +57,6 @@ public class ResultController implements Initializable {
         });
 
 		chartCbBox.getSelectionModel().select((String) charts.keySet().toArray()[0]);
-
-
-
-
-
 	}
 
 	private void add(AlgorithmData algorithmData, String name){
