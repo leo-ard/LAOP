@@ -10,6 +10,7 @@ import org.lrima.laop.ui.I18n;
 import org.lrima.laop.utils.ImageDefilementTMP;
 import javax.swing.*;
 import java.awt.*;
+import java.net.URI;
 import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -20,6 +21,7 @@ import java.util.ResourceBundle;
  */
 public class HomeController implements Initializable {
     @FXML private Label text;
+    @FXML private JFXButton viewGitHubBtn;
     @FXML private ChoiceBox<String> choiceBox;
     @FXML private Label selectLanguageLabel;
     @FXML private JFXButton viewScientificConceptsBtn;
@@ -45,7 +47,7 @@ public class HomeController implements Initializable {
         }else {
             choiceBox.getSelectionModel().select(englishLabel);
         }
-        I18n.bind(text, selectLanguageLabel);
+        I18n.bind(text, selectLanguageLabel, viewGitHubBtn);
 
         //TMP
         Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -88,6 +90,17 @@ public class HomeController implements Initializable {
         });
 
         //END TMP
+
+        //Show the github page on view github btn click
+        this.viewGitHubBtn.setOnMouseClicked((event) -> {
+            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                try {
+                    Desktop.getDesktop().browse(new URI("https://github.com/lool01/LAOP_alpha"));
+                }catch (Exception e){
+                    System.out.println("Error opening github page");
+                }
+            }
+        });
 
     }
 }
