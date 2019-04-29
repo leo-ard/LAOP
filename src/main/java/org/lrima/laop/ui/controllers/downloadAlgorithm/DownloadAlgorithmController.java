@@ -27,15 +27,10 @@ import javafx.scene.layout.TilePane;
  * @author Clement Bisaillon
  */
 public class DownloadAlgorithmController implements Initializable {
-	@FXML
-	TilePane algorithmTiles;
-	@FXML
-	JFXButton nextPageBtn;
-	@FXML
-	JFXButton prevPageBtn;
-	@FXML
-	Label currentPageLbl;
-	
+	@FXML TilePane algorithmTiles;
+	@FXML JFXButton nextPageBtn;
+	@FXML JFXButton prevPageBtn;
+	@FXML Label currentPageLbl;
 	@FXML HBox errorBox;
 	@FXML HBox bottomBar;
 	@FXML Label algorithmLabel;
@@ -78,11 +73,9 @@ public class DownloadAlgorithmController implements Initializable {
 		AlgorithmResponseBean algorithmResponse = this.algorithmApi.getAllAlgorithms(page);
 		
 		this.currentPage = algorithmResponse.getCurrent_page();
-		this.maxPages = (int) Math.ceil(algorithmResponse.getTotal() / algorithmResponse.getPer_page());
+		this.maxPages = (int) Math.ceil((double)algorithmResponse.getTotal() / algorithmResponse.getPer_page());
 		
-		Collection<AlgorithmBean> algorithms = algorithmResponse.getData();
-
-		return algorithms;
+		return algorithmResponse.getData();
 	}
 
 	/**
@@ -97,7 +90,7 @@ public class DownloadAlgorithmController implements Initializable {
 						getClass().getResource("/views/panels/downloadAlgo/algorithmSummary.fxml"));
 				Node node = loader.load();
 				
-				node.setOnMouseClicked((event) -> {this.algorithmClicked(algorithm);});
+				node.setOnMouseClicked((event) -> this.algorithmClicked(algorithm));
 				
 				AlgorithmSummaryController controller = loader.getController();
 				controller.initData(algorithm);

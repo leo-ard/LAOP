@@ -7,5 +7,9 @@ import javafx.scene.canvas.GraphicsContext;
  * @author Clement Bisaillon
  */
 public interface Drawable {
-	public void draw(GraphicsContext gc);
+	/**
+	 * Defines how the object can be drawn on the screen
+	 * @param gc the graphical context to draw on
+	 */
+	void draw(GraphicsContext gc);
 }

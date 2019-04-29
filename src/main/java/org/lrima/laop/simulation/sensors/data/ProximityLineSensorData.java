@@ -13,10 +13,10 @@ import org.lrima.laop.ui.Drawable;
  */
 public class ProximityLineSensorData implements SensorData {
 	
-	double startX, startY;
-	double angle;
-	double length;
-	double value;
+	private double startX, startY;
+	private double angle;
+	private double length;
+	private double value;
 	
 	/**
 	 * Save the state of a proximity line sensor at a certain moment

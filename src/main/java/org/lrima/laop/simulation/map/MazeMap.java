@@ -21,6 +21,10 @@ public class MazeMap extends AbstractMap {
 
 	private double orientation;
 
+	/**
+	 * Initiates a new maze map
+	 * @param numberOfSquareX the number of squares in the x direction.
+	 */
 	public MazeMap(int numberOfSquareX) {
     	super();
     	this.numberSquareX = numberOfSquareX;
@@ -182,19 +186,11 @@ public class MazeMap extends AbstractMap {
 		int randomY = 0;//RandomUtils.getInteger(0, numberSquareX - 1);
 
 
-		this.start = new Point2D.Double((randomX * MAP_SQUARE_WIDTH) + MAP_SQUARE_WIDTH / 2, (randomY * MAP_SQUARE_WIDTH) + 10);
+		this.start = new Point2D.Double((randomX * MAP_SQUARE_WIDTH) + MAP_SQUARE_WIDTH / 2.0, (randomY * MAP_SQUARE_WIDTH) + 10);
 		if(south[1][1]){
 			orientation = 3*Math.PI/2;
 		}
 	}
-
-
-    /**
-     * Randomly create a maze representing the map
-     */
-    public void randomize() {
-    	//Start by making maze with all squares closed
-    }
 
     @Override
     public Point2D getStartPoint() {

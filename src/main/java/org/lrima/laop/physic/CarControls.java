@@ -12,11 +12,20 @@ public class CarControls {
 
 	public CarControls(){}
 
+	/**
+	 * Initiates the car controls from an array of values
+	 * @param values the array of values
+	 */
 	public CarControls(double ... values){
 		this.accelerationField = values[0];
 		this.rotationField = values[1];
 	}
 
+	/**
+	 * Initiate the car controls with specific fields
+	 * @param accelerationField the acceleration of the car
+	 * @param rotationField the retation of the steering wheel
+	 */
 	public CarControls(double accelerationField, double rotationField) {
 		this.accelerationField = accelerationField;
 		this.rotationField = rotationField;
@@ -25,7 +34,7 @@ public class CarControls {
 	/**
 	 * @return The acceleration from the array received from an algorithm
 	 */
-	public double getAcceleration() {
+	double getAcceleration() {
 		if(Math.abs(accelerationField )< 0.0001){
 			accelerationField = 0;
 		}
@@ -36,24 +45,8 @@ public class CarControls {
 	/**
 	 * @return The rotation from the array received from an algorithm
 	 */
-	public double getRotation() {
+	double getRotation() {
 		return this.rotationField;
-	}
-	
-	/**
-	 * Sets the acceleration
-	 * @param acceleration the acceleration
-	 */
-	public void setAcceleration(double acceleration) {
-		this.accelerationField = acceleration;
-	}
-
-	/**
-	 * Sets the rotation
-	 * @param rotation the rotation
-	 */
-	public void setRotation(double rotation) {
-		this.rotationField = rotation;
 	}
 
 	@Override

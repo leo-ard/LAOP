@@ -13,14 +13,6 @@ public class MathUtils {
     public static final Function<Double, Double> TANH = Math::tanh;
     private static final double FLOAT_DELTA = 0.0001;
 
-
-    public static double normalDistribution(double x, double max, double translate){
-        double firstTerm = 1/(max*Math.sqrt(2*Math.PI));
-        double secondTerm = Math.exp(-Math.pow((x-translate),2)/(2*Math.pow(max,2)));
-
-        return firstTerm * secondTerm;
-    }
-
     /**
      * Used to know if a decimal number is near zero. The precision is 0.0001.
      * @param number the number to test
@@ -36,13 +28,12 @@ public class MathUtils {
      * @param error the error
      * @return true if the number is near zero, false otherwise
      */
-    public static boolean nearZero(double number, double error){
+    private static boolean nearZero(double number, double error){
         if(number < error && number > -error){
             return true;
         }
-        else{
-            return false;
-        }
+        return false;
+
     }
 
     /**
@@ -113,24 +104,14 @@ public class MathUtils {
                 || segmentIntersection(p0x, p0y, p1x, p1y, r3x, r3y, r0x, r0y) != null;
     }
 
-    public static void main(String args[]){
-        double[][][] array = new double[][][]{
-                {
-                        {2, 3, 4},
-                        {4, 3, 2, 3, 5}
-                },
-                {
-                        {3, 5, 6, 4, 2},
-                        {3, 4, 53, 2, 3}
-                }
-        };
-
-        System.out.println(Arrays.toString(array));
-
-    }
-
-    public static boolean arrayEquals(double[] captorValues, int i) {
-        for (double captorValue : captorValues) {
+    /**
+     * Check if all the values of an array are a certain value
+     * @param array the array to check
+     * @param i the value to check
+     * @return true if all the values of the array are i
+     */
+    public static boolean arrayEquals(double[] array, int i) {
+        for (double captorValue : array) {
             if(captorValue != i)
                 return false;
         }
@@ -138,16 +119,11 @@ public class MathUtils {
         return true;
     }
 
-    public static int[] convertToIntArray(double[] vector) {
-        int[] integerVector = new int[vector.length];
-
-        for (int i = 0; i < vector.length; i++) {
-            integerVector[i] = (int) Math.round(vector[i]);
-        }
-
-        return integerVector;
-    }
-
+    /**
+     * Converts an integer array to a double array
+     * @param vector the array to convert
+     * @return the array with double values
+     */
     public static double[] convertToDoubleArray(int[] vector) {
         double[] doubleVector = new double[vector.length];
 

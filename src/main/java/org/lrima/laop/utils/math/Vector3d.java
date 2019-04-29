@@ -9,7 +9,7 @@ public class Vector3d implements Cloneable {
     private double y;
     private double z;
 
-    public static Vector3d origin = new Vector3d(0, 0, 0);
+    private static Vector3d origin = new Vector3d(0, 0, 0);
 
 
     /**
@@ -24,14 +24,6 @@ public class Vector3d implements Cloneable {
         this.z = z;
     }
 
-    /**
-     * Creates a vector at the origin
-     */
-    public Vector3d(){
-        this.x = 0;
-        this.y = 0;
-        this.z = 0;
-    }
 
     /**
      * Clone the vector
@@ -64,18 +56,7 @@ public class Vector3d implements Cloneable {
      * @return the smallest angle between a and b
      */
     public static double angleBetween(Vector3d a, Vector3d b){
-        double angle = Math.acos(a.dot(b) / (a.modulus() * b.modulus()));
-
-
-        return angle;
-    }
-
-    /**
-     * Get the the unit orientation vector
-     * @return the orientation vector
-     */
-    public Vector3d orientation(){
-        return this.multiply(1/this.modulus());
+        return Math.acos(a.dot(b) / (a.modulus() * b.modulus()));
     }
 
     /**
@@ -85,16 +66,6 @@ public class Vector3d implements Cloneable {
      */
     public double dot(Vector3d b){
         return this.x * b.getX() + this.y * b.getY() + this.z * b.getZ();
-    }
-
-
-    /**
-     * Applies the cross product to the vector
-     * @param b the second vector
-     * @return the cros product between this vector and b
-     */
-    public Vector3d cross(Vector3d b){
-        return new Vector3d(y*b.getZ() - b.getY()*z, -x*b.getZ() + b.getX()*z, x*b.getY() - y*b.getX());
     }
 
     /**
@@ -131,58 +102,52 @@ public class Vector3d implements Cloneable {
         return this.multiply(1/this.modulus());
     }
 
+
+    /**
+     * @return the x component of the vector
+     */
     public double getX() {
         return x;
     }
 
+    /**
+     * Set the x component of the vector
+     * @param x the x value
+     */
     public void setX(double x) {
         this.x = x;
     }
 
+    /**
+     * @return the y component of the vector
+     */
     public double getY() {
         return y;
     }
 
+    /**
+     * Set the y component of the vector
+     * @param y the y value
+     */
     public void setY(double y) {
         this.y = y;
     }
 
+    /**
+     * @return the z component of the vector
+     */
     public double getZ() {
         return z;
-    }
-
-    public void setZ(double z) {
-        this.z = z;
-    }
-
-
-
-    /**
-     * Rotate the vector around an axis
-     * @param tetha the angle of rotation
-     * @return the rotated vector
-     */
-    public Vector3d rotateZAround(double tetha, Vector3d axis){
-        double x = ((this.x - axis.getX()) * Math.cos(tetha)) - ((this.y - axis.getY()) * Math.sin(tetha)) + axis.getX();
-        double y = ((this.x - axis.getX()) * Math.sin(tetha)) + ((this.y - axis.getY()) * Math.cos(tetha)) + axis.getY();
-
-        return new Vector3d(x, y, 0);
-    }
-
-    /**
-     * Project a vector on another
-     * @param b the second vector
-     * @return the vector projected on vector2
-     */
-    public Vector3d projection(Vector3d b){
-        return b.normalize().multiply(this.dot(b)/Math.pow(b.modulus(),2));
     }
 
 
     @Override
     public boolean equals(Object obj) {
-        Vector3d vec = (Vector3d) obj;
-        return vec.getX() == this.getX() && vec.getY() == this.getY() && vec.getZ() == this.getZ();
+        if(obj instanceof Vector3d){
+            Vector3d vec = (Vector3d) obj;
+            return vec.getX() == this.getX() && vec.getY() == this.getY() && vec.getZ() == this.getZ();
+        }
+        return false;
     }
 
     @Override

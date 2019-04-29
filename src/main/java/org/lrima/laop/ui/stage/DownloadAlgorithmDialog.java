@@ -13,7 +13,7 @@ import org.lrima.laop.ui.I18n;
  * @author Clement Bisaillon
  */
 public class DownloadAlgorithmDialog extends Stage {
-	Scene scene;
+	private Scene scene;
 	
 	/**
 	 * Initiates a DownloadAlgorithmDialog attached to a parent stage
@@ -29,7 +29,10 @@ public class DownloadAlgorithmDialog extends Stage {
 		this.showAndWait();
 		
 	}
-	
+
+	/**
+	 * Configures all the components to show on this dialog
+	 */
 	private void configureDialogComponents() {
 		try {
 			StackPane pane = FXMLLoader.load(getClass().getResource("/views/panels/downloadAlgo/downloadAlgorithm.fxml"));

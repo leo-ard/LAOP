@@ -30,30 +30,23 @@ public class ViewAlgorithmController implements Initializable {
 	//Author
 	@FXML Label authorName;
 	
-	AlgorithmBean algorithm;
-	
-	
-	public void initData( StackPane parent, AlgorithmBean algorithm) {
+	private AlgorithmBean algorithm;
+
+	/**
+	 * Initialize the data of this controller by giving it its parent and the algorithm to show
+	 * @param parent the parent of this controller
+	 * @param algorithm the algorithm to show
+	 */
+	void initData( StackPane parent, AlgorithmBean algorithm) {
 		this.algorithm = algorithm;
 		
 		this.algorithmName.setText(algorithm.getTitle());
 		this.descriptionTextArea.setText(algorithm.getDescription());
 		this.authorName.setText(algorithm.getUser().getName());
 		
-		this.backButton.setOnMouseClicked((event) -> {
-			parent.getChildren().remove(root);
-		});
+		this.backButton.setOnMouseClicked(event -> parent.getChildren().remove(root));
 		
-		this.downloadBtn.setOnMouseClicked((event) -> {
-			this.downloadAlgorithm();
-		});
-	}
-
-
-
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		
+		this.downloadBtn.setOnMouseClicked(event -> this.downloadAlgorithm());
 	}
 	
 	/**
@@ -63,4 +56,7 @@ public class ViewAlgorithmController implements Initializable {
 	private void downloadAlgorithm() {
 		DownloadProgressDialog progressDialog = new DownloadProgressDialog(this.algorithm);
 	}
+
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) {}
 }

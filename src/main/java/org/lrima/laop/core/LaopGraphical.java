@@ -10,8 +10,6 @@ import org.lrima.laop.ui.stage.ConfigurationStage;
  * @author Clement Bisaillon
  */
 public class LaopGraphical extends Application {
-    //TODO: Pouvoir changer entre different stage (settings, simulation et conclusion)
-
     public static void main(String[] args){
         launch(args);
     }
@@ -20,9 +18,5 @@ public class LaopGraphical extends Application {
     public void start(Stage stage) {
         ConfigurationStage configurationStage = new ConfigurationStage();
         configurationStage.show();
-
-//        LAOP laop = new LAOP();
-//        laop.addAlgorithm("kskssk", DL4J.class, DL4JLearning.class, null);
-//        laop.startSimulation(LAOP.SimulationDisplayMode.WITH_INTERFACE);
     }
 }
