@@ -56,7 +56,6 @@ public class LAOP {
         settings = new Settings();
         defaultSettings();
     }
-
     /**
      * Met les valeurs par défaut au settings
      */
@@ -65,6 +64,7 @@ public class LAOP {
         settings.set(Settings.GLOBAL_SCOPE, KEY_TIME_LIMIT, DEFAULT_TIME_LIMIT);
         settings.set(Settings.GLOBAL_SCOPE, KEY_NUMBER_OF_SENSORS, DEFAULT_NUMBER_OF_SENSORS);
         settings.set(Settings.GLOBAL_SCOPE, KEY_ENVIRONNEMENT_CLASS, new OptionClass<>(DEFAULT_ENVIRONNEMENT_CLASS, environnements, clazz -> false));
+        settings.set(Settings.GLOBAL_SCOPE, KEY_MAP_SIZE, DEFAULT_MAP_SIZE);
     }
 
     /**
@@ -150,8 +150,8 @@ public class LAOP {
     public enum SimulationDisplayMode{
         WITH_INTERFACE,
         WITHOUT_INTERFACE;
-    }
 
+    }
     /**
      * <p>Getter for the field <code>learningAlgorithmsClasses</code>.</p>
      *
@@ -160,6 +160,7 @@ public class LAOP {
     public ArrayList<Class<? extends LearningAlgorithm>> getLearningAlgorithmsClasses() {
         return learningAlgorithmsClasses;
     }
+
 
     /** Constant <code>DEFAULT_NUMBER_OF_CARS=100</code> */
     public static final int DEFAULT_NUMBER_OF_CARS = 100;
@@ -183,4 +184,7 @@ public class LAOP {
     public static final String KEY_ENVIRONNEMENT_CLASS = "ENVIRONNEMENT_CLASS";
     /** Constant <code>DEFAULT_ENVIRONNEMENT_CLASS</code> */
     public static final Class<? extends Environnement> DEFAULT_ENVIRONNEMENT_CLASS = BetterEnvironnement.class;
+
+    public static final String KEY_MAP_SIZE = "MAP_SIZE";
+    public static final int DEFAULT_MAP_SIZE = 10;
 }

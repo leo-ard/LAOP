@@ -10,8 +10,21 @@ import java.util.ArrayList;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 
+/**
+ * Utility class to create jar files that can later be imported in the platform
+ *
+ * @author Léonard
+ */
 public class PluginCreator {
 
+    /**
+     * Creates a jar file containing the main class <code>classLoad</code> and the dependencies <code>allClassesToLoad</code>
+     *
+     * @param path the path to export the jar file to
+     * @param classLoad the main class to load
+     * @param allClassesToLoad all other classes to include in the jar file
+     * @throws IOException
+     */
     public static void createJar(String path, Class classLoad, ArrayList<Class> allClassesToLoad) throws IOException {
         if(!path.endsWith(".jar"))
             path+=".jar";
@@ -29,7 +42,6 @@ public class PluginCreator {
         fileOutputStream.close();
 
     }
-
 
     private static void loadClasses(ArrayList<Class> allClassesToLoad, JarOutputStream jarFile) {
         for (Class aClass : allClassesToLoad) {
@@ -72,9 +84,5 @@ public class PluginCreator {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void main(String[] args){
-
     }
 }

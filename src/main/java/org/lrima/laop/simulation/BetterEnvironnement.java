@@ -1,6 +1,7 @@
 package org.lrima.laop.simulation;
 
 import javafx.scene.canvas.GraphicsContext;
+import org.lrima.laop.core.LAOP;
 import org.lrima.laop.physic.CarControls;
 import org.lrima.laop.physic.SimpleCar;
 import org.lrima.laop.simulation.buffer.SimulationBuffer;
@@ -13,12 +14,19 @@ import org.lrima.laop.utils.math.Vector2d;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+/**
+ * A environnement sample. It has a maze map containing cars.
+ *
+ * @author Léonard
+ */
 public class BetterEnvironnement implements MultiAgentEnvironnement {
     private MazeMap mazeMap;
     private SimulationBuffer buffer;
     private ArrayList<SimpleCar> simpleCars;
     private boolean finished;
     private int step = 0;
+    private int numberOfSensors;
+    private int mapSize;
 
     @Override
     public ArrayList<Agent> step(ArrayList<CarControls> carControls) {
@@ -51,7 +59,7 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
 
     @Override
     public ArrayList<Agent> reset(int numberOfCars) {
-        mazeMap = new MazeMap(10);
+        mazeMap = new MazeMap(mapSize);
         mazeMap.bake();
 
         step = 0;
@@ -68,9 +76,7 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
         return agents;
     }
 
-    public ArrayList<SimpleCar> generateCarObjects(int numberOfCars){
-        int numberOfSensors = 5;
-
+    private ArrayList<SimpleCar> generateCarObjects(int numberOfCars){
         ArrayList<SimpleCar> carObjects = new ArrayList<>();
         for(int i = 0 ; i < numberOfCars ; i++) {
             Point2D start = mazeMap.getStartPoint();
@@ -105,6 +111,8 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
     @Override
     public void init(LearningEngine learningEngine) {
         this.buffer = learningEngine.getBuffer();
+        this.numberOfSensors = (int) learningEngine.getSettings().get(LAOP.KEY_NUMBER_OF_SENSORS);
+        this.mapSize = (int) learningEngine.getSettings().get(LAOP.KEY_MAP_SIZE);
     }
 
     @Override

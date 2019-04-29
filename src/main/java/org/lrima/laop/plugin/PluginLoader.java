@@ -12,14 +12,24 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.jar.Manifest;
 
+/**
+ * Utility class to load jar files into the platform
+ *
+ * @author Léonard
+ */
 public class PluginLoader {
     private static URLClassLoader classLoader;
     private static ArrayList<URL> jars = new ArrayList<>();
 
-    public static String ALGORITHM_CLASS_TAG = "Algorithm-Class";
-    public static String LEARNING_CLASS_TAG = "Learning-Class";
-    public static String ACTIVATOR_CLASS_TAG = "Activator";
+    static String LEARNING_CLASS_TAG = "Learning-Class";
+    static String ACTIVATOR_CLASS_TAG = "Activator";
 
+    /**
+     * Load the plugin activator with the LAOP class
+     *
+     * @param laop the laop instance to load the plugins to
+     * @throws IOException
+     */
     public static void load(LAOP laop) throws IOException {
         URL[] urls = new URL[jars.size()];
         for (int i = 0; i < jars.size(); i++) {
@@ -51,20 +61,11 @@ public class PluginLoader {
         }
     }
 
-
-
-
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
-//        ArrayList<Class> classes = new ArrayList<>();
-//        classes.add(Test.class);
-//        PluginCreator.createJar("helpme.jar", new AlgorithmActivator(), classes);
-
-        addDir("algos/");
-        LAOP laop = new LAOP();
-        load(laop);
-
-    }
-
+    /**
+     * Add a jar to the path of jars to load
+     *
+     * @param path the path to the directory
+     */
     public static void addJar(String path){
         try {
             jars.add(new URL("jar:file:"+path+"!/"));
@@ -73,13 +74,20 @@ public class PluginLoader {
         }
     }
 
+    /**
+     * Add a directory to the path of jars to load
+     *
+     * @param path the path to the directory
+     */
     public static void addDir(String path){
         File folder = new File(path);
         File[] listOfFiles = folder.listFiles();
 
-        for (File file : listOfFiles) {
-            if(file.isFile() && file.getName().endsWith(".jar")){
-                addJar(file.getPath());
+        if (listOfFiles != null) {
+            for (File file : listOfFiles) {
+                if(file.isFile() && file.getName().endsWith(".jar")){
+                    addJar(file.getPath());
+                }
             }
         }
     }

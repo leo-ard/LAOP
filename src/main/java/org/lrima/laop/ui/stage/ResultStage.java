@@ -22,6 +22,8 @@ public class ResultStage extends Stage {
 		I18n.bind("result-title", this::setTitle);
 		this.learningData = learningData;
 		this.trainingData = trainingData;
+
+		loadScene();
 	}
 	
 	/**
@@ -31,8 +33,8 @@ public class ResultStage extends Stage {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/conclusion/results.fxml"));
 			Parent parent = loader.load();
-			ResultController controller = loader.<ResultController>getController();
-//			controller.initData(this.data);
+			ResultController controller = loader.getController();
+			controller.initData(this.learningData, this.trainingData);
 			
 			BorderPane root = loader.getRoot();
 			Scene scene = new Scene(root);

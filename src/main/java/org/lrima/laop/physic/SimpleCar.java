@@ -41,11 +41,11 @@ public class SimpleCar implements LineCollidable {
     private float x1, x2, y1, y2;
 
     /**
-     * Creates a new car with position <code>position</code> and controller <code>controller</code>
+     * Creates a new car with position <code>position</code>
      *
      * @param position the position of the car
      */
-    public SimpleCar(Vector2d position) {
+    private SimpleCar(Vector2d position) {
         this.position = position;
         this.forces = new ArrayList<>();
         this.sensors = new ArrayList<>();
@@ -57,13 +57,23 @@ public class SimpleCar implements LineCollidable {
         this.rotation = 0;
     }
 
-
+    /**
+     * Creates a new car with position <code>position</code> and rotation <code>rotation</code>
+     *
+     * @param position
+     * @param rotation
+     */
     public SimpleCar(Vector2d position, double rotation){
         this(position);
         this.rotation = rotation;
     }
 
-   
+
+    /**
+     * Makes a step in the simulation changing its position
+     *
+     * @param carControls the car control for that step
+     */
     public void nextStep(CarControls carControls) {
         if(this.dead) return;
         
@@ -110,20 +120,39 @@ public class SimpleCar implements LineCollidable {
         return v.rotate(this.rotation, Vector2d.origin);
     }
 
+    /**
+     * Returns the array of sensors mounted on that car
+     *
+     * @return the sensors
+     */
     public ArrayList<Sensor> getSensors() {
         return sensors;
     }
 
-    
+    /**
+     * True if the car has hit a wall. False otherwise
+     *
+     * @return True if the car has hit a wall. False otherwise
+     */
     public boolean isDead() {
         return dead;
     }
 
-    
+
+    /**
+     * Get all the sensors that can collide with the map. For optimisation purposes.
+     *
+     * @return the array of all the sensors
+     */
     public ArrayList<LineCollidable> getCollidableSensors() {
         return collidableSensors;
     }
 
+    /**
+     * Get an arrayList of sensor data. This is used while the simulation is running to see the captors
+     *
+     * @return the sensor data
+     */
     public ArrayList<SensorData> getSensorsData() {
         ArrayList<SensorData> list = new ArrayList();
 
@@ -144,8 +173,13 @@ public class SimpleCar implements LineCollidable {
             this.collidableSensors.add((LineCollidable) sensor);
         }
     }
-    
 
+
+    /**
+     *  Makes a collision between this and the line parsed in parameters
+     *
+     * @param line the line
+     */
     public void collide(StaticLineObject line) {
         if(this.isDead()) return;
 
@@ -220,16 +254,28 @@ public class SimpleCar implements LineCollidable {
     }
     
     /**
-     * @return the rotation of the object
+     * Gets the rotation of the car
+     *
+     * @return the rotation of the car
      */
     public double getRotation(){
         return this.rotation;
     }
-    
+
+    /**
+     * Gets the position of the car
+     *
+     * @return the position of the car
+     */
     public Vector2d getPosition() {
     	return this.position;
     }
-    
+
+    /**
+     * Gets the center position of the car
+     *
+     * @return the center position of the car
+     */
     public Vector2d getCenter(){
         return this.position.add(new Vector2d(this.CAR_WIDTH/2, this.CAR_HEIGHT/2));
     }
@@ -257,20 +303,6 @@ public class SimpleCar implements LineCollidable {
     public void kill(){
         dead = true;
     }
-    
-    /**
-     * Add a new velocity to the object
-     * @param velocity - the velocity to add
-     */
-    public void addVelocity(Vector2d velocity) {this.velocity = this.velocity.add(velocity);}
-
-    /**
-     * Set the position of the physicable object
-     * @param position - the new position
-     */
-    public void setPosition(Vector2d position){
-        this.position = position.clone();
-    }
 
     /**
      * Get all the forces applied to the object
@@ -280,12 +312,6 @@ public class SimpleCar implements LineCollidable {
         return this.forces;
     }
 
-    /**
-     * Resets the velocity of the object
-     */
-    protected void resetVelocity() {
-        this.velocity = Vector2d.origin;
-    }
 
     /**
      * @return The velocity of the object
@@ -293,43 +319,6 @@ public class SimpleCar implements LineCollidable {
     public Vector2d getVelocity() {
         return velocity;
     }
-
-    /**
-     * Applies a velocity to the object
-     * @param velocity the velocity of the object
-     */
-    public void setVelocity(Vector2d velocity) {
-        this.velocity = velocity;
-    }
-
-    /**
-     * Set the rotation of the object and change the rotation of all the forces
-     * @param rotation the rotation to apply on the object
-     */
-    public void rotate(double rotation) {
-        this.rotation += rotation;
-    }
-
-    public double getAngularVelocity() {
-        return angularVelocity;
-    }
-    
-    /**
-     * 
-     * @return The mass of the object
-     */
-    protected double getMass() {
-    	return this.CAR_MASS;
-    }
-    
-    /**
-     * Translate the position of the object
-     * @param position the translation vector
-     */
-    protected void addPosition(Vector2d position) {
-    	this.position = this.position.add(position);
-    }
-    
     
     /**
      * @return The acceleration of the car
@@ -352,6 +341,11 @@ public class SimpleCar implements LineCollidable {
     	return this.CAR_HEIGHT;
     }
 
+    /**
+     * Keeps track of the distance traveled in pixels
+     *
+     * @return the distance traveled in pixels
+     */
     public double getDistanceTraveled() {
         return distanceTraveled;
     }

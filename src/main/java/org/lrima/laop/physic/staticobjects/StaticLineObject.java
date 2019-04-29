@@ -17,6 +17,14 @@ public class StaticLineObject implements StaticObject {
     float x1, y1, x2, y2;
     private final Color COLOR = new Color(32.0/255.0, 78.0/255.0, 95.0/255.0, 1);
 
+    /**
+     * Creates a static line object with parameters x1, x2, y1, y2
+     *
+     * @param x1 The x value of the first coordinate
+     * @param y1 The y value of the first coordinate
+     * @param x2 The x value of the second coordinate
+     * @param y2 The y value of the second coordinate
+     */
     public StaticLineObject(float x1, float y1, float x2, float y2) {
         this.x1 = x1;
         this.y1 = y1;

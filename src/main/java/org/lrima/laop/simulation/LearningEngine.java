@@ -90,14 +90,17 @@ public class LearningEngine implements Runnable{
 
         if(environnement instanceof MultiAgentEnvironnement){
             int episode = 0;
-            ArrayList<Agent> agents = ((MultiAgentEnvironnement) environnement).reset(trained.length);
             while(episode < 100){
+                ArrayList<Agent> agents = ((MultiAgentEnvironnement) environnement).reset(trained.length);
                 while (!environnement.isFinished()){
                     ArrayList<CarControls> carControls = new ArrayList<>();
                     for (int i = 0; i < trained.length; i++) {
                         carControls.add(trained[i].test(agents.get(i)));
                     }
                     agents = ((MultiAgentEnvironnement) environnement).step(carControls);
+
+                    environnement.render();
+                    System.out.println("haha");
 
                 }
                 for (int i = 0; i < trained.length; i++) {
@@ -152,7 +155,7 @@ public class LearningEngine implements Runnable{
             agent = this.environnement.reset();
         }
 
-        learningData.put("learning-" + getCurrentScopeName(), sum/MAX);
+        learningData.put(getCurrentScopeName(), sum/MAX);
     }
 
 
@@ -199,7 +202,7 @@ public class LearningEngine implements Runnable{
     }
 
     /**
-     * ONLY USED TO CONTROL THE CAR WITH THE KEYBORD (need key listeners)
+     * Used to parse the listeners to the algorithms that need it (need key listeners)
      * @param mainScene the main JAVAFX scene
      */
     public void setMainScene(Stage mainScene) {
@@ -214,12 +217,8 @@ public class LearningEngine implements Runnable{
         return this.environnement;
     }
 
-    public String getCurrentScopeName() {
+    private String getCurrentScopeName() {
     	return this.settings.getLocalScopeKeys().get(this.batchCount);
-    }
-    
-    public Scope getCurrentScope() {
-    	return this.settings.getLocalScopes().get(this.batchCount);
     }
 
     public Stage getMainScene() {

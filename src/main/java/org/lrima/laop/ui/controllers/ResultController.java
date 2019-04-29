@@ -35,23 +35,33 @@ public class ResultController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-//		getDataBtn.setOnMouseClicked(event -> this.data.toCsv("learning"));
-	}
+
+    }
 	
 	public void initData(AlgorithmData learning, AlgorithmData training) {
 		this.learning = learning;
 		this.training = training;
 
-
-		String keyLearning = "learning";
-		String keyTraining = "training";
-
-		dataTypeCbBox.getItems().addAll(keyLearning, keyTraining);
-
 		charts = new HashMap<>();
 
-		for (Map.Entry<String, ArrayList<Double>> en : this.learning.getData().entrySet()) {
+		add(this.learning, "learning");
+		add(this.training, "training");
 
+		chartCbBox.getItems().addAll(charts.keySet());
+		chartCbBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+		    chartPane.setCenter(charts.get(newVal));
+        });
+
+		chartCbBox.getSelectionModel().select((String) charts.keySet().toArray()[0]);
+
+
+
+
+
+	}
+
+	private void add(AlgorithmData algorithmData, String name){
+        for (Map.Entry<String, ArrayList<Double>> en : algorithmData.getData().entrySet()) {
             NumberAxis xAxis = new NumberAxis();
             NumberAxis yAxis = new NumberAxis();
 
@@ -64,20 +74,23 @@ public class ResultController implements Initializable {
                 max = Math.max(max, val);
             }
 
+            ArrayList<XYChart.Data<Number, Number>> data = new ArrayList<>();
+            for (int i = 0; i < en.getValue().size(); i++) {
+                data.add(new XYChart.Data<>(i+1, en.getValue().get(i)));
+            }
+
             yAxis.setLowerBound(0);
             yAxis.setUpperBound(max);
             yAxis.setTickUnit(max/10);
 
+            LineChart currentChart = new LineChart<>(xAxis, yAxis);
+            currentChart.setTitle(en.getKey());
+            XYChart.Series<Number, Number> serie = new XYChart.Series<>();
+            serie.getData().addAll(data);
+            currentChart.getData().add(serie);
 
-
-			Chart currentChart = new LineChart<>(xAxis, yAxis);
-		}
-
-
-
-
-
-
-	}
+            charts.put(name + " - " + en.getKey(), currentChart);
+        }
+    }
 
 }

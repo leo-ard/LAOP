@@ -1,15 +1,8 @@
 package org.lrima.laop.utils;
 
 
-import com.sun.org.apache.xpath.internal.functions.FuncId;
-import com.sun.org.apache.xpath.internal.functions.Function2Args;
-import org.lrima.laop.utils.math.Vector2d;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 /**
  * Class for java.math utilities that are not present in the java Math class
