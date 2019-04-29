@@ -1,7 +1,7 @@
 package org.lrima.laop.network.nn;
 
 import org.lrima.laop.utils.MathUtils;
-import org.lrima.laop.utils.NetworkUtils;
+import org.lrima.laop.utils.NeuralNetworkUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,7 +31,7 @@ public class NeuralNetwork {
 
         this.layers = new ArrayList<>();
 
-        double[][][] allweghts = NetworkUtils.remap(topology, weights);
+        double[][][] allweghts = NeuralNetworkUtils.remap(topology, weights);
 
         for (int i = 0; i < allweghts.length; i++) {
             double[][] allweght = allweghts[i];
@@ -96,7 +96,7 @@ public class NeuralNetwork {
             weights[i] = denseLayer.getWeights();
         }
 
-        return NetworkUtils.flatArray(weights);
+        return NeuralNetworkUtils.flatArray(weights);
     }
 
     public int[] getTopology() {
@@ -174,7 +174,7 @@ public class NeuralNetwork {
 
 
         System.out.println(Arrays.toString(topo));
-        double[][][] test = NetworkUtils.remap(topo, weights1);
+        double[][][] test = NeuralNetworkUtils.remap(topo, weights1);
 
 
         for (double[][] doubles : test) {

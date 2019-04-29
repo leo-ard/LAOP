@@ -6,17 +6,20 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Labeled;
 import org.lrima.laop.ui.I18n;
 import org.lrima.laop.utils.ImageDefilementTMP;
 
 import javax.swing.*;
-import javax.tools.Tool;
 import java.awt.*;
 import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for the home page
+ *
+ * @author Léonard
+ */
 public class homeController implements Initializable {
     @FXML  Label text;
     @FXML ChoiceBox<String> choiceBox;
@@ -85,8 +88,6 @@ public class homeController implements Initializable {
             });
 
         });
-
-        //END TMP
 
     }
 }

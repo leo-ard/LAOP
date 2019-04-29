@@ -6,30 +6,35 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * Utility class to create CSV files
+ *
+ * @author Léonard
+ */
 public class CSVUtils {
-
     private static final char DEFAULT_SEPARATOR = ',';
 
+    /**
+     * Write a line in the csv file
+     *
+     * @param w the writer
+     * @param values the values to write
+     * @throws IOException if an error occurs when writing to the file
+     */
     public static void writeLine(Writer w, Collection<String> values) throws IOException {
         writeLine(w, values, DEFAULT_SEPARATOR, '"');
     }
 
-    public static void writeLine(Writer w, Collection<String> values, char separators) throws IOException {
-        writeLine(w, values, separators, ' ');
-    }
 
-    //https://tools.ietf.org/html/rfc4180
     private static String followCVSformat(String value) {
-
         String result = value;
         if (result.contains("\"")) {
             result = result.replace("\"", "\"\"");
         }
         return result;
-
     }
 
-    public static void writeLine(Writer w, Collection<String> values, char separators, char customQuote) throws IOException {
+    private static void writeLine(Writer w, Collection<String> values, char separators, char customQuote) throws IOException {
         boolean first = true;
 
         //default customQuote is empty
@@ -55,14 +60,12 @@ public class CSVUtils {
         w.append(sb.toString());
     }
 
-    private static List<String> toString(ArrayList<Double> doubleList) {
-        List<String> stringList = new ArrayList<String>();
-
-        doubleList.forEach(d -> stringList.add(d.toString()));
-
-        return stringList;
-    }
-
+    /**
+     * Create a CSV file defined in the consumer parsed in parameters
+     *
+     * @param file the file
+     * @param bufferedWriterConsumer the consumer
+     */
     public static void createCSVFile(File file, Consumer<BufferedWriter> bufferedWriterConsumer){
         try {
             FileWriter fileWriter = new FileWriter(file);
