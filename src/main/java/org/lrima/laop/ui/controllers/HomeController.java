@@ -21,6 +21,7 @@ import java.util.ResourceBundle;
  */
 public class HomeController implements Initializable {
     @FXML private Label text;
+    @FXML private Label authorLbl;
     @FXML private JFXButton viewGitHubBtn;
     @FXML private ChoiceBox<String> choiceBox;
     @FXML private Label selectLanguageLabel;
@@ -47,7 +48,7 @@ public class HomeController implements Initializable {
         }else {
             choiceBox.getSelectionModel().select(englishLabel);
         }
-        I18n.bind(text, selectLanguageLabel, viewGitHubBtn);
+        I18n.bind(text, selectLanguageLabel, viewGitHubBtn, authorLbl);
 
         //TMP
         Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
