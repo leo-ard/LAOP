@@ -27,7 +27,6 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println(choiceBox);
         String englishLabel = "English";
         String frenchLabel = "Fran\u00e7ais";
         choiceBox.getItems().addAll(englishLabel, frenchLabel);

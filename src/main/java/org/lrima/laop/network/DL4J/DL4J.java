@@ -78,7 +78,6 @@ public class DL4J extends ManualCarController {
         }
         else if(tempMode == MODE.AI_CONTROL){
             double[] output = network.output(captor).toDoubleVector();
-            System.out.println(output);
             carControls = super.getControls(output);
         }
         else if(tempMode == MODE.LEARNING_FROM_DIRECT_INPUT){
@@ -129,8 +128,6 @@ public class DL4J extends ManualCarController {
 
         this.oldTakeOverMode = takeOverMode;
 
-        if(takeOverMode == MODE.AI_CONTROL)
-            System.out.println(carControls);
 
         return carControls;
 

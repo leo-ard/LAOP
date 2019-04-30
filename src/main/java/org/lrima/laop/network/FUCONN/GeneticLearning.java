@@ -35,7 +35,6 @@ public class GeneticLearning implements LearningAlgorithm{
                 })
                 .collect(Collectors.toList());
 
-        System.out.println(cars.get(0).getFitness());
 
         //Selection : keep only 50% best cars
         final int initialNumberOfCar = 100;

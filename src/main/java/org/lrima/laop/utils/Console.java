@@ -76,9 +76,11 @@ public class Console {
 
     private static void warnListeners(LogType logtype, String s){
         listeners.forEach(c -> c.accept(logtype, s));
-        //System.out.printf("[%s] %s\n", logtype.getPrefix(), s);
     }
 
+    /**
+     * Class containing all the types of messages
+     */
     public enum LogType {
         INFO(Color.BLUE, "INFO"),
         WARN(Color.YELLOW, "WARN") ,

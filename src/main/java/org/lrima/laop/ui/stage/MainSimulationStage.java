@@ -76,6 +76,8 @@ public class MainSimulationStage extends Stage {
         nextAlgorithm.setOnAction((e)-> {
             learningEngine.nextAlgorithm();
         });
+
+        I18n.bind(nextAlgorithm);
         timeline.getChildren().add(nextAlgorithm);
 
         this.simulationDrawer.start();
@@ -118,11 +120,6 @@ public class MainSimulationStage extends Stage {
         Scene scene = new Scene(mainPane);
         scene.getStylesheets().add("/css/general.css");
 
-        scene.setOnKeyPressed(key->{
-            if(key.getCharacter().equals("p")){
-                this.learningEngine.pause();
-            }
-        });
 
         //CHECKBOX
         JFXCheckBox checkBoxRealTime = new JFXCheckBox("");

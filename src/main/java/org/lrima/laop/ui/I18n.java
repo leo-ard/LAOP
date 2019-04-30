@@ -51,7 +51,6 @@ public class I18n {
         if(string.startsWith("%")){
             allKeys.put(string.substring(1), (key)->{
                 menuItem.setText(key);
-                System.out.println(key + " " + menuItem.getText());
             });
             menuItem.setText(messages.getString(string.substring(1)));
         }
