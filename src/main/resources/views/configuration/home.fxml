@@ -1,30 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
+<?import javafx.scene.image.*?>
 <?import com.jfoenix.controls.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 
-<AnchorPane prefHeight="600.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.lrima.laop.ui.controllers.HomeController">
+<AnchorPane prefHeight="715.0" prefWidth="525.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.lrima.laop.ui.controllers.HomeController">
    <children>
-      <Label layoutX="147.0" layoutY="14.0" text="LAOP">
-         <font>
-            <Font size="65.0" />
-         </font>
-      </Label>
-      <Label fx:id="text" alignment="TOP_LEFT" layoutX="14.0" layoutY="116.0" prefHeight="171.0" prefWidth="420.0" text="\%text-entry" textAlignment="JUSTIFY" wrapText="true" />
-      <ChoiceBox fx:id="choiceBox" layoutX="284.0" layoutY="561.0" prefWidth="150.0" />
-      <Label fx:id="selectLanguageLabel" alignment="CENTER_RIGHT" layoutX="90.0" layoutY="565.0" prefHeight="17.0" prefWidth="186.0" text="\%select-language" textAlignment="RIGHT" />
-      <JFXButton fx:id="viewScientificConceptsBtn" layoutX="13.0" layoutY="500.0" prefHeight="39.0" prefWidth="208.0" styleClass="btn" text="Concepts scientifiques" AnchorPane.leftAnchor="13.0" />
-      <JFXButton fx:id="viewGitHubBtn" layoutX="132.0" layoutY="300.0" prefHeight="39.0" prefWidth="186.0" styleClass="btn-danger" text="\%view-github" AnchorPane.leftAnchor="132.0" AnchorPane.rightAnchor="132.0" />
-      <JFXButton fx:id="viewUserGuideBtn" layoutX="227.0" layoutY="500.0" prefHeight="39.0" prefWidth="208.0" styleClass="btn" text="Guide utilisateur" AnchorPane.rightAnchor="15.0" />
-      <Label fx:id="authorLbl" layoutX="14.0" layoutY="366.0" text="\%authors">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <Label layoutX="14.0" layoutY="393.0" text="- Clément Bisaillon" />
-      <Label layoutX="14.0" layoutY="420.0" text="- Léonard Oest O'Leary" />
+      <ImageView fitHeight="131.0" fitWidth="217.0" layoutX="154.0" layoutY="43.0" AnchorPane.leftAnchor="154.0" AnchorPane.rightAnchor="154.0" AnchorPane.topAnchor="43.0">
+         <image>
+            <Image url="@../../images/logo_LAOP.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="text" alignment="TOP_LEFT" layoutX="53.0" layoutY="232.0" prefHeight="171.0" prefWidth="420.0" text="\%text-entry" textAlignment="JUSTIFY" wrapText="true" AnchorPane.bottomAnchor="312.0" AnchorPane.leftAnchor="53.0" AnchorPane.rightAnchor="52.0" />
+      <ChoiceBox fx:id="choiceBox" layoutX="285.0" layoutY="656.0" prefWidth="150.0" AnchorPane.bottomAnchor="14.0" />
+      <Label fx:id="selectLanguageLabel" alignment="CENTER_RIGHT" layoutX="91.0" layoutY="660.0" prefHeight="17.0" prefWidth="186.0" text="\%select-language" textAlignment="RIGHT" AnchorPane.bottomAnchor="14.0" />
+      <JFXButton fx:id="viewGitHubBtn" layoutX="132.0" layoutY="403.0" prefHeight="39.0" prefWidth="186.0" styleClass="btn-danger" text="\%view-github" AnchorPane.bottomAnchor="267.0" AnchorPane.leftAnchor="132.0" AnchorPane.rightAnchor="132.0" />
    </children>
 </AnchorPane>

@@ -22,7 +22,7 @@ These instructions will get you a copy of the project up and running on your loc
     > cd LAOP_alpha
     > mvn install
     ```
-1. Run the graphical interface by running the main method of **org.lrima.laop.core.App27Laop**
+1. Run the graphical interface by running the main method of **org.lrima.laop.core.LaopGraphical**
 
 
 ## Built With

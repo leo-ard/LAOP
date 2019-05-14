@@ -36,7 +36,7 @@ public class LAOP {
      * <p>Constructor for LAOP.</p>
      */
     public LAOP(){
-        I18n.update(new Locale("fr", "CA"));
+        I18n.update(new Locale("en", "CA"));
         learningAlgorithmsClasses = new ArrayList<>();
         learningAlgorithmsClasses.add(GeneticLearning.class);
         learningAlgorithmsClasses.add(DL4JLearning.class);
