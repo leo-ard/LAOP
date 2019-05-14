@@ -1,5 +1,6 @@
 package org.lrima.laop.simulation;
 
+import com.sun.xml.internal.ws.api.config.management.policy.ManagementAssertion;
 import javafx.stage.Stage;
 import org.lrima.laop.core.LAOP;
 import org.lrima.laop.network.LearningAlgorithm;
@@ -114,7 +115,6 @@ public class LearningEngine implements Runnable{
                     agents = ((MultiAgentEnvironnement) environnement).step(carControls);
 
                     environnement.render();
-                    System.out.println("haha");
 
                 }
                 for (int i = 0; i < trained.length; i++) {
@@ -284,6 +284,8 @@ public class LearningEngine implements Runnable{
      * @return the current scope name
      */
     private String getCurrentScopeName() {
+        if(batchCount >= this.settings.getLocalScopeKeys().size())
+            return Settings.GLOBAL_SCOPE;
     	return this.settings.getLocalScopeKeys().get(this.batchCount);
     }
 

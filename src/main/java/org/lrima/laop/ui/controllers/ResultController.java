@@ -1,20 +1,19 @@
 package org.lrima.laop.ui.controllers;
 
-import java.net.URL;
+import com.jfoenix.controls.JFXComboBox;
+import javafx.fxml.FXML;
+import javafx.scene.chart.Chart;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import org.lrima.laop.simulation.data.AlgorithmData;
+import org.lrima.laop.ui.I18n;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.ResourceBundle;
-
-import com.jfoenix.controls.JFXButton;
-
-import com.jfoenix.controls.JFXComboBox;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.chart.*;
-import javafx.scene.layout.BorderPane;
-import org.lrima.laop.simulation.data.AlgorithmData;
-import org.lrima.laop.ui.components.ChartPanel;
 
 /**
  * javafx controller for the result page
@@ -29,7 +28,7 @@ public class ResultController {
 	@FXML
 	JFXComboBox<String> chartCbBox;
 	@FXML
-	JFXComboBox<String> dataTypeCbBox;
+    Label chartLabel;
 
 	@FXML
 	BorderPane chartPane;
@@ -57,6 +56,8 @@ public class ResultController {
         });
 
 		chartCbBox.getSelectionModel().select((String) charts.keySet().toArray()[0]);
+
+        I18n.bind(chartLabel);
 	}
 
 	private void add(AlgorithmData algorithmData, String name){

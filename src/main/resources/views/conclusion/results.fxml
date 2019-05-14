@@ -26,25 +26,9 @@
    <center>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox prefHeight="30.0" prefWidth="1022.0" spacing="10.0">
-               <children>
-                  <Label text="\%data-type :">
-                     <HBox.margin>
-                        <Insets top="5.0" />
-                     </HBox.margin>
-                  </Label>
-                  <JFXComboBox fx:id="dataTypeCbBox" />
-               </children>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-            </HBox>
             <HBox prefHeight="47.0" prefWidth="1022.0" spacing="10.0">
                <children>
-                  <Label text="\%chart" HBox.hgrow="NEVER">
+                  <Label fx:id="chartLabel" text="\%chart" HBox.hgrow="NEVER">
                      <HBox.margin>
                         <Insets top="5.0" />
                      </HBox.margin>

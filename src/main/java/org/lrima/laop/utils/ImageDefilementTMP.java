@@ -54,7 +54,6 @@ public class ImageDefilementTMP extends JPanel {
             public void mouseWheelMoved(MouseWheelEvent e) {
                 JLabel a = ImageDefilementTMP.this.lblPourContenirImage;
                 int newY = (int)(a.getBounds().getY() + e.getWheelRotation() * e.getScrollAmount() * -10);
-                System.out.println(newY + " " + imageHeight);
                 if(newY > 0){
                     newY = 0;
                 }

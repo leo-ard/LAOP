@@ -3,7 +3,19 @@ package org.lrima.laop.utils;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+/**
+ * Utility class for reflection-type queries
+ *
+ * @author Leonard
+ */
 public class ClassUtils {
+    /**
+     * Checks if a class <code>c</code> implements a certain interface <code>i</code>
+     *
+     * @param c the class
+     * @param i the interface
+     * @return true if the class implemets the class. False otherwise
+     */
     public static boolean checkIfInterface(Class c, Class i){
         if(c == i && c.isInterface()) return true;
         for (Class anInterface : c.getInterfaces()) {
@@ -13,21 +25,4 @@ public class ClassUtils {
         }
         return false;
     }
-
-    public static boolean checkIfGenericOfInterface(Class c, Class i){
-        Type[] genericInterfaces = c.getGenericInterfaces();
-        for (Type genericInterface : genericInterfaces) {
-            if (genericInterface instanceof ParameterizedType) {
-                Type[] genericTypes = ((ParameterizedType) genericInterface).getActualTypeArguments();
-                for (Type genericType : genericTypes) {
-                    if(checkIfInterface(i, (Class) genericType)){
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    public static void main(String[] args){ }
 }

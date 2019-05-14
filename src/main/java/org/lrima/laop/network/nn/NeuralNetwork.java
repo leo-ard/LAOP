@@ -153,17 +153,6 @@ public class NeuralNetwork {
             prediction[i] = MathUtils.LOGISTIC.apply(sum);
         }
 
-/*
-        for (double v : prediction) {
-            System.out.print(v + "\t");
-        }
-        System.out.println();
-        for (double v : predictionNN) {
-            System.out.print(v + "\t");
-        }
-
-        /**/
-
         double[][][] expected = new double[1][][];
         for (int i = 0; i < neuralNetwork.layers.size(); i++) {
             expected[i] = ((DenseLayer)neuralNetwork.getLayers().get(i)).getWeights();
