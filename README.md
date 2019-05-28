@@ -36,8 +36,9 @@ These instructions will get you a copy of the project up and running on your loc
 
 ## Authors
 
-* **Léonard Oest O'Leary** - [GitHub](https://github.com/lool01)
-* **Clément Bisaillon** - [GitHub](https://github.com/cbisaillon), [LinkedIn](https://www.linkedin.com/in/clementbisaillon/)
+* **Dr Jihene Rezgui** - [website](http://lrima.cmaisonneuve.qc.ca/)
+* **LÃ©onard Oest O'Leary** - [GitHub](https://github.com/lool01)
+* **ClÃ©ment Bisaillon** - [GitHub](https://github.com/cbisaillon), [LinkedIn](https://www.linkedin.com/in/clementbisaillon/)
 
 See also the list of [contributors](CONTRIBUTORS.md) who participated in this project.
 
