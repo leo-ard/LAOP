@@ -46,8 +46,9 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
             }
         }
         step++;
-        if(step > 1000)
-            finished = true;
+        //Todo: From the settings
+//        if(step > 1000)
+//            finished = true;
 
         return agents;
     }
