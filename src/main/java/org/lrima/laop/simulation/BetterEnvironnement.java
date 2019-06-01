@@ -21,10 +21,13 @@ import java.util.ArrayList;
  */
 public class BetterEnvironnement implements MultiAgentEnvironnement {
     private MazeMap mazeMap;
+    private ArrayList<MazeMap> testMaps;
+    private int currentTestMap = 0;
     private SimulationBuffer buffer;
     private ArrayList<SimpleCar> simpleCars;
     private boolean finished;
     private int step = 0;
+    private int MAX_STEP = 500;
     private int numberOfSensors;
     private int mapSize;
 
@@ -46,9 +49,10 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
             }
         }
         step++;
-        //Todo: From the settings
-//        if(step > 1000)
-//            finished = true;
+
+        if(step > this.MAX_STEP){
+            this.finished = true;
+        }
 
         return agents;
     }
@@ -60,9 +64,6 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
 
     @Override
     public ArrayList<Agent> reset(int numberOfAgents) {
-        mazeMap = new MazeMap(mapSize);
-        mazeMap.bake();
-
         step = 0;
         buffer.clear();
         finished = false;
@@ -114,6 +115,38 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
         this.buffer = learningEngine.getBuffer();
         this.numberOfSensors = (int) learningEngine.getSettings().get(LAOP.KEY_NUMBER_OF_SENSORS);
         this.mapSize = (int) learningEngine.getSettings().get(LAOP.KEY_MAP_SIZE);
+        this.testMaps = new ArrayList<>();
+
+        //Create the test maps
+        //Used so that the test maps are always the same
+        for(int i = 0 ; i < this.getNumberTestMap() ; i++){
+            MazeMap map = new MazeMap(mapSize);
+            map.bake();
+            this.testMaps.add(map);
+        }
+        this.newMap();
+    }
+
+    @Override
+    public int getNumberTestMap() {
+        return 100;
+    }
+
+    @Override
+    public void newMap() {
+        mazeMap = new MazeMap(mapSize);
+        mazeMap.bake();
+    }
+
+    @Override
+    public void nextTestMap() {
+        mazeMap = this.testMaps.get(currentTestMap);
+        currentTestMap++;
+    }
+
+    @Override
+    public void resetTest() {
+        this.currentTestMap = 0;
     }
 
     @Override

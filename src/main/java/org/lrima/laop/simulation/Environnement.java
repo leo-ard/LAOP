@@ -42,4 +42,18 @@ public interface Environnement extends Drawable {
      * @param learningEngine the learning engine
      */
     void init(LearningEngine learningEngine);
+
+
+    void newMap();
+    void nextTestMap();
+
+    /**
+     * Called when the evaluation phase ended
+     */
+    void resetTest();
+
+    /**
+     * @return the number of map to evaluate the algorithm on
+     */
+    int getNumberTestMap();
 }

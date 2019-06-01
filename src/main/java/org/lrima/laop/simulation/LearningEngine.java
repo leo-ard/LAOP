@@ -94,18 +94,15 @@ public class LearningEngine implements Runnable{
 
 
             trained[batchCount] = learningAlgorithm;
-
-
         }
 
-        //TODO : faire le cas ou c'est pas un multi
-
+        //Get the average score of the algorithm
         environnement = generateEnvironnement();
         environnement.init(this);
 
         if(environnement instanceof MultiAgentEnvironnement){
             int episode = 0;
-            while(episode < 100){
+            while(episode < 10000){
                 ArrayList<Agent> agents = ((MultiAgentEnvironnement) environnement).reset(trained.length);
                 while (!environnement.isFinished()){
                     ArrayList<CarControls> carControls = new ArrayList<>();
@@ -124,7 +121,7 @@ public class LearningEngine implements Runnable{
             }
         }
         else
-            throw new RuntimeException("Do not support sigle environnemnt yet");
+            throw new RuntimeException("Do not support single environnemnt yet");
 
         onEnd.forEach((a) -> a.handle(this));
         learningData.toCsv("learning");
@@ -166,7 +163,7 @@ public class LearningEngine implements Runnable{
             }
         }
 
-        int MAX = 10;
+        int MAX = this.environnement.getNumberTestMap();
         int episode = 0;
         Agent agent = this.environnement.reset();
         double sum = 0;
@@ -178,8 +175,9 @@ public class LearningEngine implements Runnable{
             sum += agent.reward;
             episode++;
             agent = this.environnement.reset();
+            this.environnement.nextTestMap();
         }
-
+        this.environnement.resetTest();
         learningData.put(getCurrentScopeName(), sum/MAX);
     }
 

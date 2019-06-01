@@ -31,7 +31,7 @@ public class LAOP {
     private ArrayList<Class<? extends LearningAlgorithm>> learningAlgorithmsClasses;
     private ArrayList<Class<? extends Environnement>> environnements;
 
-    Settings settings;
+    private Settings settings;
     /**
      * <p>Constructor for LAOP.</p>
      */
