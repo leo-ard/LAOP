@@ -349,4 +349,12 @@ public class SimpleCar implements LineCollidable {
     public double getDistanceTraveled() {
         return distanceTraveled;
     }
+
+    /**
+     * Sets the orientation of the car
+     * @param orientation the orientation
+     */
+    public void setOrientation(double orientation){
+        this.rotation = orientation;
+    }
 }

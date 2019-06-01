@@ -129,13 +129,19 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
 
     @Override
     public int getNumberTestMap() {
-        return 100;
+        return 200;
     }
 
     @Override
     public void newMap() {
         mazeMap = new MazeMap(mapSize);
         mazeMap.bake();
+
+        if(simpleCars != null) {
+            for (SimpleCar car : this.simpleCars) {
+                car.setOrientation(mazeMap.getStartingOrientation());
+            }
+        }
     }
 
     @Override
@@ -156,6 +162,6 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
 
 
     private double evalFitness(SimpleCar car){
-        return car.getDistanceTraveled() + Math.pow(mazeMap.distanceFromStart(car.getPosition().asPoint()), 2);
+        return car.getDistanceTraveled() + mazeMap.distanceFromStart(car.getPosition().asPoint());
     }
 }

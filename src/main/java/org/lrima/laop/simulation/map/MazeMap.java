@@ -187,9 +187,16 @@ public class MazeMap extends AbstractMap {
 
 
 		this.start = new Point2D.Double((randomX * MAP_SQUARE_WIDTH) + MAP_SQUARE_WIDTH / 2.0, (randomY * MAP_SQUARE_WIDTH) + 10);
-		if(south[1][1]){
-			orientation = 3*Math.PI/2;
+
+//		System.out.println(south[1][1] + " " + east[1][1]);
+
+		if(east[1][1]){
+			orientation = 0;
 		}
+		if(south[1][1]){
+			orientation = -Math.PI / 2;
+		}
+
 	}
 
     @Override
