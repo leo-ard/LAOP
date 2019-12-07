@@ -102,8 +102,33 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
         if(buffer != null) {
             SimulationSnapshot snapshot = new SimulationSnapshot();
 
+            ArrayList<CarData> carData = new ArrayList<>();
+
+            int bestCarIndex = 0;
+            int index = 0;
+
             for(SimpleCar car : this.simpleCars) {
-                snapshot.addCar(new CarData(car));
+                CarData data = new CarData(car);
+
+                double fitness = this.evalFitness(car);
+                data.setFitness(fitness);
+
+                //Check if its the best
+                if(fitness > evalFitness(this.simpleCars.get(bestCarIndex))){
+                    bestCarIndex = index;
+                }
+
+                carData.add(data);
+                index++;
+            }
+
+            //Assign the status of best to the best car
+            CarData bestCarData = new CarData(simpleCars.get(bestCarIndex));
+            bestCarData.setIsBest(true);
+            carData.set(bestCarIndex, bestCarData);
+
+            for(CarData data : carData){
+                snapshot.addCar(data);
             }
 
             this.buffer.addSnapshot(snapshot);
@@ -129,7 +154,7 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
 
     @Override
     public int getNumberTestMap() {
-        return 200;
+        return 100;
     }
 
     @Override
@@ -147,6 +172,13 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
     @Override
     public void nextTestMap() {
         mazeMap = this.testMaps.get(currentTestMap);
+        //Sets the good starting orientation of the cars
+        if(simpleCars != null) {
+            for (SimpleCar car : this.simpleCars) {
+                car.setOrientation(mazeMap.getStartingOrientation());
+            }
+        }
+
         currentTestMap++;
     }
 
@@ -160,8 +192,11 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
         this.mazeMap.draw(gc);
     }
 
-
     private double evalFitness(SimpleCar car){
-        return car.getDistanceTraveled() + mazeMap.distanceFromStart(car.getPosition().asPoint());
+        double fitness = car.getDistanceTraveled();
+        if(mazeMap.distanceFromStart(car.getPosition().asPoint()) < 100){
+            return 0;
+        }
+        return fitness;
     }
 }

@@ -30,9 +30,12 @@ public class CarData implements Inspectable, Drawable {
     private double tilt;
     private Vector2d velociy;
     private Vector2d acceleration;
+    private Double fitness;
+    private boolean isBest;
 
     private ArrayList<Vector2d> forces;
     private final Color CAR_COLOR = new Color(32.0/255.0, 78.0/255.0, 95.0/255.0, 1);
+    private final Color CAR_BEST_COLOR = new Color(125.0/255.0, 255.0/255.0, 125.0/255.0, 1.0);
     
     private ArrayList<Drawable> sensors;
 
@@ -49,6 +52,8 @@ public class CarData implements Inspectable, Drawable {
         this.forces = car.getForces();
         this.velociy = car.getVelocity();
         this.acceleration = car.getAcceleration();
+        this.fitness = (double) 0;
+        this.isBest = false;
         
         this.sensors = new ArrayList<>();
         this.sensors.addAll(car.getSensorsData());
@@ -67,6 +72,7 @@ public class CarData implements Inspectable, Drawable {
         information.put("Angle", String.format("%.2f", tilt));
         information.put("Velocity", String.format("%.2f", velociy.modulus()));
         information.put("Acceleration", String.format("%.2f", acceleration.modulus()));
+        information.put("Fitness", "" + this.fitness);
 
         for(Vector2d force : this.forces){
             information.put(force.getTag(), force.toString());
@@ -95,6 +101,9 @@ public class CarData implements Inspectable, Drawable {
 
         //Draw the rectangle of the car
         gc.setFill(CAR_COLOR);
+        if(this.isBest){
+            gc.setFill(CAR_BEST_COLOR);
+        }
         gc.fillRect(x, y, width, height);
 
         //Draw the sensors
@@ -125,6 +134,29 @@ public class CarData implements Inspectable, Drawable {
 
     public double getY() {
         return this.y;
+    }
+
+    /**
+     * Set the fitness to the data
+     * @param fitness the fitness of the car data
+     */
+    public void setFitness(double fitness){
+        this.fitness = fitness;
+    }
+
+    /**
+     * Set the state of isBest of the data
+     * @param isBest the state
+     */
+    public void setIsBest(boolean isBest){
+        this.isBest = isBest;
+    }
+
+    /**
+     * @return true if the car data has the highest fitness
+     */
+    public boolean getIsBest(){
+        return this.isBest;
     }
 
 	@Override

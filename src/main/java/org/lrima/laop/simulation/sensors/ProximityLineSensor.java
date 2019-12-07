@@ -19,7 +19,7 @@ public class ProximityLineSensor implements Sensor, LineCollidable {
 	//The car that this sensor is attached to
 	private SimpleCar car;
 	private double orientation;
-	private static final double SENSOR_LENGHT = 150;
+	private static final double SENSOR_LENGHT = 300;
 	private static final double SENSOR_LENGHT_MINUS_1 = 1.0/SENSOR_LENGHT;
 	private Point2D start;
 

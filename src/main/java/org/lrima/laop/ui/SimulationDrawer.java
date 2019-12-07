@@ -72,7 +72,6 @@ public class SimulationDrawer{
 
     /**
      * Start the javafx thread to update the canvas at fixed rate.
-     *
      */
     public void start(){
         resetView();
@@ -153,6 +152,7 @@ public class SimulationDrawer{
 	        //Draw the map
 	        learningEngine.getEnvironnement().draw(gc);
 
+	        //Draw the car
             for(CarData car : currentCars) {
 	            car.draw(gc, inspector.getSelectedObject() == car);
 	        }
