@@ -52,6 +52,7 @@ public class DL4JLearning implements LearningAlgorithm {
         double[] sensorValues = agent.getSensors().stream().mapToDouble(Sensor::getValue).toArray();
         dl4J.setAIControl(true);
         dl4J.setTakeOverMode(DL4J.MODE.AI_CONTROL);
+
         return dl4J.control(sensorValues);
     }
 }

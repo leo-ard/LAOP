@@ -27,9 +27,11 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
     private ArrayList<SimpleCar> simpleCars;
     private boolean finished;
     private int step = 0;
-    private int MAX_STEP = 500;
+    //private int MAX_STEP = 500;
     private int numberOfSensors;
     private int mapSize;
+
+
 
     @Override
     public ArrayList<Agent> step(ArrayList<CarControls> carControls) {
@@ -43,21 +45,25 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
             SimpleCar simpleCar = simpleCars.get(i);
             CarControls carControl = carControls.get(i);
 
-            simpleCar.nextStep(carControl);
+            if(simpleCar.getMaxStep() < step){
+                simpleCar.kill();
+            }
 
+            simpleCar.nextStep(carControl);
             mazeMap.collide(simpleCar);
 
             agents.add(new Agent(simpleCar.getSensors(), evalFitness(simpleCar)));
             if(!simpleCar.isDead()){
                 finished = false;
             }
+
         }
 
         step++;
 
-        if(step > this.MAX_STEP){
+        /*if(step > this.MAX_STEP){
             this.finished = true;
-        }
+        }*/
 
         return agents;
     }
@@ -90,6 +96,18 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
             SimpleCar car = new SimpleCar(new Vector2d(start.getX(), start.getY()), mazeMap.getStartingOrientation());
 
             double orientationIncrement = Math.PI / numberOfSensors;
+            //attribute fitness
+            car.setWallCountFunction((numberOfTimeHitted, currentCar) -> {
+                currentCar.addFitness( 10 / numberOfTimeHitted);
+                currentCar.addTime(25 / numberOfTimeHitted);
+                /*System.out.println(currentCar.getFitnessWallCount());
+                System.out.println(currentCar.getMaxStep());
+                System.out.println(numberOfTimeHitted);*/
+
+            });
+            car.addTime(100);
+
+
             //Create the sensors and assign them to the car
             for(int x = 0 ; x < numberOfSensors; x++) {
                 ProximityLineSensor sensor = new ProximityLineSensor(car, (x * orientationIncrement) + orientationIncrement/2);
@@ -197,10 +215,6 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
     }
 
     private double evalFitness(SimpleCar car){
-        double fitness = car.getDistanceTraveled();
-        if(mazeMap.distanceFromStart(car.getPosition().asPoint()) < 100){
-            return 0;
-        }
-        return fitness;
+        return car.getFitnessWallCount();
     }
 }

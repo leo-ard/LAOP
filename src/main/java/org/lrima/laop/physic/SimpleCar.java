@@ -1,11 +1,12 @@
 package org.lrima.laop.physic;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.function.BiConsumer;
 
 import org.lrima.laop.physic.staticobjects.FitnessWallObject;
 import org.lrima.laop.physic.staticobjects.StaticLineObject;
 import org.lrima.laop.simulation.LearningEngine;
-import org.lrima.laop.simulation.map.AbstractMap;
 import org.lrima.laop.simulation.map.LineCollidable;
 import org.lrima.laop.simulation.sensors.Sensor;
 import org.lrima.laop.simulation.sensors.SensorData;
@@ -37,6 +38,12 @@ public class SimpleCar implements LineCollidable {
 
     private double distanceTraveled;
 
+    private int fitnessWallCount;
+    private int maxStep;
+
+    private BiConsumer<Integer, SimpleCar> wallCountFunction;
+    ArrayList<FitnessWallObject> currentTouching = new ArrayList<>();
+
     //OPTIMISATION
     private ArrayList<LineCollidable> collidableSensors;
     private float x1, x2, y1, y2;
@@ -56,6 +63,8 @@ public class SimpleCar implements LineCollidable {
         this.velocity = Vector2d.origin;
         this.acceleration = Vector2d.origin;
         this.rotation = 0;
+        this.fitnessWallCount = 0;
+        this.maxStep = 0;
     }
 
     /**
@@ -211,10 +220,19 @@ public class SimpleCar implements LineCollidable {
                 (float) getBottomRightPosition().getX(), (float) getBottomRightPosition().getY(),
                 (float) getBottomLeftPosition().getX(), (float) getBottomLeftPosition().getY())){
 
-            int numberOfTimeHit = line.addCollidableToCollided(this);
+
+
+            if(!currentTouching.contains(line)){
+                wallCountFunction.accept(line.addCollidableToCollided(this), this);
+            }
+            currentTouching.add(line);
+
+
+
             //todo: add fitness here
             //todo: and reset the car timer
         }
+        else currentTouching.remove(line);
 
     }
 
@@ -379,5 +397,22 @@ public class SimpleCar implements LineCollidable {
      */
     public void setOrientation(double orientation){
         this.rotation = orientation;
+    }
+
+    public int getFitnessWallCount() { return fitnessWallCount; }
+
+    public int getMaxStep() { return maxStep; }
+
+
+    public void setWallCountFunction(BiConsumer<Integer, SimpleCar> fitnessFunction) {
+        this.wallCountFunction = fitnessFunction;
+    }
+
+    public void addFitness(int fitness) {
+        this.fitnessWallCount += fitness;
+    }
+
+    public void addTime(int time){
+        this.maxStep += time;
     }
 }

@@ -9,6 +9,7 @@ import org.lrima.laop.simulation.MultiAgentEnvironnement;
 import org.lrima.laop.simulation.sensors.Sensor;
 import org.lrima.laop.utils.math.RandomUtils;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
  */
 public class GeneticLearning implements LearningAlgorithm{
     ArrayList<FUCONN> geneticNN;
-    private int NUMBER_CAR = 10;
+    private int NUMBER_CAR = 100;
 
     /**
      * Makes the array of cars better by doing the three main phases : evaluation, selection and reproduction
@@ -28,19 +29,11 @@ public class GeneticLearning implements LearningAlgorithm{
      * @return a better array of cars
      */
     private ArrayList<FUCONN> learn(ArrayList<FUCONN> cars) {
-        //Evaluation : sort by best-fitness
-        cars = (ArrayList<FUCONN>) cars.stream()
-                .sorted((gn1, gn2)-> {
-                    int i = (int)gn2.getFitness()-(int)gn1.getFitness();
-                    return i;
-                })
-                .collect(Collectors.toList());
-
-
         //Selection : keep only 50% best cars
         final int initialNumberOfCar = this.NUMBER_CAR;
         ArrayList<FUCONN> bestPerformingCars = new ArrayList<>();
         for(int i = 0 ; i < initialNumberOfCar / 2 ; i++) {
+            cars.get(i).setFitness(0);
             bestPerformingCars.add(cars.get(i));
         }
         cars = bestPerformingCars;
@@ -58,6 +51,14 @@ public class GeneticLearning implements LearningAlgorithm{
         return cars;
     }
 
+    private void sortByBest(ArrayList<FUCONN> cars){
+
+        cars.sort((gn1, gn2)-> {
+            int i = (int)gn2.getFitness()-(int)gn1.getFitness();
+            return i;
+        });
+    }
+
     @Override
     public void train(Environnement env1, LearningEngine learningEngine) {
         MultiAgentEnvironnement env = (MultiAgentEnvironnement) env1;
@@ -70,12 +71,14 @@ public class GeneticLearning implements LearningAlgorithm{
             geneticNN.add(e);
         }
 
+        int testFrequance = 0;
+
         ArrayList<Agent> agents = env.reset(this.NUMBER_CAR);
         while(learningEngine.whileButtonNotPressed()){
             while(!env.isFinished()){
                 ArrayList<CarControls> carControls = new ArrayList<>();
                 for (int i = 0; i < geneticNN.size(); i++) {
-                    geneticNN.get(i).setFitness(agents.get(i).getReward());
+                    geneticNN.get(i).setFitness(agents.get(i).getReward() + geneticNN.get(i).getFitness());
                     double[] sensorValues = agents.get(i).getSensors().stream().mapToDouble(Sensor::getValue).toArray();
                     carControls.add(geneticNN.get(i).control(sensorValues));
                 }
@@ -84,8 +87,13 @@ public class GeneticLearning implements LearningAlgorithm{
                 env.render();
             }
 
-            geneticNN = learn(geneticNN);
-            learningEngine.evaluate(this);
+            if(testFrequance++ > 10){
+                sortByBest(geneticNN);
+                learningEngine.evaluate(this);
+                geneticNN = learn(geneticNN);
+                testFrequance = 0;
+            }
+
             agents = env.reset(geneticNN.size());
             env.newMap();
         }

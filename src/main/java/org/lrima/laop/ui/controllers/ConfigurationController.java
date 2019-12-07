@@ -1,20 +1,6 @@
 package org.lrima.laop.ui.controllers;
 
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.ResourceBundle;
-
-import javafx.scene.control.Label;
-import org.lrima.laop.core.LAOP;
-import org.lrima.laop.network.FUCONN.GeneticLearning;
-import org.lrima.laop.settings.Scope;
-import org.lrima.laop.ui.I18n;
-import org.lrima.laop.ui.stage.DownloadAlgorithmDialog;
-
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXListView;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,7 +9,6 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -33,10 +18,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-import org.lrima.laop.utils.ImageDefilementTMP;
+import org.lrima.laop.core.LAOP;
+import org.lrima.laop.network.FUCONN.GeneticLearning;
+import org.lrima.laop.settings.Scope;
+import org.lrima.laop.ui.I18n;
+import org.lrima.laop.ui.stage.DownloadAlgorithmDialog;
 
-import javax.swing.*;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 /**
  * Class that controls the configuration panel (configuration.fxml)

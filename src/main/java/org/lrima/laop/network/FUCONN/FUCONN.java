@@ -59,6 +59,7 @@ public class FUCONN {
     public void init() {
         neuralNetwork = new NeuralNetwork(5);
         neuralNetwork.addDenseLayer(5, MathUtils.TANH);
+        neuralNetwork.addDenseLayer(8, MathUtils.TANH);
         neuralNetwork.addDenseLayer(2, MathUtils.TANH);
     }
 
