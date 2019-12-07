@@ -3,6 +3,7 @@ package org.lrima.laop.simulation.map;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
+import org.lrima.laop.physic.staticobjects.FitnessWallObject;
 import org.lrima.laop.physic.staticobjects.StaticLineObject;
 
 /**
@@ -80,6 +81,8 @@ public abstract class AbstractMap {
 	 * @param gc the graphical context to draw to
 	 */
     public void draw(GraphicsContext gc){
-		lines.forEach(line -> line.draw(gc));
+		lines.forEach(line -> {
+			line.draw(gc);
+		});
 	}
 }

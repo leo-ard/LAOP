@@ -1,5 +1,6 @@
 package org.lrima.laop.simulation.map;
 
+import org.lrima.laop.physic.staticobjects.FitnessWallObject;
 import org.lrima.laop.physic.staticobjects.StaticLineObject;
 import org.lrima.laop.utils.math.RandomUtils;
 
@@ -147,8 +148,14 @@ public class MazeMap extends AbstractMap {
     	//North lines
     	for(int x = 1 ; x < north.length - 1 ; x++) {
 			for(int y = 1 ; y < north[0].length - 1 ; y++) {
+				int x1 = (x - 1) * MAP_SQUARE_WIDTH;
+				int y1 = (y - 1) * MAP_SQUARE_WIDTH;
+				int x2 = x * MAP_SQUARE_WIDTH;
+				int y2 = (y - 1) * MAP_SQUARE_WIDTH;
 				if(north[x][y]) {
-					this.lines.add(new StaticLineObject((x - 1) * MAP_SQUARE_WIDTH, (y - 1) * MAP_SQUARE_WIDTH, x * MAP_SQUARE_WIDTH, (y - 1) * MAP_SQUARE_WIDTH));
+					this.lines.add(new StaticLineObject(x1, y1, x2, y2));
+				}else{
+					this.lines.add(new FitnessWallObject(x1, y1, x2, y2));
 				}
 			}
 		}
@@ -163,9 +170,16 @@ public class MazeMap extends AbstractMap {
     	//East lines
     	for(int x = 1 ; x < east.length - 1 ; x++) {
     		for(int y = 1 ; y < east[0].length - 1 ; y++) {
+    			int x1 = x * MAP_SQUARE_WIDTH;
+    			int y1 = (y - 1) * MAP_SQUARE_WIDTH;
+    			int x2 = x * MAP_SQUARE_WIDTH;
+    			int y2 = y * MAP_SQUARE_WIDTH;
+
     			if(east[x][y]) {
-    				this.lines.add(new StaticLineObject(x * MAP_SQUARE_WIDTH, (y - 1) * MAP_SQUARE_WIDTH, x * MAP_SQUARE_WIDTH, y * MAP_SQUARE_WIDTH));
-    			}
+    				this.lines.add(new StaticLineObject(x1, y1, x2, y2));
+    			}else{
+    				this.lines.add(new FitnessWallObject(x1, y1, x2, y2));
+				}
     		}
     	}
     	//West lines

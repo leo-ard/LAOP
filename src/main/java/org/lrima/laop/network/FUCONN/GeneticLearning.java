@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  */
 public class GeneticLearning implements LearningAlgorithm{
     ArrayList<FUCONN> geneticNN;
-    private int NUMBER_CAR = 100;
+    private int NUMBER_CAR = 10;
 
     /**
      * Makes the array of cars better by doing the three main phases : evaluation, selection and reproduction

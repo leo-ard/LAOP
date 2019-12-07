@@ -3,6 +3,7 @@ package org.lrima.laop.simulation.sensors;
 import javafx.scene.paint.Color;
 
 import org.lrima.laop.physic.SimpleCar;
+import org.lrima.laop.physic.staticobjects.FitnessWallObject;
 import org.lrima.laop.physic.staticobjects.StaticLineObject;
 import org.lrima.laop.simulation.map.LineCollidable;
 import org.lrima.laop.simulation.sensors.data.ProximityLineSensorData;
@@ -57,6 +58,11 @@ public class ProximityLineSensor implements Sensor, LineCollidable {
 
             value = Math.min(Math.sqrt(x*x + y*y)*SENSOR_LENGHT_MINUS_1, value);
         }
+    }
+
+    @Override
+    public void collideFitnessAdder(FitnessWallObject line) {
+        //DO NOTHING
     }
 
 

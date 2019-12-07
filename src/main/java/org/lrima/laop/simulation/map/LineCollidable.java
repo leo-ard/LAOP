@@ -1,5 +1,6 @@
 package org.lrima.laop.simulation.map;
 
+import org.lrima.laop.physic.staticobjects.FitnessWallObject;
 import org.lrima.laop.physic.staticobjects.StaticLineObject;
 
 /**
@@ -16,6 +17,12 @@ public interface LineCollidable {
      * @param line the line
      */
     void collide(StaticLineObject line);
+
+    /**
+     * Called when the collidable touches a fitness adder wall
+     * @param line
+     */
+    void collideFitnessAdder(FitnessWallObject line);
 
     /**
      * Called before each step to pre-calculate the controls of x1, x2, y1, y2 (faster that way).

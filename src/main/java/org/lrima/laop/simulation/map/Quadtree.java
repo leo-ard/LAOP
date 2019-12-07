@@ -1,5 +1,8 @@
 package org.lrima.laop.simulation.map;
 
+import org.apache.commons.math3.genetics.Fitness;
+import org.lrima.laop.physic.SimpleCar;
+import org.lrima.laop.physic.staticobjects.FitnessWallObject;
 import org.lrima.laop.physic.staticobjects.StaticLineObject;
 
 import java.util.ArrayList;
@@ -181,7 +184,13 @@ public class Quadtree {
      */
     public void collide(LineCollidable lineCollidable){
         for (StaticLineObject line : lines) {
-            lineCollidable.collide(line);
+            if(!(line instanceof FitnessWallObject)) {
+                lineCollidable.collide(line);
+            }else{
+                if(lineCollidable instanceof SimpleCar) {
+                    lineCollidable.collideFitnessAdder((FitnessWallObject) line);
+                }
+            }
         }
 
         if(nodes == null) return;

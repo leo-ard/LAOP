@@ -35,19 +35,24 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
     public ArrayList<Agent> step(ArrayList<CarControls> carControls) {
         if(this.isFinished())
             return this.reset(carControls.size());
+
         ArrayList<Agent> agents = new ArrayList<>();
         finished = true;
+
         for (int i = 0; i < simpleCars.size(); i++) {
             SimpleCar simpleCar = simpleCars.get(i);
             CarControls carControl = carControls.get(i);
 
             simpleCar.nextStep(carControl);
+
             mazeMap.collide(simpleCar);
+
             agents.add(new Agent(simpleCar.getSensors(), evalFitness(simpleCar)));
             if(!simpleCar.isDead()){
                 finished = false;
             }
         }
+
         step++;
 
         if(step > this.MAX_STEP){
@@ -101,7 +106,6 @@ public class BetterEnvironnement implements MultiAgentEnvironnement {
     public void render() {
         if(buffer != null) {
             SimulationSnapshot snapshot = new SimulationSnapshot();
-
             ArrayList<CarData> carData = new ArrayList<>();
 
             int bestCarIndex = 0;

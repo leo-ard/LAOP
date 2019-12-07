@@ -9,8 +9,8 @@ import javafx.scene.paint.Paint;
  * @author Clement Bisaillon
  */
 public class StaticLineObject implements StaticObject {
-    private float x1, y1, x2, y2;
-    private final Color COLOR = new Color(32.0/255.0, 78.0/255.0, 95.0/255.0, 1);
+    protected float x1, y1, x2, y2;
+    protected final Color COLOR = new Color(32.0/255.0, 78.0/255.0, 95.0/255.0, 1);
 
     /**
      * Creates a static line object with parameters x1, x2, y1, y2

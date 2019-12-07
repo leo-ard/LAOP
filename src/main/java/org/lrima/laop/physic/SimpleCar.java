@@ -2,6 +2,7 @@ package org.lrima.laop.physic;
 
 import java.util.ArrayList;
 
+import org.lrima.laop.physic.staticobjects.FitnessWallObject;
 import org.lrima.laop.physic.staticobjects.StaticLineObject;
 import org.lrima.laop.simulation.LearningEngine;
 import org.lrima.laop.simulation.map.AbstractMap;
@@ -195,6 +196,28 @@ public class SimpleCar implements LineCollidable {
         getCollidableSensors().forEach(s -> s.collide(line));
     }
 
+    /**
+     * When the car collides with a fitness adder wall
+     * @param line
+     */
+    @Override
+    public void collideFitnessAdder(FitnessWallObject line) {
+        //todo: Refactor this into a method to not duplicate code
+        if(MathUtils.rectSegmentIntersection(
+                line.getX1(), line.getY1(),
+                line.getX2(), line.getY2(),
+                (float) getTopLeftPosition().getX(), (float) getTopLeftPosition().getY(),
+                (float) getTopRightPosition().getX(), (float) getTopRightPosition().getY(),
+                (float) getBottomRightPosition().getX(), (float) getBottomRightPosition().getY(),
+                (float) getBottomLeftPosition().getX(), (float) getBottomLeftPosition().getY())){
+
+            int numberOfTimeHit = line.addCollidableToCollided(this);
+            //todo: add fitness here
+            //todo: and reset the car timer
+        }
+
+    }
+
     @Override
     public void bake() {
         getCollidableSensors().forEach(LineCollidable::bake);
@@ -326,7 +349,7 @@ public class SimpleCar implements LineCollidable {
     public Vector2d getAcceleration() {
     	return this.acceleration;
     }
-    
+
     /**
      * @return The width of the car
      */
